@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "tailwind:init": "tailwindcss init -p"
+    "tailwind:init": "tailwindcss init -p",
+    "postinstall": "npx vite --version"
   },
   "dependencies": {
     "emailjs-com": "^3.2.0",
@@ -32,6 +33,6 @@
     "tailwindcss": "^4.1.13"
   },
   "engines": {
-    "node": "22.x"
+    "node": "20.x"
   }
 }
