@@ -1,0 +1,190 @@
+.authors-container {
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Hero */
+.authors-hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.authors-hero h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.authors-hero p {
+  font-size: 1.1rem;
+  color: #444;
+}
+.authors-hero span {
+  font-weight: bold;
+  color: #f4b400;
+}
+
+/* Grid */
+.authors-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  justify-content: center; /* Center the grid */
+}
+
+/* Featured authors grid - reduce gap if needed */
+.featured-grid {
+  justify-content: center;
+  max-width: 600px; /* Optional: adjust spacing between 2 authors */
+  margin: 0 auto;
+}
+
+/* Card */
+.author-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+.author-card:hover {
+  transform: translateY(-5px);
+}
+.author-img {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.author-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.author-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+.genre,
+.book-title {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+.view-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #f4b400;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.view-btn:hover {
+  background: #d69e00;
+}
+
+/* CTA */
+.authors-cta {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 2rem;
+  background: #fafafa;
+  border-radius: 12px;
+}
+.authors-cta h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+.authors-cta p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+/* CTA Form */
+.cta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 450px;
+  margin: 0 auto;
+}
+.cta-form input,
+.cta-form textarea {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.2s ease;
+  font-family: "Poppins", sans-serif;
+}
+.cta-form input:focus,
+.cta-form textarea:focus {
+  border-color: #f4b400;
+  box-shadow: 0px 0px 5px rgba(244, 180, 0, 0.4);
+}
+.cta-form textarea {
+  min-height: 120px;
+  resize: none;
+}
+
+.cta-btn {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background: #f4b400;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+.cta-btn:hover {
+  background: #d69e00;
+}
+
+/* Popup */
+.popup-message {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeIn 0.5s ease;
+  cursor: pointer;
+}
+.popup-message.success {
+  background: #e6f9ed;
+  color: #1e7e34;
+  border: 1px solid #1e7e34;
+}
+.popup-message.error {
+  background: #fdecea;
+  color: #d93025;
+  border: 1px solid #d93025;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .authors-grid {
+    grid-template-columns: 1fr;
+    justify-content: center; /* Center on mobile */
+  }
+}

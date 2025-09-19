@@ -1,0 +1,84 @@
+.book-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.book-details-cover {
+  flex: 1;
+  max-width: 350px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.book-info {
+  flex: 2;
+}
+
+.book-info h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+.subtitle {
+  font-style: italic;
+  color: #666;
+  margin-bottom: 0.8rem;
+}
+
+.author, .genre, .year {
+  font-size: 1rem;
+  margin: 0.2rem 0;
+}
+
+.description {
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.details-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.buy-btn {
+  background: #f4b400;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.buy-btn:hover {
+  background: #d99900;
+}
+
+.back-btn {
+  background: #f0f0f0;
+  color: #333;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #ddd;
+}
+
+.not-found {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}

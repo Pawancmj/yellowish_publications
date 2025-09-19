@@ -1,0 +1,214 @@
+.footer {
+  width: 100%;
+  background: linear-gradient(90deg, #1e3a8a, #0f172a);
+  color: #fff;
+  padding: clamp(16px, 3vw, 48px) 20px;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: clamp(16px, 2.5vw, 40px);
+}
+
+.col {
+  flex: 1 1 250px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* default for mobile/tablet */
+  box-sizing: border-box;
+}
+
+/* ---------- Desktop: center content under heading/logo ---------- */
+@media (min-width: 1025px) {
+  .col {
+    align-items: center; /* center elements under heading/logo */
+    text-align: center; /* align text & subheadings */
+  }
+  .col .linkList,
+  .col .regionContacts,
+  .col .addr,
+  .col .socials,
+  .col .blurb {
+    text-align: center;
+  }
+  .col .linkList li,
+  .col .regionContacts li {
+    margin: 6px 0;
+  }
+}
+
+/* ---------- Logo ---------- */
+.logo {
+  width: 120px;
+  margin-bottom: 12px;
+}
+
+/* ---------- Headings ---------- */
+.heading {
+  margin-bottom: 10px;
+  font-size: clamp(15px, 2vw, 20px);
+  font-weight: 700;
+  color: #facc15;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-left: 0;
+}
+
+/* ---------- Subheadings ---------- */
+.subHeading {
+  font-size: 15px;
+  font-weight: 600;
+  color: #facc15;
+  margin: 14px 0 8px;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- Blurb ---------- */
+.blurb {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #f1f5f9;
+  margin-bottom: 14px;
+  max-width: 360px;
+}
+
+/* ---------- Links ---------- */
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.linkList li {
+  margin: 6px 0;
+}
+.linkList a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px;
+  transition: color 0.25s;
+}
+.linkList a:hover {
+  color: #facc15;
+}
+
+/* ---------- Address ---------- */
+.addr {
+  font-style: normal;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #e2e8f0;
+  line-height: 1.5;
+  width: 100%;
+}
+
+/* ---------- Social Icons ---------- */
+.socials {
+  display: flex;
+  gap: 16px;
+  margin: 14px 0;
+  justify-content: center; /* center social icons on desktop */
+}
+.socials a {
+  color: #fff;
+  font-size: 22px;
+  transition: transform 0.2s, color 0.2s;
+}
+.socials a:hover {
+  color: #facc15;
+  transform: scale(1.15);
+}
+
+/* ---------- Contact ---------- */
+.regionContacts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.regionContacts li {
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #f1f5f9;
+}
+.regionContacts a {
+  color: #fff;
+  text-decoration: none;
+}
+.regionContacts a:hover {
+  color: #facc15;
+}
+
+/* ---------- Divider ---------- */
+.divider {
+  border: none;
+  border-top: 1px solid #334155;
+  margin: 24px 0;
+  width: 100%;
+}
+
+/* ---------- Copyright ---------- */
+.copyright {
+  font-size: 13px;
+  text-align: center;
+  margin-top: 10px;
+  color: #cbd5e1;
+}
+
+/* ---------- Tablet: 2-column layout ---------- */
+@media (max-width: 1024px) {
+  .col {
+    flex: 1 1 calc(50% - 20px);
+    min-width: 220px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .socials {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- Mobile: 1-column left-aligned ---------- */
+@media (max-width: 768px) {
+  .columns {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .col {
+    width: 100%;
+    max-width: 100%;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .socials {
+    justify-content: flex-start;
+  }
+  .blurb,
+  .linkList,
+  .addr,
+  .regionContacts {
+    text-align: left;
+  }
+  .logo {
+    margin-bottom: 8px;
+  }
+}
