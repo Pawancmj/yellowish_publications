@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "npx vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "tailwind:init": "tailwindcss init -p",
-    "postinstall": "npx vite --version"
-  },
+  "dev": "vite",
+  "build": "npx vite build",
+  "lint": "eslint .",
+  "preview": "vite preview",
+  "tailwind:init": "tailwindcss init -p",
+  "postinstall": "npx vite --version"
+},
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.2",
     "emailjs-com": "^3.2.0",
