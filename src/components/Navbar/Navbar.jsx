@@ -4,30 +4,35 @@ import "./Navbar.css";
 import Logo from "../../assets/logo.png"; // Logo image
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
 
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const closeMenu = () => setIsOpen(false);
+
+  // Smooth scroll to top
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleNavClick = (e, path) => {
     e.preventDefault();
-    setIsOpen(false);
+    closeMenu();
 
     if (location.pathname === path) {
-      scrollToTop(); // Same page, smooth scroll
+      // Already on this page → just smooth scroll
+      scrollToTop();
     } else {
+      // Navigate to another page, then scroll smoothly
       navigate(path);
-      setTimeout(scrollToTop, 400); // Slightly longer delay for video-heavy pages
+      setTimeout(scrollToTop, 300); // Delay to allow page render
     }
   };
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
   return (
     <nav className="navbar">
+      {/* Logo */}
       <div className="logo-container">
         <img src={Logo} alt="Yellowish Publication Logo" className="logo-img" />
         <div className="logo-text">
@@ -35,48 +40,57 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Desktop Navigation */}
       <ul className="navList desktopNav">
         <li>
-          <a href="/" onClick={(e) => handleNavClick(e, "/")} className="navLink">Home</a>
+          <a href="/" onClick={(e) => handleNavClick(e, "/")} className="navLink">
+            Home
+          </a>
         </li>
         <li>
-          <NavLink
-            to="/about"
-            className={({ isActive }) => isActive ? "navLink active" : "navLink"}
-            onClick={(e) => handleNavClick(e, "/about")}
-          >
+          <a href="/about" onClick={(e) => handleNavClick(e, "/about")} className="navLink">
             About Us
-          </NavLink>
+          </a>
         </li>
         <li>
-          <NavLink
-            to="/authors"
-            className={({ isActive }) => isActive ? "navLink active" : "navLink"}
-            onClick={(e) => handleNavClick(e, "/authors")}
-          >
+          <a href="/authors" onClick={(e) => handleNavClick(e, "/authors")} className="navLink">
             Our Authors
-          </NavLink>
+          </a>
         </li>
         <li>
-          <NavLink
-            to="/store"
-            className={({ isActive }) => isActive ? "navLink active" : "navLink"}
-            onClick={(e) => handleNavClick(e, "/store")}
-          >
+          <a href="/store" onClick={(e) => handleNavClick(e, "/store")} className="navLink">
             Store
-          </NavLink>
+          </a>
         </li>
       </ul>
 
+      {/* Hamburger for Mobile */}
       <div className="hamburger" onClick={toggleMenu}>☰</div>
 
+      {/* Mobile Menu */}
       <div className={`mobileMenu ${isOpen ? "open" : ""}`}>
         <button className="closeBtn" onClick={toggleMenu}>×</button>
         <ul className="mobileNavList">
-          <li><a href="/" onClick={(e) => handleNavClick(e, "/")} className="navLink">Home</a></li>
-          <li><NavLink to="/about" className="navLink" onClick={(e) => handleNavClick(e, "/about")}>About Us</NavLink></li>
-          <li><NavLink to="/authors" className="navLink" onClick={(e) => handleNavClick(e, "/authors")}>Our Authors</NavLink></li>
-          <li><NavLink to="/store" className="navLink" onClick={(e) => handleNavClick(e, "/store")}>Store</NavLink></li>
+          <li>
+            <a href="/" onClick={(e) => handleNavClick(e, "/")} className="navLink">
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="/about" onClick={(e) => handleNavClick(e, "/about")} className="navLink">
+              About Us
+            </a>
+          </li>
+          <li>
+            <a href="/authors" onClick={(e) => handleNavClick(e, "/authors")} className="navLink">
+              Our Authors
+            </a>
+          </li>
+          <li>
+            <a href="/store" onClick={(e) => handleNavClick(e, "/store")} className="navLink">
+              Store
+            </a>
+          </li>
         </ul>
       </div>
     </nav>

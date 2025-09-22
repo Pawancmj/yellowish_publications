@@ -1,12 +1,23 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { books } from "../../data/books";
 import "./BookDetails.css";
 
 export default function BookDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const book = books.find((b) => b.id === id);
 
   if (!book) return <p className="not-found">Book not found.</p>;
+
+  // Smooth scroll to top
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleBack = () => {
+    navigate("/store");
+    setTimeout(scrollToTop, 200); // scroll after navigation
+  };
 
   return (
     <div className="book-details">
@@ -19,10 +30,12 @@ export default function BookDetails() {
         <p className="year">Published: {book.year}</p>
         <p className="description">{book.description}</p>
         <p className="price">₹{book.price}</p>
-        
+
         <div className="details-buttons">
           <button className="buy-btn">Buy Now</button>
-          <Link to="/store" className="back-btn">← Back to Store</Link>
+          <button onClick={handleBack} className="back-btn">
+            ← Back to Store
+          </button>
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Home.css";
 
 // Featured Books
@@ -22,9 +23,28 @@ import heroImage from "../../assets/hero.png";
 import { FaBookOpen, FaGlobe, FaPenFancy, FaUsers } from "react-icons/fa";
 
 // EmailJS
-import emailjs from "emailjs-com";
+import emailjs from "@emailjs/browser";
 
 export default function Home() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Smooth scroll function
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Handle internal navigation links
+  const handleNavClick = (e, path) => {
+    e.preventDefault();
+    if (location.pathname === path) {
+      scrollToTop(); // Already on the page
+    } else {
+      navigate(path); // Navigate then scroll
+      setTimeout(scrollToTop, 300); // Delay for render
+    }
+  };
+
   const handleNewsletter = (e) => {
     e.preventDefault();
     emailjs
@@ -71,12 +91,12 @@ export default function Home() {
           </h1>
           <p>YellowBook Publication — where stories come alive with quality and care.</p>
           <div className="hero-buttons">
-            <a href="/store" className="btn-primary">
+            <a href="/store" className="btn-primary" onClick={(e) => handleNavClick(e, "/store")}>
               Explore Our Store
             </a>
-            <a href="/contact" className="btn-secondary">
+            <button className="btn-secondary">
               Publish With Us
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -91,7 +111,7 @@ export default function Home() {
               We believe every story deserves to be told, and we are committed to turning your creative vision into reality.
               From professional editing and eye-catching cover designs to global distribution and promotional support, we handle every step of the publishing journey.
             </p>
-            <a href="/about" className="btn-primary">
+            <a href="/about" className="btn-primary" onClick={(e) => handleNavClick(e, "/about")}>
               Know More About Us
             </a>
           </div>
@@ -131,7 +151,7 @@ export default function Home() {
               <p>Things That Cannot Be Indelible</p>
             </div>
           </div>
-          <a href="/store" className="btn-secondary mt-6">
+          <a href="/store" className="btn-secondary mt-6" onClick={(e) => handleNavClick(e, "/store")}>
             Visit Store for More
           </a>
         </div>
@@ -167,7 +187,7 @@ export default function Home() {
               <p>Rahul Deb</p>
             </div>
           </div>
-          <a href="/authors" className="btn-primary mt-6">
+          <a href="/authors" className="btn-primary mt-6" onClick={(e) => handleNavClick(e, "/authors")}>
             View All Authors
           </a>
         </div>

@@ -26,18 +26,20 @@
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  justify-content: center; /* Center the grid */
+  justify-content: center;
 }
 
-/* Featured authors grid - reduce gap if needed */
+/* Featured authors grid */
 .featured-grid {
   justify-content: center;
-  max-width: 600px; /* Optional: adjust spacing between 2 authors */
-  margin: 0 auto;
+  max-width: 600px;
+  margin: 0 auto 3rem; /* Added margin-bottom for spacing after featured authors */
 }
 
 /* Card */
 .author-card {
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border-radius: 12px;
   padding: 1rem;
@@ -70,6 +72,12 @@
   font-size: 0.95rem;
   margin-bottom: 0.5rem;
 }
+
+/* Make button stay at bottom */
+.card-button-container {
+  margin-top: auto;
+}
+
 .view-btn {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -77,6 +85,7 @@
   color: #fff;
   border-radius: 6px;
   text-decoration: none;
+  transition: background 0.2s ease;
 }
 .view-btn:hover {
   background: #d69e00;
@@ -181,10 +190,16 @@
   }
 }
 
-/* Responsive */
+/* Responsive for mobile: 2-column grids for both sections */
 @media (max-width: 768px) {
-  .authors-grid {
-    grid-template-columns: 1fr;
-    justify-content: center; /* Center on mobile */
+  .all-authors .authors-grid,
+  .featured-authors .authors-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  /* Add spacing between All Authors heading and Featured Authors */
+  .all-authors h2 {
+    margin-top: 2rem;
   }
 }

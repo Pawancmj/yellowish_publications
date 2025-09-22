@@ -1,13 +1,24 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaBookOpen, FaQuoteLeft } from "react-icons/fa";
 import { authors } from "../../data/author";
 import "./AuthorDetails.css";
 
 export default function AuthorDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const author = authors.find((a) => String(a.id) === id);
 
   if (!author) return <p>Author not found.</p>;
+
+  // Smooth scroll to top
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleBack = () => {
+    navigate("/authors");
+    setTimeout(scrollToTop, 200); // scroll after navigation
+  };
 
   return (
     <div className="author-details">
@@ -45,7 +56,7 @@ export default function AuthorDetails() {
 
       {/* Back */}
       <div className="back-btn">
-        <Link to="/authors">← Back to Authors</Link>
+        <button onClick={handleBack}>← Back to Authors</button>
       </div>
     </div>
   );

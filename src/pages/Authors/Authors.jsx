@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaFeatherAlt } from "react-icons/fa";
 import { authors } from "../../data/author";
-import emailjs from "emailjs-com";
+import emailjs from "@emailjs/browser";
 import "./Authors.css";
 
 export default function Authors() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -54,6 +58,22 @@ export default function Authors() {
       );
   };
 
+  // Smooth scroll function
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Handle internal navigation
+  const handleNavClick = (e, path) => {
+    e.preventDefault();
+    if (location.pathname === path) {
+      scrollToTop();
+    } else {
+      navigate(path);
+      setTimeout(scrollToTop, 300);
+    }
+  };
+
   return (
     <div className="authors-container">
       {/* Hero Section */}
@@ -81,9 +101,15 @@ export default function Authors() {
               </div>
               <h3>{author.name}</h3>
               <p className="genre">{author.genre}</p>
-              <a href={`/author/${author.id}`} className="view-btn">
-                View Profile
-              </a>
+              <div className="card-button-container">
+                <a
+                  href={`/author/${author.id}`}
+                  className="view-btn"
+                  onClick={(e) => handleNavClick(e, `/author/${author.id}`)}
+                >
+                  View Profile
+                </a>
+              </div>
             </div>
           ))}
         </div>
@@ -103,9 +129,15 @@ export default function Authors() {
               </div>
               <h3>{author.name}</h3>
               <p className="book-title">{author.books[0]}</p>
-              <a href={`/author/${author.id}`} className="view-btn">
-                View Profile
-              </a>
+              <div className="card-button-container">
+                <a
+                  href={`/author/${author.id}`}
+                  className="view-btn"
+                  onClick={(e) => handleNavClick(e, `/author/${author.id}`)}
+                >
+                  View Profile
+                </a>
+              </div>
             </div>
           ))}
         </div>

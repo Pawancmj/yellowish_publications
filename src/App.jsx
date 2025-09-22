@@ -11,11 +11,13 @@ import AuthorDetails from "./pages/AuthorDetails/AuthorDetails";
 import Books from "./pages/Books/Books";
 import BookDetails from "./pages/BookDetails/BookDetails";
 
-function ScrollToTopOnRouteChange() {
+// Scroll to top whenever route changes
+function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Instant scroll to top on route change
+    window.scrollTo({ top: 0, behavior: "instant" }); 
   }, [pathname]);
 
   return null;
@@ -26,7 +28,7 @@ function App() {
     <Router>
       <div className="app-container">
         <Navbar />
-        <ScrollToTopOnRouteChange /> {/* Smooth scroll on route change */}
+        <ScrollToTop /> {/* Scroll to top on every route change */}
         <main style={{ flex: 1, width: "100%" }}>
           <Routes>
             <Route path="/" element={<Home />} />

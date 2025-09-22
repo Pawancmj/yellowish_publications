@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./About.css";
 import {
   FaBookOpen,
@@ -9,10 +10,13 @@ import {
   FaHandshake,
   FaPenNib,
 } from "react-icons/fa";
-import StoryImg from "../../assets/Story.png"; // ✅ Import your image
-import emailjs from "emailjs-com";
+import StoryImg from "../../assets/Story.png"; 
+import emailjs from "@emailjs/browser";
 
 const About = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,10 +42,10 @@ const About = () => {
     e.preventDefault();
     emailjs
       .send(
-        "service_9vpwjdo", // ✅ Your Service ID
-        "template_1vzt7uv", // ✅ Your Template ID
+        "service_9vpwjdo",
+        "template_1vzt7uv",
         formData,
-        "KBwcTEiUFQhCaMWZB" // ✅ Your Public Key
+        "KBwcTEiUFQhCaMWZB"
       )
       .then(
         () => {
@@ -60,6 +64,22 @@ const About = () => {
           });
         }
       );
+  };
+
+  // Smooth scroll function
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Handle internal navigation
+  const handleNavClick = (e, path) => {
+    e.preventDefault();
+    if (location.pathname === path) {
+      scrollToTop();
+    } else {
+      navigate(path);
+      setTimeout(scrollToTop, 300);
+    }
   };
 
   return (
@@ -258,9 +278,7 @@ const About = () => {
         {/* Popup Message */}
         {popup.show && (
           <div className={`popup-overlay`}>
-            <div
-              className={`popup-box ${popup.success ? "success" : "error"}`}
-            >
+            <div className={`popup-box ${popup.success ? "success" : "error"}`}>
               <p>{popup.msg}</p>
               <button onClick={() => setPopup({ ...popup, show: false })}>
                 Close

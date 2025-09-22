@@ -1,3 +1,10 @@
+/* Ensure padding and border are included in width calculations */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .books-page {
   padding: 2rem;
 }
@@ -55,6 +62,8 @@
 }
 
 .book-card {
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -86,9 +95,9 @@
   margin-bottom: 0.5rem;
 }
 
-.author a {
-  color: #0066cc;
+.author {
   font-weight: bold;
+  color: #333;
 }
 
 .genre {
@@ -105,7 +114,7 @@
 .card-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.5rem;
+  margin-top: auto;
 }
 
 .details-btn,
@@ -143,4 +152,26 @@
   text-align: center;
   font-size: 1.2rem;
   color: #888;
+}
+
+/* Responsive: Mobile 2-column grid */
+@media (max-width: 768px) {
+  .books-page {
+    padding-inline: 0.5rem; /* Reduce horizontal padding to fit grid */
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Prevent cut-off */
+    gap: 1rem;
+  }
+
+  .book-card {
+    padding: 0.8rem;
+  }
+
+  .book-cover {
+    height: 250px; /* optional: reduce height for better mobile fit */
+  }
 }

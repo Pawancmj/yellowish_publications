@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { books } from "../../data/books";
 import { FaSearch, FaFilter, FaShoppingCart, FaInfoCircle } from "react-icons/fa";
 import "./Books.css";
@@ -8,6 +8,9 @@ export default function Books() {
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState("");
   const [sortBy, setSortBy] = useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const filteredBooks = books
     .filter((book) =>
@@ -21,6 +24,20 @@ export default function Books() {
       if (sortBy === "priceHigh") return b.price - a.price;
       return 0;
     });
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleNavClick = (e, path) => {
+    e.preventDefault();
+    if (location.pathname === path) {
+      scrollToTop();
+    } else {
+      navigate(path);
+      setTimeout(scrollToTop, 300);
+    }
+  };
 
   return (
     <div className="books-page">
@@ -71,13 +88,15 @@ export default function Books() {
               <img src={book.cover} alt={book.title} className="book-cover" />
               <h3>{book.title}</h3>
               {book.subtitle && <p className="subtitle">{book.subtitle}</p>}
-              <p className="author">
-                By <Link to={`/author/${book.authorId}`}>{book.author}</Link>
-              </p>
+              <p className="author">By {book.author}</p>
               <p className="genre">{book.genre}</p>
               <p className="price">₹{book.price}</p>
               <div className="card-buttons">
-                <Link to={`/book/${book.id}`} className="details-btn">
+                <Link
+                  to={`/book/${book.id}`}
+                  className="details-btn"
+                  onClick={(e) => handleNavClick(e, `/book/${book.id}`)}
+                >
                   <FaInfoCircle /> View Details
                 </Link>
                 <button className="cart-btn">
