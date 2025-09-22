@@ -8,8 +8,7 @@
     "build": "npx vite build",
     "lint": "eslint .",
     "preview": "npx vite preview",
-    "tailwind:init": "npx tailwindcss init -p",
-    "postinstall": "npx vite --version"
+    "tailwind:init": "npx tailwindcss init -p"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
