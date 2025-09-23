@@ -72,7 +72,7 @@ const About = () => {
   };
 
   // Handle internal navigation
-  const handleNavClick = (e, path) => {
+ const handleNavClick = (e, path) => {
     e.preventDefault();
     if (location.pathname === path) {
       scrollToTop();
@@ -81,6 +81,7 @@ const About = () => {
       setTimeout(scrollToTop, 300);
     }
   };
+  
 
   return (
     <div className="about">

@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
+import ScrollTop from "./components/ScrollTop/ScrollTop"; // Correct import
 
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
@@ -11,24 +11,12 @@ import AuthorDetails from "./pages/AuthorDetails/AuthorDetails";
 import Books from "./pages/Books/Books";
 import BookDetails from "./pages/BookDetails/BookDetails";
 
-// Scroll to top whenever route changes
-function ScrollToTop() {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    // Instant scroll to top on route change
-    window.scrollTo({ top: 0, behavior: "instant" }); 
-  }, [pathname]);
-
-  return null;
-}
-
 function App() {
   return (
     <Router>
+      <ScrollTop /> {/* Scroll to top on route change */}
       <div className="app-container">
         <Navbar />
-        <ScrollToTop /> {/* Scroll to top on every route change */}
         <main style={{ flex: 1, width: "100%" }}>
           <Routes>
             <Route path="/" element={<Home />} />

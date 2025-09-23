@@ -31,8 +31,9 @@ h2 {
   align-items: center;
   justify-content: center;
   text-align: center;
+
   background-image: url('../../assets/hero.png'); /* hero.png background */
-  background-size: cover;
+  background-size: cover;   /* Desktop = cover */
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -300,6 +301,15 @@ h2 {
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  /* ✅ Show full hero image without cropping */
+  .hero-section {
+    background-size: contain;
+    background-position: top center;
+    background-color: #000; /* fills gaps */
+  }
+}
+
 @media (max-width: 900px) {
   .about-container {
     grid-template-columns: 1fr;
@@ -313,8 +323,9 @@ h2 {
 
 @media (max-width: 768px) {
   .hero-section {
-    height: 100vh;
-    padding: 1rem;
+    height: auto;
+    min-height: 80vh;
+    padding: 2rem 1rem;
   }
 
   .hero-content h1 {
