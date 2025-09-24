@@ -34,7 +34,7 @@ export default function Footer() {
             <div className="socials">
               <a href="https://www.linkedin.com" target="_blank" rel="noreferrer"><FaLinkedin /></a>
               <a href="https://www.facebook.com/share/1JdnHjwC6o/" target="_blank" rel="noreferrer"><FaFacebook /></a>
-              <a href="https://www.instagram.com/yellowishpublication" target="_blank" rel="noreferrer"><FaInstagram /></a>
+              <a href="https://www.instagram.com/yellowishpublication?igsh=MWphbHRuMTZtNmlweg==" target="_blank" rel="noreferrer"><FaInstagram /></a>
               <a href="https://wa.me/919871569192" target="_blank" rel="noreferrer"><FaWhatsapp /></a>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
@@ -13,7 +13,7 @@ import BookDetails from "./pages/BookDetails/BookDetails";
 
 function App() {
   return (
-    <Router>
+   <>
       <ScrollTop /> {/* Scroll to top on route change */}
       <div className="app-container">
         <Navbar />
@@ -29,7 +29,7 @@ function App() {
         </main>
         <Footer />
       </div>
-    </Router>
+    </>
   );
 }
 

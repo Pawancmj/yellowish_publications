@@ -2,20 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reset margins and padding */
-* {
+html, body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  background: #f9fafb; /* light gray background */
+  /* overflow-x: hidden;   because of this the scrolltop functionality is not working */
+  background: #f9fafb;
   font-family: 'Inter', sans-serif;
-  color: #111827; /* neutral gray/black */
+  color: #111827;
 }
 
 #root {
@@ -23,4 +18,23 @@ html, body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
 }

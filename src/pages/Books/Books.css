@@ -157,7 +157,7 @@
 /* Responsive: Mobile 2-column grid */
 @media (max-width: 768px) {
   .books-page {
-    padding-inline: 0.5rem; /* Reduce horizontal padding to fit grid */
+    padding-inline: 0.5rem; 
     padding-top: 1rem;
     padding-bottom: 1rem;
   }
@@ -172,6 +172,18 @@
   }
 
   .book-cover {
-    height: 250px; /* optional: reduce height for better mobile fit */
+    height: 230px;
+  }
+
+  /* Responsive Buttons */
+  .card-buttons {
+    flex-wrap: wrap;          /* allow buttons to wrap */
+    gap: 0.5rem;              /* space between wrapped buttons */
+  }
+
+  .details-btn,
+  .cart-btn {
+    flex: 1 1 100%;           /* buttons take full width */
+    justify-content: center;  /* center content horizontally */
   }
 }

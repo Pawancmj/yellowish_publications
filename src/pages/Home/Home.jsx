@@ -51,7 +51,7 @@ export default function Home() {
       .sendForm("service_9vpwjdo", "template_mzztq8n", e.target, "KBwcTEiUFQhCaMWZB")
       .then(
         () => {
-          alert("🎉 Congratulations! You’ve joined the YellowBook community.");
+          alert("🎉 Congratulations! You’ve joined the Yellowish Publications community.");
           e.target.reset();
         },
         (error) => {
@@ -67,7 +67,7 @@ export default function Home() {
       .sendForm("service_9vpwjdo", "template_1vzt7uv", e.target, "KBwcTEiUFQhCaMWZB")
       .then(
         () => {
-          alert("✅ Thank you for contacting YellowBook! We’ll get back to you soon.");
+          alert("✅ Thank you for contacting Yellowish Publication! We’ll get back to you soon.");
           e.target.reset();
         },
         (error) => {
@@ -89,7 +89,7 @@ export default function Home() {
           <h1>
             Publishing <span>Dreams</span> into Reality
           </h1>
-          <p>YellowBook Publication — where stories come alive with quality and care.</p>
+          <p>Yellowish Publication — where stories come alive with quality and care.</p>
           <div className="hero-buttons">
             <a href="/store" className="btn-primary" onClick={(e) => handleNavClick(e, "/store")}>
               Explore Our Store
@@ -107,7 +107,7 @@ export default function Home() {
           <div className="about-text">
             <h2>About Us</h2>
             <p>
-              At YellowBook, we empower authors by providing seamless publishing, design, and marketing solutions to bring their stories to the world.
+              At Yellowish Publication, we empower authors by providing seamless publishing, design, and marketing solutions to bring their stories to the world.
               We believe every story deserves to be told, and we are committed to turning your creative vision into reality.
               From professional editing and eye-catching cover designs to global distribution and promotional support, we handle every step of the publishing journey.
             </p>
@@ -225,13 +225,13 @@ export default function Home() {
           <div className="testimonial-grid">
             <div className="testimonial-card">
               <p>
-                “YellowBook made my publishing journey smooth and exciting. Their team is simply the best!”
+                “Yellowish Publication made my publishing journey smooth and exciting. Their team is simply the best!”
               </p>
               <span>- Rahul Deb</span>
             </div>
             <div className="testimonial-card">
               <p>
-                “Thanks to YellowBook, my book reached readers across the globe. Highly recommended!”
+                “Thanks to Yellowish Publication, my book reached readers across the globe. Highly recommended!”
               </p>
               <span>- Dr. Heena Sachdeva</span>
             </div>

@@ -81,7 +81,7 @@ export default function Authors() {
         <h1>Meet Our Authors</h1>
         <p>
           Discover the storytellers and dreamers who partnered with{" "}
-          <span>YellowBook Publication</span> to bring their books to life.
+          <span>Yellowish Publication</span> to bring their books to life.
         </p>
       </div>
 
@@ -147,7 +147,7 @@ export default function Authors() {
       <div className="authors-cta">
         <h2>Want to see your name here?</h2>
         <p>
-          Join YellowBook Publication and let us help you share your story with
+          Join Yellowish Publication and let us help you share your story with
           the world.
         </p>
 
