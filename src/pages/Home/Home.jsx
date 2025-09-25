@@ -122,32 +122,52 @@ export default function Home() {
       </section>
 
       {/* Featured Books */}
-      <section className="featured-books">
-        <div className="container">
-          <h2>Featured Books</h2>
-          <div className="book-grid">
-            <div className="book-card">
-              <img src={book1} alt="Book 1" />
-              <p title="Optimize Your Mind">Optimize Your Mind</p>
-            </div>
-            <div className="book-card">
-              <img src={book2} alt="Book 2" />
-              <p title="Genetic Habits">Genetic Habits</p>
-            </div>
-            <div className="book-card">
-              <img src={book3} alt="Book 3" />
-              <p title="Management And Education in Digital Age">Management And Education in Digital Age</p>
-            </div>
-            <div className="book-card">
-              <img src={book4} alt="Book 4" />
-              <p title="Things That Cannot Be Indelible">Things That Cannot Be Indelible</p>
-            </div>
-          </div>
-          <a href="/store" className="btn-secondary mt-6" onClick={(e) => handleNavClick(e, "/store")}>
-            Visit Store for More
-          </a>
+<section className="featured-books">
+  <div className="container">
+    <h2>Featured Books</h2>
+    <div className="book-grid">
+      <div className="book-card">
+        <div className="book-img">
+          <img src={book1} alt="Book 1" />
         </div>
-      </section>
+        <div className="book-info">
+          <h3>Optimize Your Mind</h3>
+        </div>
+      </div>
+      <div className="book-card">
+        <div className="book-img">
+          <img src={book2} alt="Book 2" />
+        </div>
+        <div className="book-info">
+          <h3>Genetic Habits</h3>
+        </div>
+      </div>
+      <div className="book-card">
+        <div className="book-img">
+          <img src={book3} alt="Book 3" />
+        </div>
+        <div className="book-info">
+          <h3>Management And Education in Digital Age</h3>
+        </div>
+      </div>
+      <div className="book-card">
+        <div className="book-img">
+          <img src={book4} alt="Book 4" />
+        </div>
+        <div className="book-info">
+          <h3>Things That Cannot Be Indelible</h3>
+        </div>
+      </div>
+    </div>
+    <a
+      href="/store"
+      className="btn-secondary mt-6"
+      onClick={(e) => handleNavClick(e, "/store")}
+    >
+      Visit Store for More
+    </a>
+  </div>
+</section>
 
       {/* Meet Our Authors */}
       <section className="authors">
@@ -176,7 +196,7 @@ export default function Home() {
               <div className="image-placeholder">
                 <img src={author4} alt="Author 4" />
               </div>
-              <p>Rahul Deb</p>
+              <p>Sarfaraz Khader</p>
             </div>
           </div>
           <a href="/authors" className="btn-primary mt-6" onClick={(e) => handleNavClick(e, "/authors")}>

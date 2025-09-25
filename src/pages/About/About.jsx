@@ -211,11 +211,11 @@ const About = () => {
         <h2>Our Milestones</h2>
         <div className="achievements-grid">
           <div className="achievement">
-            <h3>500+</h3>
+            <h3>2000+</h3>
             <p>Books Published</p>
           </div>
           <div className="achievement">
-            <h3>100+</h3>
+            <h3>1000+</h3>
             <p>Authors Onboard</p>
           </div>
           <div className="achievement">

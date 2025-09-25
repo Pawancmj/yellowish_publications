@@ -137,61 +137,74 @@ h2 {
   transform: scale(1.05);
 }
 
-/* Books */
+/* ✅ Featured Books */
+.featured-books {
+  background: #fafafa;
+  padding: 3rem 1.5rem;
+  border-radius: 1rem;
+}
+
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); /* narrower columns */
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  justify-items: center;   /* ✅ grid ke andar card center */
+  align-items: start;      /* ✅ sabhi upar align */
 }
 
 .book-card {
   background: #fff;
-  border-radius: 0.5rem;
-  padding: 0.4rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-  transition: 0.3s;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 135px; /* 50% smaller */
+  height: auto;              /* ✅ fixed - ab card text ke hisaab se */
+  text-align: center;
 }
 
 .book-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-.book-card .image-placeholder {
-  flex: 1;
-  background: #f3f4f6;
-  border-radius: 0.35rem;
+.book-img {
+  width: 100%;
+  height: 260px; /* ✅ thoda chhota, har screen ke liye safe */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.35rem;
-  overflow: hidden;
-  height: 95px;   /* smaller uniform image size */
+  background: #f9fafb;
 }
 
-.book-card .image-placeholder img {
-  width: 100%;
-  height: 100%;
+.book-img img {
+  max-width: 90%;
+  max-height: 90%;
   object-fit: contain;
-  border-radius: inherit;
-  display: block;
+  transition: transform 0.3s ease;
 }
 
-.book-card h3 {
-  font-size: 0.65rem;
+.book-card:hover .book-img img {
+  transform: scale(1.05);
+}
+
+.book-info h3 {
+  font-size: 1rem;            /* ✅ thoda readable size */
   font-weight: 600;
-  margin: 0;
+  color: #333;
+  font-family: "Poppins", sans-serif;
   text-align: center;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+  white-space: normal;        /* ✅ wrapping allowed */
+  word-break: break-word;     /* ✅ long words break */
+  overflow-wrap: break-word;
+
+  margin: 0.5rem auto 1rem;   /* ✅ space balanced */
+  padding: 0 0.5rem;
+  line-height: 1.4;
 }
-
-
 
 /* Authors */
 .author-grid {
@@ -328,7 +341,6 @@ h2 {
 
 /* Responsive */
 @media (max-width: 1024px) {
-  /* ✅ Show full hero image without cropping */
   .hero-section {
     background-size: contain;
     background-position: top center;
@@ -367,3 +379,4 @@ h2 {
     gap: 0.75rem;
   }
 }
+
