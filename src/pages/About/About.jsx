@@ -219,7 +219,7 @@ const About = () => {
             <p>Authors Onboard</p>
           </div>
           <div className="achievement">
-            <h3>20+</h3>
+            <h3>10+</h3>
             <p>Countries Reached</p>
           </div>
         </div>

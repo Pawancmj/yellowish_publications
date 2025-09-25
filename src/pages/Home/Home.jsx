@@ -127,28 +127,20 @@ export default function Home() {
           <h2>Featured Books</h2>
           <div className="book-grid">
             <div className="book-card">
-              <div className="image-placeholder">
-                <img src={book1} alt="Book 1" />
-              </div>
-              <p>Optimize Your Mind</p>
+              <img src={book1} alt="Book 1" />
+              <p title="Optimize Your Mind">Optimize Your Mind</p>
             </div>
             <div className="book-card">
-              <div className="image-placeholder">
-                <img src={book2} alt="Book 2" />
-              </div>
-              <p>Genetic Habits</p>
+              <img src={book2} alt="Book 2" />
+              <p title="Genetic Habits">Genetic Habits</p>
             </div>
             <div className="book-card">
-              <div className="image-placeholder">
-                <img src={book3} alt="Book 3" />
-              </div>
-              <p>Management And Education in Digital Age</p>
+              <img src={book3} alt="Book 3" />
+              <p title="Management And Education in Digital Age">Management And Education in Digital Age</p>
             </div>
             <div className="book-card">
-              <div className="image-placeholder">
-                <img src={book4} alt="Book 4" />
-              </div>
-              <p>Things That Cannot Be Indelible</p>
+              <img src={book4} alt="Book 4" />
+              <p title="Things That Cannot Be Indelible">Things That Cannot Be Indelible</p>
             </div>
           </div>
           <a href="/store" className="btn-secondary mt-6" onClick={(e) => handleNavClick(e, "/store")}>
