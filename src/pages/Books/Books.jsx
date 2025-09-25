@@ -86,11 +86,19 @@ export default function Books() {
           filteredBooks.map((book) => (
             <div key={book.id} className="book-card">
               <img src={book.cover} alt={book.title} className="book-cover" />
-              <h3>{book.title}</h3>
-              {book.subtitle && <p className="subtitle">{book.subtitle}</p>}
-              <p className="author">By {book.author}</p>
-              <p className="genre">{book.genre}</p>
+
+              {/* main variable-height content — this will grow to push price & buttons to bottom */}
+              <div className="card-main">
+                <h3>{book.title}</h3>
+                {book.subtitle && <p className="subtitle">{book.subtitle}</p>}
+                <p className="author">By {book.author}</p>
+                <p className="genre">{book.genre}</p>
+              </div>
+
+              {/* price just above buttons */}
               <p className="price">₹{book.price}</p>
+
+              {/* buttons always at bottom */}
               <div className="card-buttons">
                 <Link
                   to={`/book/${book.id}`}

@@ -196,7 +196,7 @@ export default function Home() {
       {/* Why Choose Us */}
       <section className="why-choose">
         <div className="container">
-          <h2>Why Choose YellowBook?</h2>
+          <h2>Why Choose Yellowish Publication?</h2>
           <div className="pillars">
             <div className="pillar">
               <FaBookOpen className="icon" />

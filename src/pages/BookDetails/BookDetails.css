@@ -3,6 +3,8 @@
   flex-wrap: wrap;
   gap: 2rem;
   padding: 2rem;
+  justify-content: center; /* Center horizontally */
+  align-items: flex-start;
 }
 
 .book-details-cover {
@@ -14,6 +16,7 @@
 
 .book-info {
   flex: 2;
+  min-width: 280px;
 }
 
 .book-info h1 {
@@ -45,6 +48,7 @@
 
 .details-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
 }
@@ -81,4 +85,24 @@
   text-align: center;
   padding: 2rem;
   font-size: 1.2rem;
+}
+
+/* 📱 Mobile view fixes */
+@media (max-width: 768px) {
+  .book-details {
+    flex-direction: column;
+    align-items: center; /* Center items */
+    text-align: center;
+  }
+
+  .book-details-cover,
+  .book-info {
+    flex: none;        /* stop flex stretching */
+    margin: 0 auto;    /* force center horizontally */
+    max-width: 90%;    /* prevent overflow */
+  }
+
+  .details-buttons {
+    justify-content: center;
+  }
 }
