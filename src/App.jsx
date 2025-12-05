@@ -34,7 +34,7 @@ function App() {
               <Route path="/store" element={<Books />} />
               <Route path="/book/:id" element={<BookDetails />} />
               <Route path="/admin121-secret" element={<Admin />} /> {/* this is dashboard page*/}
-              <Route path="/adminform121-secret" element={<AdminForm />} /> {/* this is login page*/}
+              <Route path="/login" element={<AdminForm />} /> {/* this is login page*/}
             </Routes>
           </main>
           <Footer />

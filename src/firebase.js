@@ -1,5 +1,7 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";  // ← ADDED for data
+import { getStorage } from "firebase/storage";     // ← ADDED for images/files
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -14,6 +16,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
-export const auth = getAuth(app);
+// Export all services
+export const db = getFirestore(app);        // Firestore for collections data
+export const storage = getStorage(app);     // Storage for images/files
+export const auth = getAuth(app);           // Authentication
 export default app;

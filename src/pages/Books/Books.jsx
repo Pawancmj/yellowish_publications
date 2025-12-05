@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { books } from "../../data/books";
+import { useData } from "../../contexts/DataContext"; // ✅ ADD THIS
 import { FaSearch, FaFilter, FaShoppingCart, FaInfoCircle } from "react-icons/fa";
 import "./Books.css";
 
@@ -9,19 +9,25 @@ export default function Books() {
   const [genre, setGenre] = useState("");
   const [sortBy, setSortBy] = useState("");
 
+  // ✅ USE LIVE DATA FROM FIRESTORE
+  const { books, addBook } = useData(); // ✅ LIVE DATA + CRUD
+
   const navigate = useNavigate();
   const location = useLocation();
 
+  // ✅ FILTER LIVE FIRESTORE BOOKS (incl. newly added!)
   const filteredBooks = books
     .filter((book) =>
-      (book.title.toLowerCase() + book.author.toLowerCase() + book.genre.toLowerCase())
+      (book.title?.toLowerCase() + 
+       (book.author || book.authorsName || "").toLowerCase() + 
+       (book.genre || "").toLowerCase())
         .includes(search.toLowerCase())
     )
-    .filter((book) => (genre ? book.genre === genre : true))
+    .filter((book) => (genre ? (book.genre || "") === genre : true))
     .sort((a, b) => {
-      if (sortBy === "newest") return b.year - a.year;
-      if (sortBy === "priceLow") return a.price - b.price;
-      if (sortBy === "priceHigh") return b.price - a.price;
+      if (sortBy === "newest") return (b.updatedAt || b.year || 0) - (a.updatedAt || a.year || 0);
+      if (sortBy === "priceLow") return (a.price || 0) - (b.price || 0);
+      if (sortBy === "priceHigh") return (b.price || 0) - (a.price || 0);
       return 0;
     });
 
@@ -80,25 +86,26 @@ export default function Books() {
         </div>
       </div>
 
-      {/* Books Grid */}
+      {/* Books Grid - NOW SHOWS LIVE FIRESTORE DATA */}
       <div className="books-grid">
         {filteredBooks.length > 0 ? (
           filteredBooks.map((book) => (
             <div key={book.id} className="book-card">
-              <img src={book.cover} alt={book.title} className="book-cover" />
+              <img 
+                src={book.cover || book.image || "https://via.placeholder.com/200x300?text=No+Image"} 
+                alt={book.title} 
+                className="book-cover"
+              />
 
-              {/* main variable-height content — this will grow to push price & buttons to bottom */}
               <div className="card-main">
                 <h3>{book.title}</h3>
                 {book.subtitle && <p className="subtitle">{book.subtitle}</p>}
-                <p className="author">By {book.author}</p>
-                <p className="genre">{book.genre}</p>
+                <p className="author">By {book.author || book.authorsName || "Unknown"}</p>
+                <p className="genre">{book.genre || "Uncategorized"}</p>
               </div>
 
-              {/* price just above buttons */}
-              <p className="price">₹{book.price}</p>
+              <p className="price">₹{book.price || 0}</p>
 
-              {/* buttons always at bottom */}
               <div className="card-buttons">
                 <Link
                   to={`/book/${book.id}`}
@@ -114,8 +121,13 @@ export default function Books() {
             </div>
           ))
         ) : (
-          <p className="no-books">No books found.</p>
+          <p className="no-books">No books found. <button onClick={() => addBook({title: "Test Book", price: 299})}>Add Test Book</button></p>
         )}
+      </div>
+
+      {/* Debug info */}
+      <div className="debug-info" style={{fontSize: '12px', color: '#666', marginTop: '20px'}}>
+        Total books from Firestore: {books.length} | Filtered: {filteredBooks.length}
       </div>
     </div>
   );

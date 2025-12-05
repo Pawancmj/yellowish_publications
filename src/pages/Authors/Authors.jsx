@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaFeatherAlt } from "react-icons/fa";
-import { authors } from "../../data/author";
+import { useData } from "../../contexts/DataContext";
 import emailjs from "@emailjs/browser";
 import "./Authors.css";
 
 export default function Authors() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { authors } = useData(); // ✅ Removed addAuthor for public view
+
+  // ✅ PROPER LOADING STATE
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -16,6 +20,14 @@ export default function Authors() {
   });
 
   const [popup, setPopup] = useState({ show: false, success: false, msg: "" });
+
+  // ✅ WAIT FOR AUTHORS TO LOAD
+  useEffect(() => {
+    if (authors.length > 0) {
+      setIsLoaded(true);
+      console.log(`📖 Authors page: Loaded ${authors.length} authors from Firestore`);
+    }
+  }, [authors]);
 
   useEffect(() => {
     if (popup.show) {
@@ -74,6 +86,18 @@ export default function Authors() {
     }
   };
 
+  // ✅ PROPER LOADING CHECK (removed debug button)
+  if (!isLoaded) {
+    return (
+      <div className="authors-container">
+        <div className="authors-hero">
+          <h1>Loading authors from Firestore...</h1>
+          <p>Total authors: {authors.length}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="authors-container">
       {/* Hero Section */}
@@ -88,19 +112,19 @@ export default function Authors() {
       {/* Featured Authors */}
       <div className="featured-authors">
         <h2>
-          <FaFeatherAlt /> Featured Authors
+          <FaFeatherAlt /> Featured Authors ({authors.length > 0 ? authors.slice(0, 2).length : 0})
         </h2>
         <div className="authors-grid featured-grid">
           {authors.slice(0, 2).map((author) => (
             <div key={author.id} className="author-card">
               <div className="author-img">
                 <img
-                  src={author.photo || "/placeholder.jpg"}
+                  src={author.photo || author.image || "https://via.placeholder.com/150?text=Author"}
                   alt={author.name}
                 />
               </div>
               <h3>{author.name}</h3>
-              <p className="genre">{author.genre}</p>
+              <p className="genre">{author.genre || "Various"}</p>
               <div className="card-button-container">
                 <a
                   href={`/author/${author.id}`}
@@ -117,18 +141,18 @@ export default function Authors() {
 
       {/* All Authors */}
       <div className="all-authors">
-        <h2>All Authors</h2>
+        <h2>All Authors ({authors.length})</h2>
         <div className="authors-grid">
           {authors.map((author) => (
             <div key={author.id} className="author-card">
               <div className="author-img">
                 <img
-                  src={author.photo || "/placeholder.jpg"}
+                  src={author.photo || author.image || "https://via.placeholder.com/150?text=Author"}
                   alt={author.name}
                 />
               </div>
               <h3>{author.name}</h3>
-              <p className="book-title">{author.books[0]}</p>
+              <p className="book-title">{author.books?.[0] || "No books yet"}</p>
               <div className="card-button-container">
                 <a
                   href={`/author/${author.id}`}
