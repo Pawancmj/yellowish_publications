@@ -94,8 +94,8 @@ export default function Home() {
       if (original && original.cover) {
         result = original.cover;
       } else {
-        // 4. Ultimate fallback
-        result = fallbackBook;
+        // 4. Ultimate fallback (shows that the book has no cover)
+        result = "https://via.placeholder.com/200x300.png?text=No+Cover";
       }
     }
     return result;
@@ -103,20 +103,23 @@ export default function Home() {
 
   // Helper to get a valid image URL for an author photo
   const getAuthorPhoto = (author) => {
+    let result;
     // 1. External URL
     if (author.photo && typeof author.photo === 'string' && author.photo.startsWith('http')) {
-      return author.photo;
+      result = author.photo;
+    } else if (author.image && typeof author.image === 'string' && author.image.startsWith('http')) {
+      result = author.image;
+    } else {
+      // 2. Fallback to original local asset
+      const original = initialAuthors.find(a => String(a.id) === String(author.id));
+      if (original && original.photo) {
+        result = original.photo;
+      } else {
+        // 3. Ultimate fallback (shows no photo available)
+        result = "https://via.placeholder.com/150x150.png?text=No+Photo";
+      }
     }
-    if (author.image && typeof author.image === 'string' && author.image.startsWith('http')) {
-      return author.image;
-    }
-    // 2. Fallback to original local asset
-    const original = initialAuthors.find(a => a.id === String(author.id));
-    if (original && original.photo) {
-      return original.photo;
-    }
-    // 3. Ultimate fallback
-    return fallbackAuthor;
+    return result;
   };
 
   return (
