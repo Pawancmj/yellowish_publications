@@ -81,21 +81,25 @@ export default function Home() {
 
   // Helper to get a valid image URL for a book cover
   const getBookCover = (book) => {
+    let result;
     // 1. If it has a valid external URL
     if (book.cover && typeof book.cover === 'string' && book.cover.startsWith('http')) {
-      return book.cover;
+      result = book.cover;
+    } else if (book.cover && typeof book.cover === 'string' && book.cover.startsWith('/assets/')) {
+      // 2. If it's a module string from Vite
+      result = book.cover;
+    } else {
+      // 3. Fallback to its original local asset if existed
+      const original = initialBooks.find(b => String(b.id) === String(book.id));
+      if (original && original.cover) {
+        result = original.cover;
+      } else {
+        // 4. Ultimate fallback
+        result = fallbackBook;
+      }
     }
-    // 2. If it's a module string from Vite
-    if (book.cover && typeof book.cover === 'string' && book.cover.startsWith('/assets/')) {
-      return book.cover;
-    }
-    // 3. Fallback to its original local asset if existed
-    const original = initialBooks.find(b => b.id === book.id);
-    if (original && original.cover) {
-      return original.cover;
-    }
-    // 4. Ultimate fallback
-    return fallbackBook;
+    console.log(`[getBookCover] ID: ${book.id}, cover: ${book.cover}, result: ${result}`);
+    return result;
   };
 
   // Helper to get a valid image URL for an author photo
