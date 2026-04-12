@@ -8,7 +8,7 @@ export default function BookDetails() {
   const navigate = useNavigate();
   
   // ✅ USE LIVE FIRESTORE DATA (read-only for public)
-  const { books } = useData(); // Removed updateBook, deleteBook
+  const { books, getBookCover } = useData(); 
   
   // ✅ FIND BOOK FROM LIVE DATA
   const book = books.find((b) => b.id === id);
@@ -52,12 +52,13 @@ export default function BookDetails() {
   return (
     <div className="book-details">
       <img 
-        src={book.cover || book.image || "https://via.placeholder.com/300x450?text=No+Image"} 
+        src={getBookCover ? getBookCover(book) : (book.cover || book.image || "https://via.placeholder.com/300x450?text=No+Image")} 
+        onError={(e) => { e.target.src = "https://via.placeholder.com/300x450?text=No+Image"; }}
         alt={book.title} 
         className="book-details-cover" 
       />
       
-      <div className="book-info">
+      <div className="book-details-info">
         <h1>{book.title}</h1>
         {book.subtitle && <h3 className="subtitle">{book.subtitle}</h3>}
         <p className="author">By {book.author || book.authorsName || "Unknown"}</p>
