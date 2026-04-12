@@ -8,7 +8,11 @@ import aboutImage from "../../assets/About.png";
 // Hero Image
 import heroImage from "../../assets/hero.png";
 
-// Fallback images for items without cover/photo
+// Initial Data for image fallbacks
+import { books as initialBooks } from "../../data/books";
+import { authors as initialAuthors } from "../../data/author";
+
+// Fallback images for any new items without cover/photo
 import fallbackBook from "../../assets/book1.png";
 import fallbackAuthor from "../../assets/author1.png";
 
@@ -77,27 +81,38 @@ export default function Home() {
 
   // Helper to get a valid image URL for a book cover
   const getBookCover = (book) => {
+    // 1. If it has a valid external URL
     if (book.cover && typeof book.cover === 'string' && book.cover.startsWith('http')) {
       return book.cover;
     }
-    // If it's a local import (module), use it directly
-    if (book.cover && typeof book.cover !== 'string') {
+    // 2. If it's a module string from Vite
+    if (book.cover && typeof book.cover === 'string' && book.cover.startsWith('/assets/')) {
       return book.cover;
     }
+    // 3. Fallback to its original local asset if existed
+    const original = initialBooks.find(b => b.id === book.id);
+    if (original && original.cover) {
+      return original.cover;
+    }
+    // 4. Ultimate fallback
     return fallbackBook;
   };
 
   // Helper to get a valid image URL for an author photo
   const getAuthorPhoto = (author) => {
+    // 1. External URL
     if (author.photo && typeof author.photo === 'string' && author.photo.startsWith('http')) {
-      return author.photo;
-    }
-    if (author.photo && typeof author.photo !== 'string') {
       return author.photo;
     }
     if (author.image && typeof author.image === 'string' && author.image.startsWith('http')) {
       return author.image;
     }
+    // 2. Fallback to original local asset
+    const original = initialAuthors.find(a => a.id === String(author.id));
+    if (original && original.photo) {
+      return original.photo;
+    }
+    // 3. Ultimate fallback
     return fallbackAuthor;
   };
 
