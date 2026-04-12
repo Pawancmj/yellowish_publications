@@ -364,8 +364,8 @@ h2 {
   max-width: none;
   justify-content: flex-start;
   align-self: start;
-  min-height: unset;       /* ✅ Books.css ka min-height: 480px override */
-  height: 300px;           /* ✅ card ki fixed height */
+  min-height: unset;       
+  height: 300px;           
 }
 
 .featured-books .book-img {
