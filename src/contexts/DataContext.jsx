@@ -1,10 +1,11 @@
-// src/contexts/DataContext.jsx - SIMPLIFIED VERSION
+// src/contexts/DataContext.jsx
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from "react";
 import { db, auth } from "../firebase";
 import { 
   collection, 
   addDoc, 
   doc, 
+  setDoc,
   updateDoc, 
   deleteDoc, 
   onSnapshot, 
@@ -23,13 +24,16 @@ export function useData() {
 }
 
 export function DataProvider({ children }) {
+  // Start with initial/static data as fallback
   const [books, setBooks] = useState(initialBooks);
   const [authors, setAuthors] = useState(initialAuthors);
+  const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const booksUnsubscribeRef = useRef(null);
   const authorsUnsubscribeRef = useRef(null);
+  const hasSeededRef = useRef(false);
 
-  // 1. Auth (optional - public reads don't need it)
+  // 1. Auth
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -42,64 +46,132 @@ export function DataProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  // 2. ✅ PUBLIC READS - Listen to shared-app-user (works for everyone!)
+  // 2. PUBLIC READS - Listen to Firestore with fallback to static data
   useEffect(() => {
     console.log("👂 Starting PUBLIC listeners...");
+    let booksReceived = false;
+    let authorsReceived = false;
 
-    // PUBLIC BOOKS - works without login
+    // PUBLIC BOOKS
     const booksQuery = query(collection(db, `users/${FIXED_USER_ID}/books`));
     booksUnsubscribeRef.current = onSnapshot(booksQuery, (snapshot) => {
-      const booksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      console.log(`📚 LIVE: ${booksData.length} books - PUBLIC ACCESS`);
-      setBooks(booksData);
+      const booksData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      booksReceived = true;
+      console.log(`📚 LIVE: ${booksData.length} books from Firestore`);
+      
+      // Only replace if Firestore actually has data
+      if (booksData.length > 0) {
+        setBooks(booksData);
+      } else {
+        // Keep initial/static data as fallback
+        console.log("📚 Firestore empty, using static books data");
+        setBooks(initialBooks);
+      }
+      
+      if (booksReceived && authorsReceived) setLoading(false);
+    }, (error) => {
+      console.error("❌ Books listener error:", error);
+      // On error, keep static data
+      setBooks(initialBooks);
+      booksReceived = true;
+      if (booksReceived && authorsReceived) setLoading(false);
     });
 
-    // PUBLIC AUTHORS - works without login
+    // PUBLIC AUTHORS
     const authorsQuery = query(collection(db, `users/${FIXED_USER_ID}/authors`));
     authorsUnsubscribeRef.current = onSnapshot(authorsQuery, (snapshot) => {
-      const authorsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      console.log(`📖 LIVE: ${authorsData.length} authors - PUBLIC ACCESS`);
-      setAuthors(authorsData);
+      const authorsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      authorsReceived = true;
+      console.log(`📖 LIVE: ${authorsData.length} authors from Firestore`);
+      
+      // Only replace if Firestore actually has data
+      if (authorsData.length > 0) {
+        setAuthors(authorsData);
+      } else {
+        // Keep initial/static data as fallback
+        console.log("📖 Firestore empty, using static authors data");
+        setAuthors(initialAuthors);
+      }
+      
+      if (booksReceived && authorsReceived) setLoading(false);
+    }, (error) => {
+      console.error("❌ Authors listener error:", error);
+      // On error, keep static data
+      setAuthors(initialAuthors);
+      authorsReceived = true;
+      if (booksReceived && authorsReceived) setLoading(false);
     });
 
+    // Safety timeout — if Firestore doesn't respond in 5s, stop loading
+    const timeout = setTimeout(() => {
+      if (!booksReceived || !authorsReceived) {
+        console.warn("⏰ Firestore timeout — using static data");
+        setLoading(false);
+      }
+    }, 5000);
+
     return () => {
+      clearTimeout(timeout);
       if (booksUnsubscribeRef.current) booksUnsubscribeRef.current();
       if (authorsUnsubscribeRef.current) authorsUnsubscribeRef.current();
     };
   }, []);
 
-  // 3. SEED DATA ONCE (admin only)
+  // 3. SEED DATA ONCE (admin only) — Fixed: uses setDoc instead of broken doc().set()
   useEffect(() => {
-    if (currentUser?.uid && !books.length && !authors.length) {
-      const seedData = async () => {
+    if (currentUser?.uid && !hasSeededRef.current) {
+      // Check if Firestore already has data (to avoid re-seeding)
+      const checkAndSeed = async () => {
         try {
-          console.log("🌱 Seeding initial data...");
-          // Seed books
-          for (const book of initialBooks) {
-            await doc(db, `users/${FIXED_USER_ID}/books`, book.id).set({
-              ...book,
-              createdAt: new Date(),
-              updatedAt: new Date()
-            }, { merge: true });
-          }
-          // Seed authors
-          for (const author of initialAuthors) {
-            await doc(db, `users/${FIXED_USER_ID}/authors`, author.id).set({
-              ...author,
-              createdAt: new Date(),
-              updatedAt: new Date()
-            }, { merge: true });
-          }
-          console.log("✅ Initial data seeded");
+          // Only seed if we detected Firestore is empty from the listeners
+          const booksQuery = query(collection(db, `users/${FIXED_USER_ID}/books`));
+          const unsubCheck = onSnapshot(booksQuery, async (snapshot) => {
+            unsubCheck(); // Unsubscribe immediately after first check
+            
+            if (snapshot.docs.length === 0 && !hasSeededRef.current) {
+              hasSeededRef.current = true;
+              console.log("🌱 Seeding initial data to Firestore...");
+              
+              // Seed books
+              for (const book of initialBooks) {
+                const bookData = { ...book };
+                // Remove imported image references — they won't work in Firestore
+                // Store as empty or placeholder URL
+                if (typeof bookData.cover !== 'string' || !bookData.cover.startsWith('http')) {
+                  delete bookData.cover;
+                }
+                await setDoc(doc(db, `users/${FIXED_USER_ID}/books`, book.id), {
+                  ...bookData,
+                  createdAt: new Date(),
+                  updatedAt: new Date()
+                }, { merge: true });
+              }
+              
+              // Seed authors
+              for (const author of initialAuthors) {
+                const authorData = { ...author };
+                if (typeof authorData.photo !== 'string' || !authorData.photo.startsWith('http')) {
+                  delete authorData.photo;
+                }
+                await setDoc(doc(db, `users/${FIXED_USER_ID}/authors`, author.id), {
+                  ...authorData,
+                  createdAt: new Date(),
+                  updatedAt: new Date()
+                }, { merge: true });
+              }
+              
+              console.log("✅ Initial data seeded to Firestore");
+            }
+          });
         } catch (error) {
           console.error("❌ Seed error:", error);
         }
       };
-      seedData();
+      checkAndSeed();
     }
   }, [currentUser]);
 
-  // 4. CRUD FUNCTIONS (admin only - blocked by security rules for public)
+  // 4. CRUD FUNCTIONS
   const addBook = useCallback(async (book) => {
     try {
       const docRef = await addDoc(collection(db, `users/${FIXED_USER_ID}/books`), {
@@ -173,6 +245,7 @@ export function DataProvider({ children }) {
   const value = {
     books,
     authors,
+    loading,
     currentUser,
     addBook,
     updateBook,
@@ -184,4 +257,5 @@ export function DataProvider({ children }) {
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
+
   

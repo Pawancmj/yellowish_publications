@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";  // eslint-disable-line no-unused-vars
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaFeatherAlt } from "react-icons/fa";
 import { useData } from "../../contexts/DataContext";
@@ -8,10 +8,7 @@ import "./Authors.css";
 export default function Authors() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authors } = useData(); // ✅ Removed addAuthor for public view
-
-  // ✅ PROPER LOADING STATE
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { authors, loading } = useData();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -20,14 +17,6 @@ export default function Authors() {
   });
 
   const [popup, setPopup] = useState({ show: false, success: false, msg: "" });
-
-  // ✅ WAIT FOR AUTHORS TO LOAD
-  useEffect(() => {
-    if (authors.length > 0) {
-      setIsLoaded(true);
-      console.log(`📖 Authors page: Loaded ${authors.length} authors from Firestore`);
-    }
-  }, [authors]);
 
   useEffect(() => {
     if (popup.show) {
@@ -86,13 +75,26 @@ export default function Authors() {
     }
   };
 
-  // ✅ PROPER LOADING CHECK (removed debug button)
-  if (!isLoaded) {
+  // Helper to get a valid image URL for an author photo
+  const getAuthorPhoto = (author) => {
+    if (author.photo && typeof author.photo === 'string' && author.photo.startsWith('http')) {
+      return author.photo;
+    }
+    if (author.photo && typeof author.photo !== 'string') {
+      return author.photo;
+    }
+    if (author.image && typeof author.image === 'string' && author.image.startsWith('http')) {
+      return author.image;
+    }
+    return "https://via.placeholder.com/150?text=Author";
+  };
+
+  // Show loading only while DataContext is still loading
+  if (loading) {
     return (
       <div className="authors-container">
         <div className="authors-hero">
-          <h1>Loading authors from Firestore...</h1>
-          <p>Total authors: {authors.length}</p>
+          <h1>Loading authors...</h1>
         </div>
       </div>
     );
@@ -119,8 +121,9 @@ export default function Authors() {
             <div key={author.id} className="author-card">
               <div className="author-img">
                 <img
-                  src={author.photo || author.image || "https://via.placeholder.com/150?text=Author"}
+                  src={getAuthorPhoto(author)}
                   alt={author.name}
+                  onError={(e) => { e.target.src = "https://via.placeholder.com/150?text=Author"; }}
                 />
               </div>
               <h3>{author.name}</h3>
@@ -147,12 +150,13 @@ export default function Authors() {
             <div key={author.id} className="author-card">
               <div className="author-img">
                 <img
-                  src={author.photo || author.image || "https://via.placeholder.com/150?text=Author"}
+                  src={getAuthorPhoto(author)}
                   alt={author.name}
+                  onError={(e) => { e.target.src = "https://via.placeholder.com/150?text=Author"; }}
                 />
               </div>
               <h3>{author.name}</h3>
-              <p className="book-title">{author.books?.[0] || "No books yet"}</p>
+              <p className="book-title">{Array.isArray(author.books) ? (author.books[0] || "No books yet") : (author.books || "No books yet")}</p>
               <div className="card-button-container">
                 <a
                   href={`/author/${author.id}`}

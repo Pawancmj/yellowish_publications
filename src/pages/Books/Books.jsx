@@ -73,6 +73,17 @@ export default function Books() {
             <option value="History">History</option>
             <option value="Self-Help">Self-Help</option>
             <option value="Academic">Academic</option>
+            <option value="Psychology">Psychology</option>
+            <option value="Science">Science</option>
+            <option value="Management">Management</option>
+            <option value="Dharma">Dharma</option>
+            <option value="Nature">Nature</option>
+            <option value="Business">Business</option>
+            <option value="Astronomy">Astronomy</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Law">Law</option>
+            <option value="Spiritual Growth">Spiritual Growth</option>
+            <option value="Epic Fantasy">Epic Fantasy</option>
           </select>
         </div>
         <div>
@@ -123,11 +134,6 @@ export default function Books() {
         ) : (
           <p className="no-books">No books found. <button onClick={() => addBook({title: "Test Book", price: 299})}>Add Test Book</button></p>
         )}
-      </div>
-
-      {/* Debug info */}
-      <div className="debug-info" style={{fontSize: '12px', color: '#666', marginTop: '20px'}}>
-        Total books from Firestore: {books.length} | Filtered: {filteredBooks.length}
       </div>
     </div>
   );

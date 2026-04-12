@@ -464,6 +464,17 @@ const BookForm = ({ book, onSave, onCancel }) => {
                 <option value="History">History</option>
                 <option value="Self-Help">Self-Help</option>
                 <option value="Academic">Academic</option>
+                <option value="Psychology">Psychology</option>
+                <option value="Science">Science</option>
+                <option value="Management">Management</option>
+                <option value="Dharma">Dharma</option>
+                <option value="Nature">Nature</option>
+                <option value="Business">Business</option>
+                <option value="Astronomy">Astronomy</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Law">Law</option>
+                <option value="Spiritual Growth">Spiritual Growth</option>
+                <option value="Epic Fantasy">Epic Fantasy</option>
               </select>
             </div>
           </div>
@@ -633,6 +644,13 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
               <option value="History">Historian</option>
               <option value="Self-Help">Self-Help Author</option>
               <option value="Academic">Academic Writer</option>
+              <option value="Psychology">Psychology</option>
+              <option value="Science">Science Writer</option>
+              <option value="Management">Management</option>
+              <option value="Dharma">Dharma / Spirituality</option>
+              <option value="Law">Law</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Fantasy">Fantasy Writer</option>
             </select>
           </div>
 

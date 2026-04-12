@@ -1,23 +1,16 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useData } from "../../contexts/DataContext";
 import "./Home.css";
-
-// Featured Books
-import book1 from "../../assets/book1.png";
-import book2 from "../../assets/book2.png";
-import book3 from "../../assets/book3.png";
-import book4 from "../../assets/book4.png";
-
-// Authors
-import author1 from "../../assets/author1.png";
-import author2 from "../../assets/author2.png";
-import author3 from "../../assets/author3.png";
-import author4 from "../../assets/author4.png";
 
 // About Image
 import aboutImage from "../../assets/About.png";
 
 // Hero Image
 import heroImage from "../../assets/hero.png";
+
+// Fallback images for items without cover/photo
+import fallbackBook from "../../assets/book1.png";
+import fallbackAuthor from "../../assets/author1.png";
 
 // React Icons
 import { FaBookOpen, FaGlobe, FaPenFancy, FaUsers } from "react-icons/fa";
@@ -28,6 +21,11 @@ import emailjs from "@emailjs/browser";
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { books, authors } = useData();
+
+  // Get first 4 books and authors for featured sections
+  const featuredBooks = books.slice(0, 4);
+  const featuredAuthors = authors.slice(0, 4);
 
   // Smooth scroll function
   const scrollToTop = () => {
@@ -51,7 +49,7 @@ export default function Home() {
       .sendForm("service_9vpwjdo", "template_mzztq8n", e.target, "KBwcTEiUFQhCaMWZB")
       .then(
         () => {
-          alert("🎉 Congratulations! You’ve joined the Yellowish Publications community.");
+          alert("🎉 Congratulations! You've joined the Yellowish Publications community.");
           e.target.reset();
         },
         (error) => {
@@ -67,7 +65,7 @@ export default function Home() {
       .sendForm("service_9vpwjdo", "template_1vzt7uv", e.target, "KBwcTEiUFQhCaMWZB")
       .then(
         () => {
-          alert("✅ Thank you for contacting Yellowish Publication! We’ll get back to you soon.");
+          alert("✅ Thank you for contacting Yellowish Publication! We'll get back to you soon.");
           e.target.reset();
         },
         (error) => {
@@ -75,6 +73,32 @@ export default function Home() {
           alert("❌ Something went wrong. Please try again!");
         }
       );
+  };
+
+  // Helper to get a valid image URL for a book cover
+  const getBookCover = (book) => {
+    if (book.cover && typeof book.cover === 'string' && book.cover.startsWith('http')) {
+      return book.cover;
+    }
+    // If it's a local import (module), use it directly
+    if (book.cover && typeof book.cover !== 'string') {
+      return book.cover;
+    }
+    return fallbackBook;
+  };
+
+  // Helper to get a valid image URL for an author photo
+  const getAuthorPhoto = (author) => {
+    if (author.photo && typeof author.photo === 'string' && author.photo.startsWith('http')) {
+      return author.photo;
+    }
+    if (author.photo && typeof author.photo !== 'string') {
+      return author.photo;
+    }
+    if (author.image && typeof author.image === 'string' && author.image.startsWith('http')) {
+      return author.image;
+    }
+    return fallbackAuthor;
   };
 
   return (
@@ -121,83 +145,63 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Books */}
-<section className="featured-books">
-  <div className="container">
-    <h2>Featured Books</h2>
-    <div className="book-grid">
-      <div className="book-card">
-        <div className="book-img">
-          <img src={book1} alt="Book 1" />
+      {/* Featured Books — Now Dynamic from Firestore */}
+      <section className="featured-books">
+        <div className="container">
+          <h2>Featured Books</h2>
+          <div className="book-grid">
+            {featuredBooks.map((book) => (
+              <div
+                className="book-card"
+                key={book.id}
+                onClick={(e) => handleNavClick(e, `/book/${book.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="book-img">
+                  <img
+                    src={getBookCover(book)}
+                    alt={book.title}
+                    onError={(e) => { e.target.src = fallbackBook; }}
+                  />
+                </div>
+                <div className="book-info">
+                  <h3>{book.title}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+          <a
+            href="/store"
+            className="btn-secondary mt-6"
+            onClick={(e) => handleNavClick(e, "/store")}
+          >
+            Visit Store for More
+          </a>
         </div>
-        <div className="book-info">
-          <h3>Optimize Your Mind</h3>
-        </div>
-      </div>
-      <div className="book-card">
-        <div className="book-img">
-          <img src={book2} alt="Book 2" />
-        </div>
-        <div className="book-info">
-          <h3>Genetic Habits</h3>
-        </div>
-      </div>
-      <div className="book-card">
-        <div className="book-img">
-          <img src={book3} alt="Book 3" />
-        </div>
-        <div className="book-info">
-          <h3>Management And Education in Digital Age</h3>
-        </div>
-      </div>
-      <div className="book-card">
-        <div className="book-img">
-          <img src={book4} alt="Book 4" />
-        </div>
-        <div className="book-info">
-          <h3>Things That Cannot Be Indelible</h3>
-        </div>
-      </div>
-    </div>
-    <a
-      href="/store"
-      className="btn-secondary mt-6"
-      onClick={(e) => handleNavClick(e, "/store")}
-    >
-      Visit Store for More
-    </a>
-  </div>
-</section>
+      </section>
 
-      {/* Meet Our Authors */}
+      {/* Meet Our Authors — Now Dynamic from Firestore */}
       <section className="authors">
         <div className="container">
           <h2>Meet Our Authors</h2>
           <div className="author-grid">
-            <div className="author-card">
-              <div className="image-placeholder">
-                <img src={author1} alt="Author 1" />
+            {featuredAuthors.map((author) => (
+              <div
+                className="author-card"
+                key={author.id}
+                onClick={(e) => handleNavClick(e, `/author/${author.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="image-placeholder">
+                  <img
+                    src={getAuthorPhoto(author)}
+                    alt={author.name}
+                    onError={(e) => { e.target.src = fallbackAuthor; }}
+                  />
+                </div>
+                <p>{author.name}</p>
               </div>
-              <p>Samranika Pattnaik</p>
-            </div>
-            <div className="author-card">
-              <div className="image-placeholder">
-                <img src={author2} alt="Author 2" />
-              </div>
-              <p>Dr. Heena Sachdeva</p>
-            </div>
-            <div className="author-card">
-              <div className="image-placeholder">
-                <img src={author3} alt="Author 3" />
-              </div>
-              <p>Mukul Dagar</p>
-            </div>
-            <div className="author-card">
-              <div className="image-placeholder">
-                <img src={author4} alt="Author 4" />
-              </div>
-              <p>Sarfaraz Khader</p>
-            </div>
+            ))}
           </div>
           <a href="/authors" className="btn-primary mt-6" onClick={(e) => handleNavClick(e, "/authors")}>
             View All Authors
@@ -237,13 +241,13 @@ export default function Home() {
           <div className="testimonial-grid">
             <div className="testimonial-card">
               <p>
-                “Yellowish Publication made my publishing journey smooth and exciting. Their team is simply the best!”
+                "Yellowish Publication made my publishing journey smooth and exciting. Their team is simply the best!"
               </p>
               <span>- Rahul Deb</span>
             </div>
             <div className="testimonial-card">
               <p>
-                “Thanks to Yellowish Publication, my book reached readers across the globe. Highly recommended!”
+                "Thanks to Yellowish Publication, my book reached readers across the globe. Highly recommended!"
               </p>
               <span>- Dr. Heena Sachdeva</span>
             </div>
