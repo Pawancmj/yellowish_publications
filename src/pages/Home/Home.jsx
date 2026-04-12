@@ -98,7 +98,6 @@ export default function Home() {
         result = fallbackBook;
       }
     }
-    console.log(`[getBookCover] ID: ${book.id}, cover: ${book.cover}, result: ${result}`);
     return result;
   };
 

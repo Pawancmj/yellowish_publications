@@ -59,19 +59,18 @@ export function DataProvider({ children }) {
       booksReceived = true;
       console.log(`📚 LIVE: ${booksData.length} books from Firestore`);
       
-      // Only replace if Firestore actually has data
-      if (booksData.length > 0) {
-        setBooks(booksData);
-      } else {
-        // Keep initial/static data as fallback
-        console.log("📚 Firestore empty, using static books data");
-        setBooks(initialBooks);
+      // ✅ MERGE Firestore data with static data so things don't disappear
+      const mergedBooks = [...booksData];
+      for (const initialBook of initialBooks) {
+        if (!booksData.find(b => b.id === initialBook.id)) {
+          mergedBooks.push(initialBook);
+        }
       }
+      setBooks(mergedBooks);
       
       if (booksReceived && authorsReceived) setLoading(false);
     }, (error) => {
       console.error("❌ Books listener error:", error);
-      // On error, keep static data
       setBooks(initialBooks);
       booksReceived = true;
       if (booksReceived && authorsReceived) setLoading(false);
@@ -84,14 +83,14 @@ export function DataProvider({ children }) {
       authorsReceived = true;
       console.log(`📖 LIVE: ${authorsData.length} authors from Firestore`);
       
-      // Only replace if Firestore actually has data
-      if (authorsData.length > 0) {
-        setAuthors(authorsData);
-      } else {
-        // Keep initial/static data as fallback
-        console.log("📖 Firestore empty, using static authors data");
-        setAuthors(initialAuthors);
+      // ✅ MERGE Firestore data with static data
+      const mergedAuthors = [...authorsData];
+      for (const initialAuthor of initialAuthors) {
+        if (!authorsData.find(a => String(a.id) === String(initialAuthor.id))) {
+          mergedAuthors.push(initialAuthor);
+        }
       }
+      setAuthors(mergedAuthors);
       
       if (booksReceived && authorsReceived) setLoading(false);
     }, (error) => {
