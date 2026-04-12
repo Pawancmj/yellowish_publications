@@ -14,6 +14,8 @@ import {
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { books as initialBooks } from "../data/books";
 import { authors as initialAuthors } from "../data/author";
+import fallbackBook from "../assets/book1.png";
+import fallbackAuthor from "../assets/author1.png";
 
 const FIXED_USER_ID = "shared-app-user";
 
@@ -253,6 +255,45 @@ export function DataProvider({ children }) {
     updateAuthor,
     deleteAuthor,
   };
+
+  // Helper to get a valid image URL for a book cover
+  const getBookCover = (book) => {
+    let result;
+    if (book.cover && typeof book.cover === 'string' && book.cover.startsWith('http')) {
+      result = book.cover;
+    } else if (book.cover && typeof book.cover === 'string' && book.cover.startsWith('/assets/')) {
+      result = book.cover;
+    } else {
+      const original = initialBooks.find(b => String(b.id) === String(book.id));
+      if (original && original.cover) {
+        result = original.cover;
+      } else {
+        result = "https://via.placeholder.com/200x300.png?text=No+Cover";
+      }
+    }
+    return result;
+  };
+
+  // Helper to get a valid image URL for an author photo
+  const getAuthorPhoto = (author) => {
+    let result;
+    if (author.photo && typeof author.photo === 'string' && author.photo.startsWith('http')) {
+      result = author.photo;
+    } else if (author.image && typeof author.image === 'string' && author.image.startsWith('http')) {
+      result = author.image;
+    } else {
+      const original = initialAuthors.find(a => String(a.id) === String(author.id));
+      if (original && original.photo) {
+        result = original.photo;
+      } else {
+        result = "https://via.placeholder.com/150x150.png?text=No+Photo";
+      }
+    }
+    return result;
+  };
+
+  value.getBookCover = getBookCover;
+  value.getAuthorPhoto = getAuthorPhoto;
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

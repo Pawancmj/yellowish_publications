@@ -18,6 +18,8 @@ const Admin = () => {
     addAuthor,
     updateAuthor,
     deleteAuthor,
+    getBookCover,
+    getAuthorPhoto,
   } = useData();
 
   const [activeTab, setActiveTab] = useState("books");
@@ -146,11 +148,11 @@ const Admin = () => {
                       <tr key={book.id}>
                         <td>
                           <img
-                            src={book.cover || "/placeholder-book.jpg"}
+                            src={getBookCover(book)}
                             alt={book.title}
                             className="table-cover"
                             onError={(e) => {
-                              e.target.src = "/placeholder-book.jpg";
+                              e.target.src = "https://via.placeholder.com/150x200.png?text=No+Cover";
                             }}
                           />
                         </td>
@@ -222,11 +224,11 @@ const Admin = () => {
                       <tr key={author.id}>
                         <td>
                           <img
-                            src={author.photo || "/placeholder.jpg"}
+                            src={getAuthorPhoto(author)}
                             alt={author.name}
                             className="table-photo"
                             onError={(e) => {
-                              e.target.src = "/placeholder.jpg";
+                              e.target.src = "https://via.placeholder.com/150x150.png?text=No+Photo";
                             }}
                           />
                         </td>

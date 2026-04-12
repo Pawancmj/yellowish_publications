@@ -8,7 +8,7 @@ import "./Authors.css";
 export default function Authors() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authors, loading } = useData();
+  const { authors, loading, getAuthorPhoto } = useData();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -75,20 +75,6 @@ export default function Authors() {
     }
   };
 
-  // Helper to get a valid image URL for an author photo
-  const getAuthorPhoto = (author) => {
-    if (author.photo && typeof author.photo === 'string' && author.photo.startsWith('http')) {
-      return author.photo;
-    }
-    if (author.photo && typeof author.photo !== 'string') {
-      return author.photo;
-    }
-    if (author.image && typeof author.image === 'string' && author.image.startsWith('http')) {
-      return author.image;
-    }
-    return "https://via.placeholder.com/150?text=Author";
-  };
-
   // Show loading only while DataContext is still loading
   if (loading) {
     return (
@@ -123,7 +109,7 @@ export default function Authors() {
                 <img
                   src={getAuthorPhoto(author)}
                   alt={author.name}
-                  onError={(e) => { e.target.src = "https://via.placeholder.com/150?text=Author"; }}
+                  onError={(e) => { e.target.src = "https://via.placeholder.com/150x150.png?text=No+Photo"; }}
                 />
               </div>
               <h3>{author.name}</h3>
@@ -152,7 +138,7 @@ export default function Authors() {
                 <img
                   src={getAuthorPhoto(author)}
                   alt={author.name}
-                  onError={(e) => { e.target.src = "https://via.placeholder.com/150?text=Author"; }}
+                  onError={(e) => { e.target.src = "https://via.placeholder.com/150x150.png?text=No+Photo"; }}
                 />
               </div>
               <h3>{author.name}</h3>

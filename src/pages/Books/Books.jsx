@@ -10,7 +10,7 @@ export default function Books() {
   const [sortBy, setSortBy] = useState("");
 
   // ✅ USE LIVE DATA FROM FIRESTORE
-  const { books, addBook } = useData(); // ✅ LIVE DATA + CRUD
+  const { books, addBook, getBookCover } = useData(); // ✅ LIVE DATA + CRUD
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -103,9 +103,10 @@ export default function Books() {
           filteredBooks.map((book) => (
             <div key={book.id} className="book-card">
               <img 
-                src={book.cover || book.image || "https://via.placeholder.com/200x300?text=No+Image"} 
+                src={getBookCover(book)} 
                 alt={book.title} 
                 className="book-cover"
+                onError={(e) => { e.target.src = "https://via.placeholder.com/200x300.png?text=No+Cover"; }}
               />
 
               <div className="card-main">
