@@ -8,7 +8,7 @@ export default function AuthorDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const { authors } = useData(); // Removed deleteAuthor
+  const { authors, getAuthorPhoto } = useData(); // Removed deleteAuthor
   
   const author = authors.find((a) => String(a.id) === id);
   
@@ -57,8 +57,9 @@ export default function AuthorDetails() {
       <div className="author-banner">
         <div className="author-photo">
           <img 
-            src={author.photo || author.image || "https://via.placeholder.com/200?text=Author"} 
+            src={getAuthorPhoto(author)} 
             alt={author.name} 
+            onError={(e) => { e.target.src = "https://via.placeholder.com/200x200.png?text=No+Photo"; }}
           />
         </div>
         <div className="author-info">
