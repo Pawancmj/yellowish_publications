@@ -29,10 +29,12 @@ export function DataProvider({ children }) {
   // Start with initial/static data as fallback
   const [books, setBooks] = useState(initialBooks);
   const [authors, setAuthors] = useState(initialAuthors);
+  const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const booksUnsubscribeRef = useRef(null);
   const authorsUnsubscribeRef = useRef(null);
+  const leadsUnsubscribeRef = useRef(null);
   const hasSeededRef = useRef(false);
 
   // 1. Auth
@@ -103,6 +105,22 @@ export function DataProvider({ children }) {
       if (booksReceived && authorsReceived) setLoading(false);
     });
 
+    // PUBLIC LEADS (Forms and Contact Data)
+    const leadsQuery = query(collection(db, `users/${FIXED_USER_ID}/leads`));
+    leadsUnsubscribeRef.current = onSnapshot(leadsQuery, (snapshot) => {
+      const leadsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      console.log(`📝 LIVE: ${leadsData.length} leads from Firestore`);
+      // Sort leads by latest first safely using Date
+      const sortedLeads = leadsData.sort((a, b) => {
+        const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+        const db = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
+        return db - da;
+      });
+      setLeads(sortedLeads);
+    }, (error) => {
+      console.error("❌ Leads listener error:", error);
+    });
+
     // Safety timeout — if Firestore doesn't respond in 5s, stop loading
     const timeout = setTimeout(() => {
       if (!booksReceived || !authorsReceived) {
@@ -115,6 +133,7 @@ export function DataProvider({ children }) {
       clearTimeout(timeout);
       if (booksUnsubscribeRef.current) booksUnsubscribeRef.current();
       if (authorsUnsubscribeRef.current) authorsUnsubscribeRef.current();
+      if (leadsUnsubscribeRef.current) leadsUnsubscribeRef.current();
     };
   }, []);
 
@@ -243,9 +262,34 @@ export function DataProvider({ children }) {
     }
   }, []);
 
+  const addLead = useCallback(async (leadData) => {
+    try {
+      const docRef = await addDoc(collection(db, `users/${FIXED_USER_ID}/leads`), {
+        ...leadData,
+        createdAt: new Date(),
+        status: leadData.status || "new",
+      });
+      console.log("✅ NEW LEAD ADDED:", docRef.id);
+      return docRef.id;
+    } catch (error) {
+      console.error("❌ Add lead failed:", error.message);
+      throw error;
+    }
+  }, []);
+
+  const deleteLead = useCallback(async (id) => {
+    try {
+      await deleteDoc(doc(db, `users/${FIXED_USER_ID}/leads`, id));
+      console.log("✅ Lead deleted");
+    } catch (error) {
+      console.error("❌ Delete lead failed (admin only):", error.message);
+    }
+  }, []);
+
   const value = {
     books,
     authors,
+    leads,
     loading,
     currentUser,
     addBook,
@@ -254,6 +298,8 @@ export function DataProvider({ children }) {
     addAuthor,
     updateAuthor,
     deleteAuthor,
+    addLead,
+    deleteLead,
   };
 
   // Helper to get a valid image URL for a book cover

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
-import { FaEdit, FaTrash, FaPlus, FaBook, FaUser } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaBook, FaUser, FaEnvelope } from "react-icons/fa";
 import "./Admin.css";
 
 const Admin = () => {
@@ -20,6 +20,8 @@ const Admin = () => {
     deleteAuthor,
     getBookCover,
     getAuthorPhoto,
+    leads,
+    deleteLead,
   } = useData();
 
   const [activeTab, setActiveTab] = useState("books");
@@ -97,6 +99,13 @@ const Admin = () => {
               <p>Total Authors</p>
             </div>
           </div>
+          <div className="stat-card">
+            <FaEnvelope />
+            <div>
+              <h3>{leads ? leads.length : 0}</h3>
+              <p>Total Leads</p>
+            </div>
+          </div>
         </div>
 
         <div className="admin-tabs">
@@ -111,6 +120,12 @@ const Admin = () => {
             onClick={() => setActiveTab("authors")}
           >
             <FaUser /> Manage Authors
+          </button>
+          <button
+            className={activeTab === "leads" ? "tab-active" : "tab"}
+            onClick={() => setActiveTab("leads")}
+          >
+            <FaEnvelope /> Manage Leads
           </button>
         </div>
 
@@ -259,6 +274,66 @@ const Admin = () => {
                     <tr>
                       <td colSpan="5" className="no-data">
                         No authors available
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "leads" && (
+          <div className="leads-management">
+            <div className="section-header">
+              <h2>Leads & Contacts</h2>
+            </div>
+
+            <div className="data-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Message</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leads && leads.length > 0 ? (
+                    leads.map((lead) => (
+                      <tr key={lead.id}>
+                        <td>{lead.createdAt?.toDate ? lead.createdAt.toDate().toLocaleDateString() : new Date(lead.createdAt).toLocaleDateString()}</td>
+                        <td>
+                          {lead.type === 'newsletter' && <span className="badge badge-info">Newsletter</span>}
+                          {lead.type === 'contact' && <span className="badge badge-primary">Contact</span>}
+                          {lead.type === 'author_request' && <span className="badge badge-success">Author Reqs</span>}
+                        </td>
+                        <td>{lead.name || "-"}</td>
+                        <td>{lead.email}</td>
+                        <td>{lead.phone || "-"}</td>
+                        <td style={{ maxWidth: "200px" }}>{lead.message || "-"}</td>
+                        <td>
+                          <button
+                            className="delete-btn"
+                            onClick={() => {
+                              if (window.confirm("Are you sure you want to delete this lead?")) {
+                                deleteLead(lead.id);
+                              }
+                            }}
+                          >
+                            <FaTrash />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="7" className="no-data">
+                        No leads available
                       </td>
                     </tr>
                   )}

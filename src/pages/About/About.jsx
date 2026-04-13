@@ -10,61 +10,11 @@ import {
   FaHandshake,
   FaPenNib,
 } from "react-icons/fa";
-import StoryImg from "../../assets/Story.png"; 
-import emailjs from "@emailjs/browser";
+import StoryImg from "../../assets/Story.png";
 
 const About = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [popup, setPopup] = useState({ show: false, success: false, msg: "" });
-
-  // Auto-hide popup after 3 seconds
-  useEffect(() => {
-    if (popup.show) {
-      const timer = setTimeout(() => {
-        setPopup({ ...popup, show: false });
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [popup]);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const sendEmail = (e) => {
-    e.preventDefault();
-    emailjs
-      .send(
-        "service_9vpwjdo",
-        "template_1vzt7uv",
-        formData,
-        "KBwcTEiUFQhCaMWZB"
-      )
-      .then(
-        () => {
-          setPopup({
-            show: true,
-            success: true,
-            msg: "✅ Message sent successfully!",
-          });
-          setFormData({ name: "", email: "", message: "" });
-        },
-        () => {
-          setPopup({
-            show: true,
-            success: false,
-            msg: "❌ Failed to send. Please try again.",
-          });
-        }
-      );
-  };
 
   // Smooth scroll function
   const scrollToTop = () => {
@@ -246,47 +196,6 @@ const About = () => {
           </div>
         </div>
 
-        {/* Contact Form */}
-        <form className="contact-form" onSubmit={sendEmail}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            value={formData.message}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit" className="cta-btn">
-            Get in Touch
-          </button>
-        </form>
-
-        {/* Popup Message */}
-        {popup.show && (
-          <div className={`popup-overlay`}>
-            <div className={`popup-box ${popup.success ? "success" : "error"}`}>
-              <p>{popup.msg}</p>
-              <button onClick={() => setPopup({ ...popup, show: false })}>
-                Close
-              </button>
-            </div>
-          </div>
-        )}
       </section>
     </div>
   );

@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";  // eslint-disable-line no-unused-v
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaFeatherAlt } from "react-icons/fa";
 import { useData } from "../../contexts/DataContext";
-import emailjs from "@emailjs/browser";
 import "./Authors.css";
 
 export default function Authors() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authors, loading, getAuthorPhoto } = useData();
+  const { authors, loading, getAuthorPhoto, addLead } = useData();
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
   });
 
@@ -31,32 +31,24 @@ export default function Authors() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
-    emailjs
-      .send(
-        "service_9vpwjdo",
-        "template_1vzt7uv",
-        formData,
-        "KBwcTEiUFQhCaMWZB"
-      )
-      .then(
-        () => {
-          setPopup({
-            show: true,
-            success: true,
-            msg: "✅ Thank you! Your request has been submitted. We'll contact you soon.",
-          });
-          setFormData({ name: "", email: "", message: "" });
-        },
-        () => {
-          setPopup({
-            show: true,
-            success: false,
-            msg: "❌ Oops! Something went wrong. Please try again.",
-          });
-        }
-      );
+    try {
+      await addLead({ ...formData, type: 'author_request', status: 'new' });
+      setPopup({
+        show: true,
+        success: true,
+        msg: "✅ Thank you! Your request has been submitted. We'll contact you soon.",
+      });
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (error) {
+      console.error(error);
+      setPopup({
+        show: true,
+        success: false,
+        msg: "❌ Oops! Something went wrong. Please try again.",
+      });
+    }
   };
 
   // Smooth scroll function
@@ -179,6 +171,14 @@ export default function Authors() {
             name="email"
             placeholder="Your Email"
             value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Your Phone Number"
+            value={formData.phone}
             onChange={handleChange}
             required
           />

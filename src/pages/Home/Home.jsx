@@ -11,13 +11,11 @@ import heroImage from "../../assets/hero.png";
 // React Icons
 import { FaBookOpen, FaGlobe, FaPenFancy, FaUsers } from "react-icons/fa";
 
-// EmailJS
-import emailjs from "@emailjs/browser";
 
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { books, authors, getBookCover, getAuthorPhoto } = useData();
+  const { books, authors, getBookCover, getAuthorPhoto, addLead } = useData();
 
   // Get first 4 books and authors for featured sections
   const featuredBooks = books.slice(0, 4);
@@ -39,36 +37,34 @@ export default function Home() {
     }
   };
 
-  const handleNewsletter = (e) => {
+  const handleNewsletter = async (e) => {
     e.preventDefault();
-    emailjs
-      .sendForm("service_9vpwjdo", "template_mzztq8n", e.target, "KBwcTEiUFQhCaMWZB")
-      .then(
-        () => {
-          alert("🎉 Congratulations! You've joined the Yellowish Publications community.");
-          e.target.reset();
-        },
-        (error) => {
-          console.error(error.text);
-          alert("❌ Something went wrong. Please try again!");
-        }
-      );
+    const email = e.target.user_email.value;
+    try {
+      await addLead({ email, type: 'newsletter', status: 'new' });
+      alert("🎉 Congratulations! You've joined the Yellowish Publications community.");
+      e.target.reset();
+    } catch (error) {
+      console.error(error);
+      alert("❌ Something went wrong. Please try again!");
+    }
   };
 
-  const handleContact = (e) => {
+  const handleContact = async (e) => {
     e.preventDefault();
-    emailjs
-      .sendForm("service_9vpwjdo", "template_1vzt7uv", e.target, "KBwcTEiUFQhCaMWZB")
-      .then(
-        () => {
-          alert("✅ Thank you for contacting Yellowish Publication! We'll get back to you soon.");
-          e.target.reset();
-        },
-        (error) => {
-          console.error(error.text);
-          alert("❌ Something went wrong. Please try again!");
-        }
-      );
+    const name = e.target.user_name.value;
+    const email = e.target.user_email.value;
+    const phone = e.target.user_phone.value;
+    const message = e.target.message.value;
+    
+    try {
+      await addLead({ name, email, phone, message, type: 'contact', status: 'new' });
+      alert("✅ Thank you for contacting Yellowish Publication! We'll get back to you soon.");
+      e.target.reset();
+    } catch (error) {
+      console.error(error);
+      alert("❌ Something went wrong. Please try again!");
+    }
   };
 
   return (
@@ -246,6 +242,7 @@ export default function Home() {
           <form className="contact-form" onSubmit={handleContact}>
             <input type="text" name="user_name" placeholder="Your Name" required />
             <input type="email" name="user_email" placeholder="Your Email" required />
+            <input type="tel" name="user_phone" placeholder="Your Phone Number" required />
             <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
             <button type="submit" className="btn-primary">
               Send Message
