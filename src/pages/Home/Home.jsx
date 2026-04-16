@@ -50,12 +50,44 @@ export default function Home() {
     }
   };
 
+  // Phone validation function
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9]{10}$/; // Exactly 10 digits
+    return phoneRegex.test(phone);
+  };
+
   const handleContact = async (e) => {
     e.preventDefault();
-    const name = e.target.user_name.value;
-    const email = e.target.user_email.value;
-    const phone = e.target.user_phone.value;
-    const message = e.target.message.value;
+    const name = e.target.user_name.value.trim();
+    const email = e.target.user_email.value.trim();
+    const phone = e.target.user_phone.value.trim();
+    const message = e.target.message.value.trim();
+    
+    // Validation checks
+    if (!name) {
+      alert("⚠️ Please enter your name!");
+      return;
+    }
+    
+    if (!email) {
+      alert("⚠️ Please enter your email!");
+      return;
+    }
+    
+    if (!phone) {
+      alert("⚠️ Please enter your phone number!");
+      return;
+    }
+    
+    if (!validatePhone(phone)) {
+      alert("⚠️ Phone number must be exactly 10 digits (e.g., 9876543210)");
+      return;
+    }
+    
+    if (!message) {
+      alert("⚠️ Please enter your message!");
+      return;
+    }
     
     try {
       await addLead({ name, email, phone, message, type: 'contact', status: 'new' });
@@ -242,7 +274,15 @@ export default function Home() {
           <form className="contact-form" onSubmit={handleContact}>
             <input type="text" name="user_name" placeholder="Your Name" required />
             <input type="email" name="user_email" placeholder="Your Email" required />
-            <input type="tel" name="user_phone" placeholder="Your Phone Number" required />
+            <input 
+              type="tel" 
+              name="user_phone" 
+              placeholder="Your Phone Number (10 digits)" 
+              pattern="[0-9]{10}" 
+              maxLength="10"
+              title="Phone number must be exactly 10 digits"
+              required 
+            />
             <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
             <button type="submit" className="btn-primary">
               Send Message

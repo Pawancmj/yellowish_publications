@@ -9,7 +9,8 @@ import {
   updateDoc, 
   deleteDoc, 
   onSnapshot, 
-  query
+  query,
+  serverTimestamp
 } from "firebase/firestore";
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { books as initialBooks } from "../data/books";
@@ -18,6 +19,7 @@ import fallbackBook from "../assets/book1.png";
 import fallbackAuthor from "../assets/author1.png";
 
 const FIXED_USER_ID = "shared-app-user";
+const SHARED_LEADS_PATH = `users/${FIXED_USER_ID}/leads`;
 
 const DataContext = createContext();
 
@@ -35,6 +37,7 @@ export function DataProvider({ children }) {
   const booksUnsubscribeRef = useRef(null);
   const authorsUnsubscribeRef = useRef(null);
   const leadsUnsubscribeRef = useRef(null);
+  const publicLeadsUnsubscribeRef = useRef(null);
   const hasSeededRef = useRef(false);
 
   // 1. Auth
@@ -122,6 +125,22 @@ export function DataProvider({ children }) {
     });
 
     // Safety timeout — if Firestore doesn't respond in 5s, stop loading
+    const publicLeadsQuery = query(collection(db, "leads"));
+    publicLeadsUnsubscribeRef.current = onSnapshot(publicLeadsQuery, (snapshot) => {
+      const publicLeadsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      setLeads((existingLeads) => {
+        const byId = new Map();
+        [...existingLeads, ...publicLeadsData].forEach((lead) => byId.set(lead.id, lead));
+        return Array.from(byId.values()).sort((a, b) => {
+          const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+          const db = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+          return db - da;
+        });
+      });
+    }, (error) => {
+      console.error("Public leads listener error:", error);
+    });
+
     const timeout = setTimeout(() => {
       if (!booksReceived || !authorsReceived) {
         console.warn("⏰ Firestore timeout — using static data");
@@ -134,6 +153,7 @@ export function DataProvider({ children }) {
       if (booksUnsubscribeRef.current) booksUnsubscribeRef.current();
       if (authorsUnsubscribeRef.current) authorsUnsubscribeRef.current();
       if (leadsUnsubscribeRef.current) leadsUnsubscribeRef.current();
+      if (publicLeadsUnsubscribeRef.current) publicLeadsUnsubscribeRef.current();
     };
   }, []);
 
@@ -264,11 +284,31 @@ export function DataProvider({ children }) {
 
   const addLead = useCallback(async (leadData) => {
     try {
-      const docRef = await addDoc(collection(db, `users/${FIXED_USER_ID}/leads`), {
+      if (!auth.currentUser) {
+        await signInAnonymously(auth).catch((authError) => {
+          console.warn("Anonymous auth failed, trying public Firestore write:", authError.message);
+        });
+      }
+
+      const cleanLead = {
         ...leadData,
-        createdAt: new Date(),
+        name: leadData.name?.trim() || "",
+        email: leadData.email?.trim() || "",
+        phone: leadData.phone?.trim() || "",
+        message: leadData.message?.trim() || "",
+        type: leadData.type || "contact",
         status: leadData.status || "new",
-      });
+        createdAt: serverTimestamp(),
+        authUid: auth.currentUser?.uid || null,
+      };
+
+      let docRef;
+      try {
+        docRef = await addDoc(collection(db, SHARED_LEADS_PATH), cleanLead);
+      } catch (sharedPathError) {
+        console.warn("Shared leads path failed, trying public leads collection:", sharedPathError.message);
+        docRef = await addDoc(collection(db, "leads"), cleanLead);
+      }
       console.log("✅ NEW LEAD ADDED:", docRef.id);
       return docRef.id;
     } catch (error) {
@@ -280,6 +320,7 @@ export function DataProvider({ children }) {
   const deleteLead = useCallback(async (id) => {
     try {
       await deleteDoc(doc(db, `users/${FIXED_USER_ID}/leads`, id));
+      await deleteDoc(doc(db, "leads", id));
       console.log("✅ Lead deleted");
     } catch (error) {
       console.error("❌ Delete lead failed (admin only):", error.message);
