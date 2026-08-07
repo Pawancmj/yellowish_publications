@@ -59,6 +59,7 @@ export default function AuthorDetails() {
           <img 
             src={getAuthorPhoto(author)} 
             alt={author.name} 
+            loading="lazy"
             onError={(e) => { e.target.src = "https://via.placeholder.com/200x200.png?text=No+Photo"; }}
           />
         </div>

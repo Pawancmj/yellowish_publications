@@ -1,0 +1,186 @@
+/* Hero background — premium editorial, pure CSS.
+   Section: #FFFDFC, 520px tall. Center intentionally empty.
+   Decorative layers: blob + glow, wave, three soft clouds.
+   No images, no SVG, gradients only via CSS. */
+
+/* The 480x350 book stage is scaled down on small screens so the
+   fixed-pixel book positions scale with it and never overflow. */
+.hero-stage {
+  transform: scale(0.55);
+  transform-origin: center;
+}
+
+@media (min-width: 480px) {
+  .hero-stage {
+    transform: scale(0.6);
+  }
+}
+
+@media (min-width: 640px) {
+  .hero-stage {
+    transform: scale(0.72);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-stage {
+    transform: none;
+  }
+}
+
+/* The hero establishes its own stacking context so the layered
+   background can sit behind the content without going behind the
+   section's own background. */
+.hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  height: 520px;
+}
+
+/* On small screens the content stacks vertically and is taller
+   than 520px, so let it grow to avoid clipping. */
+@media (max-width: 1023px) {
+  .hero {
+    height: auto;
+    min-height: 520px;
+  }
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Content always renders above the background layers. */
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Subtle ambient float for the decorative shapes. */
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* ---------- Top-right organic blob ---------- */
+.hero-blob-right {
+  position: absolute;
+  top: -120px;
+  right: -160px;
+  width: 650px;
+  height: 520px;
+  background: #f8c8cf;
+  border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%;
+  overflow: hidden;
+  animation: heroFloat 18s ease-in-out infinite;
+}
+
+/* Radial glow nested near the lower-right of the blob. */
+.hero-glow {
+  position: absolute;
+  right: 30px;
+  bottom: -40px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(248, 140, 150, 0.45) 0%,
+    rgba(248, 170, 180, 0.22) 40%,
+    transparent 80%
+  );
+  filter: blur(80px);
+}
+
+/* ---------- Bottom-left soft wave ---------- */
+.hero-wave-left {
+  position: absolute;
+  left: -60px;
+  bottom: -30px;
+  width: 420px;
+  height: 80px;
+  background: #fce8e2;
+  border-radius: 70% 30% 45% 55% / 50% 50% 40% 60%;
+  animation: heroFloat 18s ease-in-out infinite;
+}
+
+/* ---------- Small blob 1 — top-left cloud (3 rounded circles) ---------- */
+.hero-cloud-top-left {
+  position: absolute;
+  left: 40px;
+  top: 20px;
+  width: 90px;
+  height: 45px;
+  opacity: 0.65;
+  animation: heroFloat 18s ease-in-out infinite;
+}
+
+.hero-cloud-top-left span {
+  position: absolute;
+  background: #f9d6da;
+  border-radius: 50%;
+}
+
+.hero-cloud-top-left span:nth-child(1) {
+  left: 30px;
+  top: 6px;
+  width: 44px;
+  height: 38px;
+}
+
+.hero-cloud-top-left span:nth-child(2) {
+  left: 8px;
+  top: 12px;
+  width: 30px;
+  height: 30px;
+}
+
+.hero-cloud-top-left span:nth-child(3) {
+  left: 58px;
+  top: 13px;
+  width: 28px;
+  height: 28px;
+}
+
+/* ---------- Small blob 2 — top center ---------- */
+.hero-cloud-top-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 18px;
+}
+
+.hero-cloud-top-center span {
+  display: block;
+  width: 90px;
+  height: 38px;
+  background: #fbe5e7;
+  opacity: 0.45;
+  border-radius: 9999px;
+  animation: heroFloat 18s ease-in-out infinite;
+}
+
+/* ---------- Small blob 3 — middle ---------- */
+.hero-cloud-middle {
+  position: absolute;
+  left: 44%;
+  top: 170px;
+  width: 120px;
+  height: 52px;
+  background: #fad8dc;
+  opacity: 0.55;
+  border-radius: 9999px;
+  animation: heroFloat 18s ease-in-out infinite;
+}

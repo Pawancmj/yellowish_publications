@@ -166,6 +166,7 @@ const Admin = () => {
                             src={getBookCover(book)}
                             alt={book.title}
                             className="table-cover"
+                            loading="lazy"
                             onError={(e) => {
                               e.target.src = "https://via.placeholder.com/150x200.png?text=No+Cover";
                             }}
@@ -242,6 +243,7 @@ const Admin = () => {
                             src={getAuthorPhoto(author)}
                             alt={author.name}
                             className="table-photo"
+                            loading="lazy"
                             onError={(e) => {
                               e.target.src = "https://via.placeholder.com/150x150.png?text=No+Photo";
                             }}

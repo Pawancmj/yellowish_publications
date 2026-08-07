@@ -1,0 +1,345 @@
+/* ============================================================
+   Compact Premium Book Card — shared by the Store page
+   (Featured Books and Browse Our Collection).
+   Default = cover + genre badge + title + author + price.
+   Hover  = image zooms, a dark gradient overlay fades in and
+            reveals rating / description / actions INSIDE the
+            cover image. Card height never changes, no overlap.
+   ============================================================ */
+.book-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #f1e0e1;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(18, 58, 92, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-6px);
+  border-color: #d9a441;
+  box-shadow: 0 24px 52px rgba(18, 58, 92, 0.18);
+  z-index: 2;
+}
+
+/* Cover — ~75–80% of the visible card, rounded top corners only */
+.book-cover-wrap {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #fbe4e6;
+  border-radius: 15px 15px 0 0;
+}
+
+.book-cover-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover .book-cover {
+  transform: scale(1.04);
+}
+
+.card-badge {
+  position: absolute;
+  left: 0.9rem;
+  top: 0.9rem;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  background: #d9a441;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 14px rgba(217, 164, 65, 0.4);
+  z-index: 4;
+}
+
+/* Hover overlay — sits INSIDE the cover image, never grows the card */
+.card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem 0.95rem 0.9rem;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 58, 92, 0.15) 0%,
+    rgba(18, 58, 92, 0.55) 45%,
+    rgba(18, 58, 92, 0.94) 100%
+  );
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card-overlay-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.card-overlay-inner > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card-overlay-inner > *:nth-child(2) {
+  transition-delay: 0.06s;
+}
+
+.card-overlay-inner > *:nth-child(3) {
+  transition-delay: 0.12s;
+}
+
+.book-card:hover .card-overlay {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.book-card:hover .card-overlay-inner > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-overlay .card-rating {
+  margin: 0;
+}
+
+.card-overlay .star {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.card-overlay .star.filled {
+  color: #f6b93b;
+}
+
+.card-overlay .card-rating > span {
+  color: #fff;
+}
+
+.card-overlay .card-desc {
+  color: #fff;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.overlay-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.15rem;
+}
+
+.card-share {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid #d9a441;
+  background: rgba(255, 255, 255, 0.14);
+  color: #d9a441;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.card-share:hover {
+  background: #d9a441;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(217, 164, 65, 0.45);
+}
+
+.hover-buttons {
+  display: flex;
+  gap: 0.55rem;
+  flex: 1;
+}
+
+.details-btn,
+.whatsapp-btn {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.details-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid #d9a441;
+  color: #fff;
+  text-decoration: none;
+}
+
+.details-btn:hover {
+  background: #d9a441;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(217, 164, 65, 0.45);
+}
+
+.whatsapp-btn {
+  background: #25d366;
+  border: 1.5px solid #25d366;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(37, 211, 102, 0.35);
+}
+
+.whatsapp-btn:hover {
+  background: #1ebe5d;
+  border-color: #1ebe5d;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(37, 211, 102, 0.5);
+}
+
+/* Default compact info */
+.card-info {
+  padding: 0.65rem 0.85rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 152px;
+}
+
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #123a5c;
+  line-height: 1.3;
+  text-decoration: none;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.card-title:hover {
+  color: #e63946;
+}
+
+.genre-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  align-self: flex-start;
+  padding: 0.24rem 0.6rem;
+  border-radius: 999px;
+  background: #fbe4e6;
+  color: #c0392b;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.card-author {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #6b5d5e;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-price {
+  margin-top: auto;
+  padding-top: 0.3rem;
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #123a5c;
+}
+
+.card-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-rating .stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  color: #ddd;
+  font-size: 0.82rem;
+}
+
+.star.filled {
+  color: #f6b93b;
+}
+
+.card-rating > span {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #9a8b8c;
+}
+
+/* Touch devices — hover unavailable, keep the overlay content visible */
+@media (hover: none) {
+  .card-overlay {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .card-overlay-inner > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover overlay is only usable with a pointer and overflows narrow
+   2-column cards on touch screens; the default card info stays visible. */
+@media (max-width: 767px) {
+  .card-overlay {
+    opacity: 0;
+    transform: translateY(16px);
+    pointer-events: none;
+  }
+
+  .card-overlay-inner > * {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}

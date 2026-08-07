@@ -1,8 +1,12 @@
-/* General Layout */
+/* ============================================================
+   Homepage — Yellowish Publication
+   Palette: pink #f9dbdd/#fbe4e6, navy #123a5c, gold #d9a441,
+            red #e63946, black footer/gallery.
+   ============================================================ */
 .home-page {
   width: 100%;
   overflow-x: hidden;
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "Poppins", sans-serif;
   color: #333;
 }
 
@@ -11,458 +15,1003 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 3rem 1.5rem;
-  text-align: center;
 }
 
-h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
-
-/* Hero Section */
-.hero-section {
-  position: relative;
-  height: 100vh;
-  color: #fff;
-  overflow: hidden;
-  width: 100%;
-  display: flex;
+/* ---------------- Buttons ---------------- */
+.btn-gold {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  gap: 8px;
+  padding: 0.85rem 2rem;
+  border: 2px solid #d9a441;
+  border-radius: 999px;
+  background: #d9a441;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(217, 164, 65, 0.35);
+}
 
-  background-image: url('../../assets/hero.png'); /* hero.png background */
-  background-size: cover;   /* Desktop = cover */
+.btn-gold:hover {
+  background: #c08f2e;
+  border-color: #c08f2e;
+  transform: translateY(-2px);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ---------------- Section 3: Banner ---------------- */
+.banner-strip {
+  width: 100%;
+}
+
+.banner-image {
+  width: 100%;
+  height: 340px;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.hero-section .overlay {
+/* ---------------- Section 4: Features ---------------- */
+.features-section {
+  background: #fff;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
+}
+
+.feature-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  background: #fff;
+  border: 1px solid #f1e0e1;
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  box-shadow: 0 6px 18px rgba(18, 58, 92, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(18, 58, 92, 0.12);
+}
+
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 1rem;
+  background: #fbe4e6;
+  color: #e63946;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.feature-body h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #123a5c;
+  margin: 0 0 0.4rem;
+}
+
+.feature-body p {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #6b5d5e;
+  margin: 0;
+}
+
+/* ---------------- Section 5: CTA / Lead Form ---------------- */
+.cta-section {
+  position: relative;
+  background: #fff9f8;
+  overflow: hidden;
+}
+
+/* Decorative blob + contour SVG (pure CSS + inline SVG, no images) */
+.cta-decor {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Left blob — mostly outside the viewport, solid pastel */
+.cta-blob-left {
+  position: absolute;
+  left: -220px;
+  top: -120px;
+  width: 420px;
+  height: 420px;
+  background: #f7b8c5;
+  border-radius: 55% 45% 60% 40% / 45% 55% 35% 65%;
+  overflow: hidden;
+}
+
+.cta-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cta-svg path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+
+/* Right blob — soft, blurred, one thin white line */
+.cta-blob-right {
+  position: absolute;
+  right: -110px;
+  top: -70px;
+  width: 260px;
+  height: 260px;
+}
+
+.cta-blob-right-fill {
+  position: absolute;
+  inset: 0;
+  background: #f8d5da;
+  opacity: 0.55;
+  filter: blur(8px);
+  border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
+}
+
+.cta-svg-right {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cta-svg-right path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.cta-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  position: relative;
   z-index: 1;
 }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 800px;
-  margin: auto;
-  padding: 2rem;
-}
-
-.hero-content h1 {
-  font-size: 3rem;
+.cta-text h2 {
+  font-size: 2.4rem;
   font-weight: 800;
-  line-height: 1.2;
+  color: #123a5c;
+  margin: 0 0 1rem;
 }
 
-.hero-content h1 span {
-  color: #facc15;
+.cta-text p {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #6b4a4c;
+  max-width: 480px;
 }
 
-.hero-content p {
-  margin-top: 1rem;
-  font-size: 1.25rem;
-}
-
-.hero-buttons {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-/* Buttons */
-.btn-primary,
-.btn-secondary {
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.3s;
-  display: inline-block;
-}
-
-.btn-primary {
-  background: #facc15;
-  color: #000;
-}
-.btn-primary:hover {
-  background: #eab308;
-}
-.btn-secondary {
-  background: transparent;
-  border: 2px solid #facc15;
-  color: #facc15;
-}
-.btn-secondary:hover {
-  background: #facc15;
-  color: #000;
-}
-
-/* About Us */
-.about-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: center;
-  text-align: left;
-}
-
-.about-text p {
-  margin-bottom: 1rem;
-}
-
-.about-image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.about-image img {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  border-radius: 1rem;
-  object-fit: cover;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease;
-}
-
-.about-image img:hover {
-  transform: scale(1.05);
-}
-
-/* ✅ Featured Books */
-.featured-books {
-  background: #fafafa;
-  padding: 3rem 1.5rem;
-  border-radius: 1rem;
-}
-
-.book-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-  justify-items: center;   /* ✅ grid ke andar card center */
-  align-items: start;      /* ✅ sabhi upar align */
-}
-
-.book-card {
+.cta-card {
   background: #fff;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 20px 50px rgba(18, 58, 92, 0.18);
+}
+
+.cta-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cta-card input,
+.cta-card select {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1.5px solid #eee0e1;
+  border-radius: 0.9rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #333;
+  outline: none;
+  background: #fffafb;
+  transition: border-color 0.3s ease;
+}
+
+.cta-card input:focus,
+.cta-card select:focus {
+  border-color: #d9a441;
+}
+
+/* ---------------- Section 6: Books Gallery ---------------- */
+.books-section {
+  background: #fff;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.accent-line {
+  display: block;
+  width: 56px;
+  height: 4px;
+  border-radius: 4px;
+  background: #e63946;
+  margin: 0 auto 1rem;
+}
+
+.section-head h2 {
+  font-size: clamp(1.7rem, 3.4vw, 2.1rem);
+  font-weight: 800;
+  color: #123a5c;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+}
+
+.tab {
+  padding: 0.5rem 1.4rem;
+  border: 2px solid #f0dedf;
+  border-radius: 999px;
+  background: #fff;
+  color: #7a6a6b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  border-color: #d9a441;
+  color: #d9a441;
+}
+
+.tab.active {
+  position: relative;
+  background: #d9a441;
+  border-color: #d9a441;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(217, 164, 65, 0.35);
+}
+
+/* Active tab underline — anchored to the button only,
+   never stretched across the container. */
+.tab.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  border-radius: 999px;
+  background: #d9a441;
+}
+
+.books-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+}
+
+.book-tile {
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  
-}
-
-.featured-books .book-card {
-  display: flex;
-  flex-direction: column;
-  height: 270px;   /* 👈 yaha change karega toh effect aayega */
-}
-
-.book-info {
-  flex: 1;         /* 👈 remaining space le */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.book-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
-
-.book-img {
-  width: 100%;
-  height: 260px; /* ✅ thoda chhota, har screen ke liye safe */
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: #f9fafb;
-}
-
-.book-img img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-  transition: transform 0.3s ease;
-}
-
-.book-card:hover .book-img img {
-  transform: scale(1.05);
-}
-
-.book-info h3 {
-  font-size: 1rem;            /* ✅ thoda readable size */
-  font-weight: 600;
-  color: #333;
-  font-family: "Poppins", sans-serif;
-  text-align: center;
-
-  white-space: normal;        /* ✅ wrapping allowed */
-  word-break: break-word;     /* ✅ long words break */
-  overflow-wrap: break-word;
-
-  margin: 0;   /* ✅ space balanced */
-  padding: 0;
-  line-height: 1.4;
-}
-
-/* Authors */
-.author-grid {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.author-card {
-  text-align: center;
-  width: 200px; /* Fixed width */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.author-card .image-placeholder {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: #f3f4f6;
+  border: 1px solid #f1e0e1;
+  aspect-ratio: 2 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #888;
-  margin-bottom: 0.75rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.author-card p {
-  min-height: 3rem; /* Ensures all descriptions occupy same height */
+.book-tile:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(18, 58, 92, 0.18);
 }
 
-/* Why Choose */
-.pillars {
+.book-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-books {
+  text-align: center;
+  color: #8a7a7b;
+  padding: 2rem 0;
+}
+
+/* ---------------- Section 7: Testimonials ---------------- */
+.testimonials-section {
+  background: #F472B6E5;
+}
+
+.testimonials-section h2 {
+  text-align: center;
+  font-size: clamp(1.7rem, 3.4vw, 2.2rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 2.5rem;
+}
+
+.testimonials-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.25rem;
-}
-
-.pillar {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.pillar .icon {
-  font-size: 2rem;
-  color: #facc15;
-}
-
-/* Testimonials */
-.testimonial-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
 .testimonial-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
   background: #fff;
+  border-radius: 1.25rem;
   padding: 1.5rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.t-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid #fbe4e6;
+}
+
+.t-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.t-quote {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #4a3f40;
+  margin: 0 0 0.6rem;
+}
+
+.t-name {
+  font-weight: 700;
+  color: #123a5c;
+  font-size: 1rem;
+}
+
+.t-role {
+  font-size: 0.85rem;
+  color: #9a8b8c;
+}
+
+/* ---------------- Section 8: Stats Bar ---------------- */
+.stats-bar {
+  background: #123a5c;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.stat-value {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #d9a441;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: #dbe6f0;
+  letter-spacing: 0.5px;
+}
+
+/* ---------------- Section 9: Pricing ---------------- */
+.pricing-section {
+  background: linear-gradient(180deg, #fbe4e6 0%, #f9dbdd 100%);
+}
+
+.pricing-head {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.pricing-head h2 {
+  font-size: clamp(1.8rem, 3.6vw, 2.3rem);
+  font-weight: 800;
+  color: #e63946;
+  margin: 0 0 0.5rem;
+}
+
+.pricing-head p {
+  color: #6b5d5e;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.pricing-card {
+  background: #fff;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(18, 58, 92, 0.12);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.pricing-card.featured {
+  border: 3px solid #d9a441;
+  transform: scale(1.04);
+  box-shadow: 0 20px 45px rgba(18, 58, 92, 0.22);
+}
+
+.pricing-header {
+  background: #e63946;
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.pricing-card.featured .pricing-header {
+  background: linear-gradient(135deg, #e63946, #c62c39);
+}
+
+.pricing-header h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.price {
+  font-size: 1.9rem;
+  font-weight: 800;
+}
+
+.pricing-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+.pricing-body ul {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1;
+}
+
+.pricing-body li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: #4a3f40;
+}
+
+.pricing-body .check {
+  color: #e63946;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.pricing-body .btn-gold {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* ---------------- Section 10: Distribution ---------------- */
+.distribution-section {
+  background: #fff;
+}
+
+.dist-heading {
+  text-align: center;
+  font-size: clamp(1.7rem, 3.4vw, 2.1rem);
+  font-weight: 800;
+  color: #d9a441;
+  margin: 0 0 2.5rem;
+}
+
+.dist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.dist-logo {
+  background: #fafafa;
+  border: 1px solid #eee;
   border-radius: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 1.6rem 1rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #123a5c;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: grayscale(1);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.dist-logo:hover {
+  filter: grayscale(0);
+  opacity: 1;
+  border-color: #d9a441;
+  color: #d9a441;
+}
+
+/* ---------------- Section 11: Review Highlights ---------------- */
+.review-highlights {
+  background: #fbe4e6;
+}
+
+.review-highlights .gold-label {
+  display: block;
+  text-align: center;
+  color: #d9a441;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.review-highlights h2 {
+  text-align: center;
+  font-size: clamp(1.7rem, 3.4vw, 2.2rem);
+  font-weight: 800;
+  color: #123a5c;
+  margin: 0 0 2.5rem;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.review-card {
+  background: #fff;
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  text-align: center;
+  box-shadow: 0 10px 26px rgba(18, 58, 92, 0.1);
+}
+
+.review-photo {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fbe4e6;
+  margin: 0 auto 0.75rem;
+  display: block;
+}
+
+.review-card .stars {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-bottom: 0.75rem;
+}
+
+.star {
+  color: #ddd;
+  font-size: 1rem;
+}
+
+.star.filled {
+  color: #f6b93b;
+}
+
+.review-quote {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #5b4a4c;
+  margin: 0 0 0.6rem;
   font-style: italic;
 }
 
-.testimonial-card span {
-  display: block;
-  margin-top: 0.75rem;
-  font-weight: 600;
-  color: #555;
+.review-name {
+  font-weight: 700;
+  color: #123a5c;
+  font-size: 0.95rem;
 }
 
-/* Newsletter */
-.newsletter p {
-  margin-bottom: 1rem;
+/* ---------------- Section 12: Video / Gallery Grid ---------------- */
+.video-section {
+  background: #000;
 }
 
-.newsletter-form {
+.video-section h2 {
+  text-align: center;
+  font-size: clamp(1.7rem, 3.4vw, 2.1rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 2.5rem;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.video-tile {
+  position: relative;
+  border-radius: 1.1rem;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  cursor: pointer;
+}
+
+.video-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.video-tile:hover img {
+  transform: scale(1.08);
+}
+
+.tile-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(217, 164, 65, 0.75), rgba(80, 80, 80, 0.75));
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+.video-tile:hover .tile-overlay {
+  opacity: 0.55;
+}
+
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  color: #123a5c;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
+  font-size: 1.1rem;
+  padding-left: 4px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  transition: transform 0.3s ease;
 }
 
-.newsletter-form input {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 999px;
-  width: 300px;
-  outline: none;
+.video-tile:hover .play-btn {
+  transform: translate(-50%, -50%) scale(1.1);
 }
 
-.newsletter-form button {
-  border-radius: 999px;
+/* ---------------- Section 13: Google Reviews ---------------- */
+.google-reviews-section {
+  background: #fbe4e6;
 }
 
-/* Contact */
-.contact-form {
+.gr-red {
+  text-align: center;
+  font-size: clamp(1.7rem, 3.4vw, 2.2rem);
+  font-weight: 800;
+  color: #e63946;
+  margin: 0 0 0.4rem;
+}
+
+.gr-sub {
+  text-align: center;
+  font-size: 1.15rem;
+  color: #123a5c;
+  font-weight: 600;
+  margin: 0 0 2.5rem;
+}
+
+.gr-card {
+  background: #fff;
+  border-radius: 1.75rem;
+  padding: 2.5rem;
+  box-shadow: 0 20px 50px rgba(18, 58, 92, 0.15);
+}
+
+.gr-summary {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #f1e0e1;
+  margin-bottom: 2rem;
+}
+
+.gr-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #4285f4;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.gr-rating {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 600px;
-  margin: auto;
-  margin-top: 1rem;
+  gap: 0.25rem;
 }
 
-.contact-form input,
-.contact-form textarea {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 0.75rem;
-  outline: none;
+.gr-score {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #123a5c;
 }
 
-.contact-form button {
-  align-self: center;
-  border-radius: 999px;
+.gr-rating .stars {
+  display: flex;
+  gap: 3px;
 }
 
-.image-placeholder img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: inherit;
-  display: block;
+.gr-count {
+  font-size: 0.88rem;
+  color: #8a7a7b;
 }
 
-/* Featured books spacing overrides */
-.featured-books .book-grid {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  column-gap: 2rem;
-  row-gap: 2.25rem;
+.gr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
-.featured-books .book-card {
-  width: 100%;
-  max-width: none;
-  justify-content: flex-start;
-  align-self: start;
-  min-height: unset;       
-  height: 300px;           
+.gr-review {
+  background: #fffafb;
+  border: 1px solid #f1e0e1;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-.featured-books .book-img {
-  height: 200px;
-  padding: 0.75rem;
+.gr-review-top {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
 }
 
-.featured-books .book-img img {
-  max-width: 100%;
-  max-height: 100%;
+.gr-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.featured-books .book-info {
-  padding: 1rem 1rem 0.9rem;
-  min-height: auto;
-  display: block;
-  text-align: center;
+.gr-review-meta {
+  display: flex;
+  flex-direction: column;
 }
 
-.featured-books .book-info h3 {
+.gr-name {
+  font-weight: 700;
+  color: #123a5c;
+  font-size: 0.98rem;
+}
+
+.gr-date {
+  font-size: 0.8rem;
+  color: #9a8b8c;
+}
+
+.gr-text {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #4a3f40;
   margin: 0;
-  padding: 0;
-  line-height: 1.35;
-  width: 100%;
-  display: block;
-  min-height: 0;
-  text-align: center;
-  white-space: normal;
-  word-break: normal;
-  overflow-wrap: break-word;
-  hyphens: none;
 }
 
-.featured-books .btn-secondary {
+.gr-read {
+  color: #d9a441;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gr-badge {
+  margin-top: auto;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  margin-top: 2.5rem;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #8a7a7b;
 }
 
-.authors .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1.75rem;
+.gr-badge svg {
+  color: #4285f4;
 }
 
-/* Responsive */
+/* ============================================================
+   Responsive
+   ============================================================ */
 @media (max-width: 1024px) {
-  .hero-section {
-    background-size: contain;
-    background-position: top center;
-    background-color: #000; /* fills gaps */
-  }
-}
-
-@media (max-width: 900px) {
-  .about-container {
-    grid-template-columns: 1fr;
-    text-align: center;
+  .books-gallery {
+    grid-template-columns: repeat(4, 1fr);
   }
 
-  .about-image img {
-    max-width: 100%;
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dist-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .hero-section {
-    height: auto;
-    min-height: 80vh;
-    padding: 2rem 1rem;
+  .banner-image {
+    height: 240px;
   }
 
-  .hero-content h1 {
-    font-size: 2rem;
+  .features-grid {
+    grid-template-columns: 1fr;
   }
 
-  .hero-content p {
-    font-size: 1rem;
+  .cta-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
-  .hero-buttons {
+  .books-gallery {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .pricing-card.featured {
+    transform: none;
+  }
+
+  .reviews-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .gr-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .gr-card {
+    padding: 1.5rem;
+  }
+
+  .dist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .books-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+  }
+
+  .video-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .dist-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+  }
+}
+
+/* ---------------- Mobile card internals (2-column layout) ---------------- */
+@media (max-width: 767px) {
+  .testimonial-card {
     flex-direction: column;
     gap: 0.75rem;
   }
 
-  .featured-books .book-grid {
-    column-gap: 1.25rem;
-    row-gap: 1.5rem;
+  .t-avatar {
+    width: 52px;
+    height: 52px;
   }
 
-  .featured-books .book-card {
-    max-width: 100%;
+  .t-quote {
+    font-size: 0.88rem;
   }
 
-  .featured-books .book-img {
-    height: 220px;
+  .review-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .review-photo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .review-quote {
+    font-size: 0.85rem;
+  }
+
+  .gr-review {
+    padding: 1.1rem;
+    gap: 0.5rem;
   }
 }

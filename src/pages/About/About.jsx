@@ -78,7 +78,7 @@ const About = () => {
           </p>
         </div>
         <div className="story-image">
-          <img src={StoryImg} alt="Our Story - Yellowish Publication" />
+          <img src={StoryImg} alt="Our Story - Yellowish Publication" loading="lazy" />
         </div>
       </section>
 

@@ -9,10 +9,13 @@ import ScrollTop from "./components/ScrollTop/ScrollTop";
 
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
+import Contact from "./pages/Contact/Contact";
 import Authors from "./pages/Authors/Authors";
 import AuthorDetails from "./pages/AuthorDetails/AuthorDetails";
 import Books from "./pages/Books/Books";
 import BookDetails from "./pages/BookDetails/BookDetails";
+import Blog from "./pages/Blog/Blog";
+import BlogDetail from "./pages/BlogDetail/BlogDetail";
 import Admin from "./pages/Admindashboard/Admin";
 import AdminForm from "./pages/Admindashboard/AdminForm";
 
@@ -29,10 +32,13 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="/authors" element={<Authors />} />
               <Route path="/author/:id" element={<AuthorDetails />} />
               <Route path="/store" element={<Books />} />
               <Route path="/book/:id" element={<BookDetails />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/admin121-secret" element={<Admin />} /> {/* this is dashboard page*/}
               <Route path="/login" element={<AdminForm />} /> {/* this is login page*/}
             </Routes>

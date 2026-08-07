@@ -10,7 +10,7 @@ const AdminForm = () => {
 
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
+    password: "", 
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ const AdminForm = () => {
           break;
         case "auth/invalid-email":
           setError("Invalid email address.");
-          break;
+          break;  
         case "auth/too-many-requests":
           setError("Too many failed attempts. Please try again later.");
           break;

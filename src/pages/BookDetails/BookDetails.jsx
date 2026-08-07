@@ -53,6 +53,7 @@ export default function BookDetails() {
     <div className="book-details">
       <img 
         src={getBookCover ? getBookCover(book) : (book.cover || book.image || "https://via.placeholder.com/300x450?text=No+Image")} 
+        loading="lazy"
         onError={(e) => { e.target.src = "https://via.placeholder.com/300x450?text=No+Image"; }}
         alt={book.title} 
         className="book-details-cover" 
