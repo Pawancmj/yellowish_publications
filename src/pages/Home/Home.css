@@ -1015,3 +1015,165 @@
     gap: 0.5rem;
   }
 }
+
+/* ============================================================
+   Mobile (max-width: 767px): card sections → horizontal
+   swipeable carousels. Desktop & tablet grids are untouched.
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Containers that become single-card carousels */
+  .features-grid,
+  .books-gallery,
+  .testimonials-grid,
+  .pricing-grid,
+  .dist-grid,
+  .reviews-grid,
+  .video-grid,
+  .gr-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 1rem;
+    max-width: none;
+
+    /* Full-bleed so a snapped card occupies most of the viewport width */
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    width: calc(100% + 3rem);
+  }
+
+  /* Google reviews grid is nested inside an extra padded card */
+  .gr-grid {
+    margin-left: -3rem;
+    margin-right: -3rem;
+    width: calc(100% + 6rem);
+  }
+
+  /* Visually hide the horizontal scrollbar (WebKit included) */
+  .features-grid::-webkit-scrollbar,
+  .books-gallery::-webkit-scrollbar,
+  .testimonials-grid::-webkit-scrollbar,
+  .pricing-grid::-webkit-scrollbar,
+  .dist-grid::-webkit-scrollbar,
+  .reviews-grid::-webkit-scrollbar,
+  .video-grid::-webkit-scrollbar,
+  .gr-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Exactly one card per snap position */
+  .feature-card,
+  .book-tile,
+  .testimonial-card,
+  .pricing-card,
+  .dist-logo,
+  .review-card,
+  .video-tile,
+  .gr-review {
+    flex: 0 0 calc(100% - 32px);
+    scroll-snap-align: center;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .gr-red {
+    font-size: 1.45rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .gr-sub {
+    font-size: 0.98rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .gr-card {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+
+  .gr-summary {
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1e0e1;
+    margin-bottom: 1.25rem;
+  }
+
+  .gr-logo {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+    border-radius: 0.85rem;
+    font-size: 1.65rem;
+  }
+
+  .gr-rating {
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .gr-score {
+    font-size: 1.55rem;
+    line-height: 1.1;
+  }
+
+  .gr-rating .stars {
+    gap: 2px;
+  }
+
+  .gr-rating .stars .star {
+    font-size: 1.05rem;
+  }
+
+  .gr-count {
+    font-size: 0.82rem;
+  }
+
+  .gr-grid {
+    gap: 0;
+    margin: 0;
+    width: 100%;
+    padding-right: 16px;
+  }
+
+  .gr-review {
+    flex: 0 0 calc(100% - 32px);
+    scroll-snap-align: start;
+    margin-right: 16px;
+    padding: 1.25rem;
+    gap: 0.6rem;
+  }
+
+  .gr-avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .gr-name {
+    font-size: 0.95rem;
+  }
+
+  .gr-date {
+    font-size: 0.78rem;
+  }
+
+  .gr-text {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .gr-review .stars .star {
+    font-size: 0.95rem;
+  }
+
+  .gr-badge {
+    font-size: 0.78rem;
+  }
+}
