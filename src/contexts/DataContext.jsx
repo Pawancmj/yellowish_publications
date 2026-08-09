@@ -15,6 +15,15 @@ import {
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { books as initialBooks } from "../data/books";
 import { authors as initialAuthors } from "../data/author";
+import {
+  blogListQuery,
+  normalizeBlog,
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  blogDocRef,
+} from "../services/blogModel";
+import { buildSeedBlogs } from "../data/seedBlogs";
 import fallbackBook from "../assets/book1.png";
 import fallbackAuthor from "../assets/author1.png";
 
@@ -32,13 +41,17 @@ export function DataProvider({ children }) {
   const [books, setBooks] = useState(initialBooks);
   const [authors, setAuthors] = useState(initialAuthors);
   const [leads, setLeads] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [blogsLoading, setBlogsLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const booksUnsubscribeRef = useRef(null);
   const authorsUnsubscribeRef = useRef(null);
   const leadsUnsubscribeRef = useRef(null);
   const publicLeadsUnsubscribeRef = useRef(null);
+  const blogsUnsubscribeRef = useRef(null);
   const hasSeededRef = useRef(false);
+  const hasSeededBlogsRef = useRef(false);
 
   // 1. Auth
   useEffect(() => {
@@ -157,6 +170,28 @@ export function DataProvider({ children }) {
     };
   }, []);
 
+  // PUBLIC BLOGS — Firestore is the single source of truth (no static merge).
+  useEffect(() => {
+    const q = blogListQuery();
+    blogsUnsubscribeRef.current = onSnapshot(
+      q,
+      (snapshot) => {
+        const blogData = snapshot.docs.map((d) => normalizeBlog(d));
+        console.log(`📄 LIVE: ${blogData.length} blogs from Firestore`);
+        setBlogs(blogData);
+        setBlogsLoading(false);
+      },
+      (error) => {
+        console.error("❌ Blogs listener error:", error);
+        setBlogs([]);
+        setBlogsLoading(false);
+      }
+    );
+    return () => {
+      if (blogsUnsubscribeRef.current) blogsUnsubscribeRef.current();
+    };
+  }, []);
+
   // 3. SEED DATA ONCE (admin only) — Fixed: uses setDoc instead of broken doc().set()
   useEffect(() => {
     if (currentUser?.uid && !hasSeededRef.current) {
@@ -208,6 +243,37 @@ export function DataProvider({ children }) {
         }
       };
       checkAndSeed();
+    }
+  }, [currentUser]);
+
+  // SEED BLOGS ONCE (admin only) — only when the blogs collection is empty.
+  useEffect(() => {
+    if (currentUser?.uid && !hasSeededBlogsRef.current) {
+      const checkAndSeedBlogs = async () => {
+        try {
+          const blogsQuery = blogListQuery();
+          const unsubCheck = onSnapshot(
+            blogsQuery,
+            async (snapshot) => {
+              unsubCheck(); // Unsubscribe immediately after the first check
+              if (snapshot.docs.length > 0 || hasSeededBlogsRef.current) return;
+              hasSeededBlogsRef.current = true;
+              console.log("🌱 Seeding blogs to Firestore...");
+              const seeds = buildSeedBlogs();
+              for (const seed of seeds) {
+                await setDoc(blogDocRef(seed.id), seed, { merge: true });
+              }
+              console.log(`✅ ${seeds.length} blogs seeded to Firestore`);
+            },
+            (error) => {
+              console.error("❌ Blogs seed check error:", error);
+            }
+          );
+        } catch (error) {
+          console.error("❌ Blogs seed error:", error);
+        }
+      };
+      checkAndSeedBlogs();
     }
   }, [currentUser]);
 
@@ -327,11 +393,47 @@ export function DataProvider({ children }) {
     }
   }, []);
 
+  // 5. BLOG CRUD — Firestore is the single source of truth for blogs.
+  const createBlogDoc = useCallback(async (data) => {
+    try {
+      const docRef = await createBlog(data);
+      console.log("✅ NEW BLOG CREATED:", docRef.id);
+      return { id: docRef.id, error: null };
+    } catch (error) {
+      console.error("❌ Create blog failed (admin only):", error.message);
+      return { id: null, error };
+    }
+  }, []);
+
+  const updateBlogDoc = useCallback(async (id, data) => {
+    try {
+      await updateBlog(id, data);
+      console.log("✅ Blog updated:", id);
+      return { error: null };
+    } catch (error) {
+      console.error("❌ Update blog failed (admin only):", error.message);
+      return { error };
+    }
+  }, []);
+
+  const deleteBlogDoc = useCallback(async (id) => {
+    try {
+      await deleteBlog(id);
+      console.log("✅ Blog deleted:", id);
+      return { error: null };
+    } catch (error) {
+      console.error("❌ Delete blog failed (admin only):", error.message);
+      return { error };
+    }
+  }, []);
+
   const value = {
     books,
     authors,
     leads,
+    blogs,
     loading,
+    blogsLoading,
     currentUser,
     addBook,
     updateBook,
@@ -341,6 +443,9 @@ export function DataProvider({ children }) {
     deleteAuthor,
     addLead,
     deleteLead,
+    createBlogDoc,
+    updateBlogDoc,
+    deleteBlogDoc,
   };
 
   // Helper to get a valid image URL for a book cover

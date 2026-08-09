@@ -11,6 +11,13 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@tiptap/extension-image": "^3.29.2",
+    "@tiptap/extension-link": "^3.29.2",
+    "@tiptap/extension-placeholder": "^3.29.2",
+    "@tiptap/extension-text-align": "^3.29.2",
+    "@tiptap/extension-underline": "^3.29.2",
+    "@tiptap/react": "^3.29.2",
+    "@tiptap/starter-kit": "^3.29.2",
     "autoprefixer": "^10.4.21",
     "firebase": "^12.3.0",
     "framer-motion": "^12.43.0",
