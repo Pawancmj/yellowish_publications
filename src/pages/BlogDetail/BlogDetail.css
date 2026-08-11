@@ -60,6 +60,59 @@
   margin: 0;
 }
 
+/* ---------------- Blog not found / loading ---------------- */
+.detail-page .blog-notfound {
+  position: relative;
+  min-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 96px 24px;
+}
+
+.detail-page .bf-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbe4e6, #fce8e2);
+  color: #e63946;
+  font-size: 2rem;
+  margin-bottom: 1.6rem;
+  box-shadow: 0 18px 40px rgba(18, 58, 92, 0.12);
+}
+
+.detail-page .blog-notfound h1 {
+  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #123a5c;
+  margin: 0 0 1rem;
+}
+
+.detail-page .blog-notfound p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #6b5d5e;
+  max-width: 460px;
+  margin: 0 0 2rem;
+}
+
+/* ---------------- Author label ---------------- */
+.ag-label {
+  display: block;
+  color: #d9a441;
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
 /* ---------------- Buttons ---------------- */
 .detail-page .btn-gold {
   display: inline-flex;
@@ -1945,5 +1998,38 @@
 
   .rc-time {
     font-size: 0.7rem;
+  }
+}
+
+/* ============================================================
+   Mobile (max-width: 767px): related cards → horizontal
+   swipeable carousel. Matches the Homepage mobile card behavior.
+   Desktop & tablet grids are untouched.
+   ============================================================ */
+@media (max-width: 767px) {
+  .related-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 1rem;
+    max-width: none;
+    margin: 0;
+  }
+
+  .related-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .related-card {
+    flex: 0 0 calc(100% - 32px);
+    scroll-snap-align: start;
+    min-width: 0;
   }
 }

@@ -1007,7 +1007,40 @@
   }
 }
 
-/* ---------------- Mobile card internals (2-column layout) ---------------- */
+/* ---------------- Skeleton loading ---------------- */
+.blog-skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-block {
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(90deg, #f3f0f0, #fafafa, #f3f0f0);
+  background-size: 200% 100%;
+  animation: blogShimmer 1.2s infinite;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  background: #f0eded;
+  margin-bottom: 10px;
+  animation: blogShimmer 1.2s infinite;
+}
+
+.skeleton-line.short {
+  width: 70%;
+}
+
+.skeleton-line.tiny {
+  width: 40%;
+}
+
+@keyframes blogShimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
 @media (max-width: 767px) {
   .blog-page .container {
     padding: 40px 1rem;
@@ -1033,5 +1066,38 @@
     width: 100%;
     padding: 0.6rem 0.8rem;
     font-size: 0.76rem;
+  }
+}
+
+/* ============================================================
+   Mobile (max-width: 767px): post cards → horizontal swipeable
+   carousel. Matches the Homepage mobile card behavior.
+   Desktop & tablet grids are untouched.
+   ============================================================ */
+@media (max-width: 767px) {
+  .posts-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 1rem;
+    max-width: none;
+    margin: 0;
+  }
+
+  .posts-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .post-card {
+    flex: 0 0 calc(100% - 32px);
+    scroll-snap-align: start;
+    min-width: 0;
   }
 }

@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Everyone may read the public blog catalog. Drafts are visible only
+    // to signed-in users (admin). Public pages already filter to
+    // status == "published"; these rules add defense in depth.
+    match /users/{userId}/blogs/{blogId} {
+      allow read: if request.auth != null || resource.data.status == "published";
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // Public read for books/authors/leads collection documents.
+    match /users/{userId}/{collection}/{docId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // Public-form leads fallback collection.
+    match /leads/{leadId} {
+      allow read, create: if true;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+  }
+}

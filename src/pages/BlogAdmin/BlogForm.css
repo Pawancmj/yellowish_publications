@@ -1,0 +1,508 @@
+/* Blog add/edit form — admin */
+.bf-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+  min-height: 100vh;
+  background: #f5f5f5;
+  position: relative;
+}
+
+.bf-header {
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.bf-back {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b5d5e;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.bf-back:hover {
+  color: #d9a441;
+}
+
+.bf-header h1 {
+  margin: 0;
+  color: #123a5c;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.bf-header p {
+  margin: 4px 0 0;
+  color: #8a7a7b;
+  font-size: 0.92rem;
+}
+
+.bf-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+.bf-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.bf-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.bf-card h2 {
+  margin: 0 0 18px;
+  color: #123a5c;
+  font-size: 1.05rem;
+  font-weight: 800;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #fbe4e6;
+}
+
+.bf-field {
+  margin-bottom: 18px;
+}
+
+.bf-field > label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.bf-opt {
+  font-weight: 500;
+  color: #9a8b8c;
+}
+
+.bf-input,
+.bf-field input[type="text"],
+.bf-field input[type="date"],
+.bf-field input[type="number"],
+.bf-field input[type="email"],
+.bf-field select,
+.bf-field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1.5px solid #e2e5ea;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #333;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.bf-field textarea {
+  resize: vertical;
+}
+
+.bf-input:focus,
+.bf-field input:focus,
+.bf-field select:focus,
+.bf-field textarea:focus {
+  border-color: #d9a441;
+}
+
+.bf-input.error,
+.bf-field input.error,
+.bf-field textarea.error {
+  border-color: #e63946;
+  background: #fffafa;
+}
+
+.bf-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c0392b;
+}
+
+.bf-hint {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.78rem;
+  color: #9a8b8c;
+}
+
+.bf-slug-row {
+  display: flex;
+  gap: 8px;
+}
+
+.bf-slug-row input {
+  flex: 1;
+}
+
+.bf-ghost {
+  width: 46px;
+  border: 1.5px solid #e2e5ea;
+  border-radius: 10px;
+  background: #fff;
+  color: #d9a441;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.bf-ghost:hover {
+  border-color: #d9a441;
+  background: #fffbf0;
+}
+
+.bf-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.bf-status-select {
+  display: flex;
+  gap: 8px;
+}
+
+.bf-status-opt {
+  flex: 1;
+  padding: 11px;
+  border: 1.5px solid #e2e5ea;
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #6b5d5e;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bf-status-opt.active.draft {
+  background: #fff2cc;
+  border-color: #d9a441;
+  color: #8a5a1f;
+}
+
+.bf-status-opt.active.published {
+  background: #e6f7ee;
+  border-color: #28a745;
+  color: #1a7f4b;
+}
+
+.bf-toggles {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.bf-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.bf-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bf-toggle-track {
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: #d5dae0;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.bf-toggle-track::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.bf-toggle input:checked + .bf-toggle-track {
+  background: #d9a441;
+}
+
+.bf-toggle input:checked + .bf-toggle-track::after {
+  transform: translateX(18px);
+}
+
+/* ---------- Side panel ---------- */
+.bf-side {
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bf-publish .bf-side-note {
+  font-size: 0.85rem;
+  color: #6b5d5e;
+  line-height: 1.6;
+}
+
+.bf-publish code {
+  background: #fbe4e6;
+  padding: 0.1rem 0.35rem;
+  border-radius: 5px;
+  font-size: 0.82rem;
+  color: #c0392b;
+}
+
+.bf-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 11px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  margin-bottom: 10px;
+}
+
+.bf-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.bf-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.bf-btn.publish {
+  background: #28a745;
+  color: #fff;
+}
+
+.bf-btn.draft {
+  background: #ffc107;
+  color: #333;
+}
+
+.bf-side-hints {
+  margin-top: 6px;
+}
+
+.bf-side-hints p {
+  font-size: 0.8rem;
+  color: #8a7a7b;
+  line-height: 1.55;
+  margin: 0 0 6px;
+}
+
+.bf-preview-card {
+  border: 1px solid #eef0f3;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.bf-preview-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  background: #f0f0f0;
+}
+
+.bf-preview-card .bf-prev-cat {
+  display: inline-block;
+  margin: 14px 14px 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #d9a441;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.bf-preview-card h3 {
+  margin: 8px 14px 6px;
+  color: #123a5c;
+  font-size: 1.02rem;
+  line-height: 1.4;
+}
+
+.bf-preview-card p {
+  margin: 0 14px;
+  color: #6b5d5e;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.bf-prev-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 12px 14px;
+  border-top: 1px dashed #f0dedf;
+  margin-top: 12px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #9a8b8c;
+}
+
+/* ---------- Toast ---------- */
+.bf-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  animation: bfToastIn 0.25s ease;
+}
+
+.bf-toast.success {
+  background: #28a745;
+}
+
+.bf-toast.error {
+  background: #dc3545;
+}
+
+@keyframes bfToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bf-spin {
+  animation: bfSpin 0.8s linear infinite;
+}
+
+@keyframes bfSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.bf-loading,
+.bf-notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.bf-notfound h1 {
+  color: #123a5c;
+  margin: 0;
+}
+
+.bf-notfound p {
+  color: #8a7a7b;
+}
+
+.bf-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 10px;
+  background: #d9a441;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1000px) {
+  .bf-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bf-side {
+    position: static;
+    grid-row: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .bf-side .bf-card {
+    flex: 1 1 300px;
+  }
+}
+
+@media (max-width: 720px) {
+  .bf-page {
+    padding: 16px 10px 48px;
+  }
+
+  .bf-header {
+    padding-top: 30px;
+  }
+
+  .bf-back {
+    position: static;
+    display: inline-flex;
+    margin-bottom: 10px;
+  }
+
+  .bf-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .bf-card {
+    padding: 18px 14px;
+  }
+
+  .bf-toggles {
+    flex-direction: column;
+    gap: 14px;
+  }
+}

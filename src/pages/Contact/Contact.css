@@ -1166,3 +1166,39 @@
     font-size: 0.8rem;
   }
 }
+
+/* ============================================================
+   Mobile (max-width: 767px): card sections → horizontal
+   swipeable carousels. Matches the Homepage mobile card behavior.
+   Desktop & tablet grids are untouched.
+   ============================================================ */
+@media (max-width: 767px) {
+  .contact-info-grid,
+  .why-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 1rem;
+    max-width: none;
+    margin: 0;
+  }
+
+  .contact-info-grid::-webkit-scrollbar,
+  .why-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .contact-info-card,
+  .why-card {
+    flex: 0 0 calc(100% - 32px);
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+}

@@ -1,0 +1,216 @@
+/* Featured image input — direct upload (base64) OR URL paste.
+   Uploads are compressed client-side, so no Firebase Storage is needed. */
+
+.bimg-wrap {
+  width: 100%;
+}
+
+/* Mode tabs */
+.bimg-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.bimg-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border: 1.5px solid #d0d5e0;
+  border-radius: 999px;
+  background: #fff;
+  color: #5b6470;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bimg-tab:hover {
+  border-color: #d9a441;
+  color: #c3942f;
+}
+
+.bimg-tab.active {
+  background: #d9a441;
+  border-color: #d9a441;
+  color: #fff;
+}
+
+/* Dropzone */
+.bimg-dropzone {
+  width: 100%;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 2px dashed #d0d5e0;
+  border-radius: 12px;
+  background: #fafbfc;
+  color: #6b7280;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  outline: none;
+}
+
+.bimg-dropzone:hover,
+.bimg-dropzone:focus-visible {
+  border-color: #d9a441;
+  background: #fffdf7;
+}
+
+.bimg-dropzone.busy {
+  cursor: wait;
+  opacity: 0.75;
+}
+
+.bimg-dropzone svg {
+  font-size: 2.2rem;
+  color: #d9a441;
+}
+
+.bimg-dropzone small {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #9aa0a6;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.bimg-spin {
+  animation: bimg-spin 0.9s linear infinite;
+}
+
+@keyframes bimg-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* URL row */
+.bimg-url-row {
+  display: flex;
+  gap: 8px;
+}
+
+.bimg-url-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  border: 1.5px solid #d0d5e0;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bimg-url-input:focus {
+  border-color: #d9a441;
+  box-shadow: 0 0 0 4px rgba(217, 164, 65, 0.14);
+}
+
+.bimg-url-apply {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  border: none;
+  border-radius: 10px;
+  background: #d9a441;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.bimg-url-apply:hover {
+  background: #c3942f;
+}
+
+/* Empty hint */
+.bimg-empty {
+  width: 100%;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 2px dashed #e7eaf0;
+  border-radius: 12px;
+  background: #fafbfc;
+  color: #6b7280;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.bimg-empty svg {
+  font-size: 1.6rem;
+  color: #d9a441;
+}
+
+.bimg-empty small {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #9aa0a6;
+}
+
+/* Preview */
+.bimg-preview {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid #e7eaf0;
+  background: #f5f6f8;
+  margin-top: 12px;
+}
+
+.bimg-preview img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+.bimg-actions {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.bimg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.bimg-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bimg-btn.remove {
+  background: #dc3545;
+}
+
+.bimg-error {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: #c0392b;
+}

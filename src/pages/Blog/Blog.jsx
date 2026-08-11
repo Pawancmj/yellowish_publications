@@ -14,7 +14,7 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 
-import { blogPosts, blogCategories } from "../../data/blogPosts";
+import { formatBlogDate, formatReadingTime } from "../../services/blogModel";
 
 import aboutImage from "../../assets/About.png";
 import storyImage from "../../assets/Story.png";
@@ -52,18 +52,32 @@ const staggerWrap = {
 export default function Blog() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { addLead } = useData();
+  const { addLead, blogs, blogsLoading } = useData();
 
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  const featured = blogPosts.find((post) => post.featured) || blogPosts[0];
+  // Only published blogs are shown to the public.
+  const publishedBlogs = useMemo(
+    () => blogs.filter((post) => post.status === "published"),
+    [blogs]
+  );
+
+  const blogCategories = useMemo(() => {
+    const unique = Array.from(
+      new Set(publishedBlogs.map((p) => p.category).filter(Boolean))
+    ).sort();
+    return ["All", ...unique];
+  }, [publishedBlogs]);
+
+  const featured =
+    publishedBlogs.find((post) => post.featured) || publishedBlogs[0] || null;
 
   const filteredPosts = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return blogPosts.filter((post) => {
+    return publishedBlogs.filter((post) => {
       const matchesCategory =
         activeCategory === "All" || post.category === activeCategory;
       const matchesSearch =
@@ -71,7 +85,7 @@ export default function Blog() {
         (post.title.toLowerCase() + post.excerpt.toLowerCase() + post.author.toLowerCase()).includes(query);
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, search]);
+  }, [activeCategory, search, publishedBlogs]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -182,70 +196,72 @@ export default function Blog() {
       </section>
 
       {/* ================= FEATURED ARTICLE ================= */}
-      <section className="featured-section">
-        <div className="container">
-          <motion.div
-            className="section-head"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="accent-line" />
-            <span className="gold-label">EDITOR'S PICK</span>
-            <h2>Featured Article</h2>
-            <p>The story everyone is talking about this week.</p>
-          </motion.div>
+      {featured && (
+        <section className="featured-section">
+          <div className="container">
+            <motion.div
+              className="section-head"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="accent-line" />
+              <span className="gold-label">EDITOR'S PICK</span>
+              <h2>Featured Article</h2>
+              <p>The story everyone is talking about this week.</p>
+            </motion.div>
 
-          <motion.article
-            className="featured-post"
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="fp-media">
-              <img
-                src={featured.image}
-                alt={featured.title}
-                loading="lazy"
-                onError={(e) => {
-                  e.target.src =
-                    "https://via.placeholder.com/600x400.png?text=Article+Image";
-                }}
-              />
-              <span className="fp-category">{featured.category}</span>
-            </div>
-            <div className="fp-body">
-              <span className="gold-label fp-label">FEATURED</span>
-              <h3>{featured.title}</h3>
-              <p className="fp-excerpt">{featured.excerpt}</p>
-              <div className="fp-meta">
-                <div className="fp-author">
-                  <img src={featured.avatar} alt={featured.author} loading="lazy" />
-                  <div>
-                    <span className="fp-author-name">{featured.author}</span>
-                    <span className="fp-author-role">{featured.role}</span>
-                  </div>
-                </div>
-                <span className="fp-date">
-                  <FaCalendarAlt /> {featured.date}
-                </span>
-                <span className="fp-time">
-                  <FaClock /> {featured.readingTime}
-                </span>
+            <motion.article
+              className="featured-post"
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.7 }}
+            >
+              <div className="fp-media">
+                <img
+                  src={featured.featuredImage}
+                  alt={featured.title}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://via.placeholder.com/600x400.png?text=Article+Image";
+                  }}
+                />
+                <span className="fp-category">{featured.category}</span>
               </div>
-              <Link
-                to={`/blog/${featured.slug}`}
-                className="btn-gold fp-btn"
-                onClick={(e) => handleNavClick(e, `/blog/${featured.slug}`)}
-              >
-                Read Article <FaArrowRight className="arrow-ico" />
-              </Link>
-            </div>
-          </motion.article>
-        </div>
-      </section>
+              <div className="fp-body">
+                <span className="gold-label fp-label">FEATURED</span>
+                <h3>{featured.title}</h3>
+                <p className="fp-excerpt">{featured.excerpt}</p>
+                <div className="fp-meta">
+                  <div className="fp-author">
+                    <img src={featured.avatar} alt={featured.author} loading="lazy" />
+                    <div>
+                      <span className="fp-author-name">{featured.author}</span>
+                      <span className="fp-author-role">{featured.authorRole}</span>
+                    </div>
+                  </div>
+                  <span className="fp-date">
+                    <FaCalendarAlt /> {formatBlogDate(featured.publishedAt)}
+                  </span>
+                  <span className="fp-time">
+                    <FaClock /> {formatReadingTime(featured.readingTime)}
+                  </span>
+                </div>
+                <Link
+                  to={`/blog/${featured.slug}`}
+                  className="btn-gold fp-btn"
+                  onClick={(e) => handleNavClick(e, `/blog/${featured.slug}`)}
+                >
+                  Read Article <FaArrowRight className="arrow-ico" />
+                </Link>
+              </div>
+            </motion.article>
+          </div>
+        </section>
+      )}
 
       {/* ================= ALL ARTICLES + FILTERS ================= */}
       <section id="blog-feed" className="feed-section">
@@ -288,7 +304,20 @@ export default function Blog() {
           </div>
 
           {/* Grid */}
-          {filteredPosts.length > 0 ? (
+          {blogsLoading ? (
+            <div className="posts-grid">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div className="post-card blog-skeleton-card" key={i}>
+                  <div className="post-media skeleton-block" />
+                  <div className="post-body">
+                    <div className="skeleton-line" />
+                    <div className="skeleton-line short" />
+                    <div className="skeleton-line tiny" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredPosts.length > 0 ? (
             <div className="posts-grid">
               {filteredPosts.map((post, i) => (
                 <motion.article
@@ -306,7 +335,7 @@ export default function Blog() {
                   >
                     <div className="post-media">
                       <img
-                        src={post.image}
+                        src={post.featuredImage}
                         alt={post.title}
                         loading="lazy"
                         onError={(e) => {
@@ -332,10 +361,10 @@ export default function Blog() {
                         <span>{post.author}</span>
                       </div>
                       <span className="post-date">
-                        <FaCalendarAlt /> {post.date}
+                        <FaCalendarAlt /> {formatBlogDate(post.publishedAt)}
                       </span>
                       <span className="post-time">
-                        <FaClock /> {post.readingTime}
+                        <FaClock /> {formatReadingTime(post.readingTime)}
                       </span>
                     </div>
                     <Link
@@ -352,10 +381,11 @@ export default function Blog() {
           ) : (
             <div className="empty-state">
               <FaSearch className="empty-icon" />
-              <h3>No articles found</h3>
+              <h3>{publishedBlogs.length === 0 ? "No articles yet" : "No articles found"}</h3>
               <p>
-                We couldn't find any articles matching your search. Try a
-                different keyword or category.
+                {publishedBlogs.length === 0
+                  ? "We're publishing new stories soon — please check back later."
+                  : "We couldn't find any articles matching your search. Try a different keyword or category."}
               </p>
               <button
                 className="btn-gold empty-reset"

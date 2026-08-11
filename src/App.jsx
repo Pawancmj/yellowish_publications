@@ -1,5 +1,5 @@
 // src/App.js
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext"; // Add this
 
@@ -18,6 +18,16 @@ import Blog from "./pages/Blog/Blog";
 import BlogDetail from "./pages/BlogDetail/BlogDetail";
 import Admin from "./pages/Admindashboard/Admin";
 import AdminForm from "./pages/Admindashboard/AdminForm";
+import AdminBlogs from "./pages/BlogAdmin/AdminBlogs";
+import BlogForm from "./pages/BlogAdmin/BlogForm";
+import { useAuth } from "./contexts/AuthContext";
+
+// Route guard — admin-only pages.
+function RequireAdmin({ children }) {
+  const { currentUser } = useAuth();
+  if (!currentUser) return <Navigate to="/login" replace />;
+  return children;
+}
 
 function App() {
   return (
@@ -41,6 +51,30 @@ function App() {
               <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/admin121-secret" element={<Admin />} /> {/* this is dashboard page*/}
               <Route path="/login" element={<AdminForm />} /> {/* this is login page*/}
+              <Route
+                path="/admin/blogs"
+                element={
+                  <RequireAdmin>
+                    <AdminBlogs />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/blogs/new"
+                element={
+                  <RequireAdmin>
+                    <BlogForm />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/blogs/:id/edit"
+                element={
+                  <RequireAdmin>
+                    <BlogForm />
+                  </RequireAdmin>
+                }
+              />
             </Routes>
           </main>
           <Footer />

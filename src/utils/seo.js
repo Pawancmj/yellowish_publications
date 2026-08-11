@@ -49,6 +49,8 @@ export function updatePageMeta({
 
   document.title = finalTitle;
 
+  const canonicalHref = canonical ? canonicalUrl(canonical) : canonicalUrl();
+
   priorMeta.push(...[
     ["name", "description"],
     ["name", "keywords"],
@@ -69,12 +71,12 @@ export function updatePageMeta({
   upsertMeta("property", "og:title", finalTitle);
   upsertMeta("property", "og:description", description || "");
   upsertMeta("property", "og:image", image || "");
-  upsertMeta("property", "og:url", canonicalUrl());
+  upsertMeta("property", "og:url", canonicalHref);
   upsertMeta("name", "twitter:card", "summary_large_image");
   upsertMeta("name", "twitter:title", finalTitle);
   upsertMeta("name", "twitter:description", description || "");
   upsertMeta("name", "twitter:image", image || "");
-  upsertLink("canonical", canonicalUrl());
+  upsertLink("canonical", canonicalHref);
 }
 
 export function resetPageMeta() {

@@ -4,6 +4,7 @@
 
 import { collection, addDoc, doc, updateDoc, deleteDoc, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
+import { normalizeContentHtml } from "./blogContent";
 
 export const FIXED_USER_ID = "shared-app-user";
 export const BLOG_COLLECTION = `users/${FIXED_USER_ID}/blogs`;
@@ -41,7 +42,7 @@ export function buildBlogPayload(formData) {
     title: formData.title.trim(),
     slug: formData.slug.trim(),
     excerpt: (formData.excerpt || "").trim(),
-    content: formData.content || "",
+    content: normalizeContentHtml(formData.content || ""),
     featuredImage: formData.featuredImage || "",
     author: (formData.author || "").trim(),
     category: (formData.category || "").trim(),

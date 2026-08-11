@@ -4,7 +4,6 @@ import {
   useParams,
   useNavigate,
   useLocation,
-  Navigate,
 } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useData } from "../../contexts/DataContext";
@@ -31,9 +30,15 @@ import {
   FaRegHeart,
   FaBookOpen,
   FaPenNib,
+  FaSearch,
 } from "react-icons/fa";
 
-import { blogPosts } from "../../data/blogPosts";
+import {
+  formatBlogDate,
+  formatReadingTime,
+  formatViews,
+} from "../../services/blogModel";
+import { updatePageMeta, resetPageMeta } from "../../utils/seo";
 
 import author1 from "../../assets/author1.png";
 import author2 from "../../assets/author2.png";
@@ -138,94 +143,35 @@ function ProgressRing({ progress }) {
 }
 
 // ---------------------------------------------------------------
-// Content block renderer
+// Parse stored HTML content into { html, toc } — keeps the
+// existing article CSS classes and builds the table of contents.
 // ---------------------------------------------------------------
-function ContentBlock({ block, dropCap }) {
-  switch (block.type) {
-    case "p":
-      return <p className={dropCap ? "drop-cap" : ""}>{block.text}</p>;
-    case "h2":
-      return (
-        <h2 id={block.id} className="article-h2">
-          {block.text}
-        </h2>
-      );
-    case "h3":
-      return (
-        <h3 id={block.id} className="article-h3">
-          {block.text}
-        </h3>
-      );
-    case "ul":
-      return (
-        <ul className="article-list">
-          {block.items.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ul>
-      );
-    case "ol":
-      return (
-        <ol className="article-list ordered">
-          {block.items.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ol>
-      );
-    case "quote":
-      return (
-        <blockquote className="article-quote">
-          <FaQuoteLeft className="quote-mark" />
-          <p>{block.text}</p>
-          {block.cite && <cite>— {block.cite}</cite>}
-        </blockquote>
-      );
-    case "image":
-      return (
-        <figure className="article-figure">
-          <img src={block.src} alt={block.alt || ""} loading="lazy" />
-          {block.caption && <figcaption>{block.caption}</figcaption>}
-        </figure>
-      );
-    case "table":
-      return (
-        <div className="table-wrap">
-          <table className="article-table">
-            <thead>
-              <tr>
-                {block.headers.map((h, i) => (
-                  <th key={i}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {block.rows.map((row, i) => (
-                <tr key={i}>
-                  {row.map((cell, j) => (
-                    <td key={j}>{cell}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-    case "code":
-      return (
-        <pre className="article-code">
-          <code>{block.code}</code>
-        </pre>
-      );
-    case "highlight":
-      return (
-        <div className="article-highlight">
-          {block.title && <strong className="ah-title">{block.title}</strong>}
-          <p>{block.text}</p>
-        </div>
-      );
-    default:
-      return null;
+function prepareArticleContent(html) {
+  if (!html || typeof html !== "string") {
+    return { html: "", toc: [] };
   }
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const toc = [];
+  let index = 0;
+  doc.querySelectorAll("h2, h3").forEach((h) => {
+    index += 1;
+    if (!h.id) h.id = `heading-${index}`;
+    toc.push({
+      id: h.id,
+      text: (h.textContent || "").trim(),
+      level: h.tagName === "H3" ? 3 : 2,
+    });
+  });
+
+  // Drop cap on the article opening paragraph
+  const firstP = doc.body.querySelector("p");
+  if (firstP && !firstP.closest("blockquote") && !firstP.closest("figcaption")) {
+    firstP.classList.add("drop-cap");
+  }
+
+  doc.querySelectorAll("img").forEach((img) => img.setAttribute("loading", "lazy"));
+
+  return { html: doc.body.innerHTML, toc };
 }
 
 // ---------------------------------------------------------------
@@ -323,10 +269,15 @@ export default function BlogDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { addLead } = useData();
+  const { addLead, blogs, blogsLoading } = useData();
 
-  const index = blogPosts.findIndex((p) => p.slug === slug);
-  const post = index >= 0 ? blogPosts[index] : null;
+  const publishedBlogs = useMemo(
+    () => blogs.filter((post) => post.status === "published"),
+    [blogs]
+  );
+
+  const index = publishedBlogs.findIndex((p) => p.slug === slug);
+  const post = index >= 0 ? publishedBlogs[index] : null;
 
   const articleRef = useRef(null);
 
@@ -340,41 +291,55 @@ export default function BlogDetail() {
   const [commentForm, setCommentForm] = useState({ name: "", text: "" });
   const [commentError, setCommentError] = useState("");
 
-  const toc = useMemo(() => {
-    if (!post) return [];
-    return post.content
-      .filter((b) => b.type === "h2" || b.type === "h3")
-      .map((b) => ({ id: b.id, text: b.text, level: b.type === "h3" ? 3 : 2 }));
-  }, [post]);
+  const { html, toc } = useMemo(
+    () => prepareArticleContent(post?.content || ""),
+    [post]
+  );
 
   const related = useMemo(() => {
     if (!post) return [];
-    const sameCat = blogPosts.filter(
+    const sameCat = publishedBlogs.filter(
       (p) => p.id !== post.id && p.category === post.category
     );
-    const others = blogPosts.filter(
+    const others = publishedBlogs.filter(
       (p) => p.id !== post.id && p.category !== post.category
     );
     return [...sameCat, ...others].slice(0, 3);
-  }, [post]);
+  }, [post, publishedBlogs]);
 
   const latest = useMemo(
-    () => blogPosts.filter((p) => p.id !== post?.id).slice(0, 3),
-    [post]
+    () => publishedBlogs.filter((p) => p.id !== post?.id).slice(0, 3),
+    [post, publishedBlogs]
   );
 
   const popular = useMemo(
     () =>
-      blogPosts
+      publishedBlogs
         .filter((p) => p.id !== post?.id)
-        .sort((a, b) => parseFloat(b.views) - parseFloat(a.views))
+        .sort((a, b) => Number(b.views || 0) - Number(a.views || 0))
         .slice(0, 3),
-    [post]
+    [post, publishedBlogs]
   );
 
-  const prevPost = index > 0 ? blogPosts[index - 1] : null;
+  const prevPost = index > 0 ? publishedBlogs[index - 1] : null;
   const nextPost =
-    index >= 0 && index < blogPosts.length - 1 ? blogPosts[index + 1] : null;
+    index >= 0 && index < publishedBlogs.length - 1
+      ? publishedBlogs[index + 1]
+      : null;
+
+  // SEO — dynamic title / meta / OG tags for published posts only.
+  useEffect(() => {
+    if (!post) return undefined;
+    updatePageMeta({
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt,
+      image: post.featuredImage,
+      canonical: `/blog/${post.slug}`,
+      keywords: post.seoKeywords,
+      type: "article",
+    });
+    return resetPageMeta;
+  }, [post]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -500,7 +465,38 @@ export default function BlogDetail() {
     }
   };
 
-  if (!post) return <Navigate to="/blog" replace />;
+  // ------------------- 404 / Blog Not Found -------------------
+  if (!blogsLoading && !post) {
+    return (
+      <div className="detail-page">
+        <div className="blog-notfound">
+          <div className="bf-icon"><FaSearch /></div>
+          <span className="gold-label">PAGE NOT FOUND</span>
+          <h1>Blog Not Found</h1>
+          <p>
+            The article you're looking for doesn't exist, may have been moved,
+            or is no longer published.
+          </p>
+          <Link to="/blog" className="btn-gold" onClick={(e) => handleNavClick(e, "/blog")}>
+            <FaArrowLeft /> Back to Blog
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // ------------------- Loading state -------------------
+  if (blogsLoading || !post) {
+    return (
+      <div className="detail-page">
+        <div className="blog-notfound">
+          <div className="bf-icon"><FaSearch /></div>
+          <span className="gold-label">LOADING</span>
+          <h1>Loading article...</h1>
+        </div>
+      </div>
+    );
+  }
 
   const shareUrl =
     typeof window !== "undefined" ? window.location.href : "";
@@ -510,7 +506,7 @@ export default function BlogDetail() {
       <div className="sb-author">
         <img src={post.avatar} alt={post.author} loading="lazy" />
         <strong>{post.author}</strong>
-        <span>{post.role}</span>
+        <span>{post.authorRole}</span>
       </div>
       <div className="sb-progress">
         <ProgressRing progress={articleProgress} />
@@ -577,15 +573,15 @@ export default function BlogDetail() {
               </span>
               <span className="hm-dot">•</span>
               <span className="hm-item">
-                <FaCalendarAlt /> {post.date}
+                <FaCalendarAlt /> {formatBlogDate(post.publishedAt)}
               </span>
               <span className="hm-dot">•</span>
               <span className="hm-item">
-                <FaRegClock /> {post.readingTime}
+                <FaRegClock /> {formatReadingTime(post.readingTime)}
               </span>
               <span className="hm-dot">•</span>
               <span className="hm-item">
-                <FaEye /> {post.views} views
+                <FaEye /> {formatViews(post.views)} views
               </span>
             </motion.div>
             <motion.div variants={fadeUp} custom={3} className="hero-share">
@@ -600,7 +596,7 @@ export default function BlogDetail() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
           >
             <img
-              src={post.image}
+              src={post.featuredImage}
               alt={post.title}
               loading="lazy"
               onError={(e) => {
@@ -620,11 +616,11 @@ export default function BlogDetail() {
             {SidebarInner}
           </aside>
 
-          <article className="article-body" ref={articleRef}>
-            {post.content.map((block, i) => (
-              <ContentBlock key={i} block={block} dropCap={i === 0} />
-            ))}
-          </article>
+          <article
+            className="article-body article-rich"
+            ref={articleRef}
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
         </div>
 
         {/* Sidebar content moved below the article on smaller screens */}
@@ -656,7 +652,7 @@ export default function BlogDetail() {
                   <FaBookOpen /> {post.authorBooks}
                 </span>
                 <span>
-                  <FaPenNib /> {post.role}
+                  <FaPenNib /> {post.authorRole}
                 </span>
               </div>
               <div className="ag-actions">
@@ -669,21 +665,21 @@ export default function BlogDetail() {
                 </Link>
                 <div className="ag-social">
                   <a
-                    href={post.authorSocial.twitter}
+                    href={post.authorSocial?.twitter || "#"}
                     aria-label="Twitter"
                     className="share-btn tw"
                   >
                     <FaTwitter />
                   </a>
                   <a
-                    href={post.authorSocial.linkedin}
+                    href={post.authorSocial?.linkedin || "#"}
                     aria-label="LinkedIn"
                     className="share-btn li"
                   >
                     <FaLinkedinIn />
                   </a>
                   <a
-                    href={post.authorSocial.facebook}
+                    href={post.authorSocial?.facebook || "#"}
                     aria-label="Facebook"
                     className="share-btn fb"
                   >
@@ -766,13 +762,13 @@ export default function BlogDetail() {
                   onClick={(e) => handleNavClick(e, `/blog/${p.slug}`)}
                 >
                   <div className="rc-media">
-                    <img src={p.image} alt={p.title} loading="lazy" />
+                    <img src={p.featuredImage} alt={p.title} loading="lazy" />
                     <div className="rc-overlay" />
                     <span className="rc-cat">{p.category}</span>
                     <div className="rc-body">
                       <h3 className="rc-title">{p.title}</h3>
                       <span className="rc-time">
-                        <FaClock /> {p.readingTime}
+                        <FaClock /> {formatReadingTime(p.readingTime)}
                       </span>
                     </div>
                   </div>
@@ -797,11 +793,11 @@ export default function BlogDetail() {
                   className="explore-item"
                   onClick={(e) => handleNavClick(e, `/blog/${p.slug}`)}
                 >
-                  <img src={p.image} alt="" loading="lazy" />
+                  <img src={p.featuredImage} alt="" loading="lazy" />
                   <span>
                     <strong>{p.title}</strong>
                     <small>
-                      <FaCalendarAlt /> {p.date}
+                      <FaCalendarAlt /> {formatBlogDate(p.publishedAt)}
                     </small>
                   </span>
                 </Link>
@@ -817,11 +813,11 @@ export default function BlogDetail() {
                   className="explore-item"
                   onClick={(e) => handleNavClick(e, `/blog/${p.slug}`)}
                 >
-                  <img src={p.image} alt="" loading="lazy" />
+                  <img src={p.featuredImage} alt="" loading="lazy" />
                   <span>
                     <strong>{p.title}</strong>
                     <small>
-                      <FaEye /> {p.views} views
+                      <FaEye /> {formatViews(p.views)} views
                     </small>
                   </span>
                 </Link>
@@ -832,102 +828,104 @@ export default function BlogDetail() {
       </section>
 
       {/* ================= COMMENTS ================= */}
-      <section className="comments-section">
-        <div className="container">
-          <motion.div
-            className="section-head"
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="accent-line" />
-            <span className="gold-label">JOIN THE CONVERSATION</span>
-            <h2>Discussion ({comments.length})</h2>
-            <p>Thoughts, questions, and kind words from readers.</p>
-          </motion.div>
+      {post.allowComments !== false && (
+        <section className="comments-section">
+          <div className="container">
+            <motion.div
+              className="section-head"
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="accent-line" />
+              <span className="gold-label">JOIN THE CONVERSATION</span>
+              <h2>Discussion ({comments.length})</h2>
+              <p>Thoughts, questions, and kind words from readers.</p>
+            </motion.div>
 
-          <div className="comments-wrap">
-            <form className="comment-form" onSubmit={handleCommentSubmit}>
-              <div className="cf-fields">
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  value={commentForm.name}
+            <div className="comments-wrap">
+              <form className="comment-form" onSubmit={handleCommentSubmit}>
+                <div className="cf-fields">
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    value={commentForm.name}
+                    onChange={(e) =>
+                      setCommentForm((f) => ({ ...f, name: e.target.value }))
+                    }
+                  />
+                </div>
+                <textarea
+                  placeholder="Share your thoughts on this article..."
+                  rows={4}
+                  value={commentForm.text}
                   onChange={(e) =>
-                    setCommentForm((f) => ({ ...f, name: e.target.value }))
+                    setCommentForm((f) => ({ ...f, text: e.target.value }))
                   }
                 />
-              </div>
-              <textarea
-                placeholder="Share your thoughts on this article..."
-                rows={4}
-                value={commentForm.text}
-                onChange={(e) =>
-                  setCommentForm((f) => ({ ...f, text: e.target.value }))
-                }
-              />
-              {commentError && <p className="cf-error">{commentError}</p>}
-              <button type="submit" className="btn-gold cf-submit">
-                Post Comment <FaArrowRight className="arrow-ico" />
-              </button>
-            </form>
+                {commentError && <p className="cf-error">{commentError}</p>}
+                <button type="submit" className="btn-gold cf-submit">
+                  Post Comment <FaArrowRight className="arrow-ico" />
+                </button>
+              </form>
 
-            <div className="comment-list">
-              {comments.map((c) => {
-                const isLiked = !!liked[c.id];
-                const displayLikes = c.likes + (isLiked ? 1 : 0);
-                return (
-                  <div className="comment" key={c.id}>
-                    <img
-                      src={c.avatar}
-                      alt={c.name}
-                      className="c-avatar"
-                      loading="lazy"
-                    />
-                    <div className="c-body">
-                      <div className="c-meta">
-                        <strong className="c-name">{c.name}</strong>
-                        <span className="c-date">{c.date}</span>
-                      </div>
-                      <p className="c-text">{c.text}</p>
-                      <div className="c-actions">
-                        <button
-                          className={`c-like ${isLiked ? "active" : ""}`}
-                          aria-pressed={isLiked}
-                          onClick={() => toggleLike(c.id)}
-                        >
-                          {isLiked ? <FaHeart /> : <FaRegHeart />} {displayLikes}
-                        </button>
-                        <button className="c-reply">
-                          <FaReply /> Reply
-                        </button>
-                      </div>
-                      {c.replies.map((r) => (
-                        <div className="comment reply" key={r.id}>
-                          <img
-                            src={r.avatar}
-                            alt={r.name}
-                            className="c-avatar"
-                            loading="lazy"
-                          />
-                          <div className="c-body">
-                            <div className="c-meta">
-                              <strong className="c-name">{r.name}</strong>
-                              <span className="c-date">{r.date}</span>
-                            </div>
-                            <p className="c-text">{r.text}</p>
-                          </div>
+              <div className="comment-list">
+                {comments.map((c) => {
+                  const isLiked = !!liked[c.id];
+                  const displayLikes = c.likes + (isLiked ? 1 : 0);
+                  return (
+                    <div className="comment" key={c.id}>
+                      <img
+                        src={c.avatar}
+                        alt={c.name}
+                        className="c-avatar"
+                        loading="lazy"
+                      />
+                      <div className="c-body">
+                        <div className="c-meta">
+                          <strong className="c-name">{c.name}</strong>
+                          <span className="c-date">{c.date}</span>
                         </div>
-                      ))}
+                        <p className="c-text">{c.text}</p>
+                        <div className="c-actions">
+                          <button
+                            className={`c-like ${isLiked ? "active" : ""}`}
+                            aria-pressed={isLiked}
+                            onClick={() => toggleLike(c.id)}
+                          >
+                            {isLiked ? <FaHeart /> : <FaRegHeart />} {displayLikes}
+                          </button>
+                          <button className="c-reply">
+                            <FaReply /> Reply
+                          </button>
+                        </div>
+                        {c.replies.map((r) => (
+                          <div className="comment reply" key={r.id}>
+                            <img
+                              src={r.avatar}
+                              alt={r.name}
+                              className="c-avatar"
+                              loading="lazy"
+                            />
+                            <div className="c-body">
+                              <div className="c-meta">
+                                <strong className="c-name">{r.name}</strong>
+                                <span className="c-date">{r.date}</span>
+                              </div>
+                              <p className="c-text">{r.text}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ================= NEWSLETTER ================= */}
       <section className="newsletter-cta">

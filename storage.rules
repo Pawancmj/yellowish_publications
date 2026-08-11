@@ -1,0 +1,18 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Blog images uploaded from the admin panel live under blogs/.
+    // Signed-in (admin) users may upload, read back, and clean up their
+    // images. Everyone may read the resulting public URLs.
+    match /blogs/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Fallback: anything else — public reads, writes require auth.
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

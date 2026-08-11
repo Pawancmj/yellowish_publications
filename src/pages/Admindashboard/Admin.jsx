@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
-import { FaEdit, FaTrash, FaPlus, FaBook, FaUser, FaEnvelope } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaBook, FaUser, FaEnvelope, FaFeatherAlt } from "react-icons/fa";
 import "./Admin.css";
 
 const Admin = () => {
@@ -22,6 +22,7 @@ const Admin = () => {
     getAuthorPhoto,
     leads,
     deleteLead,
+    blogs,
   } = useData();
 
   const [activeTab, setActiveTab] = useState("books");
@@ -106,6 +107,13 @@ const Admin = () => {
               <p>Total Leads</p>
             </div>
           </div>
+          <div className="stat-card">
+            <FaFeatherAlt />
+            <div>
+              <h3>{blogs ? blogs.length : 0}</h3>
+              <p>Total Blogs</p>
+            </div>
+          </div>
         </div>
 
         <div className="admin-tabs">
@@ -126,6 +134,12 @@ const Admin = () => {
             onClick={() => setActiveTab("leads")}
           >
             <FaEnvelope /> Manage Leads
+          </button>
+          <button
+            className={activeTab === "blogs" ? "tab-active" : "tab"}
+            onClick={() => setActiveTab("blogs")}
+          >
+            <FaFeatherAlt /> Manage Blogs
           </button>
         </div>
 
@@ -281,6 +295,69 @@ const Admin = () => {
                   )}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "blogs" && (
+          <div className="blogs-management">
+            <div className="section-header">
+              <h2>Blogs Management</h2>
+              <button
+                className="add-btn"
+                onClick={() => navigate("/admin/blogs/new")}
+              >
+                <FaPlus /> Add New Blog
+              </button>
+            </div>
+
+            <div className="data-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {blogs && blogs.length > 0 ? (
+                    blogs.slice(0, 10).map((blog) => (
+                      <tr key={blog.id}>
+                        <td>{blog.title}</td>
+                        <td>{blog.author || "-"}</td>
+                        <td>{blog.category || "-"}</td>
+                        <td>{blog.status}</td>
+                        <td>
+                          <button
+                            className="edit-btn"
+                            onClick={() => navigate(`/admin/blogs/${blog.id}/edit`)}
+                          >
+                            <FaEdit />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="no-data">
+                        No blogs available
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="section-header" style={{ marginTop: "1.5rem" }}>
+              <button
+                className="add-btn"
+                onClick={() => navigate("/admin/blogs")}
+              >
+                <FaFeatherAlt /> Open Full Blog Management
+              </button>
             </div>
           </div>
         )}
