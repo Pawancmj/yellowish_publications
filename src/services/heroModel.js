@@ -6,13 +6,17 @@
 // The document stores the four hero visual slots as an array:
 //   {
 //     images: [
-//       { id: "hero-1", imageUrl: "..." },
-//       { id: "hero-2", imageUrl: "..." },
-//       { id: "hero-3", imageUrl: "..." },
-//       { id: "hero-4", imageUrl: "..." }
+//       { id: "hero-1", imageUrl: "...", bookId: "..." },
+//       { id: "hero-2", imageUrl: "...", bookId: "..." },
+//       { id: "hero-3", imageUrl: "...", bookId: "..." },
+//       { id: "hero-4", imageUrl: "...", bookId: "..." }
 //     ],
 //     updatedAt: ...
 //   }
+//
+// `bookId` is an optional reference into the existing books collection.
+// When set, the Home hero cover for that slot becomes clickable and
+// navigates to that book's detail page (/book/:id).
 
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -27,7 +31,7 @@ export const HERO_SLOT_IDS = ["hero-1", "hero-2", "hero-3", "hero-4"];
 export const heroDocRef = () => doc(db, HERO_COLLECTION, HERO_DOC_ID);
 
 // Coerce a value into the canonical 4-entry images array.
-// Missing entries become empty slots ({ id, imageUrl: "" }).
+// Missing entries become empty slots ({ id, imageUrl: "", bookId: "" }).
 function normalizeImages(rawImages) {
   const source = Array.isArray(rawImages) ? rawImages : [];
   return HERO_SLOT_IDS.map((id, index) => {
@@ -37,6 +41,10 @@ function normalizeImages(rawImages) {
       imageUrl:
         entry && entry.imageUrl && typeof entry.imageUrl === "string"
           ? entry.imageUrl
+          : "",
+      bookId:
+        entry && entry.bookId && typeof entry.bookId === "string"
+          ? entry.bookId
           : "",
     };
   });
@@ -55,8 +63,8 @@ export function normalizeHero(raw) {
 }
 
 // Persist hero content (create or update). data.images is an array of
-// { id, imageUrl } entries where imageUrl is a base64 data URL produced by
-// the existing fileToDataUrl() helper, or a pasteable URL.
+// { id, imageUrl, bookId } entries where imageUrl is a base64 data URL
+// produced by the existing fileToDataUrl() helper, or a pasteable URL.
 export async function updateHero(data) {
   const images = normalizeImages(data.images);
   await setDoc(

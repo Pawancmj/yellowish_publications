@@ -5,7 +5,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
 import { FaEdit, FaTrash, FaPlus, FaBook, FaUser, FaEnvelope, FaFeatherAlt, FaHome, FaSpinner, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import "./Admin.css";
-import BlogImageUpload from "../../components/BlogImageUpload/BlogImageUpload";
 
 const Admin = () => {
   const { currentUser, logout } = useAuth();
@@ -440,15 +439,17 @@ const Admin = () => {
 
             <div className="hero-manager-card">
               <p className="hero-manager-hint">
-                Manage the four images of the floating composition on the right
-                side of the Home page hero. Upload up to four images — any slot
-                left empty keeps its default book cover. Once saved, the Home
-                page updates automatically.
+                Choose a book for each of the four floating positions on the
+                right side of the Home page hero. The selected book&apos;s cover
+                and its detail-page link are used automatically — no uploads or
+                IDs required. Save to publish.
               </p>
 
               <HeroManager
                 hero={hero}
                 heroLoading={heroLoading}
+                books={books}
+                getBookCover={getBookCover}
                 onSave={async (images) => {
                   const result = await updateHero({ images });
                   return result;
@@ -899,16 +900,18 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
   );
 };
 
-// Hero Manager Component — manage the four floating hero visuals.
+// Hero Manager Component — manage the four floating hero books.
+// Each slot stores only the selected book's id; the cover image and the
+// detail-page link are resolved live from the existing books collection.
 const HERO_SLOTS = [
-  { id: "hero-1", label: "Hero Image 1", position: "Left / upper area" },
-  { id: "hero-2", label: "Hero Image 2", position: "Upper / right area" },
-  { id: "hero-3", label: "Hero Image 3", position: "Lower / center area" },
-  { id: "hero-4", label: "Hero Image 4", position: "Right / lower area" },
+  { id: "hero-1", label: "Hero Book 1", position: "Left / upper area" },
+  { id: "hero-2", label: "Hero Book 2", position: "Upper / right area" },
+  { id: "hero-3", label: "Hero Book 3", position: "Lower / center area" },
+  { id: "hero-4", label: "Hero Book 4", position: "Right / lower area" },
 ];
 
-const HeroManager = ({ hero, heroLoading, onSave }) => {
-  const [images, setImages] = useState([]);
+const HeroManager = ({ hero, heroLoading, books = [], getBookCover, onSave }) => {
+  const [slots, setSlots] = useState([]);
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState("");
   const [error, setError] = useState("");
@@ -917,20 +920,22 @@ const HeroManager = ({ hero, heroLoading, onSave }) => {
   useEffect(() => {
     if (!heroLoading) {
       const heroImages = Array.isArray(hero?.images) ? hero.images : [];
-      setImages(
+      setSlots(
         HERO_SLOTS.map((slot) => {
           const existing = heroImages.find((img) => img.id === slot.id);
-          return { id: slot.id, imageUrl: existing?.imageUrl || "" };
+          return { id: slot.id, bookId: existing?.bookId || "" };
         })
       );
     }
   }, [hero, heroLoading]);
 
-  const updateSlot = (id, imageUrl) => {
-    setImages((prev) =>
-      prev.map((img) => (img.id === id ? { ...img, imageUrl } : img))
+  const updateSlotBook = (id, bookId) => {
+    setSlots((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, bookId } : s))
     );
   };
+
+  const clearSlot = (id) => updateSlotBook(id, "");
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -939,14 +944,14 @@ const HeroManager = ({ hero, heroLoading, onSave }) => {
     setSavedMsg("");
     setError("");
     try {
-      const result = await onSave(images);
+      const result = await onSave(slots);
       if (result?.error) {
-        setError(result.error.message || "Failed to save the hero images.");
+        setError(result.error.message || "Failed to save the hero books.");
       } else {
-        setSavedMsg("Hero images saved successfully.");
+        setSavedMsg("Hero books saved successfully.");
       }
     } catch (err) {
-      setError(err?.message || "Failed to save the hero images.");
+      setError(err?.message || "Failed to save the hero books.");
     } finally {
       setSaving(false);
     }
@@ -955,7 +960,7 @@ const HeroManager = ({ hero, heroLoading, onSave }) => {
   const handleDelete = async () => {
     if (
       !window.confirm(
-        "Remove all four hero images and restore the default book covers?"
+        "Clear all four hero book selections and restore the default covers?"
       )
     ) {
       return;
@@ -966,15 +971,15 @@ const HeroManager = ({ hero, heroLoading, onSave }) => {
     setError("");
     try {
       const result = await onSave(
-        HERO_SLOTS.map((slot) => ({ id: slot.id, imageUrl: "" }))
+        HERO_SLOTS.map((slot) => ({ id: slot.id, bookId: "" }))
       );
       if (result?.error) {
-        setError(result.error.message || "Failed to remove the hero images.");
+        setError(result.error.message || "Failed to clear the hero books.");
       } else {
-        setSavedMsg("Hero images removed. Default covers restored.");
+        setSavedMsg("Hero books cleared. Default covers restored.");
       }
     } catch (err) {
-      setError(err?.message || "Failed to remove the hero images.");
+      setError(err?.message || "Failed to clear the hero books.");
     } finally {
       setSaving(false);
     }
@@ -992,18 +997,76 @@ const HeroManager = ({ hero, heroLoading, onSave }) => {
     <form onSubmit={handleSave} className="hero-manager-form">
       <div className="hero-slots">
         {HERO_SLOTS.map((slot) => {
-          const current = images.find((img) => img.id === slot.id);
+          const current = slots.find((s) => s.id === slot.id);
+          const bookId = current?.bookId || "";
+          const selectedBook =
+            books.find((b) => String(b.id) === String(bookId)) || null;
+          // Backward compatibility: legacy slots may carry an image with no
+          // linked book. Keep the image on the Home page until a book is
+          // chosen, but let the admin know a book is needed to make it
+          // clickable.
+          const heroSlot = (hero?.images || []).find(
+            (img) => img.id === slot.id
+          );
+          const legacyImage =
+            !bookId && heroSlot?.imageUrl ? heroSlot.imageUrl : "";
+
           return (
             <div className="hero-slot" key={slot.id}>
               <div className="hero-slot-header">
                 <h3>{slot.label}</h3>
                 <span>{slot.position}</span>
               </div>
-              <BlogImageUpload
-                value={current?.imageUrl || ""}
-                onChange={(value) => updateSlot(slot.id, value)}
-                accept="image/jpg,image/jpeg,image/png,image/webp"
-              />
+
+              <label className="hero-slot-book">
+                <span>Select Book</span>
+                <select
+                  value={bookId}
+                  onChange={(e) => updateSlotBook(slot.id, e.target.value)}
+                >
+                  <option value="">Select a book…</option>
+                  {books.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.title || b.id}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {legacyImage && (
+                <p className="hero-slot-legacy">
+                  Legacy image present — select a book to make this slot
+                  clickable.
+                </p>
+              )}
+
+              {selectedBook ? (
+                <div className="hero-slot-preview">
+                  <img
+                    src={getBookCover(selectedBook)}
+                    alt={selectedBook.title}
+                    loading="lazy"
+                  />
+                  <div className="hero-slot-preview-meta">
+                    <strong>{selectedBook.title}</strong>
+                    <span>
+                      By{" "}
+                      {selectedBook.author ||
+                        selectedBook.authorsName ||
+                        "Unknown"}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className="hero-slot-clear"
+                    onClick={() => clearSlot(slot.id)}
+                  >
+                    Clear
+                  </button>
+                </div>
+              ) : (
+                <p className="hero-slot-empty">No book selected</p>
+              )}
             </div>
           );
         })}
@@ -1036,7 +1099,7 @@ const HeroManager = ({ hero, heroLoading, onSave }) => {
           onClick={handleDelete}
           disabled={saving}
         >
-          <FaTrash /> Reset / Delete
+          <FaTrash /> Clear All
         </button>
       </div>
     </form>

@@ -78,36 +78,65 @@
   margin-top: 0.5rem;
 }
 
-.buy-btn {
-  background: #facc15;
-  color: #111;
+/* Shared action-button sizing. Both buttons are given the SAME box so the
+   longer WhatsApp label can no longer stretch its button:
+   - equal flex share (flex-basis 0) makes widths identical on desktop
+   - single-line nowrap keeps line-boxes identical, and the explicit
+     line-height matches the global `button` rule so both boxes match
+   Color/background stays in the per-button classes below. */
+.details-buttons .book-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  border: 2px solid;
   font-weight: 600;
   font-size: 1.1rem;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  line-height: 25px;
+  letter-spacing: 0;
+  padding: 0.8rem 1.25rem;
+  min-width: 0;
+  flex: 1 1 0;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
-.buy-btn:hover {
-  background: #eab308;
+/* WhatsApp purchase button — colour only; sizing comes from .book-action-btn */
+.whatsapp-buy-btn {
+  background: #FFC94A;
+  color: #3A2E22;
+  border-color: #FFC94A;
+}
+
+.whatsapp-buy-btn svg {
+  color: #25D366;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.whatsapp-buy-btn:hover {
+  background: #E0A92F;
+  border-color: #E0A92F;
   transform: translateY(-2px);
 }
 
+/* Back to Store button — colour only; sizing comes from .book-action-btn */
 .back-btn {
   background: transparent;
-  border: 2px solid #ccc;
+  border-color: #ccc;
   color: #333;
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding: 0.8rem 2rem;
-  border-radius: 999px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  transition: all 0.2s ease;
+}
+
+/* Neutralise a leaked global rule (AuthorDetails.css: `.back-btn{margin-top:2rem}`)
+   that would otherwise push this page's Back button down and out of alignment
+   with the WhatsApp button. Scoped to .details-buttons so the Author page is
+   unaffected. Dimensions themselves come from the shared .book-action-btn rule,
+   which both buttons use, so the two boxes are pixel-identical. */
+.details-buttons .back-btn {
+  margin-top: 0;
 }
 
 .back-btn:hover {
@@ -147,6 +176,14 @@
   }
 
   .details-buttons {
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .details-buttons .book-action-btn {
+    flex: 1 1 100%;
+    width: 100%;
+    white-space: normal;
   }
 }

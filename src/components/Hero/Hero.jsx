@@ -89,40 +89,71 @@ const staggerWrap = {
   },
 };
 
-function FloatingBook({ src, alt, className, height, rotation, onError }) {
+function FloatingBook({ src, alt, className, height, rotation, onError, book }) {
+  const inner = (
+    <div
+      className={`relative aspect-[3/4] ${height} transition-transform duration-300 ${
+        book ? "cursor-pointer group-hover:scale-[1.05]" : ""
+      }`}
+      style={{ rotate: rotation }}
+    >
+      <img
+        src={src}
+        alt={book ? `${alt} — ${book.title}` : alt}
+        width={170}
+        height={226}
+        loading="lazy"
+        onError={onError}
+        className="h-full w-full rounded-md object-cover shadow-[0_12px_30px_rgba(0,0,0,0.12)] transition-shadow duration-300 group-hover:shadow-[0_18px_38px_rgba(0,0,0,0.2)]"
+      />
+    </div>
+  );
+
+  // No linked book → render the cover as before (not clickable).
+  if (!book) {
+    return <div className={`absolute ${className}`}>{inner}</div>;
+  }
+
   return (
     <div className={`absolute ${className}`}>
-      <div
-        className={`relative aspect-[3/4] ${height}`}
-        style={{ rotate: rotation }}
+      <Link
+        to={`/book/${book.id}`}
+        className="group block"
+        aria-label={`View details for ${book.title}`}
+        title={book.title}
       >
-        <img
-          src={src}
-          alt={alt}
-          width={170}
-          height={226}
-          loading="lazy"
-          onError={onError}
-          className="h-full w-full rounded-md object-cover shadow-[0_12px_30px_rgba(0,0,0,0.12)]"
-        />
-      </div>
+        {inner}
+      </Link>
     </div>
   );
 }
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
-  const { hero, heroLoading } = useData();
+  const { hero, heroLoading, books, getBookCover } = useData();
   const [failedSlots, setFailedSlots] = useState({});
 
-  // Resolve the source for a slot: admin-configured image if present and
-  // not failed, otherwise the slot's default image. Keeps the composition
-  // intact no matter how many slots are configured.
-  const resolveSource = (book, index) => {
+  // Resolve the source for a slot:
+  // 1. A linked book always supplies its own cover (no mismatch possible).
+  // 2. Otherwise a legacy image (old hero data, no book) is shown as-is.
+  // 3. Otherwise the slot's default fallback image keeps the composition.
+  const resolveSource = (defaultBook, index, linked) => {
+    if (linked) return getBookCover(linked);
     const slot = !heroLoading && hero?.images ? hero.images[index] : null;
     const configured = slot?.imageUrl;
-    if (configured && !failedSlots[book.slotId]) return configured;
-    return book.src;
+    if (configured && !failedSlots[defaultBook.slotId]) return configured;
+    return defaultBook.src;
+  };
+
+  // Resolve the book linked to a slot from the live books collection.
+  // Returns null when no book is selected (cover stays non-clickable).
+  const resolveBook = (index) => {
+    if (heroLoading) return null;
+    const slot = hero?.images?.[index];
+    if (!slot?.bookId) return null;
+    return (
+      (books || []).find((b) => String(b.id) === String(slot.bookId)) || null
+    );
   };
 
   const handleSlotError = (slotId) => {
@@ -233,14 +264,18 @@ export default function Hero() {
                   repeatType: "loop",
                 }}
               >
-                {FLOATING_BOOKS.map((book, index) => (
-                  <FloatingBook
-                    key={book.slotId}
-                    {...book}
-                    src={resolveSource(book, index)}
-                    onError={() => handleSlotError(book.slotId)}
-                  />
-                ))}
+                {FLOATING_BOOKS.map((book, index) => {
+                  const linked = resolveBook(index);
+                  return (
+                    <FloatingBook
+                      key={book.slotId}
+                      {...book}
+                      src={resolveSource(book, index, linked)}
+                      onError={() => handleSlotError(book.slotId)}
+                      book={linked}
+                    />
+                  );
+                })}
               </Motion.div>
             </div>
           </div>

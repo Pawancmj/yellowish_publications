@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useData } from "../../contexts/DataContext";
+import { FaWhatsapp } from "react-icons/fa";
 import "./BookDetails.css";
+
+// Same business WhatsApp number used in the Footer and Contact page
+const WHATSAPP_NUMBER = "919871569192";
 
 export default function BookDetails() {
   const { id } = useParams();
@@ -49,6 +53,19 @@ export default function BookDetails() {
     setTimeout(scrollToTop, 200);
   };
 
+  const whatsappMessage = [
+    "Hello Yellowish Publication, I would like to buy this book:",
+    "",
+    `Book: ${book.title || "This book"}`,
+    `Author: ${book.author || book.authorsName || "Unknown"}`,
+    `Price: ₹${book.price || 0}`,
+    `Book ID: ${book.id}`,
+    "",
+    "Please share the purchase details.",
+  ].join("\n");
+
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+
   return (
     <div className="book-details">
       <img 
@@ -77,10 +94,16 @@ export default function BookDetails() {
 
         {/* ✅ ONLY PUBLIC BUTTONS - No Delete */}
         <div className="details-buttons">
-          <button className="buy-btn">
-            Buy Now - ₹{book.price || 0}
-          </button>
-          <button onClick={handleBack} className="back-btn">
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="book-action-btn whatsapp-buy-btn"
+            title="Buy on WhatsApp"
+          >
+            <FaWhatsapp /> Buy on WhatsApp
+          </a>
+          <button onClick={handleBack} className="book-action-btn back-btn">
             ← Back to Store
           </button>
         </div>

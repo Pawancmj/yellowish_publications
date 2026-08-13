@@ -251,6 +251,104 @@
   text-align: right;
 }
 
+.hero-slot-book {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.hero-slot-book span {
+  font-size: 12px;
+  color: #888;
+}
+
+.hero-slot-book select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.hero-slot-empty,
+.hero-slot-legacy {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #888;
+}
+
+.hero-slot-legacy {
+  color: #b26a00;
+  background: #fff6e9;
+  border: 1px dashed #e0a92f;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.hero-slot-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+}
+
+.hero-slot-preview img {
+  width: 46px;
+  height: 62px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.hero-slot-preview-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.hero-slot-preview-meta strong {
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-slot-preview-meta span {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-slot-clear {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: transparent;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hero-slot-clear:hover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
 .hero-manager-loading {
   display: flex;
   align-items: center;

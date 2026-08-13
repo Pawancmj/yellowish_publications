@@ -1,13 +1,16 @@
 ﻿.navbar {
   width: 100%;
-  background: #123a5c;
+  box-sizing: border-box;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  background: rgba(255, 246, 233, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(120, 90, 40, 0.14);
 }
 
-/* Shared container â€” matches the 1200px content grid used by the
+/* Shared container — matches the 1200px content grid used by the
    cards below (same max-width and inline padding). */
 .navbar-container {
   width: 100%;
@@ -16,27 +19,27 @@
   padding: 0 24px;
   display: flex;
   align-items: center;
-  height: 78px;
+  height: 74px;
+  box-sizing: border-box;
 }
 
-/* âœ… Logo Container */
+/* Logo Container */
 .logo-container {
   display: flex;
   align-items: center;
   gap: 10px;
   white-space: nowrap;
   flex: 0 0 auto;
-  margin-inline: 56px;
+  margin-inline: 48px;
 }
 
 .logo-img {
-  width: 45px;
-  height: 45px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: #0f172a; /* Matches navbar bg */
-  padding: 2px;
   object-fit: cover;
-  box-shadow: 0 0 4px rgba(0,0,0,0.3);
+  background: transparent;
+  box-shadow: 0 0 0 1px rgba(255, 201, 74, 0.45);
 }
 
 .logo-text {
@@ -44,20 +47,21 @@
   font-weight: 600;
   font-family: "Source Serif 4", Georgia, serif;
   letter-spacing: -0.5px;
-  color: #fff;
-}
-.highlight {
-  color: #facc15;
+  color: #3A2E22;
 }
 
-/* âœ… Desktop Nav â€” both groups stretch (flex:1) to the container
+.highlight {
+  color: #E0A92F;
+}
+
+/* Desktop Nav — both groups stretch (flex:1) to the container
    edges so Home and Contact Us line up with the content cards
    below, while the equal flex keeps the logo perfectly centered. */
 .nav-left,
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 42px;
+  gap: 40px;
   flex: 1;
   list-style: none;
   margin: 0;
@@ -74,140 +78,176 @@
 
 .navLink {
   text-decoration: none;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
+  color: #6E596B;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
   position: relative;
   padding-bottom: 4px;
-  transition: color 0.3s ease;
+  transition: color 0.25s ease;
   white-space: nowrap;
 }
+
 .navLink:hover {
-  color: #facc15;
+  color: #E0A92F;
 }
-.active {
-  color: #facc15;
-  font-weight: 600;
+
+.navbar .navLink.active {
+  color: #E0A92F;
 }
-.navLink.active::after {
+
+.navbar .navLink.active::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
   height: 2px;
   width: 100%;
-  background: #facc15;
+  background: #FFC94A;
   border-radius: 2px;
 }
 
-/* âœ… Hamburger */
+/* Hamburger */
 .hamburger {
   display: none;
-  font-size: 2rem;
-  color: #fff;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: #3A2E22;
   cursor: pointer;
+  background: none;
+  border: none;
+  padding: 6px;
+  user-select: none;
 }
 
-/* âœ… Mobile Sidebar */
+/* Mobile Sidebar */
 .mobileMenu {
   position: fixed;
   top: 0;
   left: -100%;
-  width: 250px;
+  width: 280px;
   height: 100%;
-  background: #0f172a;
-  padding: 20px;
+  background: #FFF6E9;
+  padding: 24px 28px;
   display: flex;
   flex-direction: column;
   transition: left 0.3s ease;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+  box-shadow: 4px 0 24px rgba(120, 90, 40, 0.12);
   z-index: 2000;
+  overflow-y: auto;
 }
+
 .mobileMenu.open {
   left: 0;
 }
 
-/* âœ… Backdrop behind the drawer */
+/* Backdrop behind the drawer */
 .menu-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(10, 20, 35, 0.55);
+  background: rgba(58, 46, 34, 0.5);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 1500;
 }
+
 .menu-backdrop.open {
   opacity: 1;
   visibility: visible;
 }
+
 .closeBtn {
   align-self: flex-end;
   font-size: 2rem;
-  color: #fff;
+  line-height: 1;
+  color: #3A2E22;
   background: none;
   border: none;
   cursor: pointer;
+  padding: 4px;
 }
+
 .mobileNavList {
   list-style: none;
-  margin-top: 30px;
+  margin: 20px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-.mobileNavList .navLink {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-  text-decoration: none;
-}
-.mobileNavList .navLink:hover {
-  color: #facc15;
+  gap: 4px;
 }
 
-/* âœ… Compact desktop nav for small laptops (1024-1199px) â€” keeps all
+.mobileNavList .navLink {
+  display: block;
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #3A2E22;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(120, 90, 40, 0.1);
+  transition: color 0.25s ease;
+}
+
+.mobileNavList .navLink:hover,
+.mobileNavList .navLink.active {
+  color: #E0A92F;
+}
+
+/* Compact desktop nav for small laptops (1024-1199px) — keeps all
    6 links visible without overflow by tightening gaps and margins. */
 @media (min-width: 1024px) and (max-width: 1199px) {
   .navbar-container {
     padding: 0 20px;
   }
+
   .nav-left,
   .nav-right {
     gap: 26px;
   }
+
   .logo-container {
     margin-inline: 28px;
   }
+
   .logo-text {
     font-size: 1.15rem;
   }
+
   .navLink {
-    font-size: 14px;
+    font-size: 15px;
   }
 }
 
-/* âœ… Responsive: tablet and below â†’ drawer + centered logo */
+/* Responsive: tablet and below → drawer + centered logo */
 @media (max-width: 1023px) {
   .desktopNav {
     display: none;
   }
+
   .logo-container {
     margin-inline: auto;
   }
+
   .hamburger {
     display: block;
   }
+
   .mobileMenu {
     width: min(320px, 82vw);
   }
 }
 
 @media (max-width: 560px) {
+  .navbar-container {
+    height: 68px;
+  }
+
   .logo-text {
     font-size: 1.02rem;
   }
+
   .logo-img {
     width: 40px;
     height: 40px;

@@ -1,17 +1,16 @@
 ﻿.footer {
   width: 100%;
-  background: #000;
-  color: #fff;
-  padding: clamp(16px, 3vw, 48px) 20px 0;
-  font-family: "DM Sans", "Inter", system-ui, sans-serif;
   box-sizing: border-box;
+  background: #3A2E22;
+  color: #FFF6E9;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
   overflow-x: hidden;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 20px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -20,7 +19,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: clamp(20px, 3vw, 40px);
-  padding: 2rem 0;
+  padding: clamp(2rem, 4vw, 3rem) 0;
 }
 
 .col {
@@ -30,14 +29,16 @@
   box-sizing: border-box;
 }
 
-/* ---------- Headings ---------- */
+/* Headings — DM Sans 600, small and refined; the gold rule beneath
+   echoes the brand accent without heavy ornament. */
 .heading {
   margin-bottom: 16px;
   font-size: 15px;
   font-weight: 600;
-  color: #fff;
-  font-family: "Source Serif 4", Georgia, serif;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
   letter-spacing: 0;
+  color: #FFF6E9;
+  text-transform: none;
 }
 
 .heading::after {
@@ -46,11 +47,10 @@
   width: 34px;
   height: 3px;
   border-radius: 3px;
-  background: #d9a441;
+  background: #FFC94A;
   margin-top: 8px;
 }
 
-/* ---------- Links ---------- */
 .linkList {
   list-style: none;
   padding: 0;
@@ -62,25 +62,26 @@
   margin: 8px 0;
 }
 
-.linkList a,
-.navLink {
+.linkList a {
   text-decoration: none;
-  color: #cbd5e1;
+  color: #E8D8C8;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
   font-size: 14px;
-  transition: color 0.25s, padding-left 0.25s;
+  font-weight: 400;
+  letter-spacing: 0;
+  transition: color 0.25s ease, padding-left 0.25s ease;
 }
 
 .linkList a:hover {
-  color: #d9a441;
+  color: #FFC94A;
   padding-left: 4px;
 }
 
-/* ---------- Address ---------- */
 .addr {
   font-style: normal;
   font-size: 14px;
   margin-bottom: 10px;
-  color: #cbd5e1;
+  color: #E8D8C8;
   line-height: 1.6;
   display: flex;
   align-items: flex-start;
@@ -88,12 +89,11 @@
 }
 
 .addr-icon {
-  color: #d9a441;
+  color: #FFC94A;
   margin-top: 3px;
   flex-shrink: 0;
 }
 
-/* ---------- Contact ---------- */
 .regionContacts {
   list-style: none;
   padding: 0;
@@ -107,25 +107,26 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #cbd5e1;
+  color: #E8D8C8;
 }
 
 .regionContacts li svg {
-  color: #d9a441;
+  color: #FFC94A;
   flex-shrink: 0;
 }
 
 .regionContacts a {
-  color: #cbd5e1;
+  color: #E8D8C8;
   text-decoration: none;
-  transition: color 0.25s;
+  transition: color 0.25s ease;
 }
 
 .regionContacts a:hover {
-  color: #d9a441;
+  color: #FFC94A;
 }
 
-/* ---------- Social Icons ---------- */
+/* Social buttons — circular, subtle outline, warm hover. No heavy
+   brand fills, so the row stays quiet and editorial. */
 .socials {
   display: flex;
   gap: 12px;
@@ -136,31 +137,29 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 1px solid #334155;
-  background: #0d0d0d;
-  color: #fff;
+  border: 1px solid rgba(255, 246, 233, 0.5);
+  background: transparent;
+  color: #FFF6E9;
   font-size: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.25s;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 }
 
 .socials a:hover {
-  background: #d9a441;
-  border-color: #d9a441;
-  color: #000;
-  transform: translateY(-3px);
+  border-color: #FFC94A;
+  color: #FFC94A;
+  background: rgba(255, 201, 74, 0.12);
+  transform: translateY(-2px);
 }
 
-/* ---------- Divider ---------- */
 .divider {
   border: none;
-  border-top: 1px solid #2b2b2b;
+  border-top: 1px solid rgba(255, 246, 233, 0.15);
   margin: 0;
 }
 
-/* ---------- Bottom Bar ---------- */
 .bottom-bar {
   display: flex;
   align-items: center;
@@ -172,7 +171,8 @@
 
 .copyright {
   font-size: 13px;
-  color: #9aa4b2;
+  font-weight: 400;
+  color: #E8D8C8;
   margin: 0;
 }
 
@@ -183,25 +183,28 @@
 }
 
 .legal-links a {
-  color: #cbd5e1;
+  color: #E8D8C8;
   font-size: 13px;
+  text-decoration: none;
+  transition: color 0.25s ease;
 }
 
 .legal-links a:hover {
-  color: #d9a441;
+  color: #FFC94A;
 }
 
 .legal-links .sep {
-  color: #4a4a4a;
+  color: rgba(255, 246, 233, 0.4);
 }
 
-/* ---------- Responsive ---------- */
+/* Tablet: 2 columns */
 @media (max-width: 1024px) {
   .columns {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* Mobile: stacked, full-width sections */
 @media (max-width: 640px) {
   .columns {
     grid-template-columns: 1fr;

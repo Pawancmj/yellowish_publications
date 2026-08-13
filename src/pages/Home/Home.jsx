@@ -7,6 +7,15 @@ import "./Home.css";
 import aboutImage from "../../assets/About.png";
 import heroImage from "../../assets/hero.png";
 
+// Distribution channel logos
+import amazonLogo from "../../assets/distribution/amazon.svg";
+import kindleLogo from "../../assets/distribution/kindle.svg";
+import googlePlayBooksLogo from "../../assets/distribution/google-play-books.svg";
+import flipkartLogo from "../../assets/distribution/flipkart.svg";
+import appleBooksLogo from "../../assets/distribution/apple-books.svg";
+import barnesNobleLogo from "../../assets/distribution/barnes-noble.svg";
+import koboLogo from "../../assets/distribution/kobo.svg";
+
 import book1 from "../../assets/book1.png";
 import book5 from "../../assets/book5.png";
 import book9 from "../../assets/book9.png";
@@ -134,14 +143,14 @@ const PACKAGES = [
 ];
 
 const DISTRIBUTION = [
-  "Amazon.com",
-  "Amazon Kindle",
-  "Google Play Books",
-  "Amazon.in",
-  "Flipkart",
-  "Apple iBooks",
-  "Barnes & Noble",
-  "Kobo",
+  { name: "Amazon.com", logo: amazonLogo },
+  { name: "Amazon Kindle", logo: kindleLogo },
+  { name: "Google Play Books", logo: googlePlayBooksLogo },
+  { name: "Amazon.in", logo: amazonLogo },
+  { name: "Flipkart", logo: flipkartLogo },
+  { name: "Apple Books", logo: appleBooksLogo },
+  { name: "Barnes & Noble", logo: barnesNobleLogo },
+  { name: "Kobo", logo: koboLogo },
 ];
 
 const REVIEW_HIGHLIGHTS = [
@@ -538,9 +547,14 @@ export default function Home() {
         <div className="container">
           <h2 className="dist-heading">Our Distribution Channels</h2>
           <div className="dist-grid">
-            {DISTRIBUTION.map((name) => (
-              <div className="dist-logo" key={name}>
-                {name}
+            {DISTRIBUTION.map((channel) => (
+              <div className="dist-logo" key={channel.name}>
+                <img
+                  src={channel.logo}
+                  alt={`${channel.name} logo`}
+                  loading="lazy"
+                />
+                <span className="dist-name">{channel.name}</span>
               </div>
             ))}
           </div>
