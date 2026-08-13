@@ -11,6 +11,17 @@ service cloud.firestore {
       allow delete: if request.auth != null;
     }
 
+    // Home Page hero visual — public read, admin-only writes.
+    // Same authorization pattern as blogs/books/authors/leads: the existing
+    // Admin Dashboard authenticates with Firebase Email/Password, so writes
+    // require request.auth != null. The public Home Page only reads.
+    match /users/{userId}/hero/{heroId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
     // Public read for books/authors/leads collection documents.
     match /users/{userId}/{collection}/{docId} {
       allow read: if true;

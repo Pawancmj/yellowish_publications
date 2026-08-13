@@ -1,9 +1,9 @@
-.footer {
+﻿.footer {
   width: 100%;
   background: #000;
   color: #fff;
   padding: clamp(16px, 3vw, 48px) 20px 0;
-  font-family: "Poppins", sans-serif;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
   box-sizing: border-box;
   overflow-x: hidden;
 }
@@ -33,11 +33,11 @@
 /* ---------- Headings ---------- */
 .heading {
   margin-bottom: 16px;
-  font-size: clamp(15px, 2vw, 18px);
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-family: "Source Serif 4", Georgia, serif;
+  letter-spacing: 0;
 }
 
 .heading::after {

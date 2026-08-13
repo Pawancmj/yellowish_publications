@@ -1,4 +1,4 @@
-/* Admin Blog Management — matches existing admin panel design language */
+﻿/* Admin Blog Management â€” matches existing admin panel design language */
 .admin-blogs-page {
   max-width: 1400px;
   margin: 0 auto;
@@ -25,7 +25,7 @@
   margin: 0;
   color: #123a5c;
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .ab-header p {
@@ -42,7 +42,7 @@
   border-radius: 10px;
   background: #28a745;
   color: #fff;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.9rem;
   text-decoration: none;
   white-space: nowrap;
@@ -177,9 +177,8 @@
 
 .ab-thead span {
   font-size: 0.74rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+  font-weight: 600;
+  letter-spacing: 0;
   color: #6b5d5e;
 }
 
@@ -208,7 +207,7 @@
 .ab-trow .col-title strong {
   display: block;
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   line-height: 1.4;
 }
@@ -233,9 +232,8 @@
   padding: 4px 11px;
   border-radius: 999px;
   font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 .ab-status.published {
@@ -311,7 +309,7 @@
   border-radius: 9px;
   background: #fff;
   color: #123a5c;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -421,7 +419,7 @@
   gap: 10px;
   padding: 13px 18px;
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.9rem;
   color: #fff;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
@@ -517,7 +515,7 @@
   padding: 10px 22px;
   border: none;
   border-radius: 9px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   font-size: 0.9rem;
   transition: opacity 0.2s;
@@ -599,7 +597,7 @@
     grid-template-columns: 1fr;
   }
 
-  /* Stacked card list — no horizontal scrolling */
+  /* Stacked card list â€” no horizontal scrolling */
   .ab-thead {
     display: none;
   }
@@ -673,7 +671,7 @@
   .ab-trow .col-date::before,
   .ab-trow .col-views::before {
     content: attr(data-label);
-    font-weight: 700;
+    font-weight: 600;
     color: #9a8b8c;
     margin-right: 4px;
   }

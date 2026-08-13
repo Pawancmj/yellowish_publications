@@ -1,8 +1,11 @@
 import { motion as Motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+import { useState } from "react";
 
 import "./Hero.css";
+
+import { useData } from "../../contexts/DataContext";
 
 import book5 from "../../assets/book5.png";
 import book9 from "../../assets/book9.png";
@@ -24,8 +27,11 @@ const AUTHOR_AVATARS = [
 // Single spacious diamond collage inside a 480x350px stage.
 // Top and bottom books centered; left and right books horizontally aligned.
 // Books keep 30px+ clear whitespace between each other.
+// These are the DEFAULT sources. Admin-managed images (hero.images) override
+// them slot-for-slot; any slot without a configured image keeps its default.
 const FLOATING_BOOKS = [
   {
+    slotId: "hero-1",
     src: book13,
     alt: "Published book cover",
     className: "left-[184px] top-[8px] z-20",
@@ -33,6 +39,7 @@ const FLOATING_BOOKS = [
     rotation: 4,
   },
   {
+    slotId: "hero-2",
     src: book5,
     alt: "Published book cover",
     className: "left-[28px] top-[95px] z-10",
@@ -40,6 +47,7 @@ const FLOATING_BOOKS = [
     rotation: -4,
   },
   {
+    slotId: "hero-3",
     src: book9,
     alt: "Published book cover",
     className: "left-[330px] top-[95px] z-10",
@@ -47,6 +55,7 @@ const FLOATING_BOOKS = [
     rotation: 4,
   },
   {
+    slotId: "hero-4",
     src: book16,
     alt: "Published book cover",
     className: "left-[182px] top-[195px] z-20",
@@ -80,7 +89,7 @@ const staggerWrap = {
   },
 };
 
-function FloatingBook({ src, alt, className, height, rotation }) {
+function FloatingBook({ src, alt, className, height, rotation, onError }) {
   return (
     <div className={`absolute ${className}`}>
       <div
@@ -93,6 +102,7 @@ function FloatingBook({ src, alt, className, height, rotation }) {
           width={170}
           height={226}
           loading="lazy"
+          onError={onError}
           className="h-full w-full rounded-md object-cover shadow-[0_12px_30px_rgba(0,0,0,0.12)]"
         />
       </div>
@@ -102,6 +112,22 @@ function FloatingBook({ src, alt, className, height, rotation }) {
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
+  const { hero, heroLoading } = useData();
+  const [failedSlots, setFailedSlots] = useState({});
+
+  // Resolve the source for a slot: admin-configured image if present and
+  // not failed, otherwise the slot's default image. Keeps the composition
+  // intact no matter how many slots are configured.
+  const resolveSource = (book, index) => {
+    const slot = !heroLoading && hero?.images ? hero.images[index] : null;
+    const configured = slot?.imageUrl;
+    if (configured && !failedSlots[book.slotId]) return configured;
+    return book.src;
+  };
+
+  const handleSlotError = (slotId) => {
+    setFailedSlots((prev) => ({ ...prev, [slotId]: true }));
+  };
 
   return (
     <section className="hero w-full bg-[#FFFDFC]" aria-label="Hero">
@@ -133,7 +159,7 @@ export default function Hero() {
           >
             <Motion.div
               variants={fadeUp}
-              className="mb-5 inline-flex h-[34px] items-center gap-2 rounded-full bg-[#FFF1CC] px-4 text-[13px] font-semibold text-[#8A5A1F]"
+              className="mb-5 inline-flex h-[34px] items-center gap-2 rounded-full bg-[#FFF1CC] px-4 text-[13px] font-medium text-[#8A5A1F]"
             >
               <FaStar className="h-3 w-3 text-primary" aria-hidden="true" />
               Trusted by 15,000+ Authors
@@ -141,7 +167,7 @@ export default function Hero() {
 
             <Motion.h1
               variants={slideFromLeft}
-              className="mb-[22px] max-w-[420px] font-display text-[40px] font-extrabold leading-[1.05] tracking-[-1px] text-ink lg:text-[60px]"
+              className="mb-[22px] max-w-[420px] font-display text-[46px] font-semibold leading-[1.2] tracking-[-1px] text-ink lg:text-[72px]"
             >
               Publishing
               <br />
@@ -150,7 +176,7 @@ export default function Hero() {
 
             <Motion.p
               variants={fadeUp}
-              className="mb-[34px] max-w-[340px] text-[16px] leading-[1.7] text-[#6B7280]"
+              className="mb-[34px] max-w-[340px] text-[18px] leading-[1.45] text-[#6B7280]"
             >
               Start your publishing journey today.
               <br />
@@ -164,7 +190,7 @@ export default function Hero() {
             >
               <Link
                 to="/store"
-                className="inline-flex h-[44px] items-center justify-center rounded-[10px] bg-primary px-7 py-3.5 text-[13px] font-bold uppercase tracking-wide text-ink transition-colors duration-300 hover:bg-[#E8B000]"
+                className="inline-flex h-[44px] items-center justify-center rounded-[10px] bg-primary px-7 py-3.5 text-[16px] font-semibold text-ink transition-colors duration-300 hover:bg-[#E8B000]"
               >
                 Know More
               </Link>
@@ -183,7 +209,7 @@ export default function Hero() {
                     />
                   ))}
                 </div>
-                <span className="ml-3 text-[13px] font-semibold text-ink">
+                <span className="ml-3 text-[13px] font-medium text-ink">
                   Join 15,000+ Authors
                 </span>
               </div>
@@ -207,8 +233,13 @@ export default function Hero() {
                   repeatType: "loop",
                 }}
               >
-                {FLOATING_BOOKS.map((book) => (
-                  <FloatingBook key={book.src} {...book} />
+                {FLOATING_BOOKS.map((book, index) => (
+                  <FloatingBook
+                    key={book.slotId}
+                    {...book}
+                    src={resolveSource(book, index)}
+                    onError={() => handleSlotError(book.slotId)}
+                  />
                 ))}
               </Motion.div>
             </div>

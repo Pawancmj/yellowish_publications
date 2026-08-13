@@ -1,12 +1,12 @@
-/* ============================================================
-   Homepage — Yellowish Publication
+﻿/* ============================================================
+   Homepage â€” Yellowish Publication
    Palette: pink #f9dbdd/#fbe4e6, navy #123a5c, gold #d9a441,
             red #e63946, black footer/gallery.
    ============================================================ */
 .home-page {
   width: 100%;
   overflow-x: hidden;
-  font-family: "Inter", "Poppins", sans-serif;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
   color: #333;
 }
 
@@ -28,9 +28,9 @@
   border-radius: 999px;
   background: #d9a441;
   color: #fff;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -103,7 +103,7 @@
 
 .feature-body h3 {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   margin: 0 0 0.4rem;
 }
@@ -130,7 +130,7 @@
   pointer-events: none;
 }
 
-/* Left blob — mostly outside the viewport, solid pastel */
+/* Left blob â€” mostly outside the viewport, solid pastel */
 .cta-blob-left {
   position: absolute;
   left: -220px;
@@ -156,7 +156,7 @@
   opacity: 0.9;
 }
 
-/* Right blob — soft, blurred, one thin white line */
+/* Right blob â€” soft, blurred, one thin white line */
 .cta-blob-right {
   position: absolute;
   right: -110px;
@@ -199,7 +199,7 @@
 
 .cta-text h2 {
   font-size: 2.4rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   margin: 0 0 1rem;
 }
@@ -264,9 +264,9 @@
 
 .section-head h2 {
   font-size: clamp(1.7rem, 3.4vw, 2.1rem);
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
-  letter-spacing: 1px;
+  letter-spacing: -0.5px;
   margin: 0;
 }
 
@@ -303,7 +303,7 @@
   box-shadow: 0 6px 16px rgba(217, 164, 65, 0.35);
 }
 
-/* Active tab underline — anchored to the button only,
+/* Active tab underline â€” anchored to the button only,
    never stretched across the container. */
 .tab.active::after {
   content: "";
@@ -360,7 +360,7 @@
 .testimonials-section h2 {
   text-align: center;
   font-size: clamp(1.7rem, 3.4vw, 2.2rem);
-  font-weight: 800;
+  font-weight: 600;
   color: #fff;
   margin: 0 0 2.5rem;
 }
@@ -403,7 +403,7 @@
 }
 
 .t-name {
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   font-size: 1rem;
 }
@@ -433,14 +433,14 @@
 
 .stat-value {
   font-size: 2.6rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #d9a441;
 }
 
 .stat-label {
   font-size: 0.95rem;
   color: #dbe6f0;
-  letter-spacing: 0.5px;
+  letter-spacing: 0;
 }
 
 /* ---------------- Section 9: Pricing ---------------- */
@@ -455,7 +455,7 @@
 
 .pricing-head h2 {
   font-size: clamp(1.8rem, 3.6vw, 2.3rem);
-  font-weight: 800;
+  font-weight: 600;
   color: #e63946;
   margin: 0 0 0.5rem;
 }
@@ -502,15 +502,14 @@
 
 .pricing-header h3 {
   font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: 1px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
   margin: 0 0 0.35rem;
-  text-transform: uppercase;
 }
 
 .price {
   font-size: 1.9rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .pricing-body {
@@ -558,7 +557,7 @@
 .dist-heading {
   text-align: center;
   font-size: clamp(1.7rem, 3.4vw, 2.1rem);
-  font-weight: 800;
+  font-weight: 600;
   color: #d9a441;
   margin: 0 0 2.5rem;
 }
@@ -575,10 +574,10 @@
   border-radius: 1rem;
   padding: 1.6rem 1rem;
   text-align: center;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.05rem;
   color: #123a5c;
-  letter-spacing: 0.5px;
+  letter-spacing: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -603,16 +602,16 @@
   display: block;
   text-align: center;
   color: #d9a441;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.85rem;
-  letter-spacing: 2px;
+  letter-spacing: 0.02em;
   margin-bottom: 0.5rem;
 }
 
 .review-highlights h2 {
   text-align: center;
   font-size: clamp(1.7rem, 3.4vw, 2.2rem);
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   margin: 0 0 2.5rem;
 }
@@ -666,7 +665,7 @@
 }
 
 .review-name {
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   font-size: 0.95rem;
 }
@@ -679,7 +678,7 @@
 .video-section h2 {
   text-align: center;
   font-size: clamp(1.7rem, 3.4vw, 2.1rem);
-  font-weight: 800;
+  font-weight: 600;
   color: #fff;
   margin: 0 0 2.5rem;
 }
@@ -753,7 +752,7 @@
 .gr-red {
   text-align: center;
   font-size: clamp(1.7rem, 3.4vw, 2.2rem);
-  font-weight: 800;
+  font-weight: 600;
   color: #e63946;
   margin: 0 0 0.4rem;
 }
@@ -804,7 +803,7 @@
 
 .gr-score {
   font-size: 2.2rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
 }
 
@@ -853,7 +852,7 @@
 }
 
 .gr-name {
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   font-size: 0.98rem;
 }
@@ -1017,7 +1016,7 @@
 }
 
 /* ============================================================
-   Mobile (max-width: 767px): card sections → horizontal
+   Mobile (max-width: 767px): card sections â†’ horizontal
    swipeable carousels. Desktop & tablet grids are untouched.
    ============================================================ */
 @media (max-width: 767px) {

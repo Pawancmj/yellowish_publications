@@ -16,7 +16,9 @@ export default {
         accent: '#FDE68A',
       },
       fontFamily: {
-        display: ['Poppins', 'Plus Jakarta Sans', 'Manrope', 'sans-serif'],
+        display: ['"Source Serif 4"', 'Georgia', 'serif'],
+        sans: ['"DM Sans"', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['"Source Serif 4"', 'Georgia', 'serif'],
       },
       maxWidth: {
         '7xl': '80rem',

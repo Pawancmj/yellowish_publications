@@ -1,4 +1,4 @@
-.book-details {
+﻿.book-details {
   display: flex;
   flex-wrap: wrap;
   gap: 3rem;
@@ -66,7 +66,7 @@
 
 .book-details-info .price {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #b12704;
   margin: 0.5rem 0 1.5rem;
 }
@@ -121,7 +121,7 @@
   font-size: 1.2rem;
 }
 
-/* 📱 Mobile view fixes */
+/* ðŸ“± Mobile view fixes */
 @media (max-width: 768px) {
   .book-details {
     flex-direction: column;

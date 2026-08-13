@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
-import { FaEdit, FaTrash, FaPlus, FaBook, FaUser, FaEnvelope, FaFeatherAlt } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaBook, FaUser, FaEnvelope, FaFeatherAlt, FaHome, FaSpinner, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import "./Admin.css";
+import BlogImageUpload from "../../components/BlogImageUpload/BlogImageUpload";
 
 const Admin = () => {
   const { currentUser, logout } = useAuth();
@@ -23,6 +24,9 @@ const Admin = () => {
     leads,
     deleteLead,
     blogs,
+    hero,
+    heroLoading,
+    updateHero,
   } = useData();
 
   const [activeTab, setActiveTab] = useState("books");
@@ -140,6 +144,12 @@ const Admin = () => {
             onClick={() => setActiveTab("blogs")}
           >
             <FaFeatherAlt /> Manage Blogs
+          </button>
+          <button
+            className={activeTab === "hero" ? "tab-active" : "tab"}
+            onClick={() => setActiveTab("hero")}
+          >
+            <FaHome /> Manage Hero
           </button>
         </div>
 
@@ -418,6 +428,32 @@ const Admin = () => {
                   )}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "hero" && (
+          <div className="hero-management">
+            <div className="section-header">
+              <h2>Hero Section Management</h2>
+            </div>
+
+            <div className="hero-manager-card">
+              <p className="hero-manager-hint">
+                Manage the four images of the floating composition on the right
+                side of the Home page hero. Upload up to four images — any slot
+                left empty keeps its default book cover. Once saved, the Home
+                page updates automatically.
+              </p>
+
+              <HeroManager
+                hero={hero}
+                heroLoading={heroLoading}
+                onSave={async (images) => {
+                  const result = await updateHero({ images });
+                  return result;
+                }}
+              />
             </div>
           </div>
         )}
@@ -860,6 +896,150 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
         </form>
       </div>
     </div>
+  );
+};
+
+// Hero Manager Component — manage the four floating hero visuals.
+const HERO_SLOTS = [
+  { id: "hero-1", label: "Hero Image 1", position: "Left / upper area" },
+  { id: "hero-2", label: "Hero Image 2", position: "Upper / right area" },
+  { id: "hero-3", label: "Hero Image 3", position: "Lower / center area" },
+  { id: "hero-4", label: "Hero Image 4", position: "Right / lower area" },
+];
+
+const HeroManager = ({ hero, heroLoading, onSave }) => {
+  const [images, setImages] = useState([]);
+  const [saving, setSaving] = useState(false);
+  const [savedMsg, setSavedMsg] = useState("");
+  const [error, setError] = useState("");
+
+  // Sync the four slots from Firestore hero data.
+  useEffect(() => {
+    if (!heroLoading) {
+      const heroImages = Array.isArray(hero?.images) ? hero.images : [];
+      setImages(
+        HERO_SLOTS.map((slot) => {
+          const existing = heroImages.find((img) => img.id === slot.id);
+          return { id: slot.id, imageUrl: existing?.imageUrl || "" };
+        })
+      );
+    }
+  }, [hero, heroLoading]);
+
+  const updateSlot = (id, imageUrl) => {
+    setImages((prev) =>
+      prev.map((img) => (img.id === id ? { ...img, imageUrl } : img))
+    );
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (saving) return;
+    setSaving(true);
+    setSavedMsg("");
+    setError("");
+    try {
+      const result = await onSave(images);
+      if (result?.error) {
+        setError(result.error.message || "Failed to save the hero images.");
+      } else {
+        setSavedMsg("Hero images saved successfully.");
+      }
+    } catch (err) {
+      setError(err?.message || "Failed to save the hero images.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (
+      !window.confirm(
+        "Remove all four hero images and restore the default book covers?"
+      )
+    ) {
+      return;
+    }
+    if (saving) return;
+    setSaving(true);
+    setSavedMsg("");
+    setError("");
+    try {
+      const result = await onSave(
+        HERO_SLOTS.map((slot) => ({ id: slot.id, imageUrl: "" }))
+      );
+      if (result?.error) {
+        setError(result.error.message || "Failed to remove the hero images.");
+      } else {
+        setSavedMsg("Hero images removed. Default covers restored.");
+      }
+    } catch (err) {
+      setError(err?.message || "Failed to remove the hero images.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (heroLoading) {
+    return (
+      <div className="hero-manager-loading">
+        <FaSpinner className="hero-manager-spin" /> Loading hero settings…
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSave} className="hero-manager-form">
+      <div className="hero-slots">
+        {HERO_SLOTS.map((slot) => {
+          const current = images.find((img) => img.id === slot.id);
+          return (
+            <div className="hero-slot" key={slot.id}>
+              <div className="hero-slot-header">
+                <h3>{slot.label}</h3>
+                <span>{slot.position}</span>
+              </div>
+              <BlogImageUpload
+                value={current?.imageUrl || ""}
+                onChange={(value) => updateSlot(slot.id, value)}
+                accept="image/jpg,image/jpeg,image/png,image/webp"
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      {error && (
+        <div className="hero-manager-msg error">
+          <FaExclamationCircle /> {error}
+        </div>
+      )}
+      {savedMsg && (
+        <div className="hero-manager-msg success">
+          <FaCheckCircle /> {savedMsg}
+        </div>
+      )}
+
+      <div className="hero-manager-actions">
+        <button type="submit" className="save-btn" disabled={saving}>
+          {saving ? (
+            <>
+              <FaSpinner className="hero-manager-spin" /> Saving…
+            </>
+          ) : (
+            "Save Changes"
+          )}
+        </button>
+        <button
+          type="button"
+          className="cancel-btn"
+          onClick={handleDelete}
+          disabled={saving}
+        >
+          <FaTrash /> Reset / Delete
+        </button>
+      </div>
+    </form>
   );
 };
 

@@ -9,8 +9,13 @@ html, body {
   height: 100%;
   /* overflow-x: hidden;   because of this the scrolltop functionality is not working */
   background: #f9fafb;
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
   color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -36,5 +41,53 @@ html, body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin: 0;
+  margin: 0;
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+h1 {
+  font-size: clamp(2.875rem, 6vw, 4.5rem);
+  letter-spacing: -1px;
+}
+
+h2 {
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  letter-spacing: -0.5px;
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.5px;
+}
+
+h4, h5, h6 {
+  font-size: 1.25rem;
+  letter-spacing: 0;
+}
+
+p {
+  margin: 0;
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+button, input, textarea, select {
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+}
+
+button, .btn, .btn-gold, [class*='btn-'] {
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 25px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+a {
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
 }

@@ -1,4 +1,4 @@
-.navbar {
+﻿.navbar {
   width: 100%;
   background: #123a5c;
   position: sticky;
@@ -7,7 +7,7 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
-/* Shared container — matches the 1200px content grid used by the
+/* Shared container â€” matches the 1200px content grid used by the
    cards below (same max-width and inline padding). */
 .navbar-container {
   width: 100%;
@@ -19,7 +19,7 @@
   height: 78px;
 }
 
-/* ✅ Logo Container */
+/* âœ… Logo Container */
 .logo-container {
   display: flex;
   align-items: center;
@@ -41,16 +41,16 @@
 
 .logo-text {
   font-size: 1.3rem;
-  font-weight: 700;
-  font-family: "Poppins", sans-serif;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  font-family: "Source Serif 4", Georgia, serif;
+  letter-spacing: -0.5px;
   color: #fff;
 }
 .highlight {
   color: #facc15;
 }
 
-/* ✅ Desktop Nav — both groups stretch (flex:1) to the container
+/* âœ… Desktop Nav â€” both groups stretch (flex:1) to the container
    edges so Home and Contact Us line up with the content cards
    below, while the equal flex keeps the logo perfectly centered. */
 .nav-left,
@@ -100,7 +100,7 @@
   border-radius: 2px;
 }
 
-/* ✅ Hamburger */
+/* âœ… Hamburger */
 .hamburger {
   display: none;
   font-size: 2rem;
@@ -108,7 +108,7 @@
   cursor: pointer;
 }
 
-/* ✅ Mobile Sidebar */
+/* âœ… Mobile Sidebar */
 .mobileMenu {
   position: fixed;
   top: 0;
@@ -127,7 +127,7 @@
   left: 0;
 }
 
-/* ✅ Backdrop behind the drawer */
+/* âœ… Backdrop behind the drawer */
 .menu-backdrop {
   position: fixed;
   inset: 0;
@@ -167,7 +167,7 @@
   color: #facc15;
 }
 
-/* ✅ Compact desktop nav for small laptops (1024-1199px) — keeps all
+/* âœ… Compact desktop nav for small laptops (1024-1199px) â€” keeps all
    6 links visible without overflow by tightening gaps and margins. */
 @media (min-width: 1024px) and (max-width: 1199px) {
   .navbar-container {
@@ -188,7 +188,7 @@
   }
 }
 
-/* ✅ Responsive: tablet and below → drawer + centered logo */
+/* âœ… Responsive: tablet and below â†’ drawer + centered logo */
 @media (max-width: 1023px) {
   .desktopNav {
     display: none;

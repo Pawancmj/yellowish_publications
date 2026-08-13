@@ -11,7 +11,7 @@ import { FaImage, FaTrash, FaUpload, FaLink, FaSpinner } from "react-icons/fa";
 import { fileToDataUrl } from "../../services/imageToDataUrl";
 import "./BlogImageUpload.css";
 
-export default function BlogImageUpload({ value, onChange }) {
+export default function BlogImageUpload({ value, onChange, accept = "image/*" }) {
   const fileRef = useRef(null);
   const [mode, setMode] = useState("upload");
   const [draft, setDraft] = useState(value || "");
@@ -21,6 +21,11 @@ export default function BlogImageUpload({ value, onChange }) {
 
   const handleFile = async (file) => {
     if (!file) return;
+    const type = (file.type || "").toLowerCase();
+    if (!type.startsWith("image/")) {
+      setError("Please select a valid image file (JPG, PNG or WebP).");
+      return;
+    }
     setError("");
     setConverting(true);
     try {
@@ -87,7 +92,7 @@ export default function BlogImageUpload({ value, onChange }) {
           <input
             ref={fileRef}
             type="file"
-            accept="image/*"
+            accept={accept}
             style={{ display: "none" }}
             onChange={(e) => handleFile(e.target.files && e.target.files[0])}
           />

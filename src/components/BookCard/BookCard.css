@@ -1,5 +1,5 @@
-/* ============================================================
-   Compact Premium Book Card — shared by the Store page
+﻿/* ============================================================
+   Compact Premium Book Card â€” shared by the Store page
    (Featured Books and Browse Our Collection).
    Default = cover + genre badge + title + author + price.
    Hover  = image zooms, a dark gradient overlay fades in and
@@ -25,7 +25,7 @@
   z-index: 2;
 }
 
-/* Cover — ~75–80% of the visible card, rounded top corners only */
+/* Cover â€” ~75â€“80% of the visible card, rounded top corners only */
 .book-cover-wrap {
   position: relative;
   aspect-ratio: 4 / 5;
@@ -60,13 +60,13 @@
   background: #d9a441;
   color: #fff;
   font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  letter-spacing: 0;
   box-shadow: 0 6px 14px rgba(217, 164, 65, 0.4);
   z-index: 4;
 }
 
-/* Hover overlay — sits INSIDE the cover image, never grows the card */
+/* Hover overlay â€” sits INSIDE the cover image, never grows the card */
 .card-overlay {
   position: absolute;
   left: 0;
@@ -194,8 +194,8 @@
   padding: 0.5rem 0.7rem;
   border-radius: 999px;
   font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.3px;
+  font-weight: 600;
+  letter-spacing: 0;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -241,7 +241,7 @@
 
 .card-title {
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   line-height: 1.3;
   text-decoration: none;
@@ -267,7 +267,7 @@
   background: #fbe4e6;
   color: #c0392b;
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .card-author {
@@ -285,7 +285,7 @@
   margin-top: auto;
   padding-top: 0.3rem;
   font-size: 1.02rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
 }
 
@@ -311,11 +311,11 @@
 
 .card-rating > span {
   font-size: 0.76rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #9a8b8c;
 }
 
-/* Touch devices — hover unavailable, keep the overlay content visible */
+/* Touch devices â€” hover unavailable, keep the overlay content visible */
 @media (hover: none) {
   .card-overlay {
     opacity: 1;

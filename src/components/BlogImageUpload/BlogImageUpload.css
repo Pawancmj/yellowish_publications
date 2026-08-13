@@ -1,4 +1,4 @@
-/* Featured image input — direct upload (base64) OR URL paste.
+﻿/* Featured image input â€” direct upload (base64) OR URL paste.
    Uploads are compressed client-side, so no Firebase Storage is needed. */
 
 .bimg-wrap {
@@ -22,7 +22,7 @@
   background: #fff;
   color: #5b6470;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -194,7 +194,7 @@
   border: none;
   border-radius: 8px;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
   cursor: pointer;
   transition: opacity 0.2s;

@@ -23,6 +23,11 @@ import {
   deleteBlog,
   blogDocRef,
 } from "../services/blogModel";
+import {
+  heroDocRef,
+  normalizeHero,
+  updateHero as updateHeroDoc,
+} from "../services/heroModel";
 import { buildSeedBlogs } from "../data/seedBlogs";
 import fallbackBook from "../assets/book1.png";
 import fallbackAuthor from "../assets/author1.png";
@@ -42,6 +47,8 @@ export function DataProvider({ children }) {
   const [authors, setAuthors] = useState(initialAuthors);
   const [leads, setLeads] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [hero, setHero] = useState(null);
+  const [heroLoading, setHeroLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [blogsLoading, setBlogsLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
@@ -50,6 +57,7 @@ export function DataProvider({ children }) {
   const leadsUnsubscribeRef = useRef(null);
   const publicLeadsUnsubscribeRef = useRef(null);
   const blogsUnsubscribeRef = useRef(null);
+  const heroUnsubscribeRef = useRef(null);
   const hasSeededRef = useRef(false);
   const hasSeededBlogsRef = useRef(false);
 
@@ -189,6 +197,25 @@ export function DataProvider({ children }) {
     );
     return () => {
       if (blogsUnsubscribeRef.current) blogsUnsubscribeRef.current();
+    };
+  }, []);
+
+  // PUBLIC HERO — single document driving the Home Page hero right-side visual.
+  useEffect(() => {
+    heroUnsubscribeRef.current = onSnapshot(
+      heroDocRef(),
+      (snapshot) => {
+        setHero(snapshot.exists() ? normalizeHero(snapshot) : null);
+        setHeroLoading(false);
+      },
+      (error) => {
+        console.error("❌ Hero listener error:", error);
+        setHero(null);
+        setHeroLoading(false);
+      }
+    );
+    return () => {
+      if (heroUnsubscribeRef.current) heroUnsubscribeRef.current();
     };
   }, []);
 
@@ -427,11 +454,25 @@ export function DataProvider({ children }) {
     }
   }, []);
 
+  // 6. HERO — update the Home Page hero right-side visual.
+  const updateHero = useCallback(async (data) => {
+    try {
+      await updateHeroDoc(data);
+      console.log("✅ Hero updated");
+      return { error: null };
+    } catch (error) {
+      console.error("❌ Update hero failed (admin only):", error.message);
+      return { error };
+    }
+  }, []);
+
   const value = {
     books,
     authors,
     leads,
     blogs,
+    hero,
+    heroLoading,
     loading,
     blogsLoading,
     currentUser,
@@ -446,6 +487,7 @@ export function DataProvider({ children }) {
     createBlogDoc,
     updateBlogDoc,
     deleteBlogDoc,
+    updateHero,
   };
 
   // Helper to get a valid image URL for a book cover

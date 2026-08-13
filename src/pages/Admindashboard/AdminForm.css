@@ -1,4 +1,4 @@
-/* Basic modal styling for desktop and mobile */
+﻿/* Basic modal styling for desktop and mobile */
 .modal-content {
   max-width: 380px;
   margin: 40px auto;
@@ -27,7 +27,7 @@
   margin-bottom: 18px;
   font-size: 1.6rem;
   text-align: center;
-  letter-spacing: 1px;
+  letter-spacing: 0;
   color: #2976c8;
 }
 

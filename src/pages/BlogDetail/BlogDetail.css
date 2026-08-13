@@ -1,5 +1,5 @@
-/* ============================================================
-   Blog Detail — Yellowish Publication
+﻿/* ============================================================
+   Blog Detail â€” Yellowish Publication
    Premium editorial reading experience.
    Soft cream + pink blobs, generous whitespace, large type.
    Palette: cream #FFFDFC/#FFF9F4, pink #F8C8CF/#FBE4E6/#FCE8E2,
@@ -9,7 +9,7 @@
   position: relative;
   width: 100%;
   overflow-x: hidden;
-  font-family: "Inter", "Poppins", sans-serif;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
   color: #333;
   background: #fffdfc;
 }
@@ -24,10 +24,9 @@
 .detail-page .gold-label {
   display: block;
   color: #d9a441;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.78rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   margin-bottom: 0.7rem;
 }
 
@@ -46,11 +45,11 @@
 }
 
 .detail-page .section-head h2 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 2.4rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
-  letter-spacing: 0.5px;
+  letter-spacing: -0.5px;
   margin: 0 0 0.7rem;
 }
 
@@ -87,9 +86,9 @@
 }
 
 .detail-page .blog-notfound h1 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 2.4rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   margin: 0 0 1rem;
 }
@@ -106,10 +105,9 @@
 .ag-label {
   display: block;
   color: #d9a441;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.74rem;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   margin-bottom: 0.35rem;
 }
 
@@ -124,9 +122,9 @@
   border-radius: 999px;
   background: linear-gradient(135deg, #ffc107, #e6a900);
   color: #fff;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -156,9 +154,9 @@
   border: 2px solid #f0dedf;
   background: #fff;
   color: #123a5c;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -171,7 +169,7 @@
 }
 
 /* ============================================================
-   Reading progress — thin golden line, fixed to the top
+   Reading progress â€” thin golden line, fixed to the top
    ============================================================ */
 .reading-progress {
   position: fixed;
@@ -229,7 +227,7 @@
 }
 
 /* ============================================================
-   Hero — reduced height, centered, premium
+   Hero â€” reduced height, centered, premium
    ============================================================ */
 .detail-hero {
   position: relative;
@@ -291,17 +289,16 @@
   background: #e63946;
   color: #fff;
   font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0;
   margin-bottom: 1.3rem;
   box-shadow: 0 10px 22px rgba(230, 57, 70, 0.3);
 }
 
 .hero-copy h1 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 2.75rem;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.14;
   letter-spacing: -0.5px;
   color: #123a5c;
@@ -324,7 +321,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
 }
 
@@ -405,7 +402,7 @@
   color: #fff;
 }
 
-/* Hero figure — large, rounded, deep shadow */
+/* Hero figure â€” large, rounded, deep shadow */
 .hero-figure {
   margin: 44px auto 0;
   max-width: 1100px;
@@ -424,7 +421,7 @@
 }
 
 /* ============================================================
-   Reading layout — centered 820px article + floating sidebar
+   Reading layout â€” centered 820px article + floating sidebar
    ============================================================ */
 .reading-section {
   background: #fffdfc;
@@ -480,15 +477,14 @@
 .sb-author strong {
   display: block;
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
 }
 
 .sb-author span {
   font-size: 0.74rem;
   color: #9a8b8c;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0;
 }
 
 .sb-progress {
@@ -500,9 +496,8 @@
 
 .sb-progress-label {
   font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: #9a8b8c;
 }
 
@@ -530,7 +525,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.74rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
 }
 
@@ -541,9 +536,8 @@
 .sb-title {
   display: block;
   font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: #9a8b8c;
   margin-bottom: 0.65rem;
 }
@@ -557,9 +551,8 @@
 .toc-heading {
   display: block;
   font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: #9a8b8c;
   margin-bottom: 0.85rem;
 }
@@ -592,7 +585,7 @@
 
 .toc-nav li button.active {
   color: #e63946;
-  font-weight: 700;
+  font-weight: 600;
   transform: translateX(4px);
 }
 
@@ -601,7 +594,7 @@
 }
 
 /* ============================================================
-   Article typography — large, airy, premium
+   Article typography â€” large, airy, premium
    ============================================================ */
 .article-body p {
   font-size: 1.15rem;
@@ -613,18 +606,18 @@
 /* Drop cap */
 .article-body .drop-cap::first-letter {
   float: left;
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 4em;
   line-height: 0.78;
   padding: 0.05em 0.14em 0 0;
-  font-weight: 800;
+  font-weight: 600;
   color: #e63946;
 }
 
 .article-body .article-h2 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 1.9rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   line-height: 1.28;
   margin: 3.2rem 0 1.3rem;
@@ -632,9 +625,9 @@
 }
 
 .article-body .article-h3 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 1.4rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   line-height: 1.35;
   margin: 2.6rem 0 1rem;
@@ -688,10 +681,10 @@
   color: #c0392b;
   border-radius: 50%;
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
-/* Blockquote — elegant, gold accent */
+/* Blockquote â€” elegant, gold accent */
 .article-body .article-quote {
   position: relative;
   margin: 2.6rem 0;
@@ -709,7 +702,7 @@
 }
 
 .article-body .article-quote p {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 1.4rem;
   font-weight: 600;
   font-style: italic;
@@ -764,7 +757,7 @@
 .article-body .article-table th {
   background: #fff9f8;
   color: #123a5c;
-  font-weight: 800;
+  font-weight: 600;
   text-align: left;
   padding: 1rem 1.3rem;
   border-bottom: 2px solid #fbe4e6;
@@ -813,9 +806,8 @@
 .article-body .article-highlight .ah-title {
   display: block;
   font-size: 0.74rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.8px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: #8a5a1f;
   margin-bottom: 0.6rem;
 }
@@ -835,7 +827,7 @@
 }
 
 /* ============================================================
-   Author — soft glass card
+   Author â€” soft glass card
    ============================================================ */
 .author-section {
   position: relative;
@@ -925,9 +917,9 @@
 }
 
 .ag-body h3 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 1.9rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   margin: 0 0 0.7rem;
 }
@@ -952,7 +944,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.84rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   background: #fff;
   border: 1px solid #fbe4e6;
@@ -978,7 +970,7 @@
 }
 
 /* ============================================================
-   Prev / Next — minimal text links
+   Prev / Next â€” minimal text links
    ============================================================ */
 .pn-section {
   background: #fffdfc;
@@ -1014,16 +1006,15 @@
 .pn-link small {
   display: block;
   font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: #d9a441;
   margin-bottom: 0.25rem;
 }
 
 .pn-link strong {
   font-size: 0.92rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   line-height: 1.45;
   transition: color 0.3s ease;
@@ -1045,7 +1036,7 @@
 }
 
 /* ============================================================
-   Related — premium gradient cards
+   Related â€” premium gradient cards
    ============================================================ */
 .related-section {
   background: linear-gradient(180deg, #fffdfc 0%, #fdf1ef 100%);
@@ -1114,9 +1105,8 @@
   background: #ffc107;
   color: #123a5c;
   font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
@@ -1129,9 +1119,9 @@
 }
 
 .rc-title {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 1.22rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #fff;
   line-height: 1.35;
   margin: 0 0 0.7rem;
@@ -1171,9 +1161,9 @@
 }
 
 .explore-col h3 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   margin: 0 0 1.4rem;
 }
@@ -1214,7 +1204,7 @@
 
 .explore-item strong {
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #123a5c;
   line-height: 1.45;
   display: -webkit-box;
@@ -1336,7 +1326,7 @@
 
 .c-name {
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
 }
 
@@ -1368,7 +1358,7 @@
   padding: 0;
   font-family: inherit;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #9a8b8c;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -1397,7 +1387,7 @@
 }
 
 /* ============================================================
-   Newsletter — soft pink premium section
+   Newsletter â€” soft pink premium section
    ============================================================ */
 .newsletter-cta {
   position: relative;
@@ -1464,9 +1454,9 @@
 }
 
 .newsletter-card h2 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 2.3rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   line-height: 1.15;
   margin: 0 auto 1rem;
@@ -1576,7 +1566,7 @@
   background: #fff;
   border: 2px solid #d9a441;
   color: #123a5c;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.95rem;
   box-shadow: 0 10px 26px rgba(217, 164, 65, 0.25);
 }
@@ -1587,7 +1577,7 @@
 }
 
 /* ============================================================
-   Final CTA — premium publishing banner
+   Final CTA â€” premium publishing banner
    ============================================================ */
 .final-cta {
   position: relative;
@@ -1608,9 +1598,9 @@
 }
 
 .final-copy h2 {
-  font-family: "Poppins", "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-family: "Source Serif 4", Georgia, serif;
   font-size: 2.7rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #123a5c;
   line-height: 1.12;
   margin: 0 0 1.1rem;
@@ -1630,7 +1620,7 @@
   flex-wrap: wrap;
 }
 
-/* Illustration — floating books over a soft blob */
+/* Illustration â€” floating books over a soft blob */
 .final-illustration {
   position: relative;
   height: 400px;
@@ -2002,7 +1992,7 @@
 }
 
 /* ============================================================
-   Mobile (max-width: 767px): related cards → horizontal
+   Mobile (max-width: 767px): related cards â†’ horizontal
    swipeable carousel. Matches the Homepage mobile card behavior.
    Desktop & tablet grids are untouched.
    ============================================================ */

@@ -1,6 +1,6 @@
-.author-details {
+﻿.author-details {
   padding: 2rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
 }
 
 /* Banner */
@@ -27,7 +27,8 @@
 }
 .author-info h1 {
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 600;
+  font-family: "Source Serif 4", Georgia, serif;
 }
 .genre {
   color: #666;
@@ -39,6 +40,8 @@
 .author-books h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 600;
 }
 .author-books ul {
   list-style: none;
@@ -50,7 +53,7 @@
   position: relative;
 }
 .author-books li::before {
-  content: "📘";
+  content: "ðŸ“˜";
   position: absolute;
   left: 0;
 }
@@ -78,7 +81,7 @@
 .back-btn a {
   text-decoration: none;
   color: #f4b400;
-  font-weight: bold;
+  font-weight: 600;
 }
 .back-btn a:hover {
   text-decoration: underline;
