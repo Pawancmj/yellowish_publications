@@ -26,6 +26,13 @@
   padding: 3rem 1.5rem;
 }
 
+/* Tighter vertical rhythm on small screens across every Home section. */
+@media (max-width: 767px) {
+  .home-page .container {
+    padding: 2.25rem 1.25rem;
+  }
+}
+
 /* ---------------- Buttons ---------------- */
 .btn-gold {
   display: inline-flex;
