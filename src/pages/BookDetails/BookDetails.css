@@ -156,6 +156,7 @@
     flex-direction: column;
     align-items: center; /* Center items */
     text-align: center;
+    padding: 2.5rem 1.25rem;
   }
   
   .book-details-info {
@@ -169,6 +170,7 @@
     margin: 0 auto;    /* force center horizontally */
     max-width: 100%;    /* prevent overflow */
     width: 100%;
+    min-width: 0;      /* neutralize the 280px desktop min-width at 320px */
   }
 
   .book-details-cover {

@@ -1076,6 +1076,37 @@
     padding: 40px 1rem;
   }
 
+  /* Card grids → horizontal swipe carousels (matches the site-wide
+     mobile card pattern). Prevents ~130px-wide cards at 320px. */
+  .featured-grid,
+  .authors-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 1rem;
+    max-width: none;
+    margin: 0;
+  }
+
+  .featured-grid::-webkit-scrollbar,
+  .authors-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .featured-card,
+  .author-card {
+    flex: 0 0 calc(100% - 32px);
+    scroll-snap-align: center;
+    min-width: 0;
+  }
+
   .featured-card {
     padding: 1.4rem 1.1rem 1.1rem;
   }

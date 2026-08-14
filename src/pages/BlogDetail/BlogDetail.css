@@ -444,6 +444,8 @@
   flex: 0 1 820px;
   font-size: 1.15rem;
   color: #374151;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
 }
 
 /* ---------------- Floating sticky sidebar ---------------- */
@@ -1926,6 +1928,10 @@
 }
 
 @media (max-width: 560px) {
+  .detail-page .container {
+    padding: 0 16px;
+  }
+
   .sidebar-bottom .sidebar-inner {
     justify-content: center;
   }
