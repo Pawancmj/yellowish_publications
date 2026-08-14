@@ -153,6 +153,17 @@ const DISTRIBUTION = [
   { name: "Kobo", logo: koboLogo },
 ];
 
+const rotate = (arr, n) => arr.slice(n).concat(arr.slice(0, n));
+
+// 4 independent marquee rows — alternating directions, slight speed variance.
+// Every row carries all existing channels (rotated order) so none are removed.
+const DISTRIBUTION_ROWS = [
+  { dir: "right", duration: 34, list: DISTRIBUTION },
+  { dir: "left", duration: 42, list: rotate(DISTRIBUTION, 2) },
+  { dir: "right", duration: 37, list: rotate(DISTRIBUTION, 5) },
+  { dir: "left", duration: 40, list: rotate(DISTRIBUTION, 1) },
+];
+
 const REVIEW_HIGHLIGHTS = [
   {
     name: "Aman Shukla",
@@ -546,15 +557,31 @@ export default function Home() {
       <section className="distribution-section">
         <div className="container">
           <h2 className="dist-heading">Our Distribution Channels</h2>
-          <div className="dist-grid">
-            {DISTRIBUTION.map((channel) => (
-              <div className="dist-logo" key={channel.name}>
-                <img
-                  src={channel.logo}
-                  alt={`${channel.name} logo`}
-                  loading="lazy"
-                />
-                <span className="dist-name">{channel.name}</span>
+          <div className="dist-marquee">
+            {DISTRIBUTION_ROWS.map((row, i) => (
+              <div
+                className={`dist-row ${row.dir === "right" ? "dist-row-right" : "dist-row-left"}`}
+                key={i}
+              >
+                <div
+                  className="dist-track"
+                  style={{ "--dist-duration": `${row.duration}s` }}
+                >
+                  {[0, 1].map((half) => (
+                    <div className="dist-track-half" key={half} aria-hidden={half === 1}>
+                      {row.list.map((channel, j) => (
+                        <div className="dist-logo" key={`${half}-${j}`}>
+                          <img
+                            src={channel.logo}
+                            alt={half === 1 ? "" : `${channel.name} logo`}
+                            loading="lazy"
+                          />
+                          <span className="dist-name">{channel.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>

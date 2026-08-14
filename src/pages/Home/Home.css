@@ -4,7 +4,16 @@
             coral #FF8FA3/#E86E86, gold #FFC94A, ink #3A2E22.
    ============================================================ */
 .home-page {
-  width: 100%;
+  /* Home-Page-only visual scale correction: make the 100% browser-zoom
+     appearance match the previous 90% browser-zoom appearance.
+     `zoom: 0.9` uniformly scales the whole Home page (sections, Hero,
+     cards, typography, spacing) — the faithful equivalent of browser
+     zoom, re-rendering layout (no blur, no transform gaps). Width is
+     over-compensated to 100/0.9 so full-bleed section backgrounds still
+     span edge-to-edge after scaling. Strictly scoped to the Home page
+     root; other pages and shared components are untouched. */
+  zoom: 0.9;
+  width: 111.11%;
   overflow-x: hidden;
   font-family: "DM Sans", "Inter", system-ui, sans-serif;
   color: #6e596b;
@@ -321,7 +330,7 @@
 .books-gallery {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .book-tile {
@@ -329,7 +338,7 @@
   overflow: hidden;
   background: #FFF6E9;
   border: 1px solid #FFE3E6;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 3 / 4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -344,7 +353,8 @@
 .book-tile img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 0.6rem;
 }
 
 .no-books {
@@ -458,7 +468,7 @@
 
 .pricing-head {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .pricing-head h2 {
@@ -501,7 +511,7 @@
   background: #E86E86;
   color: #fff;
   text-align: center;
-  padding: 1.5rem 1rem;
+  padding: 1.15rem 1rem;
 }
 
 .pricing-card.featured .pricing-header {
@@ -524,16 +534,16 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 1.75rem 1.5rem 1.5rem;
+  padding: 1.25rem 1.5rem 1.25rem;
 }
 
 .pricing-body ul {
   list-style: none;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.15rem;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.45rem;
   flex: 1;
 }
 
@@ -560,6 +570,7 @@
 /* ---------------- Section 10: Distribution ---------------- */
 .distribution-section {
   background: #fff;
+  overflow: hidden;
 }
 
 .dist-heading {
@@ -570,10 +581,135 @@
   margin: 0 0 2.5rem;
 }
 
-.dist-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
+/* Premium multi-row logo marquee. Each row scrolls independently;
+   directions alternate and hover pauses only the hovered row. */
+.distribution-section .container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.distribution-section .dist-heading {
+  margin-bottom: 1.25rem;
+}
+
+.dist-marquee {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow: hidden;
+  padding: 0.25rem 0;
+}
+
+.dist-row {
+  position: relative;
+  overflow: hidden;
+}
+
+.dist-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: dist-scroll var(--dist-duration, 34s) linear infinite;
+  will-change: transform;
+}
+
+.dist-row-right .dist-track {
+  animation-direction: reverse;
+}
+
+.dist-track-half {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 1rem;
+}
+
+@keyframes dist-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.dist-marquee .dist-logo {
+  flex: 0 0 auto;
+  width: 180px;
+}
+
+/* Compact card sizing scoped to the Distribution section */
+.distribution-section .dist-logo {
+  padding: 0.8rem 0.75rem;
+  min-height: 100px;
+  gap: 0.5rem;
+}
+
+.distribution-section .dist-logo img {
+  height: 44px;
+}
+
+.distribution-section .dist-name {
+  font-size: 0.78rem;
+}
+
+@media (hover: hover) {
+  .dist-row:hover .dist-track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dist-track {
+    animation: none;
+  }
+}
+
+/* Tablet — keep the auto-scrolling marquee, slightly smaller cards */
+@media (max-width: 1024px) {
+  .dist-marquee .dist-logo {
+    width: 155px;
+    min-height: 92px;
+  }
+}
+
+/* Mobile — no auto-animation; each row is an independent swipeable strip */
+@media (max-width: 767px) {
+  .dist-marquee {
+    gap: 0.7rem;
+  }
+
+  .dist-row {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .dist-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dist-track {
+    animation: none;
+  }
+
+  .dist-track-half:last-child {
+    display: none;
+  }
+
+  .dist-marquee .dist-logo {
+    width: clamp(130px, 38vw, 150px);
+    min-height: 100px;
+    padding: 0.75rem 0.6rem;
+  }
+
+  .dist-marquee .dist-logo img {
+    height: 40px;
+  }
 }
 
 .dist-logo {
@@ -909,6 +1045,42 @@
 }
 
 /* ============================================================
+   Home-only compactness overrides (scoped strictly to the Home page)
+   ============================================================ */
+/* Books Published + Pricing sections: slightly tighter vertical rhythm. */
+.books-section .container,
+.pricing-section .container {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+/* Hero — slightly shorter: tighter content spacing on all sizes, and a
+   shorter fixed desktop height (520px -> 470px). Scoped via .home-page
+   so the shared Hero component's other usages are unaffected. */
+.home-page .hero-content {
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+.home-page .hero h1 {
+  margin-bottom: 16px;
+}
+
+.home-page .hero p {
+  margin-bottom: 26px;
+}
+
+@media (min-width: 1024px) {
+  .home-page .hero {
+    height: 470px;
+  }
+
+  .home-page .hero-content {
+    padding-bottom: 56px;
+  }
+}
+
+/* ============================================================
    Responsive
    ============================================================ */
 @media (max-width: 1024px) {
@@ -918,10 +1090,6 @@
 
   .video-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .dist-grid {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -977,10 +1145,6 @@
   .gr-card {
     padding: 1.5rem;
   }
-
-  .dist-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 560px) {
@@ -991,11 +1155,6 @@
 
   .video-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.85rem;
-  }
-
-  .dist-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 0.85rem;
   }
 }
@@ -1042,7 +1201,6 @@
 @media (max-width: 767px) {
   /* Containers that become single-card carousels */
   .features-grid,
-  .books-gallery,
   .testimonials-grid,
   .pricing-grid,
   .reviews-grid,
@@ -1076,7 +1234,6 @@
 
   /* Visually hide the horizontal scrollbar (WebKit included) */
   .features-grid::-webkit-scrollbar,
-  .books-gallery::-webkit-scrollbar,
   .testimonials-grid::-webkit-scrollbar,
   .pricing-grid::-webkit-scrollbar,
   .reviews-grid::-webkit-scrollbar,
@@ -1087,7 +1244,6 @@
 
   /* Exactly one card per snap position */
   .feature-card,
-  .book-tile,
   .testimonial-card,
   .pricing-card,
   .review-card,
@@ -1095,6 +1251,38 @@
   .gr-review {
     flex: 0 0 calc(100% - 32px);
     scroll-snap-align: center;
+    min-width: 0;
+  }
+}
+
+/* Mobile Books Published — professional 2-card horizontal carousel.
+   Exactly two cards are visible per viewport (card = 50% minus half the
+   gap, so two cards + the gap exactly fill the content width); the
+   remaining books are reached by swiping horizontally. Scoped only to
+   the Home Books Published section — nothing else scrolls. */
+@media (max-width: 767px) {
+  .books-gallery {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 1rem;
+    max-width: none;
+  }
+
+  .books-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .book-tile {
+    flex: 0 0 calc(50% - 0.5rem);
+    scroll-snap-align: start;
     min-width: 0;
   }
 }
