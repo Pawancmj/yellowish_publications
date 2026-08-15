@@ -4,10 +4,23 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  border-bottom: 1px solid rgba(120, 90, 40, 0.14);
+}
+
+/* The frosted panel lives on a ::before so the .navbar element itself
+   never carries a `backdrop-filter`. A filter/backdrop-filter on an
+   element makes it the containing block for `position: fixed`
+   descendants, which collapsed the mobile drawer to the navbar's own
+   height. Keeping the blur off the .navbar box lets the fixed
+   .mobileMenu resolve against the viewport again. */
+.navbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: rgba(255, 246, 233, 0.92);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(120, 90, 40, 0.14);
 }
 
 /* Shared container — matches the 1200px content grid used by the
@@ -120,6 +133,15 @@
   border: none;
   padding: 6px;
   user-select: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.hamburger:focus-visible,
+.closeBtn:focus-visible,
+.mobileNavList .navLink:focus-visible {
+  outline: 2px solid #E0A92F;
+  outline-offset: 2px;
 }
 
 /* Mobile Sidebar */
@@ -133,14 +155,16 @@
   padding: 24px 28px;
   display: flex;
   flex-direction: column;
-  transition: left 0.3s ease;
+  transition: left 0.3s ease, visibility 0.3s ease;
   box-shadow: 4px 0 24px rgba(120, 90, 40, 0.12);
   z-index: 2000;
   overflow-y: auto;
+  visibility: hidden;
 }
 
 .mobileMenu.open {
   left: 0;
+  visibility: visible;
 }
 
 /* Backdrop behind the drawer */

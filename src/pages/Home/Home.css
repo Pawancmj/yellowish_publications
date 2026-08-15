@@ -11,7 +11,12 @@
      zoom, re-rendering layout (no blur, no transform gaps). Width is
      over-compensated to 100/0.9 so full-bleed section backgrounds still
      span edge-to-edge after scaling. Strictly scoped to the Home page
-     root; other pages and shared components are untouched. */
+     root; other pages and shared components are untouched.
+     The 111.11% layout box is deliberately wider than the viewport
+     (rendered back to exactly 100vw after the 0.9 zoom), so it is
+     contained horizontally by `main` (overflow-x: hidden in App.jsx)
+     rather than pushing the page's scrollable width past the viewport.
+     The overflow-x below clips the decorative overhang shapes. */
   zoom: 0.9;
   width: 111.11%;
   overflow-x: hidden;

@@ -180,10 +180,10 @@ export default function Hero() {
       </div>
 
       <div className="hero-content mx-auto max-w-[1200px] px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-10 pt-[24px] pb-[40px] lg:grid-cols-[40%_60%] lg:gap-10 lg:pt-[32px] lg:pb-[80px]">
+        <div className="grid grid-cols-1 items-center gap-10 pt-[24px] pb-[40px] md:grid-cols-[42%_58%] md:gap-8 md:pt-[32px] md:pb-[56px] lg:grid-cols-[40%_60%] lg:gap-10 lg:pt-[32px] lg:pb-[80px]">
           {/* Left column */}
           <Motion.div
-            className="flex flex-col items-center text-center lg:items-start lg:text-left"
+            className="flex flex-col items-center text-center md:items-start md:text-left lg:items-start lg:text-left"
             initial="hidden"
             animate="visible"
             variants={staggerWrap}
@@ -198,7 +198,7 @@ export default function Hero() {
 
             <Motion.h1
               variants={slideFromLeft}
-              className="mb-4 max-w-[420px] font-display text-[clamp(2.25rem,9vw,3.5rem)] font-semibold leading-[1.15] tracking-[-1px] text-ink lg:mb-[22px] lg:text-[72px]"
+              className="mb-4 max-w-[420px] font-display text-[clamp(2.25rem,9vw,3.5rem)] font-semibold leading-[1.15] tracking-[-1px] text-ink md:mb-[18px] md:text-[46px] lg:mb-[22px] lg:text-[72px]"
             >
               Publishing
               <br />
@@ -207,7 +207,7 @@ export default function Hero() {
 
             <Motion.p
               variants={fadeUp}
-              className="mb-6 max-w-[340px] text-[17px] leading-[1.45] text-[#6B7280] sm:text-[18px] lg:mb-[34px]"
+              className="mb-6 max-w-[340px] text-[17px] leading-[1.45] text-[#6B7280] sm:text-[18px] md:mb-8 md:max-w-[400px] lg:mb-[34px]"
             >
               Start your publishing journey today.
               <br />
@@ -217,7 +217,7 @@ export default function Hero() {
 
             <Motion.div
               variants={fadeUp}
-              className="flex flex-wrap items-center justify-center gap-[18px] lg:justify-start"
+              className="flex flex-wrap items-center justify-center gap-[18px] md:justify-start lg:justify-start"
             >
               <Link
                 to="/store"
@@ -248,7 +248,7 @@ export default function Hero() {
           </Motion.div>
 
           {/* Right column — spacious diamond collage, 480x350 stage */}
-            <div className="hero-stage-wrap relative mx-auto flex h-[195px] w-full max-w-[420px] items-center justify-center sm:h-[252px] lg:h-[350px] lg:max-w-none lg:-translate-x-20">
+            <div className="hero-stage-wrap relative mx-auto flex h-[195px] w-full max-w-[420px] items-center justify-center sm:h-[252px] md:h-[300px] lg:h-[350px] lg:max-w-none lg:-translate-x-20">
             <div className="hero-stage relative h-[350px] w-[480px] shrink-0">
               <Motion.div
                 className="relative h-full w-full"

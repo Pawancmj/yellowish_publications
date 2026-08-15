@@ -38,7 +38,7 @@ function App() {
         <ScrollTop />
         <div className="app-container">
           <Navbar />
-          <main style={{ flex: 1, width: "100%" }}>
+          <main style={{ flex: 1, width: "100%", overflowX: "hidden" }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
