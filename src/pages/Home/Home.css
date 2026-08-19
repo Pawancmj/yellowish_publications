@@ -1397,3 +1397,93 @@
     font-size: 0.78rem;
   }
 }
+
+/* ============================================================
+   Mobile (max-width: 767px): intentional, balanced, centered
+   composition. Each section is tuned individually — no global
+   text-align:center. Desktop and tablet layouts are untouched.
+   ============================================================ */
+@media (max-width: 767px) {
+  /* ---- Features: icon + text stack and center inside a
+     comfortable-width card ---- */
+  .feature-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 400px;
+    padding: 1.75rem 1.5rem;
+  }
+
+  /* ---- CTA: heading/paragraph centered; form card stays a
+     comfortable, centered width while inputs remain left-aligned ---- */
+  .cta-text {
+    text-align: center;
+  }
+
+  .cta-text p {
+    margin-inline: auto;
+  }
+
+  .cta-card {
+    width: 100%;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+
+  /* ---- Testimonials: avatar, name and role centered ---- */
+  .testimonial-card {
+    align-items: center;
+    text-align: center;
+    max-width: 420px;
+    padding: 1.75rem 1.5rem;
+  }
+
+  .testimonial-card .t-body {
+    align-items: center;
+  }
+
+  /* ---- Publishing packages: comfortable centered width ---- */
+  .pricing-card {
+    max-width: 420px;
+  }
+
+  /* ---- Review cards: comfortable centered width (already
+     internally centered) ---- */
+  .review-card {
+    max-width: 400px;
+  }
+
+  /* ---- Distribution: inset the first logo so the strip does not
+     start glued to the screen edge ---- */
+  .dist-row .dist-track {
+    padding-left: 1.25rem;
+  }
+
+  /* ---- Google reviews: center the rating summary block ---- */
+  .gr-summary {
+    justify-content: center;
+  }
+}
+
+/* Mobile footer: balanced centered columns; the legal/copyright bar
+   below stays left-aligned for readability. */
+@media (max-width: 640px) {
+  .col {
+    align-items: center;
+    text-align: center;
+  }
+
+  .heading::after {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .addr,
+  .regionContacts li {
+    justify-content: center;
+  }
+
+  .socials {
+    justify-content: center;
+  }
+}
