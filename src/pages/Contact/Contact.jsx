@@ -392,29 +392,6 @@ export default function Contact() {
                 or anything else on your mind. Our team replies within one
                 business day.
               </p>
-              <ul className="form-contact-list">
-                {CONTACT_INFO.map((info) => {
-                  const Icon = info.icon;
-                  const Wrapper = info.href ? "a" : "div";
-                  return (
-                    <li key={info.title}>
-                      <Wrapper
-                        href={info.href}
-                        target={info.target || undefined}
-                        rel={info.target ? "noreferrer" : undefined}
-                      >
-                        <span className="fci-icon">
-                          <Icon />
-                        </span>
-                        <span className="fci-text">
-                          <strong>{info.title}</strong>
-                          {info.value}
-                        </span>
-                      </Wrapper>
-                    </li>
-                  );
-                })}
-              </ul>
               <div className="form-note">
                 <FaPaperclip /> Prefer a quick chat? Message us on WhatsApp —
                 we're always happy to help.
