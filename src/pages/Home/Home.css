@@ -24,6 +24,20 @@
   color: #6e596b;
 }
 
+/* Phones and tablets must NOT inherit the desktop zoom-compensation
+   hack. `zoom: 0.9; width: 111.11%` turns every mobile viewport into a
+   scaled-down desktop (a 390px phone lays out like a 433px desktop and
+   renders ~10% smaller, which is exactly the "squeezed desktop / cut on
+   the right" look). Below 1025px the page runs in real CSS pixels so
+   the mobile/tablet media queries work as intended. Desktop (>=1025px)
+   keeps the original zoomed appearance unchanged. */
+@media (max-width: 1024px) {
+  .home-page {
+    zoom: 1;
+    width: 100%;
+  }
+}
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -1426,7 +1440,7 @@
 
   .cta-card {
     width: 100%;
-    max-width: 480px;
+    max-width: 360px;
     margin-inline: auto;
   }
 
@@ -1485,5 +1499,127 @@
 
   .socials {
     justify-content: center;
+  }
+}
+
+/* ============================================================
+   Mobile (max-width: 767px): layout structure. Sections that read
+   better stacked or as a plain grid replace the one-at-a-time
+   carousel on phones — pricing, Google reviews and video.
+   ============================================================ */
+@media (max-width: 767px) {
+  /* ---- Features: stack vertically, centered comfortable width ---- */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+    overflow: visible;
+  }
+
+  .feature-card {
+    max-width: none;
+  }
+
+  /* ---- Author testimonials: one-column stacked list ---- */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+    overflow: visible;
+  }
+
+  .testimonial-card {
+    max-width: none;
+  }
+
+  /* ---- Publishing packages: stack vertically, centered width ---- */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: none;
+    margin-inline: auto;
+    overflow: visible;
+  }
+
+  .pricing-card {
+    width: min(420px, calc(100% - 32px));
+    max-width: none;
+    margin-inline: auto;
+  }
+
+  .pricing-head p {
+    margin: 0 auto;
+    max-width: 440px;
+  }
+
+  /* ---- Review highlights: contained carousel (no full-bleed),
+     one comfortable card per snap ---- */
+  .reviews-grid {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  /* ---- Google customer reviews: one-column stacked list ---- */
+  .gr-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .gr-review {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  /* ---- Author stories: responsive 2-column grid, no scroll ---- */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    width: calc(100% - 24px);
+    margin-inline: auto;
+    max-width: none;
+    overflow: visible;
+  }
+
+  .video-tile {
+    flex: none;
+    max-width: 100%;
+  }
+
+  /* ---- CTA heading scales naturally on small screens ---- */
+  .cta-text h2 {
+    font-size: clamp(1.7rem, 6vw, 2.4rem);
+  }
+}
+
+/* Smaller play button keeps the 2-column video grid readable on
+   narrow phones. */
+@media (max-width: 400px) {
+  .video-tile .play-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet (768px+): stats go back to 4 columns once there is enough
+   width (600px stays 2 columns). */
+@media (min-width: 768px) {
+  .stats-container {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
