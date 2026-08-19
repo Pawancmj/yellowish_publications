@@ -6,6 +6,7 @@ import { DataProvider } from "./contexts/DataContext"; // Add this
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import ScrollTop from "./components/ScrollTop/ScrollTop";
+import StickyActions from "./components/StickyActions/StickyActions";
 
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
@@ -78,6 +79,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <StickyActions />
         </div>
       </DataProvider>
     </AuthProvider>

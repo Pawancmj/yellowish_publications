@@ -448,18 +448,22 @@
   text-align: center;
 }
 
-.stat {
+.stats-bar .stat {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
 
-.stat-value {
+.stats-bar .stat-value {
   font-family: "DM Sans", "Inter", system-ui, sans-serif;
   font-size: clamp(1.9rem, 3vw, 2.4rem);
   font-weight: 600;
   line-height: 1.1;
-  color: #FFC94A;
+  /* Rich amber — a darker warm gold that keeps the brand accent while
+     staying clearly readable on the soft pink #FFE9EC background
+     (~3.8:1 contrast, was ~1.3:1 at #FFC94A). Scoped under .stats-bar
+     so the About page's generic .stat-value rule cannot leak in here. */
+  color: #A06E00;
   letter-spacing: 0;
 }
 

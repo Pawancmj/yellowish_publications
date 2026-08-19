@@ -8,7 +8,6 @@ import {
   FaEnvelope,
   FaClock,
   FaPaperPlane,
-  FaWhatsapp,
   FaBookOpen,
   FaArrowRight,
   FaFeatherAlt,
@@ -695,18 +694,6 @@ export default function Contact() {
           </motion.div>
         </div>
       </section>
-
-      {/* WhatsApp floating button */}
-      <a
-        href="https://wa.me/919871569192"
-        target="_blank"
-        rel="noreferrer"
-        className="contact-wa-float"
-        aria-label="Chat with us on WhatsApp"
-        title="Chat on WhatsApp"
-      >
-        <FaWhatsapp />
-      </a>
 
       {toast && (
         <div className="contact-toast" role="status">
