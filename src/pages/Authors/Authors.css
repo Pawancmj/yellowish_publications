@@ -1070,16 +1070,14 @@
   }
 }
 
-/* ---------------- Mobile card internals (2-column layout) ---------------- */
+/* ---------------- Mobile card internals ---------------- */
 @media (max-width: 767px) {
   .authors-page .container {
     padding: 40px 1rem;
   }
 
-  /* Card grids → horizontal swipe carousels (matches the site-wide
-     mobile card pattern). Prevents ~130px-wide cards at 320px. */
-  .featured-grid,
-  .authors-grid {
+  /* Featured cards stay a horizontal swipe carousel (unchanged). */
+  .featured-grid {
     display: flex;
     flex-wrap: nowrap;
     align-items: stretch;
@@ -1095,13 +1093,11 @@
     margin: 0;
   }
 
-  .featured-grid::-webkit-scrollbar,
-  .authors-grid::-webkit-scrollbar {
+  .featured-grid::-webkit-scrollbar {
     display: none;
   }
 
-  .featured-card,
-  .author-card {
+  .featured-card {
     flex: 0 0 calc(100% - 32px);
     scroll-snap-align: center;
     min-width: 0;
@@ -1141,16 +1137,39 @@
     font-size: 0.78rem;
   }
 
+  /* All-authors cards → a single centered column. Each card fills the
+     container content box (which already has 1rem side padding), so the
+     gutters stay equal on every phone width and the card is always
+     perfectly centered in the viewport. */
+  .authors-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: visible;
+  }
+
+  .author-card {
+    width: 100%;
+    min-width: 0;
+  }
+
   .card-body {
-    padding: 1rem 0.9rem 0.8rem;
+    padding: 1.2rem 1.1rem 1rem;
   }
 
   .card-body h3 {
-    font-size: 1rem;
+    font-size: 1.02rem;
   }
 
   .card-desc {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -1158,9 +1177,16 @@
   }
 
   .card-view {
-    width: calc(100% - 2.4rem);
-    margin: 0 1.2rem 1.2rem;
-    padding: 0.6rem 0.6rem;
-    font-size: 0.76rem;
+    display: flex;
+    width: min(100%, 540px);
+    margin: 0.3rem auto 1.4rem;
+    padding: 0.62rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  /* Room at the bottom so the sticky Enquiry/WhatsApp buttons never sit
+     on top of the last author card. */
+  .all-authors-section .container {
+    padding-bottom: 110px;
   }
 }

@@ -351,39 +351,6 @@
   padding-bottom: 72px;
 }
 
-/* Category pills */
-.cat-pills {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.7rem;
-  margin-bottom: 1.6rem;
-}
-
-.cat-pill {
-  padding: 0.5rem 1.4rem;
-  border: 2px solid #f0dedf;
-  border-radius: 999px;
-  background: #fff;
-  color: #7a6a6b;
-  font-weight: 600;
-  font-size: 0.88rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.cat-pill:hover {
-  border-color: #d9a441;
-  color: #d9a441;
-}
-
-.cat-pill.active {
-  background: #d9a441;
-  border-color: #d9a441;
-  color: #fff;
-  box-shadow: 0 6px 16px rgba(217, 164, 65, 0.35);
-}
-
 /* Sticky filter bar */
 .filter-bar-sticky {
   position: sticky;
@@ -732,6 +699,12 @@
   .featured-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
+  }
+
+  /* Room at the bottom so the sticky Enquiry/WhatsApp buttons never
+     sit on top of the last row of book cards. */
+  .all-books-section .container {
+    padding-bottom: 110px;
   }
 }
 

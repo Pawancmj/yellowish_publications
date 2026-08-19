@@ -302,7 +302,7 @@
   border-radius: 22px;
 }
 
-.ah-frame img {
+.ah-frame > img {
   display: block;
   width: 100%;
   height: 460px;
@@ -1149,7 +1149,7 @@
     max-width: 560px;
   }
 
-  .ah-frame img {
+  .ah-frame > img {
     height: 400px;
     max-height: 440px;
   }
@@ -1208,7 +1208,21 @@
     margin-bottom: 1.6rem;
   }
 
-  .ah-frame img {
+  /* Hero visual composition → contained, centered, proportional.
+     The frame fills a centered container with even gutters so the
+     book-chip / gold-dot accents stay inside the viewport. */
+  .ah-visual {
+    width: calc(100% - 32px);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .ah-frame {
+    max-width: none;
+    width: 100%;
+  }
+
+  .ah-frame > img {
     height: 320px;
     max-height: 350px;
   }
@@ -1219,8 +1233,8 @@
   }
 
   .ah-gold-dot {
-    top: -14px;
-    right: -8px;
+    top: -12px;
+    right: -6px;
     width: 52px;
     height: 52px;
   }
@@ -1243,35 +1257,52 @@
     max-width: 460px;
   }
 
+  /* Publishing journey → single centered column. Each step is one unit:
+     the numbered circle on the left, heading beside it, description below
+     the heading. The vertical connector runs behind the circles on the far
+     left and never crosses the text. */
   .journey-track {
+    position: relative;
+    display: grid;
     grid-template-columns: 1fr;
     gap: 0;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .journey-track::before {
+    content: "";
+    display: none;
   }
 
   .journey-step {
-    padding-bottom: 1.75rem;
-  }
-
-  .journey-step:last-child {
-    padding-bottom: 0;
-  }
-
-  .journey-step {
+    position: relative;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 1rem;
-    text-align: left;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 0.6rem 1.1rem;
     align-items: start;
+    text-align: left;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px 2.25rem;
+    z-index: 1;
   }
 
   .journey-step::before {
     content: "";
     position: absolute;
-    left: 24px;
-    top: 48px;
+    left: 56px;
+    top: 0;
     bottom: 0;
     width: 2px;
     background: #f0dedf;
+    z-index: 0;
+  }
+
+  .journey-step:last-child {
+    padding-bottom: 0;
   }
 
   .journey-step:last-child::before {
@@ -1279,9 +1310,10 @@
   }
 
   .journey-node {
-    width: 48px;
-    height: 48px;
+    width: 72px;
+    height: 72px;
     margin: 0;
+    z-index: 1;
   }
 
   .journey-ico {
@@ -1295,18 +1327,22 @@
     padding: 0;
     background: transparent;
     border: none;
-    font-size: 0.95rem;
+    font-size: 1.15rem;
+    font-weight: 700;
     color: #8a5a1f;
   }
 
   .journey-step h3 {
-    font-size: 1.05rem;
-    margin: 0.15rem 0 0.35rem;
+    font-size: clamp(1rem, 4.5vw, 1.15rem);
+    margin: 0 0 0.4rem;
   }
 
   .journey-step p {
+    grid-column: 2;
     margin: 0;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    max-width: 100%;
   }
 
   .stats-grid {
@@ -1352,6 +1388,12 @@
   .final-cta-copy p {
     font-size: 1.05rem;
     margin-bottom: 1.6rem;
+  }
+
+  /* Room at the bottom so the sticky Enquiry/WhatsApp buttons never sit
+     on top of the closing call-to-action. */
+  .about-final-cta .container {
+    padding-bottom: 120px;
   }
 }
 

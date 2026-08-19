@@ -94,9 +94,6 @@ export default function Books() {
 
   const featured = sortedBase.slice(0, 4);
 
-  const activeCategory =
-    genre === "" ? "All Books" : genre;
-
   // Filtered grid preserves the exact original filter logic
   const filteredBooks = books
     .filter((book) =>
@@ -302,19 +299,6 @@ export default function Books() {
             <h2>Browse Our Collection</h2>
             <p>Find your next favourite read.</p>
           </motion.div>
-
-          {/* Category pills */}
-          <nav className="cat-pills" aria-label="Book categories">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className={`cat-pill ${activeCategory === cat ? "active" : ""}`}
-                onClick={() => setGenre(cat === "All Books" ? "" : cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </nav>
 
           {/* Sticky filter bar */}
           <div className="filter-bar-sticky">
