@@ -14,7 +14,7 @@ import {
   FaEyeSlash,
   FaCheckCircle,
   FaExclamationCircle,
-  FaFeatherAlt,
+  FaPen,
   FaTable,
 } from "react-icons/fa";
 import { formatBlogDate, formatViews } from "../../services/blogModel";
@@ -149,7 +149,7 @@ export default function AdminBlogs() {
 
       <div className="ab-stats">
         <div className="ab-stat">
-          <FaFeatherAlt />
+          <FaPen />
           <div>
             <h3>{blogs.length}</h3>
             <p>Total Blogs</p>

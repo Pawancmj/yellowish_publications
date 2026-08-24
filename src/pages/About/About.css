@@ -64,15 +64,6 @@
   margin: 0 auto 3rem;
 }
 
-.about-page .accent-line {
-  display: block;
-  width: 56px;
-  height: 4px;
-  border-radius: 4px;
-  background: #e63946;
-  margin: 0 auto 1.1rem;
-}
-
 .about-page .gold-label {
   display: inline-block;
   color: #d9a441;
@@ -314,54 +305,6 @@
   background: #fbe4e6;
 }
 
-.ah-gold-dot {
-  position: absolute;
-  top: -20px;
-  right: -14px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #e8b04a, #d9a441);
-  box-shadow: 0 10px 24px rgba(217, 164, 65, 0.45);
-  z-index: 2;
-}
-
-.ah-book-chip {
-  position: absolute;
-  left: -22px;
-  bottom: -22px;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  background: #fff;
-  border-radius: 14px;
-  padding: 0.6rem 0.85rem;
-  box-shadow: 0 16px 36px rgba(18, 58, 92, 0.22);
-  z-index: 2;
-}
-
-.ah-book-chip img {
-  width: 52px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: none;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-}
-
-.ah-book-chip span {
-  font-size: 0.85rem;
-  color: #6b5d5e;
-  line-height: 1.3;
-}
-
-.ah-book-chip strong {
-  display: block;
-  color: #123a5c;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
 /* ============================================================
    OUR STORY
    ============================================================ */
@@ -520,14 +463,9 @@
   margin-bottom: 1.2rem;
 }
 
-.mv-mission .mv-icon {
+.mv-icon {
   background: #fff1cc;
   color: #d9a441;
-}
-
-.mv-vision .mv-icon {
-  background: #fbe4e6;
-  color: #e63946;
 }
 
 .mv-eyebrow {
@@ -602,11 +540,6 @@
   justify-content: center;
   font-size: 1.3rem;
   margin-bottom: 1rem;
-  background: #fbe4e6;
-  color: #e63946;
-}
-
-.service-card:nth-child(even) .svc-icon {
   background: #fff1cc;
   color: #d9a441;
 }
@@ -688,14 +621,6 @@
   align-items: center;
   justify-content: center;
   font-size: 1.35rem;
-}
-
-.why-card-pink .why-icon {
-  background: #fbe4e6;
-  color: #e63946;
-}
-
-.why-card-gold .why-icon {
   background: #fff1cc;
   color: #d9a441;
 }
@@ -1209,8 +1134,7 @@
   }
 
   /* Hero visual composition → contained, centered, proportional.
-     The frame fills a centered container with even gutters so the
-     book-chip / gold-dot accents stay inside the viewport. */
+     The frame fills a centered container with even gutters. */
   .ah-visual {
     width: calc(100% - 32px);
     max-width: 520px;
@@ -1225,18 +1149,6 @@
   .ah-frame > img {
     height: 320px;
     max-height: 350px;
-  }
-
-  .ah-book-chip {
-    left: 12px;
-    bottom: 12px;
-  }
-
-  .ah-gold-dot {
-    top: -12px;
-    right: -6px;
-    width: 52px;
-    height: 52px;
   }
 
   .story-frame img {

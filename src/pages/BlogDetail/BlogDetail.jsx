@@ -19,7 +19,7 @@ import {
   FaLink,
   FaCheck,
   FaQuoteLeft,
-  FaFeatherAlt,
+  FaPen,
   FaArrowRight,
   FaArrowLeft,
   FaEnvelope,
@@ -29,7 +29,6 @@ import {
   FaHeart,
   FaRegHeart,
   FaBookOpen,
-  FaPenNib,
   FaSearch,
 } from "react-icons/fa";
 
@@ -652,7 +651,7 @@ export default function BlogDetail() {
                   <FaBookOpen /> {post.authorBooks}
                 </span>
                 <span>
-                  <FaPenNib /> {post.authorRole}
+                  <FaPen /> {post.authorRole}
                 </span>
               </div>
               <div className="ag-actions">
@@ -740,7 +739,6 @@ export default function BlogDetail() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">KEEP READING</span>
             <h2>Related Stories</h2>
             <p>Hand-picked articles that pair beautifully with this one.</p>
@@ -838,7 +836,6 @@ export default function BlogDetail() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="accent-line" />
               <span className="gold-label">JOIN THE CONVERSATION</span>
               <h2>Discussion ({comments.length})</h2>
               <p>Thoughts, questions, and kind words from readers.</p>
@@ -1015,7 +1012,7 @@ export default function BlogDetail() {
                   className="btn-gold"
                   onClick={(e) => handleNavClick(e, "/about")}
                 >
-                  <FaFeatherAlt /> Publish Your Book
+                  <FaPen /> Publish Your Book
                 </Link>
                 <button className="btn-outline" onClick={goToContact}>
                   <FaEnvelope /> Contact Us

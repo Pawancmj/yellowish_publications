@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useData } from "../../contexts/DataContext";
 import {
-  FaFeatherAlt,
+  FaPen,
   FaArrowRight,
   FaSearch,
   FaClock,
@@ -17,7 +17,6 @@ import {
 import { formatBlogDate, formatReadingTime } from "../../services/blogModel";
 
 import aboutImage from "../../assets/About.png";
-import storyImage from "../../assets/Story.png";
 import heroImage from "../../assets/hero.png";
 import book6 from "../../assets/book6.png";
 import book9 from "../../assets/book9.png";
@@ -25,14 +24,15 @@ import book13 from "../../assets/book13.png";
 
 import "./Blog.css";
 
-// Magazine-style floating thumbnails for the hero
+// Editorial-collage hero: one focal story visual anchored right, an article
+// card top-left, a news card bottom-left, and two small accents bridging the
+// diagonal. Fixed-pixel positions on a scaled stage keep spacing intentional.
 const FLOATING_THUMBS = [
-  { src: aboutImage, className: "ft-1", rotation: 5, label: "Behind the Cover" },
-  { src: book6, className: "ft-2", rotation: -4, label: "Book Review" },
-  { src: storyImage, className: "ft-3", rotation: 3, label: "Author Stories" },
-  { src: book9, className: "ft-4", rotation: -3, label: "Marketing" },
-  { src: heroImage, className: "ft-5", rotation: 4, label: "News" },
-  { src: book13, className: "ft-6", rotation: -2, label: "Publishing" },
+  { src: book13, className: "ft-focal", rotation: -3, label: "Publishing" },
+  { src: aboutImage, className: "ft-article", rotation: 2, label: "Behind the Cover" },
+  { src: heroImage, className: "ft-news", rotation: -2, label: "Author Stories" },
+  { src: book9, className: "ft-marketing", rotation: 3, label: "Marketing" },
+  { src: book6, className: "ft-review", rotation: -4, label: "Book Review" },
 ];
 
 const fadeUp = {
@@ -146,9 +146,6 @@ export default function Blog() {
         <div className="hero-inner">
           <div className="hero-copy">
             <motion.div variants={staggerWrap} initial="hidden" animate="visible">
-              <motion.span variants={fadeUp} className="hero-badge">
-                <FaNewspaper /> Our Blog
-              </motion.span>
               <motion.h1 variants={fadeUp} custom={1}>
                 Insights, Stories
                 <br />& <span className="accent">Publishing Tips</span>
@@ -169,28 +166,30 @@ export default function Blog() {
                   className="btn-outline"
                   onClick={(e) => handleNavClick(e, "/about")}
                 >
-                  <FaFeatherAlt /> Become an Author
+                  <FaPen /> Become an Author
                 </Link>
               </motion.div>
             </motion.div>
           </div>
 
           <div className="hero-visual" aria-hidden="true">
-            <motion.div
-              className="thumb-mosaic"
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 7, ease: "easeInOut", repeat: Infinity }}
-            >
-              {FLOATING_THUMBS.map((t) => (
-                <div
-                  className={`floating-thumb ${t.className}`}
-                  key={t.className}
-                >
-                  <img src={t.src} alt="" loading="lazy" style={{ rotate: t.rotation }} />
-                  <span className="thumb-label">{t.label}</span>
-                </div>
-              ))}
-            </motion.div>
+            <div className="blog-stage">
+              <motion.div
+                className="thumb-mosaic"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 7, ease: "easeInOut", repeat: Infinity }}
+              >
+                {FLOATING_THUMBS.map((t) => (
+                  <div
+                    className={`floating-thumb ${t.className}`}
+                    key={t.className}
+                  >
+                    <img src={t.src} alt="" loading="lazy" style={{ rotate: t.rotation }} />
+                    <span className="thumb-label">{t.label}</span>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -206,7 +205,6 @@ export default function Blog() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="accent-line" />
               <span className="gold-label">EDITOR'S PICK</span>
               <h2>Featured Article</h2>
               <p>The story everyone is talking about this week.</p>
@@ -273,7 +271,6 @@ export default function Blog() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">READ & DISCOVER</span>
             <h2>Latest Articles</h2>
             <p>Fresh insights on writing, publishing, and everything in between.</p>

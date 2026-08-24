@@ -2,16 +2,14 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  FaFeatherAlt,
+  FaPen,
   FaStar,
   FaStarHalfAlt,
   FaRegStar,
   FaCheck,
   FaSearch,
   FaBookOpen,
-  FaAward,
   FaArrowRight,
-  FaPenFancy,
   FaQuoteLeft,
   FaFacebookF,
   FaInstagram,
@@ -211,7 +209,7 @@ export default function Authors() {
     return (
       <div className="authors-wrapper">
         <div className="authors-loader">
-          <FaFeatherAlt className="loader-icon" />
+          <FaPen className="loader-icon" />
           <p>Loading authors...</p>
         </div>
       </div>
@@ -235,9 +233,6 @@ export default function Authors() {
         <div className="hero-inner">
           <div className="hero-copy">
             <motion.div variants={staggerWrap} initial="hidden" animate="visible">
-              <motion.span variants={fadeUp} className="hero-badge">
-                <FaFeatherAlt /> Our Community
-              </motion.span>
               <motion.h1 variants={fadeUp} custom={1}>
                 Meet the Authors
                 <br />
@@ -266,7 +261,7 @@ export default function Authors() {
                     scrollToSection("become-author");
                   }}
                 >
-                  <FaPenFancy /> Become an Author
+                  <FaPen /> Become an Author
                 </a>
               </motion.div>
             </motion.div>
@@ -287,13 +282,6 @@ export default function Authors() {
                 />
               </div>
             ))}
-            <div className="hero-card-float">
-              <FaAward className="card-float-ico" />
-              <div>
-                <strong>15,000+</strong>
-                <span>Happy Authors</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -308,7 +296,6 @@ export default function Authors() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">FEATURED TALENT</span>
             <h2>Featured Authors</h2>
             <p>Handpicked storytellers making waves across the globe.</p>
@@ -389,7 +376,6 @@ export default function Authors() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">OUR COMMUNITY</span>
             <h2>All Authors</h2>
             <p>Every creator behind our published library.</p>

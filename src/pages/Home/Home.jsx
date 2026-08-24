@@ -33,7 +33,7 @@ import Hero from "../../components/Hero/Hero";
 import {
   FaBookOpen,
   FaGlobe,
-  FaPenFancy,
+  FaPen,
   FaUsers,
   FaStar,
   FaStarHalfAlt,
@@ -60,7 +60,7 @@ const FEATURES = [
     desc: "Affordable packages with a team that guides you at every step.",
   },
   {
-    icon: FaPenFancy,
+    icon: FaPen,
     title: "High Quality",
     desc: "Professional editing, design, and print quality guaranteed.",
   },
@@ -330,17 +330,7 @@ export default function Home() {
       {/* Section 2 — Hero */}
       <Hero />
 
-      {/* Section 3 — Full Width Banner */}
-      <section className="banner-strip">
-        <div
-          className="banner-image"
-          style={{ backgroundImage: `url(${aboutImage})` }}
-          role="img"
-          aria-label="Author workspace"
-        />
-      </section>
-
-      {/* Section 4 — Features Grid */}
+      {/* Section 3 — Features Grid */}
       <section className="features-section">
         <div className="container">
           <div className="features-grid">
@@ -441,7 +431,6 @@ export default function Home() {
       <section className="books-section">
         <div className="container">
           <div className="section-head">
-            <span className="accent-line" />
             <h2>BOOKS PUBLISHED</h2>
           </div>
           <div className="filter-tabs">

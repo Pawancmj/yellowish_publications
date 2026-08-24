@@ -8,20 +8,17 @@ import "./About.css";
 // Assets — existing publishing / author imagery only.
 import heroVisual from "../../assets/About.png";
 import storyImage from "../../assets/Story.png";
-import bookOverlay from "../../assets/book9.png";
 import testimonialPhoto from "../../assets/author4.png";
 
 // React Icons
 import {
   FaArrowRight,
-  FaFeatherAlt,
   FaGlobe,
   FaHeart,
   FaHandshake,
   FaAward,
   FaBullhorn,
   FaPalette,
-  FaPenNib,
   FaBookOpen,
   FaFileAlt,
   FaSearch,
@@ -55,7 +52,7 @@ const staggerWrap = {
 const SERVICES = [
   {
     num: "01",
-    icon: FaPenNib,
+    icon: FaPen,
     title: "Editing & Proofreading",
     desc: "Professional developmental editing and careful proofreading that polish your manuscript before it reaches readers.",
   },
@@ -207,10 +204,7 @@ export default function About() {
             initial="hidden"
             animate="visible"
           >
-            <motion.span variants={fadeUp} className="ah-badge">
-              <FaFeatherAlt /> About Yellowish Publication
-            </motion.span>
-            <motion.h1 variants={slideFromLeft} custom={1}>
+<motion.h1 variants={slideFromLeft} custom={1}>
               Turning Stories Into
               <br />
               <span className="ah-accent">Books That Matter</span>
@@ -242,14 +236,6 @@ export default function About() {
                 alt="An author at work with Yellowish Publication"
                 loading="lazy"
               />
-              <span className="ah-gold-dot" aria-hidden="true" />
-              <div className="ah-book-chip">
-                <img src={bookOverlay} alt="A published book cover" loading="lazy" />
-                <span>
-                  <strong>Published</strong>
-                  with love
-                </span>
-              </div>
             </div>
           </motion.div>
         </div>
@@ -316,7 +302,6 @@ export default function About() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">What Drives Us</span>
             <h2>Mission &amp; Vision</h2>
             <p>The purpose we serve and the future we're building for storytellers.</p>
@@ -331,7 +316,7 @@ export default function About() {
               transition={{ duration: 0.6 }}
             >
               <span className="mv-icon">
-                <FaFeatherAlt />
+                <FaPen />
               </span>
               <span className="mv-eyebrow">Our Mission</span>
               <h3>Empower Every Author</h3>
@@ -372,7 +357,6 @@ export default function About() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">Our Expertise</span>
             <h2>Everything You Need to Publish With Confidence</h2>
             <p>Four pillars of publishing, handled end-to-end by one team.</p>
@@ -413,7 +397,6 @@ export default function About() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">The Yellowish Difference</span>
             <h2>Why Authors Choose Yellowish</h2>
             <p>The reasons authors trust us with their most important work.</p>
@@ -456,7 +439,6 @@ export default function About() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">How It Works</span>
             <h2>From Manuscript to Published Book</h2>
             <p>A clear, guided path from first draft to reader's shelf.</p>
@@ -523,7 +505,6 @@ export default function About() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">Our Community</span>
             <h2>Built Around Authors</h2>
             <p>Writers from every genre trust Yellowish to tell their stories.</p>
@@ -618,7 +599,7 @@ export default function About() {
             </p>
             <div className="final-cta-actions">
               <Link to="/authors" className="btn-gold">
-                Become an Author <FaFeatherAlt />
+                Become an Author <FaPen />
               </Link>
               <Link to="/store" className="final-cta-ghost">
                 <FaBookOpen /> Explore Books

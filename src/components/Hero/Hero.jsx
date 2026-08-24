@@ -188,14 +188,6 @@ export default function Hero() {
             animate="visible"
             variants={staggerWrap}
           >
-            <Motion.div
-              variants={fadeUp}
-              className="mb-5 inline-flex h-[34px] items-center gap-2 rounded-full bg-[#FFF1CC] px-4 text-[13px] font-medium text-[#8A5A1F]"
-            >
-              <FaStar className="h-3 w-3 text-primary" aria-hidden="true" />
-              Trusted by 15,000+ Authors
-            </Motion.div>
-
             <Motion.h1
               variants={slideFromLeft}
               className="mb-4 max-w-[420px] font-display text-[clamp(2.25rem,9vw,3.5rem)] font-semibold leading-[1.15] tracking-[-1px] text-ink md:mb-[18px] md:text-[46px] lg:mb-[22px] lg:text-[72px]"

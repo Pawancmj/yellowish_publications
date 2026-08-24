@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
-import { FaEdit, FaTrash, FaPlus, FaBook, FaUser, FaEnvelope, FaFeatherAlt, FaHome, FaSpinner, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaBook, FaUser, FaEnvelope, FaPen, FaHome, FaSpinner, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import "./Admin.css";
 
 const Admin = () => {
@@ -111,7 +111,7 @@ const Admin = () => {
             </div>
           </div>
           <div className="stat-card">
-            <FaFeatherAlt />
+            <FaPen />
             <div>
               <h3>{blogs ? blogs.length : 0}</h3>
               <p>Total Blogs</p>
@@ -142,7 +142,7 @@ const Admin = () => {
             className={activeTab === "blogs" ? "tab-active" : "tab"}
             onClick={() => setActiveTab("blogs")}
           >
-            <FaFeatherAlt /> Manage Blogs
+            <FaPen /> Manage Blogs
           </button>
           <button
             className={activeTab === "hero" ? "tab-active" : "tab"}
@@ -365,7 +365,7 @@ const Admin = () => {
                 className="add-btn"
                 onClick={() => navigate("/admin/blogs")}
               >
-                <FaFeatherAlt /> Open Full Blog Management
+                <FaPen /> Open Full Blog Management
               </button>
             </div>
           </div>

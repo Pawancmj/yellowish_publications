@@ -25,15 +25,6 @@
   margin-bottom: 2.5rem;
 }
 
-.blog-page .accent-line {
-  display: block;
-  width: 56px;
-  height: 4px;
-  border-radius: 4px;
-  background: #e63946;
-  margin: 0 auto 1.1rem;
-}
-
 .blog-page .gold-label {
   display: block;
   text-align: center;
@@ -257,7 +248,7 @@
 }
 
 .blog-hero .hero-copy h1 .accent {
-  color: #e63946;
+  color: #d9a441;
 }
 
 .blog-hero .hero-copy p {
@@ -275,10 +266,23 @@
   flex-wrap: wrap;
 }
 
-/* ---------- Magazine-style floating thumbnails ---------- */
+/* ---------- Editorial collage (fixed 580x460 stage, scaled responsively
+   the same way as the Home hero stage) ---------- */
 .blog-hero .hero-visual {
   position: relative;
-  height: 400px;
+  height: 414px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blog-stage {
+  position: relative;
+  width: 580px;
+  height: 460px;
+  flex-shrink: 0;
+  transform: scale(0.9);
+  transform-origin: center;
 }
 
 .blog-hero .thumb-mosaic {
@@ -317,51 +321,48 @@
   letter-spacing: 0;
 }
 
-.floating-thumb.ft-1 {
-  width: 170px;
-  height: 120px;
-  right: 4%;
-  top: 4%;
+/* Focal story visual — right anchor */
+.floating-thumb.ft-focal {
+  width: 180px;
+  height: 240px;
+  left: 350px;
+  top: 18px;
   z-index: 3;
 }
 
-.floating-thumb.ft-2 {
-  width: 120px;
-  height: 158px;
-  left: 5%;
-  top: 8%;
+/* Feature article card — top-left anchor */
+.floating-thumb.ft-article {
+  width: 216px;
+  height: 136px;
+  left: 20px;
+  top: 22px;
   z-index: 2;
 }
 
-.floating-thumb.ft-3 {
-  width: 158px;
-  height: 108px;
-  left: 18%;
-  bottom: 2%;
-  z-index: 1;
+/* News card — bottom-left anchor */
+.floating-thumb.ft-news {
+  width: 200px;
+  height: 133px;
+  left: 18px;
+  top: 248px;
+  z-index: 2;
 }
 
-.floating-thumb.ft-4 {
-  width: 128px;
+/* Small marketing book — bottom-centre accent */
+.floating-thumb.ft-marketing {
+  width: 126px;
   height: 168px;
-  right: 16%;
-  bottom: 6%;
+  left: 400px;
+  top: 292px;
   z-index: 2;
 }
 
-.floating-thumb.ft-5 {
-  width: 118px;
-  height: 88px;
-  left: 32%;
-  top: 4%;
-  z-index: 1;
-}
-
-.floating-thumb.ft-6 {
-  width: 104px;
-  height: 138px;
-  right: 30%;
-  top: 16%;
+/* Tiny review card — diagonal bridge accent */
+.floating-thumb.ft-review {
+  width: 120px;
+  height: 80px;
+  left: 252px;
+  top: 300px;
   z-index: 1;
 }
 
@@ -919,6 +920,17 @@
 /* ============================================================
    Responsive
    ============================================================ */
+/* Editorial stage scales down as the viewport narrows (Home-hero pattern) */
+@media (max-width: 1180px) {
+  .blog-stage {
+    transform: scale(0.74);
+  }
+
+  .blog-hero .hero-visual {
+    height: 340px;
+  }
+}
+
 @media (max-width: 1024px) {
   .blog-hero .hero-inner {
     grid-template-columns: 1fr;
@@ -938,7 +950,11 @@
     max-width: 480px;
     width: 100%;
     margin: 0 auto;
-    height: 360px;
+    height: 368px;
+  }
+
+  .blog-stage {
+    transform: scale(0.8);
   }
 
   .featured-post {
@@ -958,6 +974,14 @@
   .blog-hero .hero-inner {
     padding: 56px 1.5rem 64px;
     gap: 2.5rem;
+  }
+
+  .blog-stage {
+    transform: scale(0.62);
+  }
+
+  .blog-hero .hero-visual {
+    height: 285px;
   }
 
   .fp-body {
@@ -993,8 +1017,11 @@
   }
 
   .blog-hero .hero-visual {
-    height: 300px;
-    transform: scale(0.85);
+    height: 230px;
+  }
+
+  .blog-stage {
+    transform: scale(0.5);
   }
 
   .newsletter-form {
@@ -1003,6 +1030,16 @@
 
   .newsletter-form .nl-btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .blog-stage {
+    transform: scale(0.45);
+  }
+
+  .blog-hero .hero-visual {
+    height: 207px;
   }
 }
 

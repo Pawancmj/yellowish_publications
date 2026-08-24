@@ -6,7 +6,7 @@ import {
   FaSearch,
   FaBookOpen,
   FaArrowRight,
-  FaFeatherAlt,
+  FaPen,
 } from "react-icons/fa";
 
 import BookCard from "../../components/BookCard/BookCard";
@@ -18,11 +18,14 @@ import book13 from "../../assets/book13.png";
 
 import "./Books.css";
 
+// Curated-collection hero: one large focal cover front-left with a
+// staircase of supporting covers rising to the right. Fixed-pixel
+// positions on a scaled stage keep the spacing intentional.
 const FLOATING_BOOKS = [
-  { src: book13, className: "fl-1", rotation: 5 },
+  { src: book13, className: "fl-1", rotation: -2 },
   { src: book5, className: "fl-2", rotation: -4 },
   { src: book9, className: "fl-3", rotation: 3 },
-  { src: book1, className: "fl-4", rotation: -3 },
+  { src: book1, className: "fl-4", rotation: 5 },
 ];
 
 const BADGES = ["Editor's Choice", "Best Seller", "New Release"];
@@ -195,9 +198,6 @@ export default function Books() {
         <div className="hero-inner">
           <div className="hero-copy">
             <motion.div variants={staggerWrap} initial="hidden" animate="visible">
-              <motion.span variants={fadeUp} className="hero-badge">
-                <FaBookOpen /> Our Collection
-              </motion.span>
               <motion.h1 variants={fadeUp} custom={1}>
                 Discover Stories
                 <br />
@@ -215,29 +215,31 @@ export default function Books() {
                   Browse Collection <FaArrowRight className="arrow-ico" />
                 </button>
                 <button className="btn-outline" onClick={() => scrollToSection("store-cta")}>
-                  <FaFeatherAlt /> Become an Author
+                  <FaPen /> Become an Author
                 </button>
               </motion.div>
             </motion.div>
           </div>
 
           <div className="hero-visual" aria-hidden="true">
-            <motion.div
-              className="book-stack"
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
-            >
-              {FLOATING_BOOKS.map((b) => (
-                <div className={`floating-book ${b.className}`} key={b.className}>
-                  <img
-                    src={b.src}
-                    alt=""
-                    loading="lazy"
-                    style={{ rotate: b.rotation }}
-                  />
-                </div>
-              ))}
-            </motion.div>
+            <div className="store-stage">
+              <motion.div
+                className="book-stack"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
+              >
+                {FLOATING_BOOKS.map((b) => (
+                  <div className={`floating-book ${b.className}`} key={b.className}>
+                    <img
+                      src={b.src}
+                      alt=""
+                      loading="lazy"
+                      style={{ rotate: b.rotation }}
+                    />
+                  </div>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -252,7 +254,6 @@ export default function Books() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">HAND PICKED</span>
             <h2>Featured Books</h2>
             <p>Our editors' favourite reads of the season.</p>
@@ -294,7 +295,6 @@ export default function Books() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="gold-label">FULL LIBRARY</span>
             <h2>Browse Our Collection</h2>
             <p>Find your next favourite read.</p>
@@ -409,7 +409,7 @@ export default function Books() {
                 Contact Us <FaArrowRight className="arrow-ico" />
               </button>
               <Link to="/authors" className="btn-outline">
-                <FaFeatherAlt /> Publish Your Book
+                <FaPen /> Publish Your Book
               </Link>
             </div>
           </motion.div>

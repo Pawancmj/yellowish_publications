@@ -25,15 +25,6 @@
   margin-bottom: 2.5rem;
 }
 
-.store-page .accent-line {
-  display: block;
-  width: 56px;
-  height: 4px;
-  border-radius: 4px;
-  background: #e63946;
-  margin: 0 auto 1.1rem;
-}
-
 .store-page .gold-label {
   display: block;
   text-align: center;
@@ -255,7 +246,7 @@
 }
 
 .store-hero .hero-copy h1 .accent {
-  color: #e63946;
+  color: #d9a441;
 }
 
 .store-hero .hero-copy p {
@@ -273,10 +264,23 @@
   flex-wrap: wrap;
 }
 
-/* Hero book stack */
+/* Hero book collection — fixed 570x440 stage, scaled responsively
+   (same pattern as the Home hero stage) */
 .store-hero .hero-visual {
   position: relative;
-  height: 380px;
+  height: 396px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.store-stage {
+  position: relative;
+  width: 570px;
+  height: 440px;
+  flex-shrink: 0;
+  transform: scale(0.9);
+  transform-origin: center;
 }
 
 .store-hero .book-stack {
@@ -300,31 +304,33 @@
   border-radius: 0.9rem;
 }
 
+/* Focal cover — large, front-left anchor */
 .floating-book.fl-1 {
-  width: 150px;
-  right: 10%;
-  top: 6%;
+  width: 200px;
+  left: 24px;
+  top: 86px;
   z-index: 3;
 }
 
+/* Supporting covers — staircase rising to the right */
 .floating-book.fl-2 {
-  width: 128px;
-  left: 8%;
-  top: 16%;
+  width: 124px;
+  left: 300px;
+  top: 246px;
   z-index: 2;
 }
 
 .floating-book.fl-3 {
-  width: 158px;
-  left: 16%;
-  bottom: 6%;
-  z-index: 1;
+  width: 142px;
+  left: 268px;
+  top: 18px;
+  z-index: 2;
 }
 
 .floating-book.fl-4 {
-  width: 120px;
-  right: 22%;
-  bottom: 12%;
+  width: 112px;
+  left: 450px;
+  top: 252px;
   z-index: 2;
 }
 
@@ -602,6 +608,17 @@
 /* ============================================================
    Responsive
    ============================================================ */
+/* Store stage scales down as the viewport narrows (Home-hero pattern) */
+@media (max-width: 1180px) {
+  .store-stage {
+    transform: scale(0.75);
+  }
+
+  .store-hero .hero-visual {
+    height: 330px;
+  }
+}
+
 @media (max-width: 1024px) {
   .store-hero .hero-inner {
     grid-template-columns: 1fr;
@@ -618,9 +635,14 @@
   }
 
   .store-hero .hero-visual {
-    max-width: 420px;
+    max-width: 480px;
     width: 100%;
     margin: 0 auto;
+    height: 352px;
+  }
+
+  .store-stage {
+    transform: scale(0.8);
   }
 
   .filter-bar {
@@ -640,6 +662,14 @@
   .store-hero .hero-inner {
     padding: 56px 1.5rem 64px;
     gap: 2.5rem;
+  }
+
+  .store-stage {
+    transform: scale(0.62);
+  }
+
+  .store-hero .hero-visual {
+    height: 273px;
   }
 
   .filter-bar {
@@ -671,8 +701,21 @@
   }
 
   .store-hero .hero-visual {
-    height: 300px;
-    transform: scale(0.85);
+    height: 220px;
+  }
+
+  .store-stage {
+    transform: scale(0.5);
+  }
+}
+
+@media (max-width: 400px) {
+  .store-stage {
+    transform: scale(0.45);
+  }
+
+  .store-hero .hero-visual {
+    height: 198px;
   }
 }
 

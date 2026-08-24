@@ -4,21 +4,14 @@
             coral #FF8FA3/#E86E86, gold #FFC94A, ink #3A2E22.
    ============================================================ */
 .home-page {
-  /* Home-Page-only visual scale correction: make the 100% browser-zoom
-     appearance match the previous 90% browser-zoom appearance.
-     `zoom: 0.9` uniformly scales the whole Home page (sections, Hero,
-     cards, typography, spacing) — the faithful equivalent of browser
-     zoom, re-rendering layout (no blur, no transform gaps). Width is
-     over-compensated to 100/0.9 so full-bleed section backgrounds still
-     span edge-to-edge after scaling. Strictly scoped to the Home page
-     root; other pages and shared components are untouched.
-     The 111.11% layout box is deliberately wider than the viewport
-     (rendered back to exactly 100vw after the 0.9 zoom), so it is
-     contained horizontally by `main` (overflow-x: hidden in App.jsx)
-     rather than pushing the page's scrollable width past the viewport.
-     The overflow-x below clips the decorative overhang shapes. */
+  /* Home-page-only visual scale correction. The widened layout box is
+     centered around the viewport before `zoom` is applied, keeping every
+     section's inner container visually centered instead of clipped from
+     the right edge. */
   zoom: 0.9;
   width: 111.11%;
+  margin-left: -5.555%;
+  margin-right: -5.555%;
   overflow-x: hidden;
   font-family: "DM Sans", "Inter", system-ui, sans-serif;
   color: #6e596b;
@@ -35,10 +28,12 @@
   .home-page {
     zoom: 1;
     width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
-.container {
+.home-page .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -83,20 +78,7 @@
   width: 100%;
 }
 
-/* ---------------- Section 3: Banner ---------------- */
-.banner-strip {
-  width: 100%;
-}
-
-.banner-image {
-  width: 100%;
-  height: 340px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* ---------------- Section 4: Features ---------------- */
+/* ---------------- Section 3: Features ---------------- */
 .features-section {
   background: #fff;
 }
@@ -128,8 +110,8 @@
   width: 60px;
   height: 60px;
   border-radius: 1rem;
-  background: #FFE9EC;
-  color: #E86E86;
+  background: #fff1cc;
+  color: #d9a441;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -287,15 +269,6 @@
 .section-head {
   text-align: center;
   margin-bottom: 1.5rem;
-}
-
-.accent-line {
-  display: block;
-  width: 56px;
-  height: 4px;
-  border-radius: 4px;
-  background: #E86E86;
-  margin: 0 auto 1rem;
 }
 
 .section-head h2 {
@@ -1124,10 +1097,6 @@
 }
 
 @media (max-width: 768px) {
-  .banner-image {
-    height: 240px;
-  }
-
   .features-grid {
     grid-template-columns: 1fr;
   }

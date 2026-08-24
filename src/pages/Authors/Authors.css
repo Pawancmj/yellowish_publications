@@ -25,15 +25,6 @@
   margin-bottom: 3rem;
 }
 
-.authors-page .accent-line {
-  display: block;
-  width: 56px;
-  height: 4px;
-  border-radius: 4px;
-  background: #e63946;
-  margin: 0 auto 1.1rem;
-}
-
 .authors-page .gold-label {
   display: block;
   text-align: center;
@@ -236,7 +227,7 @@
 }
 
 .hero-copy h1 .accent {
-  color: #e63946;
+  color: #d9a441;
 }
 
 .hero-copy p {
@@ -330,41 +321,6 @@
   right: 18%;
   bottom: 42px;
   z-index: 2;
-}
-
-.hero-card-float {
-  position: absolute;
-  right: 4%;
-  top: 34%;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.8rem 1.1rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 14px 36px rgba(18, 58, 92, 0.18);
-  backdrop-filter: blur(6px);
-  z-index: 4;
-  animation: heroFloat 5s ease-in-out infinite;
-}
-
-.hero-card-float .card-float-ico {
-  color: #d9a441;
-  font-size: 1.4rem;
-}
-
-.hero-card-float strong {
-  display: block;
-  color: #123a5c;
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.1;
-}
-
-.hero-card-float span {
-  display: block;
-  color: #9a8b8c;
-  font-size: 0.72rem;
 }
 
 /* ---------------- Featured Authors ---------------- */

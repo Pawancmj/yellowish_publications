@@ -10,23 +10,18 @@ import {
   FaPaperPlane,
   FaBookOpen,
   FaArrowRight,
-  FaFeatherAlt,
   FaPen,
   FaLightbulb,
   FaHandshake,
   FaGlobe,
   FaChevronDown,
-  FaCommentDots,
-  FaEnvelopeOpenText,
   FaCheckCircle,
   FaSpinner,
   FaPaperclip,
 } from "react-icons/fa";
 
 import book1 from "../../assets/book1.png";
-import book5 from "../../assets/book5.png";
 import book9 from "../../assets/book9.png";
-import book13 from "../../assets/book13.png";
 
 import "./Contact.css";
 
@@ -242,9 +237,6 @@ export default function Contact() {
         <div className="contact-hero-inner">
           <div className="contact-hero-copy">
             <motion.div variants={staggerWrap} initial="hidden" animate="visible">
-              <motion.span variants={fadeUp} className="contact-hero-badge">
-                <FaEnvelope /> Contact Yellowish Publication
-              </motion.span>
               <motion.h1 variants={fadeUp} custom={1}>
                 Let's Start Your
                 <br />
@@ -272,55 +264,31 @@ export default function Contact() {
           </div>
 
           <div className="contact-hero-visual" aria-hidden="true">
-            <motion.div
-              className="contact-floating-stage"
-              animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
-            >
-              <span className="pg-glow pg-glow-pink" />
-              <span className="pg-glow pg-glow-cream" />
-              <span className="pg-glow pg-glow-white" />
+            <div className="contact-stage">
+              <motion.div
+                className="contact-floating-stage"
+                animate={{ y: [0, -5, 0] }}
+                transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
+              >
+                <span className="pg-glow pg-glow-pink" />
+                <span className="pg-glow pg-glow-cream" />
+                <span className="pg-glow pg-glow-white" />
 
-              <div className="pbook pbook-back-left">
-                <div className="pbook-inner">
-                  <img src={book9} alt="" loading="lazy" />
+                {/* Focal book */}
+                <div className="pbook pbook-main">
+                  <div className="pbook-glow" />
+                  <div className="pbook-inner">
+                    <img src={book1} alt="" loading="lazy" />
+                  </div>
                 </div>
-              </div>
-              <div className="pbook pbook-back-right">
-                <div className="pbook-inner">
-                  <img src={book5} alt="" loading="lazy" />
+                {/* Single supporting book */}
+                <div className="pbook pbook-accent">
+                  <div className="pbook-inner">
+                    <img src={book9} alt="" loading="lazy" />
+                  </div>
                 </div>
-              </div>
-              <div className="pbook pbook-main">
-                <div className="pbook-glow" />
-                <div className="pbook-inner">
-                  <img src={book1} alt="" loading="lazy" />
-                </div>
-              </div>
-              <div className="pbook pbook-top">
-                <div className="pbook-inner">
-                  <img src={book13} alt="" loading="lazy" />
-                </div>
-              </div>
-              <div className="pbook pbook-bottom">
-                <div className="pbook-inner">
-                  <img src={book13} alt="" loading="lazy" />
-                </div>
-              </div>
-
-              <div className="pg-icon pg-icon-chat">
-                <FaCommentDots />
-              </div>
-              <div className="pg-icon pg-icon-book">
-                <FaBookOpen />
-              </div>
-              <div className="pg-icon pg-icon-pen">
-                <FaPen />
-              </div>
-              <div className="pg-icon pg-icon-env">
-                <FaEnvelopeOpenText />
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -335,7 +303,6 @@ export default function Contact() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="contact-gold-label">CONTACT INFORMATION</span>
             <h2>Get In Touch</h2>
             <p>Reach us directly through any of these channels.</p>
@@ -521,7 +488,6 @@ export default function Contact() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="contact-gold-label">WHY CONTACT US</span>
             <h2>What You Get When You Reach Out</h2>
             <p>Real people, honest advice, and a team that cares about your book.</p>
@@ -561,7 +527,6 @@ export default function Contact() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="contact-gold-label">FIND US</span>
             <h2>Our Location</h2>
             <p>Visit our head office in Ghaziabad, Uttar Pradesh.</p>
@@ -598,7 +563,6 @@ export default function Contact() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="accent-line" />
             <span className="contact-gold-label">FAQ</span>
             <h2>Frequently Asked Questions</h2>
             <p>Quick answers to the questions we hear most often.</p>
@@ -659,7 +623,7 @@ export default function Contact() {
                 className="btn-gold"
                 onClick={(e) => handleNavClick(e, "/authors")}
               >
-                Publish Your Book <FaFeatherAlt />
+                Publish Your Book <FaPen />
               </button>
               <button
                 className="contact-btn-outline"
