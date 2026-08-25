@@ -1,8 +1,8 @@
 ﻿/* ============================================================
-   Contact Us â€” Yellowish Publication
+   Contact Us — Yellowish Publication
    Matches the Homepage design language exactly.
-   Palette: pink #fbe4e6/#f8c8cf, cream #fff9f8/#FFFDFC,
-            navy #123a5c, gold #d9a441, red #e63946.
+   Palette: cream #fff9f8/#FFFDFC, navy #123a5c, gold #d9a441/#f3b51b.
+   Pink/red accents removed to match homepage's gold+navy+cream mood.
    ============================================================ */
 .contact-page {
   width: 100%;
@@ -65,7 +65,7 @@
   gap: 0.55rem;
   padding: 0.85rem 1.8rem;
   border-radius: 999px;
-  border: 2px solid #f0dedf;
+  border: 2px solid #fffaf4;
   background: #fff;
   color: #123a5c;
   font-weight: 600;
@@ -89,7 +89,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #fff9f8;
+  background: #fffaf4;
 }
 
 .contact-hero-bg {
@@ -105,7 +105,7 @@
   right: -160px;
   width: 650px;
   height: 520px;
-  background: #f8c8cf;
+  background: #f3b51b;
   border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%;
   overflow: hidden;
   animation: contactFloat 18s ease-in-out infinite;
@@ -120,8 +120,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(248, 140, 150, 0.45) 0%,
-    rgba(248, 170, 180, 0.22) 40%,
+    rgba(217, 164, 65, 0.45) 0%,
+    rgba(217, 164, 65, 0.22) 40%,
     transparent 80%
   );
   filter: blur(80px);
@@ -133,7 +133,7 @@
   bottom: -30px;
   width: 420px;
   height: 80px;
-  background: #fce8e2;
+  background: #fff1cc;
   border-radius: 70% 30% 45% 55% / 50% 50% 40% 60%;
   animation: contactFloat 18s ease-in-out infinite;
 }
@@ -149,7 +149,7 @@
   top: 24px;
   width: 52px;
   height: 52px;
-  background: #f9d6da;
+  background: #fdf1d9;
   opacity: 0.65;
 }
 
@@ -158,7 +158,7 @@
   top: 20px;
   width: 90px;
   height: 38px;
-  background: #fbe5e7;
+  background: #fff1cc;
   opacity: 0.5;
   border-radius: 9999px;
 }
@@ -168,7 +168,7 @@
   top: 190px;
   width: 120px;
   height: 52px;
-  background: #fad8dc;
+  background: #fdf1d9;
   opacity: 0.55;
   border-radius: 9999px;
 }
@@ -287,7 +287,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(248, 200, 207, 0.85) 0%, rgba(248, 200, 207, 0) 70%);
+  background: radial-gradient(circle, rgba(217, 164, 65, 0.35) 0%, rgba(217, 164, 65, 0) 70%);
   filter: blur(6px);
 }
 
@@ -353,8 +353,8 @@
   border-radius: 50%;
   background: radial-gradient(
     ellipse at center,
-    rgba(230, 57, 70, 0.32),
-    rgba(217, 164, 65, 0.18) 45%,
+    rgba(217, 164, 65, 0.32),
+    rgba(18, 58, 92, 0.14) 45%,
     rgba(255, 255, 255, 0) 72%
   );
   filter: blur(14px);
@@ -404,7 +404,7 @@
   text-align: center;
   padding: 2.25rem 1.5rem;
   background: rgba(255, 255, 255, 0.75);
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.25rem;
   backdrop-filter: blur(8px);
   box-shadow: 0 10px 28px rgba(18, 58, 92, 0.08);
@@ -456,7 +456,7 @@
    CONTACT FORM
    ============================================================ */
 .contact-form-section {
-  background: #fbe4e6;
+  background: #fffaf4;
 }
 
 .contact-form-wrap {
@@ -545,7 +545,7 @@
 .form-field textarea {
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 1.5px solid #eee0e1;
+  border: 1.5px solid #fffaf4;
   border-radius: 0.9rem;
   font-size: 0.95rem;
   font-family: inherit;
@@ -567,9 +567,10 @@
   cursor: pointer;
 }
 
+/* Validation-state color, kept for clear error signalling */
 .field-error {
   font-size: 0.78rem;
-  color: #e63946;
+  color: #c0392b;
   font-weight: 600;
 }
 
@@ -609,7 +610,7 @@
 
 .why-card {
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.25rem;
   padding: 2.25rem 1.6rem;
   text-align: center;
@@ -661,13 +662,13 @@
    MAP
    ============================================================ */
 .contact-map-section {
-  background: #fbe4e6;
+  background: #fffaf4;
 }
 
 .map-wrap {
   border-radius: 1.5rem;
   overflow: hidden;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   box-shadow: 0 20px 50px rgba(18, 58, 92, 0.16);
 }
 
@@ -695,7 +696,7 @@
 
 .faq-item {
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.1rem;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(18, 58, 92, 0.06);
@@ -763,7 +764,7 @@
    ============================================================ */
 .contact-cta {
   position: relative;
-  background: #fff9f8;
+  background: #fffaf4;
   overflow: hidden;
 }
 
@@ -786,7 +787,7 @@
 .ccta-blob-left-fill {
   position: absolute;
   inset: 0;
-  background: #f7b8c5;
+  background: #f3b51b;
   border-radius: 55% 45% 60% 40% / 45% 55% 35% 65%;
 }
 
@@ -801,7 +802,7 @@
 .ccta-blob-right-fill {
   position: absolute;
   inset: 0;
-  background: #f8d5da;
+  background: #fdf1d9;
   opacity: 0.55;
   filter: blur(8px);
   border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
@@ -829,7 +830,7 @@
 .contact-cta-copy p {
   font-size: 1.05rem;
   line-height: 1.65;
-  color: #6b4a4c;
+  color: #6b5d5e;
   margin: 0 auto 2rem;
   max-width: 460px;
 }
@@ -1083,7 +1084,7 @@
 }
 
 /* ============================================================
-   Mobile (max-width: 767px): card sections â†’ horizontal
+   Mobile (max-width: 767px): card sections → horizontal
    swipeable carousels. Matches the Homepage mobile card behavior.
    Desktop & tablet grids are untouched.
    ============================================================ */

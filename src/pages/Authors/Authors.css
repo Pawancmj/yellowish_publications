@@ -1,8 +1,8 @@
 ﻿/* ============================================================
-   Authors Page â€” Yellowish Publication
+   Authors Page — Yellowish Publication
    Matches the Homepage design language exactly.
-   Palette: pink #fbe4e6/#f8c8cf, cream #fff9f8/#FFFDFC,
-            navy #123a5c, gold #d9a441, red #e63946.
+   Palette: cream #fff9f8/#FFFDFC, navy #123a5c, gold #d9a441/#f3b51b.
+   Pink/red accents removed to match homepage's gold+navy+cream mood.
    ============================================================ */
 .authors-page {
   width: 100%;
@@ -93,7 +93,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #fff9f8;
+  background: #fffaf4;
 }
 
 .authors-hero .hero-bg {
@@ -109,7 +109,7 @@
   right: -160px;
   width: 650px;
   height: 520px;
-  background: #f8c8cf;
+  background: #f3b51b;
   border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%;
   overflow: hidden;
   animation: heroFloat 18s ease-in-out infinite;
@@ -124,8 +124,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(248, 140, 150, 0.45) 0%,
-    rgba(248, 170, 180, 0.22) 40%,
+    rgba(217, 164, 65, 0.45) 0%,
+    rgba(217, 164, 65, 0.22) 40%,
     transparent 80%
   );
   filter: blur(80px);
@@ -137,7 +137,7 @@
   bottom: -30px;
   width: 420px;
   height: 80px;
-  background: #fce8e2;
+  background: #fff1cc;
   border-radius: 70% 30% 45% 55% / 50% 50% 40% 60%;
   animation: heroFloat 18s ease-in-out infinite;
 }
@@ -153,7 +153,7 @@
   top: 24px;
   width: 52px;
   height: 52px;
-  background: #f9d6da;
+  background: #fdf1d9;
   opacity: 0.65;
 }
 
@@ -162,7 +162,7 @@
   top: 20px;
   width: 90px;
   height: 38px;
-  background: #fbe5e7;
+  background: #fff1cc;
   opacity: 0.5;
   border-radius: 9999px;
 }
@@ -172,7 +172,7 @@
   top: 180px;
   width: 120px;
   height: 52px;
-  background: #fad8dc;
+  background: #fdf1d9;
   opacity: 0.55;
   border-radius: 9999px;
 }
@@ -251,7 +251,7 @@
   gap: 0.55rem;
   padding: 0.85rem 1.8rem;
   border-radius: 999px;
-  border: 2px solid #f0dedf;
+  border: 2px solid #fffaf4;
   background: #fff;
   color: #123a5c;
   font-weight: 600;
@@ -268,7 +268,7 @@
   transform: translateY(-2px);
 }
 
-/* Hero visual â€” floating portraits */
+/* Hero visual — floating portraits */
 .hero-visual {
   position: relative;
   height: 380px;
@@ -341,7 +341,7 @@
   display: flex;
   flex-direction: column;
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.5rem;
   padding: 2.2rem 2.2rem 1.6rem;
   box-shadow: 0 12px 32px rgba(18, 58, 92, 0.1);
@@ -370,7 +370,7 @@
   background: radial-gradient(
     circle at 30% 30%,
     rgba(217, 164, 65, 0.18),
-    rgba(230, 57, 70, 0.12) 60%,
+    rgba(18, 58, 92, 0.1) 60%,
     transparent 80%
   );
 }
@@ -381,7 +381,7 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #fbe4e6;
+  border: 4px solid #fff1cc;
   transition: transform 0.4s ease;
 }
 
@@ -423,8 +423,8 @@
   display: inline-block;
   padding: 0.3rem 0.85rem;
   border-radius: 999px;
-  background: #fbe4e6;
-  color: #c0392b;
+  background: #fff1cc;
+  color: #8a5a1f;
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0;
@@ -457,7 +457,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 1.5px solid #f0dedf;
+  border: 1.5px solid #fffaf4;
   background: #fff;
   color: #123a5c;
   display: flex;
@@ -504,7 +504,7 @@
 
 /* ---------------- All Authors ---------------- */
 .all-authors-section {
-  background: #fbe4e6;
+  background: #fffaf4;
 }
 
 .all-authors-section .container {
@@ -518,7 +518,7 @@
   gap: 1rem;
   align-items: end;
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.25rem;
   padding: 1.1rem;
   box-shadow: 0 10px 28px rgba(18, 58, 92, 0.08);
@@ -540,13 +540,13 @@
 .filter-search input {
   width: 100%;
   padding: 0.85rem 1rem 0.85rem 2.6rem;
-  border: 1.5px solid #eee0e1;
+  border: 1.5px solid #fffaf4;
   border-radius: 0.9rem;
   font-size: 0.95rem;
   font-family: inherit;
   color: #333;
   outline: none;
-  background: #fffafb;
+  background: #fffaf4;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -567,13 +567,13 @@
 .filter-select select {
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 1.5px solid #eee0e1;
+  border: 1.5px solid #fffaf4;
   border-radius: 0.9rem;
   font-size: 0.95rem;
   font-family: inherit;
   color: #333;
   outline: none;
-  background: #fffafb;
+  background: #fffaf4;
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -595,7 +595,7 @@
   display: flex;
   flex-direction: column;
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: 0 10px 28px rgba(18, 58, 92, 0.08);
@@ -613,7 +613,7 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #fbe4e6;
+  background: #fff1cc;
 }
 
 .author-img img {
@@ -717,7 +717,7 @@
   text-align: center;
   padding: 3.5rem 1rem;
   background: #fff;
-  border: 1px dashed #f0dedf;
+  border: 1px dashed #fffaf4;
   border-radius: 1.5rem;
   color: #9a8b8c;
 }
@@ -736,7 +736,7 @@
 /* ---------------- CTA Section ---------------- */
 .cta-section {
   position: relative;
-  background: #fff9f8;
+  background: #fffaf4;
   overflow: hidden;
 }
 
@@ -753,7 +753,7 @@
   top: -120px;
   width: 420px;
   height: 420px;
-  background: #f7b8c5;
+  background: #f3b51b;
   border-radius: 55% 45% 60% 40% / 45% 55% 35% 65%;
   overflow: hidden;
 }
@@ -783,7 +783,7 @@
 .cta-blob-right-fill {
   position: absolute;
   inset: 0;
-  background: #f8d5da;
+  background: #fdf1d9;
   opacity: 0.55;
   filter: blur(8px);
   border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
@@ -827,7 +827,7 @@
 .cta-text p {
   font-size: 1.05rem;
   line-height: 1.65;
-  color: #6b4a4c;
+  color: #6b5d5e;
   max-width: 440px;
   margin: 0 auto;
 }
@@ -853,13 +853,13 @@
 .cta-card textarea {
   width: 100%;
   padding: 0.9rem 1rem;
-  border: 1.5px solid #eee0e1;
+  border: 1.5px solid #fffaf4;
   border-radius: 0.9rem;
   font-size: 0.95rem;
   font-family: inherit;
   color: #333;
   outline: none;
-  background: #fffafb;
+  background: #fffaf4;
   resize: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -877,7 +877,7 @@
   gap: 0.9rem;
 }
 
-/* Popup */
+/* Popup — functional status colors kept as-is (not part of the theme) */
 .popup-message {
   margin-top: 1.1rem;
   padding: 0.8rem 1rem;
@@ -895,7 +895,7 @@
 }
 
 .popup-message.error {
-  background: #fdecea;
+  background: #fffaf4;
   color: #d93025;
   border: 1px solid #d93025;
 }
