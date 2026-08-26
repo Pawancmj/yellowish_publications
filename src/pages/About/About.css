@@ -1,9 +1,9 @@
 ﻿/* ============================================================
-   About Us Page â€” Yellowish Publication
+   About Us Page — Yellowish Publication
    Design language matches Homepage / Authors / Contact / Blog.
-   Palette: cream #fff9f8, pink #fbe4e6/#f8c8cf, navy #123a5c,
-            gold #d9a441, red #e63946.
-   No transform:scale / zoom anywhere â€” everything is fluid.
+   Palette: cream #fff9f8, gold #d9a441 / #f3b51b, navy #123a5c.
+   Pink/red accents removed to match homepage's gold+navy+cream mood.
+   No transform:scale / zoom anywhere — everything is fluid.
    ============================================================ */
 
 .about-page {
@@ -96,7 +96,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #fff9f8;
+  background: #fffaf4;
   min-height: 560px;
   display: flex;
   align-items: center;
@@ -115,7 +115,7 @@
   right: -180px;
   width: 640px;
   height: 540px;
-  background: #f8c8cf;
+  background: #f3b51b;
   border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%;
   overflow: hidden;
   animation: aboutFloat 18s ease-in-out infinite;
@@ -130,8 +130,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(248, 140, 150, 0.45) 0%,
-    rgba(248, 170, 180, 0.22) 40%,
+    rgba(217, 164, 65, 0.45) 0%,
+    rgba(217, 164, 65, 0.22) 40%,
     transparent 80%
   );
   filter: blur(80px);
@@ -143,7 +143,7 @@
   bottom: -30px;
   width: 420px;
   height: 80px;
-  background: #fce8e2;
+  background: #fff1cc;
   border-radius: 70% 30% 45% 55% / 50% 50% 40% 60%;
   animation: aboutFloat 18s ease-in-out infinite;
 }
@@ -159,7 +159,7 @@
   top: 26px;
   width: 52px;
   height: 52px;
-  background: #f9d6da;
+  background: #fdf1d9;
   opacity: 0.65;
 }
 
@@ -168,7 +168,7 @@
   top: 22px;
   width: 90px;
   height: 38px;
-  background: #fbe5e7;
+  background: #fff1cc;
   opacity: 0.5;
   border-radius: 9999px;
 }
@@ -178,7 +178,7 @@
   top: 210px;
   width: 120px;
   height: 52px;
-  background: #fad8dc;
+  background: #fdf1d9;
   opacity: 0.55;
   border-radius: 9999px;
 }
@@ -262,7 +262,7 @@
   gap: 0.5rem;
   padding: 0.85rem 1.9rem;
   border-radius: 999px;
-  border: 2px solid #f0dedf;
+  border: 2px solid #fffaf4;
   background: #fff;
   color: #123a5c;
   font-weight: 600;
@@ -279,7 +279,7 @@
   transform: translateY(-2px);
 }
 
-/* Hero visual â€” ONE framed image with a small book accent */
+/* Hero visual — ONE framed image with a small book accent */
 .ah-visual {
   display: flex;
   justify-content: center;
@@ -302,7 +302,7 @@
   border-radius: 22px;
   border: 8px solid #fff;
   box-shadow: 0 30px 60px rgba(18, 58, 92, 0.2);
-  background: #fbe4e6;
+  background: #fff1cc;
 }
 
 /* ============================================================
@@ -326,7 +326,7 @@
   bottom: -160px;
   width: 420px;
   height: 420px;
-  background: #f9dbdd;
+  background: #fdf1d9;
   border-radius: 55% 45% 60% 40% / 45% 55% 35% 65%;
   opacity: 0.5;
 }
@@ -337,7 +337,7 @@
   top: -70px;
   width: 230px;
   height: 230px;
-  border: 2px solid #f0dedf;
+  border: 2px solid #fffaf4;
   border-radius: 50%;
 }
 
@@ -357,7 +357,7 @@
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 24px 60px rgba(18, 58, 92, 0.16);
-  background: #fbe4e6;
+  background: #fff1cc;
 }
 
 .story-frame img {
@@ -408,7 +408,7 @@
    MISSION & VISION
    ============================================================ */
 .about-mission {
-  background: #fbe4e6;
+  background: #fffaf4;
 }
 
 .mv-wrap {
@@ -424,7 +424,7 @@
   flex: 1 1 340px;
   max-width: 460px;
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.5rem;
   padding: 2rem 2rem 1.9rem;
   box-shadow: 0 12px 32px rgba(18, 58, 92, 0.08);
@@ -444,7 +444,7 @@
 }
 
 .mv-vision::before {
-  background: rgba(230, 57, 70, 0.07);
+  background: rgba(18, 58, 92, 0.06);
 }
 
 .mv-panel:hover {
@@ -507,7 +507,7 @@
 .service-card {
   position: relative;
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.25rem;
   padding: 1.75rem 1.5rem 1.6rem;
   box-shadow: 0 10px 26px rgba(18, 58, 92, 0.06);
@@ -527,7 +527,7 @@
   right: 1.25rem;
   font-size: 1.7rem;
   font-weight: 600;
-  color: #f3e3e4;
+  color: #f3e9d4;
   line-height: 1;
 }
 
@@ -563,7 +563,7 @@
    WHY AUTHORS CHOOSE US
    ============================================================ */
 .about-why {
-  background: #fff9f8;
+  background: #fffaf4;
 }
 
 .why-grid {
@@ -579,7 +579,7 @@
   flex-direction: column;
   border-radius: 1.25rem;
   padding: 1.8rem 1.8rem 1.7rem;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   box-shadow: 0 12px 32px rgba(18, 58, 92, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -591,7 +591,7 @@
 
 .why-card-pink {
   background: #fff;
-  border-left: 4px solid #f8a3b4;
+  border-left: 4px solid #123a5c;
 }
 
 .why-card-gold {
@@ -609,7 +609,7 @@
 .why-num {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #ead0d3;
+  color: #e8dcc4;
   line-height: 1;
 }
 
@@ -660,7 +660,7 @@
   left: 6%;
   right: 6%;
   height: 2px;
-  background: #f0dedf;
+  background: #fffaf4;
   z-index: 0;
 }
 
@@ -750,7 +750,7 @@
   height: 320px;
   left: -120px;
   top: -120px;
-  background: rgba(248, 200, 207, 0.12);
+  background: rgba(217, 164, 65, 0.12);
 }
 
 .stats-blob-b {
@@ -823,7 +823,7 @@
   text-align: center;
   text-decoration: none;
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.25rem;
   padding: 2rem 1.5rem 1.7rem;
   box-shadow: 0 12px 30px rgba(18, 58, 92, 0.08);
@@ -841,7 +841,7 @@
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 1rem;
-  border: 4px solid #fbe4e6;
+  border: 4px solid #fff1cc;
   box-shadow: 0 10px 24px rgba(18, 58, 92, 0.18);
 }
 
@@ -876,7 +876,7 @@
    AUTHOR QUOTE
    ============================================================ */
 .about-quote {
-  background: #fbe4e6;
+  background: #fffaf4;
 }
 
 .quote-wrap {
@@ -885,7 +885,7 @@
   margin: 0 auto;
   text-align: center;
   background: #fff;
-  border: 1px solid #f1e0e1;
+  border: 1px solid #fffaf4;
   border-radius: 1.75rem;
   padding: 3rem 2.5rem 2.6rem;
   box-shadow: 0 20px 50px rgba(18, 58, 92, 0.12);
@@ -898,8 +898,8 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: #fbe4e6;
-  color: #e63946;
+  background: #fff1cc;
+  color: #d9a441;
   font-size: 1.7rem;
   margin-bottom: 1.2rem;
 }
@@ -973,7 +973,7 @@
   height: 360px;
   left: -140px;
   bottom: -140px;
-  background: rgba(248, 200, 207, 0.12);
+  background: rgba(217, 164, 65, 0.12);
 }
 
 .final-blob-b {
@@ -1209,7 +1209,7 @@
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #f0dedf;
+    background: #fffaf4;
     z-index: 0;
   }
 
@@ -1330,7 +1330,7 @@
 }
 
 /* ============================================================
-   Mobile (max-width: 767px): card sections â†’ horizontal
+   Mobile (max-width: 767px): card sections → horizontal
    swipeable carousels. Matches the Homepage mobile card behavior.
    Desktop & tablet grids are untouched.
    ============================================================ */

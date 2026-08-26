@@ -1,8 +1,9 @@
 ﻿/* ============================================================
-   Homepage â€” Yellowish Publication
+   Homepage — Yellowish Publication
    Palette: warm cream #FFF6E9, soft pink #FFE9EC/#FFF0D9,
             coral #FF8FA3/#E86E86, gold #FFC94A, ink #3A2E22.
    ============================================================ */
+
 .home-page {
   /* Home-page-only visual scale correction. The widened layout box is
      centered around the viewport before `zoom` is applied, keeping every
@@ -18,12 +19,7 @@
 }
 
 /* Phones and tablets must NOT inherit the desktop zoom-compensation
-   hack. `zoom: 0.9; width: 111.11%` turns every mobile viewport into a
-   scaled-down desktop (a 390px phone lays out like a 433px desktop and
-   renders ~10% smaller, which is exactly the "squeezed desktop / cut on
-   the right" look). Below 1025px the page runs in real CSS pixels so
-   the mobile/tablet media queries work as intended. Desktop (>=1025px)
-   keeps the original zoomed appearance unchanged. */
+   hack. */
 @media (max-width: 1024px) {
   .home-page {
     zoom: 1;
@@ -47,7 +43,9 @@
   }
 }
 
+
 /* ---------------- Buttons ---------------- */
+
 .btn-gold {
   display: inline-flex;
   align-items: center;
@@ -78,69 +76,78 @@
   width: 100%;
 }
 
+
 /* ---------------- Section 3: Features ---------------- */
+
 .features-section {
-  background: #fff;
+  width: 100%;
+  background: #fffaf4;
+  padding: 45px 0;
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.75rem;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
 }
 
 .feature-card {
   display: flex;
-  align-items: flex-start;
-  gap: 1.25rem;
-  background: #fff;
-  border: 1px solid #FFE3E6;
-  border-radius: 1.25rem;
-  padding: 1.75rem;
-  box-shadow: 0 6px 18px rgba(120, 90, 40, 0.10);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 35px;
+  border-right: 1px solid #ddd6cc;
 }
 
-.feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(120, 90, 40, 0.14);
+.feature-card:last-child {
+  border-right: none;
 }
 
 .feature-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 1rem;
-  background: #fff1cc;
-  color: #d9a441;
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #fff0d9;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  flex-shrink: 0;
+
+  color: #10243e;
+}
+
+.feature-icon svg {
+  width: 34px;
+  height: 34px;
 }
 
 .feature-body h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #3A2E22;
-  margin: 0 0 0.4rem;
+  margin: 0 0 7px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #17243b;
 }
 
 .feature-body p {
-  font-size: 0.98rem;
-  line-height: 1.55;
-  color: #6e596b;
   margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
 }
-
 /* ---------------- Section 5: CTA / Lead Form ---------------- */
+
 .cta-section {
   position: relative;
-  background: #FFF6E9;
+  width: 100%;
+  min-height: 540px;
+  padding: 55px 0;
+  background: #fffaf4 !important;
   overflow: hidden;
+  color: #10294a;
 }
 
-/* Decorative blob + contour SVG (pure CSS + inline SVG, no images) */
+/* Decorations */
 .cta-decor {
   position: absolute;
   inset: 0;
@@ -148,120 +155,311 @@
   pointer-events: none;
 }
 
-/* Left blob â€” mostly outside the viewport, solid pastel */
-.cta-blob-left {
-  position: absolute;
-  left: -220px;
-  top: -120px;
-  width: 420px;
-  height: 420px;
-  background: #FF8FA3;
-  border-radius: 55% 45% 60% 40% / 45% 55% 35% 65%;
-  overflow: hidden;
-}
-
-.cta-svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.cta-svg path {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  opacity: 0.9;
-}
-
-/* Right blob â€” soft, blurred, one thin white line */
-.cta-blob-right {
-  position: absolute;
-  right: -110px;
-  top: -70px;
-  width: 260px;
-  height: 260px;
-}
-
-.cta-blob-right-fill {
-  position: absolute;
-  inset: 0;
-  background: #FFD9E0;
-  opacity: 0.55;
-  filter: blur(8px);
-  border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
-}
-
+.cta-blob-left,
+.cta-blob-right,
+.cta-blob-right-fill,
+.cta-svg,
 .cta-svg-right {
+  display: none !important;
+}
+
+/* Top-left dots */
+.cta-section::before {
+  content: "";
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 70px;
+  left: 48px;
+  width: 105px;
+  height: 115px;
+  background-image: radial-gradient(
+    circle,
+    #f3b51b 2px,
+    transparent 2.5px
+  );
+  background-size: 19px 19px;
+  opacity: 0.7;
+  z-index: 0;
 }
 
-.cta-svg-right path {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 1.5;
-  stroke-linecap: round;
+/* Bottom-left circles */
+.cta-section::after {
+  content: "";
+  position: absolute;
+  left: -105px;
+  bottom: -145px;
+  width: 330px;
+  height: 330px;
+  background: #f3aa08;
+  border-radius: 50%;
+  box-shadow: 82px -65px 0 0 #f8ead2;
+  z-index: 0;
 }
 
+/* Main layout */
 .cta-container {
+  position: relative;
+  z-index: 2;
+  width: min(1200px, 90%);
+  min-height: 420px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  gap: 70px;
   align-items: center;
+}
+
+/* Right dots */
+.cta-container::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  bottom: 8px;
+  width: 105px;
+  height: 115px;
+  background-image: radial-gradient(
+    circle,
+    #f3b51b 2px,
+    transparent 2.5px
+  );
+  background-size: 19px 19px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Left content */
+.cta-text {
   position: relative;
-  z-index: 1;
+  z-index: 3;
+  padding-left: 45px;
+}
+
+.cta-text::before {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 3px;
+  margin-bottom: 28px;
+  background: #e9a609;
+  border-radius: 5px;
 }
 
 .cta-text h2 {
-  font-size: 2.4rem;
+  font-size: 4rem !important;
+  line-height: 1.08;
   font-weight: 600;
-  color: #3A2E22;
-  margin: 0 0 1rem;
+  color: #12365b;
+  margin: 0 0 1.2rem;
+}
+
+.cta-text h2 span {
+  color: #e9a400;
 }
 
 .cta-text p {
-  font-size: 1.05rem;
+  margin: 0;
+  max-width: 520px;
+  color: #4f5054;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
+  font-size: 17px;
   line-height: 1.65;
-  color: #6e596b;
-  max-width: 480px;
 }
 
+/* Form card */
 .cta-card {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 535px;
+  margin-left: auto;
+  padding: 34px;
   background: #fff;
-  border-radius: 1.5rem;
-  padding: 2rem;
-  box-shadow: 0 20px 50px rgba(120, 90, 40, 0.14);
+  border-radius: 25px;
+  box-shadow: 0 18px 45px rgba(40, 45, 55, 0.1);
 }
 
 .cta-card form {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 15px;
 }
 
 .cta-card input,
 .cta-card select {
+  box-sizing: border-box;
   width: 100%;
-  padding: 0.9rem 1rem;
-  border: 1.5px solid #FFE3E6;
-  border-radius: 0.9rem;
-  font-size: 0.95rem;
-  font-family: inherit;
-  color: #6e596b;
+  height: 54px;
+  padding: 0 16px;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+  color: #444;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
+  font-size: 15px;
   outline: none;
-  background: #FFF6E9;
-  transition: border-color 0.3s ease;
+  transition: 0.2s ease;
+}
+
+.cta-card input::placeholder {
+  color: #777;
 }
 
 .cta-card input:focus,
 .cta-card select:focus {
-  border-color: #FFC94A;
+  border-color: #e9a609;
+  box-shadow: 0 0 0 3px rgba(233, 166, 9, 0.08);
 }
 
+/* Button */
+.cta-card button {
+  width: 100%;
+  height: 58px;
+  margin-top: 2px;
+  border: none;
+  border-radius: 12px;
+  background: #efa900;
+  color: #fff;
+  font-family: "DM Sans", "Inter", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(239, 169, 0, 0.2);
+  transition: 0.2s ease;
+}
+
+.cta-card button:hover {
+  background: #df9900;
+  transform: translateY(-2px);
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .cta-section {
+    padding: 55px 0;
+  }
+
+  .cta-container {
+    width: 90%;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    min-height: auto;
+  }
+
+  .cta-text {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .cta-text::before {
+    margin: 0 auto 22px;
+  }
+
+  .cta-text h2,
+  .cta-text p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-card {
+    margin: 0 auto;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .cta-section {
+    padding: 45px 0 60px;
+  }
+
+  .cta-container {
+    width: 90%;
+    gap: 30px;
+  }
+
+  .cta-text {
+    padding: 0 10px;
+  }
+
+  .cta-text h2 {
+    font-size: 40px;
+    letter-spacing: -1px;
+  }
+
+  .cta-text p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .cta-card {
+    padding: 25px;
+    border-radius: 20px;
+  }
+
+  .cta-card input,
+  .cta-card select {
+    height: 52px;
+  }
+
+  .cta-card button {
+    height: 54px;
+  }
+
+  .cta-section::before {
+    top: 30px;
+    left: 18px;
+    width: 70px;
+    height: 80px;
+    background-size: 14px 14px;
+  }
+
+  .cta-section::after {
+    left: -120px;
+    bottom: -150px;
+    width: 280px;
+    height: 280px;
+    box-shadow: 70px -55px 0 0 #f8ead2;
+  }
+
+  .cta-container::after {
+    right: -15px;
+    width: 65px;
+    height: 75px;
+    background-size: 14px 14px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .cta-container {
+    width: 92%;
+  }
+
+  .cta-text h2 {
+    font-size: 34px;
+  }
+
+  .cta-text p {
+    font-size: 14px;
+  }
+
+  .cta-card {
+    padding: 20px;
+  }
+
+  .cta-card input,
+  .cta-card select {
+    height: 49px;
+    padding: 0 13px;
+    font-size: 13px;
+  }
+
+  .cta-card button {
+    height: 51px;
+  }
+}
+
+
 /* ---------------- Section 6: Books Gallery ---------------- */
+
 .books-section {
   background: #fff;
 }
@@ -312,8 +510,6 @@
   box-shadow: 0 6px 16px rgba(255, 201, 74, 0.35);
 }
 
-/* Active tab underline â€” anchored to the button only,
-   never stretched across the container. */
 .tab.active::after {
   content: "";
   position: absolute;
@@ -362,7 +558,9 @@
   padding: 2rem 0;
 }
 
+
 /* ---------------- Section 7: Testimonials ---------------- */
+
 .testimonials-section {
   background: #E86E86;
 }
@@ -423,7 +621,9 @@
   color: #6e596b;
 }
 
+
 /* ---------------- Section 8: Stats Bar ---------------- */
+
 .stats-bar {
   background: #FFE9EC;
 }
@@ -446,10 +646,6 @@
   font-size: clamp(1.9rem, 3vw, 2.4rem);
   font-weight: 600;
   line-height: 1.1;
-  /* Rich amber — a darker warm gold that keeps the brand accent while
-     staying clearly readable on the soft pink #FFE9EC background
-     (~3.8:1 contrast, was ~1.3:1 at #FFC94A). Scoped under .stats-bar
-     so the About page's generic .stat-value rule cannot leak in here. */
   color: #A06E00;
   letter-spacing: 0;
 }
@@ -464,9 +660,15 @@
   text-shadow: none;
 }
 
+
 /* ---------------- Section 9: Pricing ---------------- */
+
 .pricing-section {
-  background: linear-gradient(180deg, #FFE9EC 0%, #FFF0D9 100%);
+  background: linear-gradient(
+    180deg,
+    #FFE9EC 0%,
+    #FFF0D9 100%
+  );
 }
 
 .pricing-head {
@@ -518,7 +720,11 @@
 }
 
 .pricing-card.featured .pricing-header {
-  background: linear-gradient(135deg, #FF8FA3, #E86E86);
+  background: linear-gradient(
+    135deg,
+    #FF8FA3,
+    #E86E86
+  );
 }
 
 .pricing-header h3 {
@@ -570,97 +776,257 @@
   width: 100%;
 }
 
+
 /* ---------------- Section 10: Distribution ---------------- */
+ 
+
 .distribution-section {
-  background: #fff;
+  width: 100%;
   overflow: hidden;
+  padding: 80px 0;
+  background: #fffaf4;
+}
+
+.distribution-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+.dist-heading-wrap {
+  text-align: center;
+  padding: 0 20px;
+  margin-bottom: 45px;
 }
 
 .dist-heading {
-  text-align: center;
-  font-size: clamp(1.7rem, 3.4vw, 2.1rem);
-  font-weight: 600;
-  color: #3A2E22;
-  margin: 0 0 2.5rem;
+  margin: 0;
+  color: #123a5c;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 1.15;
 }
 
-/* Premium multi-row logo marquee. Each row scrolls independently;
-   directions alternate and hover pauses only the hovered row. */
-.distribution-section .container {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+.dist-subheading {
+  margin: 12px auto 0;
+  max-width: 650px;
+  color: #6b7280;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
-.distribution-section .dist-heading {
-  margin-bottom: 1.25rem;
-}
+
+/* ---------- Full Width Marquee ---------- */
 
 .dist-marquee {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  width: 100%;
   overflow: hidden;
-  padding: 0.25rem 0;
+  position: relative;
 }
 
-.dist-row {
-  position: relative;
-  overflow: hidden;
-}
+
+/* ---------- Sliding Track ---------- */
 
 .dist-track {
   display: flex;
-  align-items: center;
   width: max-content;
-  animation: dist-scroll var(--dist-duration, 34s) linear infinite;
+  gap: 24px;
+  animation: distributionSlide 28s linear infinite;
   will-change: transform;
 }
 
-.dist-row-right .dist-track {
-  animation-direction: reverse;
+
+/* Pause when user hovers */
+
+.dist-marquee:hover .dist-track {
+  animation-play-state: paused;
 }
 
-.dist-track-half {
+
+/* ---------- Cards ---------- */
+
+.dist-card {
+  flex: 0 0 280px;
+  width: 280px;
+  min-height: 260px;
+
+  padding: 28px 24px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #ffffff;
+  border: 1px solid rgba(18, 58, 92, 0.10);
+  border-radius: 18px;
+
+  box-shadow: 0 8px 25px rgba(18, 58, 92, 0.08);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.dist-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 35px rgba(18, 58, 92, 0.14);
+}
+
+
+/* ---------- Logo ---------- */
+
+.dist-icon {
+  width: 85px;
+  height: 85px;
+
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding-right: 1rem;
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  border-radius: 16px;
+  background: #fffaf5;
 }
 
-@keyframes dist-scroll {
+.dist-icon img {
+  max-width: 68px;
+  max-height: 68px;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+}
+
+
+/* ---------- Name ---------- */
+
+.dist-name {
+  margin: 0 0 8px;
+
+  color: #123a5c;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+
+/* ---------- Description ---------- */
+
+.dist-desc {
+  margin: 0;
+
+  max-width: 220px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* ---------- Shopping Button ---------- */
+
+.dist-cart {
+  width: 38px;
+  height: 38px;
+
+  margin-top: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+  background: #d9a441;
+
+  border-radius: 50%;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.dist-cart:hover {
+  transform: scale(1.1);
+  background: #123a5c;
+}
+
+
+/* ============================================================
+   INFINITE SLIDE
+   ============================================================ */
+
+@keyframes distributionSlide {
   from {
     transform: translateX(0);
   }
+
   to {
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% - 12px));
   }
 }
 
-.dist-marquee .dist-logo {
-  flex: 0 0 auto;
-  width: 180px;
-}
 
-/* Compact card sizing scoped to the Distribution section */
-.distribution-section .dist-logo {
-  padding: 0.8rem 0.75rem;
-  min-height: 100px;
-  gap: 0.5rem;
-}
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
-.distribution-section .dist-logo img {
-  height: 44px;
-}
+@media (max-width: 768px) {
+  .distribution-section {
+    padding: 60px 0;
+  }
 
-.distribution-section .dist-name {
-  font-size: 0.78rem;
-}
+  .dist-heading-wrap {
+    margin-bottom: 32px;
+  }
 
-@media (hover: hover) {
-  .dist-row:hover .dist-track {
-    animation-play-state: paused;
+  .dist-track {
+    gap: 16px;
+    animation-duration: 24s;
+  }
+
+  .dist-card {
+    flex-basis: 240px;
+    width: 240px;
+    min-height: 235px;
+    padding: 22px 18px;
+  }
+
+  .dist-icon {
+    width: 72px;
+    height: 72px;
+  }
+
+  .dist-icon img {
+    max-width: 58px;
+    max-height: 58px;
+  }
+
+  .dist-name {
+    font-size: 18px;
   }
 }
+
+@media (max-width: 480px) {
+  .dist-track {
+    animation-duration: 20s;
+  }
+
+  .dist-card {
+    flex-basis: 220px;
+    width: 220px;
+  }
+}
+
+
+/* Respect reduced-motion preference */
 
 @media (prefers-reduced-motion: reduce) {
   .dist-track {
@@ -668,91 +1034,8 @@
   }
 }
 
-/* Tablet — keep the auto-scrolling marquee, slightly smaller cards */
-@media (max-width: 1024px) {
-  .dist-marquee .dist-logo {
-    width: 155px;
-    min-height: 92px;
-  }
-}
-
-/* Mobile — no auto-animation; each row is an independent swipeable strip */
-@media (max-width: 767px) {
-  .dist-marquee {
-    gap: 0.7rem;
-  }
-
-  .dist-row {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    overscroll-behavior-x: contain;
-  }
-
-  .dist-row::-webkit-scrollbar {
-    display: none;
-  }
-
-  .dist-track {
-    animation: none;
-  }
-
-  .dist-track-half:last-child {
-    display: none;
-  }
-
-  .dist-marquee .dist-logo {
-    width: clamp(130px, 38vw, 150px);
-    min-height: 100px;
-    padding: 0.75rem 0.6rem;
-  }
-
-  .dist-marquee .dist-logo img {
-    height: 40px;
-  }
-}
-
-.dist-logo {
-  background: #FFF6E9;
-  border: 1px solid #FFE3E6;
-  border-radius: 1rem;
-  padding: 1.5rem 1.25rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.9rem;
-  min-height: 150px;
-  box-shadow: 0 8px 32px rgba(120, 90, 40, 0.10);
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.dist-logo img {
-  width: 100%;
-  height: 62px;
-  object-fit: contain;
-  display: block;
-}
-
-.dist-name {
-  font-family: "DM Sans", "Inter", system-ui, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #3A2E22;
-  letter-spacing: 0;
-}
-
-.dist-logo:hover {
-  transform: translateY(-2px);
-  border-color: #FFC94A;
-  box-shadow: 0 14px 34px rgba(120, 90, 40, 0.15);
-}
-
 /* ---------------- Section 11: Review Highlights ---------------- */
+
 .review-highlights {
   background: #FFE9EC;
 }
@@ -829,7 +1112,9 @@
   font-size: 0.95rem;
 }
 
+
 /* ---------------- Section 12: Video / Gallery Grid ---------------- */
+
 .video-section {
   background: #3A2E22;
 }
@@ -870,7 +1155,12 @@
 .tile-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 201, 74, 0.75), rgba(232, 110, 134, 0.55));
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 201, 74, 0.75),
+      rgba(232, 110, 134, 0.55)
+    );
   opacity: 0.75;
   transition: opacity 0.3s ease;
 }
@@ -903,7 +1193,9 @@
   transform: translate(-50%, -50%) scale(1.1);
 }
 
+
 /* ---------------- Section 13: Google Reviews ---------------- */
+
 .google-reviews-section {
   background: #FFE9EC;
 }
@@ -1047,45 +1339,34 @@
   color: #4285f4;
 }
 
+
 /* ============================================================
-   Home-only compactness overrides (scoped strictly to the Home page)
+   Home-only compactness overrides
    ============================================================ */
-/* Books Published + Pricing sections: slightly tighter vertical rhythm. */
+
+/* Books Published + Pricing sections */
 .books-section .container,
 .pricing-section .container {
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
 }
 
-/* Hero — slightly shorter: tighter content spacing on all sizes, and a
-   shorter fixed desktop height (520px -> 470px). Scoped via .home-page
-   so the shared Hero component's other usages are unaffected. */
-.home-page .hero-content {
-  padding-top: 24px;
-  padding-bottom: 48px;
-}
 
-.home-page .hero h1 {
-  margin-bottom: 16px;
-}
+/* ============================================================
+   IMPORTANT:
+   Old Hero height/padding overrides REMOVED.
+   
+   Hero is now controlled ONLY by:
+   src/components/Hero/Hero.css
+   
+   This prevents Home.css from breaking the redesigned Hero.
+   ============================================================ */
 
-.home-page .hero p {
-  margin-bottom: 26px;
-}
-
-@media (min-width: 1024px) {
-  .home-page .hero {
-    height: 470px;
-  }
-
-  .home-page .hero-content {
-    padding-bottom: 56px;
-  }
-}
 
 /* ============================================================
    Responsive
    ============================================================ */
+
 @media (max-width: 1024px) {
   .books-gallery {
     grid-template-columns: repeat(4, 1fr);
@@ -1158,7 +1439,9 @@
   }
 }
 
-/* ---------------- Mobile card internals (2-column layout) ---------------- */
+
+/* ---------------- Mobile card internals ---------------- */
+
 @media (max-width: 767px) {
   .testimonial-card {
     flex-direction: column;
@@ -1193,12 +1476,12 @@
   }
 }
 
+
 /* ============================================================
-   Mobile (max-width: 767px): card sections â†’ horizontal
-   swipeable carousels. Desktop & tablet grids are untouched.
+   Mobile card sections
    ============================================================ */
+
 @media (max-width: 767px) {
-  /* Containers that become single-card carousels */
   .features-grid,
   .testimonials-grid,
   .pricing-grid,
@@ -1218,20 +1501,17 @@
     gap: 1rem;
     max-width: none;
 
-    /* Full-bleed so a snapped card occupies most of the viewport width */
     margin-left: -1.5rem;
     margin-right: -1.5rem;
     width: calc(100% + 3rem);
   }
 
-  /* Google reviews grid is nested inside an extra padded card */
   .gr-grid {
     margin-left: -3rem;
     margin-right: -3rem;
     width: calc(100% + 6rem);
   }
 
-  /* Visually hide the horizontal scrollbar (WebKit included) */
   .features-grid::-webkit-scrollbar,
   .testimonials-grid::-webkit-scrollbar,
   .pricing-grid::-webkit-scrollbar,
@@ -1241,7 +1521,6 @@
     display: none;
   }
 
-  /* Exactly one card per snap position */
   .feature-card,
   .testimonial-card,
   .pricing-card,
@@ -1254,11 +1533,11 @@
   }
 }
 
-/* Mobile Books Published — professional 2-card horizontal carousel.
-   Exactly two cards are visible per viewport (card = 50% minus half the
-   gap, so two cards + the gap exactly fill the content width); the
-   remaining books are reached by swiping horizontally. Scoped only to
-   the Home Books Published section — nothing else scrolls. */
+
+/* ============================================================
+   Mobile Books Published
+   ============================================================ */
+
 @media (max-width: 767px) {
   .books-gallery {
     display: flex;
@@ -1285,6 +1564,7 @@
     min-width: 0;
   }
 }
+
 
 @media (max-width: 767px) {
   .gr-red {
@@ -1381,14 +1661,12 @@
   }
 }
 
+
 /* ============================================================
-   Mobile (max-width: 767px): intentional, balanced, centered
-   composition. Each section is tuned individually — no global
-   text-align:center. Desktop and tablet layouts are untouched.
+   Mobile centered composition
    ============================================================ */
+
 @media (max-width: 767px) {
-  /* ---- Features: icon + text stack and center inside a
-     comfortable-width card ---- */
   .feature-card {
     flex-direction: column;
     align-items: center;
@@ -1397,8 +1675,6 @@
     padding: 1.75rem 1.5rem;
   }
 
-  /* ---- CTA: heading/paragraph centered; form card stays a
-     comfortable, centered width while inputs remain left-aligned ---- */
   .cta-text {
     text-align: center;
   }
@@ -1413,7 +1689,6 @@
     margin-inline: auto;
   }
 
-  /* ---- Testimonials: avatar, name and role centered ---- */
   .testimonial-card {
     align-items: center;
     text-align: center;
@@ -1425,31 +1700,25 @@
     align-items: center;
   }
 
-  /* ---- Publishing packages: comfortable centered width ---- */
   .pricing-card {
     max-width: 420px;
   }
 
-  /* ---- Review cards: comfortable centered width (already
-     internally centered) ---- */
   .review-card {
     max-width: 400px;
   }
 
-  /* ---- Distribution: inset the first logo so the strip does not
-     start glued to the screen edge ---- */
   .dist-row .dist-track {
     padding-left: 1.25rem;
   }
 
-  /* ---- Google reviews: center the rating summary block ---- */
   .gr-summary {
     justify-content: center;
   }
 }
 
-/* Mobile footer: balanced centered columns; the legal/copyright bar
-   below stays left-aligned for readability. */
+
+/* Mobile footer */
 @media (max-width: 640px) {
   .col {
     align-items: center;
@@ -1471,13 +1740,12 @@
   }
 }
 
+
 /* ============================================================
-   Mobile (max-width: 767px): layout structure. Sections that read
-   better stacked or as a plain grid replace the one-at-a-time
-   carousel on phones — pricing, Google reviews and video.
+   Mobile layout structure
    ============================================================ */
+
 @media (max-width: 767px) {
-  /* ---- Features: stack vertically, centered comfortable width ---- */
   .features-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -1492,7 +1760,6 @@
     max-width: none;
   }
 
-  /* ---- Author testimonials: one-column stacked list ---- */
   .testimonials-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -1507,7 +1774,6 @@
     max-width: none;
   }
 
-  /* ---- Publishing packages: stack vertically, centered width ---- */
   .pricing-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -1529,15 +1795,12 @@
     max-width: 440px;
   }
 
-  /* ---- Review highlights: contained carousel (no full-bleed),
-     one comfortable card per snap ---- */
   .reviews-grid {
     margin-left: 0;
     margin-right: 0;
     width: 100%;
   }
 
-  /* ---- Google customer reviews: one-column stacked list ---- */
   .gr-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -1553,7 +1816,6 @@
     margin: 0;
   }
 
-  /* ---- Author stories: responsive 2-column grid, no scroll ---- */
   .video-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1569,14 +1831,13 @@
     max-width: 100%;
   }
 
-  /* ---- CTA heading scales naturally on small screens ---- */
   .cta-text h2 {
     font-size: clamp(1.7rem, 6vw, 2.4rem);
   }
 }
 
-/* Smaller play button keeps the 2-column video grid readable on
-   narrow phones. */
+
+/* Smaller play button */
 @media (max-width: 400px) {
   .video-tile .play-btn {
     width: 40px;
@@ -1585,10 +1846,30 @@
   }
 }
 
-/* Tablet (768px+): stats go back to 4 columns once there is enough
-   width (600px stays 2 columns). */
+
+/* Tablet: stats go back to 4 columns */
 @media (min-width: 768px) {
   .stats-container {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+/* ============================================================
+   FULL WIDTH FEATURES SECTION
+   ============================================================ */
+
+.features-section .container {
+  max-width: none;
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.features-grid {
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.feature-card {
+  padding: 10px 35px;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../contexts/DataContext";
 import "./Home.css";
@@ -142,26 +142,15 @@ const PACKAGES = [
   },
 ];
 
-const DISTRIBUTION = [
-  { name: "Amazon.com", logo: amazonLogo },
-  { name: "Amazon Kindle", logo: kindleLogo },
-  { name: "Google Play Books", logo: googlePlayBooksLogo },
-  { name: "Amazon.in", logo: amazonLogo },
-  { name: "Flipkart", logo: flipkartLogo },
-  { name: "Apple Books", logo: appleBooksLogo },
-  { name: "Barnes & Noble", logo: barnesNobleLogo },
-  { name: "Kobo", logo: koboLogo },
-];
-
-const rotate = (arr, n) => arr.slice(n).concat(arr.slice(0, n));
-
-// 4 independent marquee rows — alternating directions, slight speed variance.
-// Every row carries all existing channels (rotated order) so none are removed.
-const DISTRIBUTION_ROWS = [
-  { dir: "right", duration: 34, list: DISTRIBUTION },
-  { dir: "left", duration: 42, list: rotate(DISTRIBUTION, 2) },
-  { dir: "right", duration: 37, list: rotate(DISTRIBUTION, 5) },
-  { dir: "left", duration: 40, list: rotate(DISTRIBUTION, 1) },
+// ✅ FIXED — uses real imported logos, no broken DISTRIBUTION/rotate code
+const DISTRIBUTION_CHANNELS = [
+  { name: "Flipkart", logo: flipkartLogo, desc: "Shop our books on Flipkart", link: "#" },
+  { name: "Apple Books", logo: appleBooksLogo, desc: "Available on Apple Books", link: "#" },
+  { name: "Barnes & Noble", logo: barnesNobleLogo, desc: "Find us on Barnes & Noble", link: "#" },
+  { name: "Kobo", logo: koboLogo, desc: "Read on your Kobo device", link: "#" },
+  { name: "Amazon", logo: amazonLogo, desc: "Available on Amazon", link: "#" },
+  { name: "Amazon Kindle", logo: kindleLogo, desc: "Read on Kindle devices", link: "#" },
+  { name: "Google Play Books", logo: googlePlayBooksLogo, desc: "Available on Google Play", link: "#" },
 ];
 
 const REVIEW_HIGHLIGHTS = [
@@ -239,6 +228,39 @@ export default function Home() {
   const { books, getBookCover, addLead } = useData();
 
   const [activeCategory, setActiveCategory] = useState("All Books");
+
+  // ✅ Distribution carousel hooks — added here, inside the component
+  const distTrackRef = useRef(null);
+  const [distActiveDot, setDistActiveDot] = useState(0);
+  const [distPerView, setDistPerView] = useState(6);
+
+  useEffect(() => {
+    const updatePerView = () => {
+      if (window.innerWidth <= 640) setDistPerView(2);
+      else if (window.innerWidth <= 1024) setDistPerView(4);
+      else setDistPerView(6);
+    };
+    updatePerView();
+    window.addEventListener("resize", updatePerView);
+    return () => window.removeEventListener("resize", updatePerView);
+  }, []);
+
+  const distDotsCount = Math.ceil(DISTRIBUTION_CHANNELS.length / distPerView);
+
+  const scrollDistTo = (index) => {
+    const track = distTrackRef.current;
+    if (!track) return;
+    track.scrollTo({ left: track.clientWidth * index, behavior: "smooth" });
+  };
+
+  const handleDistPrev = () => scrollDistTo(Math.max(distActiveDot - 1, 0));
+  const handleDistNext = () => scrollDistTo(Math.min(distActiveDot + 1, distDotsCount - 1));
+
+  const handleDistScroll = () => {
+    const track = distTrackRef.current;
+    if (!track) return;
+    setDistActiveDot(Math.round(track.scrollLeft / track.clientWidth));
+  };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -503,80 +525,149 @@ export default function Home() {
       </section>
 
       {/* Section 9 — Pricing Packages */}
-      <section className="pricing-section">
-        <div className="container">
-          <div className="pricing-head">
-            <h2>Publishing Packages</h2>
-            <p>Simple, transparent pricing to bring your book to life.</p>
+      {/* Section 9 — Pricing Packages */}
+<section className="pricing-section">
+  <div className="container">
+
+    <div className="pricing-head">
+      <h2>Publishing Packages</h2>
+      <p>Simple, transparent pricing to bring your book to life.</p>
+    </div>
+
+    <div className="pricing-grid">
+      {PACKAGES.map((pkg) => (
+        <div
+          className={`pricing-card ${pkg.featured ? "featured" : ""}`}
+          key={pkg.name}
+        >
+          <div className="pricing-header">
+            <h3>{pkg.name}</h3>
+            <span className="price">{pkg.price}</span>
           </div>
-          <div className="pricing-grid">
-            {PACKAGES.map((pkg) => (
-              <div
-                className={`pricing-card ${pkg.featured ? "featured" : ""}`}
-                key={pkg.name}
-              >
-                <div className="pricing-header">
-                  <h3>{pkg.name}</h3>
-                  <span className="price">{pkg.price}</span>
-                </div>
-                <div className="pricing-body">
-                  <ul>
-                    {pkg.features.map((feature) => (
-                      <li key={feature}>
-                        <FaCheck className="check" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    href="/store"
-                    className="btn-gold"
-                    onClick={(e) => handleNavClick(e, "/store")}
-                  >
-                    KNOW MORE
-                  </a>
-                </div>
-              </div>
-            ))}
+
+          <div className="pricing-body">
+            <ul>
+              {pkg.features.map((feature) => (
+                <li key={feature}>
+                  <FaCheck className="check" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href="/store"
+              className="btn-gold"
+              onClick={(e) => handleNavClick(e, "/store")}
+            >
+              KNOW MORE
+            </a>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
 
+  </div>
+</section>
       {/* Section 10 — Distribution Channels */}
-      <section className="distribution-section">
-        <div className="container">
-          <h2 className="dist-heading">Our Distribution Channels</h2>
-          <div className="dist-marquee">
-            {DISTRIBUTION_ROWS.map((row, i) => (
-              <div
-                className={`dist-row ${row.dir === "right" ? "dist-row-right" : "dist-row-left"}`}
-                key={i}
-              >
-                <div
-                  className="dist-track"
-                  style={{ "--dist-duration": `${row.duration}s` }}
-                >
-                  {[0, 1].map((half) => (
-                    <div className="dist-track-half" key={half} aria-hidden={half === 1}>
-                      {row.list.map((channel, j) => (
-                        <div className="dist-logo" key={`${half}-${j}`}>
-                          <img
-                            src={channel.logo}
-                            alt={half === 1 ? "" : `${channel.name} logo`}
-                            loading="lazy"
-                          />
-                          <span className="dist-name">{channel.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+<section className="distribution-section">
+  <div className="distribution-container">
 
+    <div className="dist-heading-wrap">
+      <h2 className="dist-heading">Our Distribution Channels</h2>
+      <p className="dist-subheading">
+        Our books are available across leading platforms worldwide.
+      </p>
+    </div>
+
+    <div className="dist-marquee">
+      <div className="dist-track">
+
+        {/* First set */}
+        {DISTRIBUTION_CHANNELS.map((channel, i) => (
+          <div className="dist-card" key={`first-${i}`}>
+            <div className="dist-icon">
+              <img
+                src={channel.logo}
+                alt={`${channel.name} logo`}
+                loading="lazy"
+              />
+            </div>
+
+            <h3 className="dist-name">{channel.name}</h3>
+
+            <p className="dist-desc">{channel.desc}</p>
+
+            <a
+              className="dist-cart"
+              href={channel.link}
+              aria-label={`Shop on ${channel.name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-1.5 6h11M9 21a1 1 0 100-2 1 1 0 000 2zM18 21a1 1 0 100-2 1 1 0 000 2z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+        ))}
+
+        {/* Duplicate set for seamless infinite scrolling */}
+        {DISTRIBUTION_CHANNELS.map((channel, i) => (
+          <div className="dist-card" key={`second-${i}`}>
+            <div className="dist-icon">
+              <img
+                src={channel.logo}
+                alt={`${channel.name} logo`}
+                loading="lazy"
+              />
+            </div>
+
+            <h3 className="dist-name">{channel.name}</h3>
+
+            <p className="dist-desc">{channel.desc}</p>
+
+            <a
+              className="dist-cart"
+              href={channel.link}
+              aria-label={`Shop on ${channel.name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-1.5 6h11M9 21a1 1 0 100-2 1 1 0 000-2zM18 21a1 1 0 100-2 1 1 0 000 2z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+        ))}
+
+      </div>
+    </div>
+
+  </div>
+</section>
       {/* Section 11 — Customer Review Highlights */}
       <section className="review-highlights">
         <div className="container">
