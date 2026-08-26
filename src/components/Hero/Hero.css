@@ -160,14 +160,11 @@
 ============================================================ */
 
 .hero-books {
-  position: relative;
-  z-index: 5;
-  width: min(1600px, 94%);
-  height: 355px;
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  align-items: end;
-  gap: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 28px;
 }
 
 

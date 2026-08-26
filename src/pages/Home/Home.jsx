@@ -26,6 +26,15 @@ import author2 from "../../assets/author2.png";
 import author3 from "../../assets/author3.png";
 import author4 from "../../assets/author4.png";
 import author5 from "../../assets/author5.png";
+/*Authors below google review*/
+import googleauthor1 from "../../assets/author-1.png";
+import googleauthor2 from "../../assets/author-2.png";
+import googleauthor3 from "../../assets/author-3.png";
+import googleauthor4 from "../../assets/author-4.png";
+import googleauthor5 from "../../assets/author-5.png";
+import googleauthor6 from "../../assets/author-6.png";
+import googleauthor7 from "../../assets/author-7.png";
+import googleauthor8 from "../../assets/author-8.png";
 
 import Hero from "../../components/Hero/Hero";
 
@@ -278,6 +287,24 @@ export default function Home() {
 
   const galleryBooks = books.slice(0, 10);
 
+ const TRUSTED_AUTHORS = [
+  googleauthor1, googleauthor2, googleauthor3, googleauthor4,
+  googleauthor5, googleauthor6, googleauthor7, googleauthor8,
+];
+
+const [trustedIndex, setTrustedIndex] = useState(0);
+
+const nextTrusted = () =>
+  setTrustedIndex((i) => (i + 1) % TRUSTED_AUTHORS.length);
+
+const prevTrusted = () =>
+  setTrustedIndex((i) => (i - 1 + TRUSTED_AUTHORS.length) % TRUSTED_AUTHORS.length);
+
+useEffect(() => {
+  const timer = setInterval(nextTrusted, 3500);
+  return () => clearInterval(timer);
+}, []);
+
   const filteredGallery =
     activeCategory === "All Books"
       ? galleryBooks
@@ -494,79 +521,75 @@ export default function Home() {
       </section>
 
       {/* Section 7 — Testimonials */}
-      <section className="testimonials-section">
-        <div className="container">
-          <h2>Loved by authors worldwide</h2>
-          <div className="testimonials-grid">
-            {TESTIMONIALS.map((t) => (
-              <div className="testimonial-card" key={t.name}>
-                <img src={t.photo} alt={t.name} className="t-avatar" loading="lazy" />
-                <div className="t-body">
-                  <p className="t-quote">"{t.quote}"</p>
-                  <span className="t-name">{t.name}</span>
-                  <span className="t-role">{t.role}</span>
-                </div>
-              </div>
-            ))}
+<section className="testimonials-section">
+  <div className="container">
+    <h2>Loved by Authors Worldwide</h2>
+    <p className="testimonials-subtitle">
+      Real stories from real authors who turned<br />
+      their ideas into impact with Yellowish Publication.
+    </p>
+
+    <div className="testimonials-grid">
+      {TESTIMONIALS.map((t) => (
+        <div className="testimonial-card" key={t.name}>
+          <div className="t-avatar-wrap">
+            <img src={t.photo} alt={t.name} className="t-avatar" loading="lazy" />
           </div>
-        </div>
-      </section>
 
-      {/* Section 8 — Stats Bar */}
-      <section className="stats-bar">
-        <div className="container stats-container">
-          {STATS.map((stat) => (
-            <div className="stat" key={stat.label}>
-              <span className="stat-value">{stat.value}</span>
-              <span className="stat-label">{stat.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+          <div className="t-body">
+            <span className="quote-open">“</span>
+            <p className="t-quote">{t.quote}</p>
+            <div className="t-divider" />
+            <span className="t-name">{t.name}</span>
+            <span className="t-role">{t.role}</span>
+          </div>
 
-      {/* Section 9 — Pricing Packages */}
-      {/* Section 9 — Pricing Packages */}
+          <span className="quote-close">”</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+      {/* Section 8 — Stats */}
+<section className="stats-bar">
+  <div className="container stats-container">
+    {STATS.map((stat, i) => (
+      <div className="stat" key={stat.label}>
+        <span className="stat-icon">{["♧", "▢", "◎", "◉"][i]}</span>
+        <div><span className="stat-value">{stat.value}</span><span className="stat-label">{stat.label}</span></div>
+      </div>
+    ))}
+  </div>
+</section>
+
+{/* Section 9 — Pricing */}
 <section className="pricing-section">
   <div className="container">
-
     <div className="pricing-head">
       <h2>Publishing Packages</h2>
       <p>Simple, transparent pricing to bring your book to life.</p>
     </div>
 
     <div className="pricing-grid">
-      {PACKAGES.map((pkg) => (
-        <div
-          className={`pricing-card ${pkg.featured ? "featured" : ""}`}
-          key={pkg.name}
-        >
+      {PACKAGES.map((pkg, i) => (
+        <div className={`pricing-card ${pkg.featured ? "featured" : ""}`} key={pkg.name}>
           <div className="pricing-header">
+            <span className="plan-icon">{["☆", "♛", "◇"][i]}</span>
             <h3>{pkg.name}</h3>
             <span className="price">{pkg.price}</span>
           </div>
-
           <div className="pricing-body">
             <ul>
-              {pkg.features.map((feature) => (
-                <li key={feature}>
-                  <FaCheck className="check" />
-                  {feature}
-                </li>
+              {pkg.features.map(feature => (
+                <li key={feature}><FaCheck className="check" />{feature}</li>
               ))}
             </ul>
-
-            <a
-              href="/store"
-              className="btn-gold"
-              onClick={(e) => handleNavClick(e, "/store")}
-            >
-              KNOW MORE
-            </a>
+            <a href="/store" className="btn-gold" onClick={e => handleNavClick(e, "/store")}>KNOW MORE</a>
           </div>
         </div>
       ))}
     </div>
-
   </div>
 </section>
       {/* Section 10 — Distribution Channels */}
@@ -668,92 +691,149 @@ export default function Home() {
 
   </div>
 </section>
-      {/* Section 11 — Customer Review Highlights */}
-      <section className="review-highlights">
-        <div className="container">
-          <span className="gold-label">GOOGLE CUSTOMER REVIEWS</span>
-          <h2>What Authors Think About Us</h2>
-          <div className="reviews-grid">
-            {REVIEW_HIGHLIGHTS.map((review) => (
-              <div className="review-card" key={review.name}>
-                <img src={review.photo} alt={review.name} className="review-photo" loading="lazy" />
-                <Stars rating={review.rating} />
-                <p className="review-quote">"{review.quote}"</p>
-                <span className="review-name">{review.name}</span>
-              </div>
-            ))}
+      {/* Section 11 — Reviews */}
+<section className="review-highlights">
+  <div className="container">
+    <span className="gold-label">★ ★ ★ &nbsp; GOOGLE CUSTOMER REVIEWS &nbsp; ★ ★ ★</span>
+    <h2>What Authors Think About Us</h2>
+    <div className="review-line">— ★ —</div>
+
+    <div className="reviews-grid">
+      {REVIEW_HIGHLIGHTS.map((review) => (
+        <div className="review-card" key={review.name}>
+          <img src={review.photo} alt={review.name} className="review-photo" />
+          <Stars rating={review.rating} />
+          <p className="review-quote">“{review.quote}”</p>
+          <span className="review-name">{review.name}</span>
+          <div className="card-line" />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* Section 11-b — Trusted Authors */}
+<section className="trusted-authors">
+  <div className="container">
+    <h2>
+      Trusted by <span>12,000+</span> Authors including{" "}
+      <span>celebrities</span> and <span>influencers.</span>
+    </h2>
+
+    <div className="review-line">— ★ —</div>
+
+    <div className="trusted-slider">
+      <button className="slider-arrow" onClick={prevTrusted}>‹</button>
+
+      <div className="trusted-track">
+        {[0, 1, 2, 3].map((n) => (
+          <img
+            key={n}
+            src={TRUSTED_AUTHORS[(trustedIndex + n) % TRUSTED_AUTHORS.length]}
+            alt="Trusted author"
+            className="trusted-image"
+          />
+        ))}
+      </div>
+
+      <button className="slider-arrow" onClick={nextTrusted}>›</button>
+    </div>
+
+    <div className="slider-dots">
+      {TRUSTED_AUTHORS.map((_, i) => (
+        <span
+          key={i}
+          className={i === trustedIndex ? "active" : ""}
+          onClick={() => setTrustedIndex(i)}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+     <section className="video-section">
+  <div className="container">
+    <span className="video-label">✦ VIDEO STORIES ✦</span>
+    <h2>Watch <span>Author Stories</span></h2>
+    <p>Real stories. Real authors. Real impact.</p>
+
+    <div className="video-grid">
+      {VIDEO_TILES.map((tile, i) => (
+        <div className="video-tile" key={i}>
+          <img src={tile.img} alt="Author story" />
+          <div className="play-btn"><FaPlay /></div>
+          <div className="tile-info">
+            <b>{tile.title}</b>
+            <span>━━━━</span>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
-      {/* Section 12 — Video / Gallery Grid */}
-      <section className="video-section">
-        <div className="container">
-          <h2>Watch Author Stories</h2>
-          <div className="video-grid">
-            {VIDEO_TILES.map((tile, index) => (
-              <div className="video-tile" key={index}>
-                <img src={tile.img} alt="Gallery preview" loading="lazy" />
-                <div className="tile-overlay" />
-                <div className="play-btn">
-                  <FaPlay />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Section 13 — Google Reviews Widget */}
       <section className="google-reviews-section">
-        <div className="container">
-          <h2 className="gr-red">Don't Just Believe What We Say</h2>
-          <p className="gr-sub">Read What Authors Have To Say About Us</p>
-          <div className="gr-card">
-            <div className="gr-summary">
-              <div className="gr-logo">
-                <FaGoogle />
-              </div>
-              <div className="gr-rating">
-                <span className="gr-score">4.5</span>
-                <Stars rating={4.5} />
-                <span className="gr-count">Based on 120+ Google reviews</span>
-              </div>
-            </div>
-            <div className="gr-grid">
-              {GOOGLE_REVIEWS.map((review) => (
-                <div className="gr-review" key={review.name}>
-                  <div className="gr-review-top">
-                    <img
-                      src={
-                        review.name === "Rahul Deb"
-                          ? author5
-                          : review.name === "Dr. Heena Sachdeva"
-                          ? author2
-                          : author3
-                      }
-                      alt={review.name}
-                      loading="lazy"
-                      className="gr-avatar"
-                    />
-                    <div className="gr-review-meta">
-                      <span className="gr-name">{review.name}</span>
-                      <span className="gr-date">{review.date}</span>
-                    </div>
-                  </div>
-                  <Stars rating={review.rating} />
-                  <p className="gr-text">
-                    {review.text} <span className="gr-read">Read more</span>
-                  </p>
-                  <span className="gr-badge">
-                    <FaGoogle /> Posted on Google
-                  </span>
-                </div>
-              ))}
-            </div>
+  <div className="container">
+    <div className="gr-title">— ★ —</div>
+    <h2>Don't Just Believe What We Say</h2>
+    <p className="gr-sub">Read What Authors Have To Say About Us</p>
+
+    <div className="gr-card">
+      <div className="gr-summary">
+        <div className="gr-rating-box">
+          <div className="gr-logo"><FaGoogle /></div>
+          <div>
+            <b className="gr-score">4.5</b>
+            <Stars rating={4.5} />
+            <span className="gr-count">Based on 120+ Google reviews</span>
           </div>
         </div>
-      </section>
+
+        <div className="gr-bars">
+          {[["5 Star","68%"],["4 Star","22%"],["3 Star","7%"],["2 Star","2%"],["1 Star","1%"]].map(([star, value]) => (
+            <div className="gr-bar" key={star}>
+              <span>{star}</span>
+              <i><b style={{width:value}} /></i>
+              <span>{value}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="gr-happy">
+          <b>120+</b>
+          <span>Happy Authors</span>
+        </div>
+      </div>
+
+      <div className="gr-grid">
+        {GOOGLE_REVIEWS.map((review) => (
+          <div className="gr-review" key={review.name}>
+            <div className="gr-review-top">
+              <img
+                src={
+                  review.name === "Rahul Deb" ? author5 :
+                  review.name === "Dr. Heena Sachdeva" ? author2 : author3
+                }
+                alt={review.name}
+                className="gr-avatar"
+              />
+              <div>
+                <b className="gr-name">{review.name}</b>
+                <span className="gr-date">{review.date}</span>
+              </div>
+            </div>
+
+            <Stars rating={review.rating} />
+            <p className="gr-text">
+              {review.text} <span>Read more</span>
+            </p>
+            <small><FaGoogle /> Posted on Google</small>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
     </div>
   );
 }

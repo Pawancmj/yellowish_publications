@@ -1,7 +1,7 @@
 ﻿/* ============================================================
    About Us Page — Yellowish Publication
    Design language matches Homepage / Authors / Contact / Blog.
-   Palette: cream #fff9f8, gold #d9a441 / #f3b51b, navy #123a5c.
+   Palette: cream #FFF8EC, gold #E2A233 / #F0AE1D, navy #17324E.
    Pink/red accents removed to match homepage's gold+navy+cream mood.
    No transform:scale / zoom anywhere — everything is fluid.
    ============================================================ */
@@ -29,9 +29,9 @@
   justify-content: center;
   gap: 10px;
   padding: 0.85rem 1.9rem;
-  border: 2px solid #d9a441;
+  border: 2px solid #E2A233;
   border-radius: 999px;
-  background: #d9a441;
+  background: #E2A233;
   color: #fff;
   font-weight: 600;
   font-size: 1rem;
@@ -39,14 +39,14 @@
   text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 20px rgba(217, 164, 65, 0.35);
+  box-shadow: 0 8px 20px rgba(226, 162, 51, 0.35);
 }
 
 .about-page .btn-gold:hover {
-  background: #c08f2e;
-  border-color: #c08f2e;
+  background: #B8841F;
+  border-color: #B8841F;
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(217, 164, 65, 0.45);
+  box-shadow: 0 14px 30px rgba(226, 162, 51, 0.45);
 }
 
 .about-page .arrow-ico {
@@ -66,7 +66,7 @@
 
 .about-page .gold-label {
   display: inline-block;
-  color: #d9a441;
+  color: #E2A233;
   font-weight: 600;
   font-size: 0.85rem;
   letter-spacing: 0.02em;
@@ -76,14 +76,14 @@
 .about-page .section-head h2 {
   font-size: clamp(1.9rem, 3.4vw, 2.5rem);
   font-weight: 600;
-  color: #123a5c;
+  color: #17324E;
   letter-spacing: -0.5px;
   line-height: 1.15;
   margin: 0 0 0.8rem;
 }
 
 .about-page .section-head p {
-  color: #6b5d5e;
+  color: #4A3B29;
   font-size: 1.05rem;
   line-height: 1.6;
   margin: 0;
@@ -96,7 +96,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #fffaf4;
+  background: #FFF8EC;
   min-height: 560px;
   display: flex;
   align-items: center;
@@ -115,7 +115,7 @@
   right: -180px;
   width: 640px;
   height: 540px;
-  background: #f3b51b;
+  background: #F0AE1D;
   border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%;
   overflow: hidden;
   animation: aboutFloat 18s ease-in-out infinite;
@@ -130,8 +130,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(217, 164, 65, 0.45) 0%,
-    rgba(217, 164, 65, 0.22) 40%,
+    rgba(226, 162, 51, 0.45) 0%,
+    rgba(226, 162, 51, 0.22) 40%,
     transparent 80%
   );
   filter: blur(80px);
@@ -143,7 +143,7 @@
   bottom: -30px;
   width: 420px;
   height: 80px;
-  background: #fff1cc;
+  background: #F4C24A;
   border-radius: 70% 30% 45% 55% / 50% 50% 40% 60%;
   animation: aboutFloat 18s ease-in-out infinite;
 }
@@ -159,7 +159,7 @@
   top: 26px;
   width: 52px;
   height: 52px;
-  background: #fdf1d9;
+  background: #FBEFD3;
   opacity: 0.65;
 }
 
@@ -168,7 +168,7 @@
   top: 22px;
   width: 90px;
   height: 38px;
-  background: #fff1cc;
+  background: #FBEFCF;
   opacity: 0.5;
   border-radius: 9999px;
 }
@@ -178,7 +178,7 @@
   top: 210px;
   width: 120px;
   height: 52px;
-  background: #fdf1d9;
+  background: #FBEFD3;
   opacity: 0.55;
   border-radius: 9999px;
 }
@@ -216,15 +216,15 @@
   gap: 0.5rem;
   padding: 0.5rem 1.1rem;
   border-radius: 999px;
-  background: #fff1cc;
-  color: #8a5a1f;
+  background: #FBEFCF;
+  color: #7A4E1A;
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 1.4rem;
 }
 
 .ah-badge svg {
-  color: #d9a441;
+  color: #E2A233;
 }
 
 .ah-copy h1 {
@@ -233,18 +233,18 @@
   font-weight: 600;
   line-height: 1.06;
   letter-spacing: -1.5px;
-  color: #123a5c;
+  color: #17324E;
   margin: 0 0 1.3rem;
 }
 
 .ah-accent {
-  color: #d9a441;
+  color: #E2A233;
 }
 
 .ah-copy p {
   font-size: 1.1rem;
   line-height: 1.7;
-  color: #5f5456;
+  color: #453A28;
   max-width: 470px;
   margin: 0 0 2rem;
 }
@@ -262,9 +262,9 @@
   gap: 0.5rem;
   padding: 0.85rem 1.9rem;
   border-radius: 999px;
-  border: 2px solid #fffaf4;
+  border: 2px solid #FFF8EC;
   background: #fff;
-  color: #123a5c;
+  color: #17324E;
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0;
@@ -274,8 +274,8 @@
 }
 
 .ah-ghost:hover {
-  border-color: #d9a441;
-  color: #d9a441;
+  border-color: #E2A233;
+  color: #E2A233;
   transform: translateY(-2px);
 }
 
@@ -301,8 +301,8 @@
   object-fit: cover;
   border-radius: 22px;
   border: 8px solid #fff;
-  box-shadow: 0 30px 60px rgba(18, 58, 92, 0.2);
-  background: #fff1cc;
+  box-shadow: 0 30px 60px rgba(23, 50, 78, 0.2);
+  background: #FBEFCF;
 }
 
 /* ============================================================
@@ -326,7 +326,7 @@
   bottom: -160px;
   width: 420px;
   height: 420px;
-  background: #fdf1d9;
+  background: #FBEFD3;
   border-radius: 55% 45% 60% 40% / 45% 55% 35% 65%;
   opacity: 0.5;
 }
@@ -337,7 +337,7 @@
   top: -70px;
   width: 230px;
   height: 230px;
-  border: 2px solid #fffaf4;
+  border: 2px solid #FFF8EC;
   border-radius: 50%;
 }
 
@@ -356,8 +356,8 @@
   position: relative;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(18, 58, 92, 0.16);
-  background: #fff1cc;
+  box-shadow: 0 24px 60px rgba(23, 50, 78, 0.16);
+  background: #FBEFCF;
 }
 
 .story-frame img {
@@ -377,7 +377,7 @@
   font-family: "Source Serif 4", Georgia, serif;
   font-size: clamp(2rem, 3.4vw, 2.6rem);
   font-weight: 600;
-  color: #123a5c;
+  color: #17324E;
   letter-spacing: -0.5px;
   line-height: 1.15;
   margin: 0 0 1.1rem;
@@ -386,7 +386,7 @@
 .story-copy p {
   font-size: 1.05rem;
   line-height: 1.75;
-  color: #6b5d5e;
+  color: #4A3B29;
   margin: 0 0 1.1rem;
   max-width: 540px;
 }
@@ -394,10 +394,10 @@
 .story-highlight {
   margin: 1.4rem 0 0;
   padding: 1.15rem 1.35rem;
-  border-left: 4px solid #d9a441;
-  background: #fffaf3;
+  border-left: 4px solid #E2A233;
+  background: #FFF6E3;
   border-radius: 0 14px 14px 0;
-  color: #123a5c;
+  color: #17324E;
   font-family: "Source Serif 4", Georgia, serif;
   font-weight: 500;
   font-size: 1.06rem;
@@ -408,7 +408,7 @@
    MISSION & VISION
    ============================================================ */
 .about-mission {
-  background: #fffaf4;
+  background: #FFF8EC;
 }
 
 .mv-wrap {
@@ -424,10 +424,10 @@
   flex: 1 1 340px;
   max-width: 460px;
   background: #fff;
-  border: 1px solid #fffaf4;
+  border: 1px solid #FFF8EC;
   border-radius: 1.5rem;
   padding: 2rem 2rem 1.9rem;
-  box-shadow: 0 12px 32px rgba(18, 58, 92, 0.08);
+  box-shadow: 0 12px 32px rgba(23, 50, 78, 0.08);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -440,16 +440,16 @@
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  background: rgba(217, 164, 65, 0.08);
+  background: rgba(226, 162, 51, 0.08);
 }
 
 .mv-vision::before {
-  background: rgba(18, 58, 92, 0.06);
+  background: rgba(23, 50, 78, 0.06);
 }
 
 .mv-panel:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 44px rgba(18, 58, 92, 0.14);
+  box-shadow: 0 20px 44px rgba(23, 50, 78, 0.14);
 }
 
 .mv-icon {
@@ -464,13 +464,13 @@
 }
 
 .mv-icon {
-  background: #fff1cc;
-  color: #d9a441;
+  background: #FBEFCF;
+  color: #E2A233;
 }
 
 .mv-eyebrow {
   display: block;
-  color: #d9a441;
+  color: #E2A233;
   font-weight: 600;
   font-size: 0.78rem;
   letter-spacing: 0.02em;
@@ -480,14 +480,14 @@
 .mv-panel h3 {
   font-size: 1.45rem;
   font-weight: 600;
-  color: #123a5c;
+  color: #17324E;
   margin: 0 0 0.6rem;
 }
 
 .mv-panel p {
   font-size: 1rem;
   line-height: 1.65;
-  color: #6b5d5e;
+  color: #4A3B29;
   margin: 0;
 }
 
@@ -507,10 +507,10 @@
 .service-card {
   position: relative;
   background: #fff;
-  border: 1px solid #fffaf4;
+  border: 1px solid #FFF8EC;
   border-radius: 1.25rem;
   padding: 1.75rem 1.5rem 1.6rem;
-  box-shadow: 0 10px 26px rgba(18, 58, 92, 0.06);
+  box-shadow: 0 10px 26px rgba(23, 50, 78, 0.06);
   overflow: hidden;
   min-height: 200px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -518,7 +518,7 @@
 
 .service-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 18px 40px rgba(18, 58, 92, 0.14);
+  box-shadow: 0 18px 40px rgba(23, 50, 78, 0.14);
 }
 
 .svc-num {
@@ -527,7 +527,7 @@
   right: 1.25rem;
   font-size: 1.7rem;
   font-weight: 600;
-  color: #f3e9d4;
+  color: #F1E4C4;
   line-height: 1;
 }
 
@@ -540,14 +540,14 @@
   justify-content: center;
   font-size: 1.3rem;
   margin-bottom: 1rem;
-  background: #fff1cc;
-  color: #d9a441;
+  background: #FBEFCF;
+  color: #E2A233;
 }
 
 .service-card h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #123a5c;
+  color: #17324E;
   line-height: 1.3;
   margin: 0 0 0.5rem;
 }
@@ -555,7 +555,7 @@
 .service-card p {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #6b5d5e;
+  color: #4A3B29;
   margin: 0;
 }
 
@@ -563,7 +563,7 @@
    WHY AUTHORS CHOOSE US
    ============================================================ */
 .about-why {
-  background: #fffaf4;
+  background: #FFF8EC;
 }
 
 .why-grid {
@@ -579,24 +579,24 @@
   flex-direction: column;
   border-radius: 1.25rem;
   padding: 1.8rem 1.8rem 1.7rem;
-  border: 1px solid #fffaf4;
-  box-shadow: 0 12px 32px rgba(18, 58, 92, 0.08);
+  border: 1px solid #FFF8EC;
+  box-shadow: 0 12px 32px rgba(23, 50, 78, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .why-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 44px rgba(18, 58, 92, 0.16);
+  box-shadow: 0 20px 44px rgba(23, 50, 78, 0.16);
 }
 
 .why-card-pink {
   background: #fff;
-  border-left: 4px solid #123a5c;
+  border-left: 4px solid #17324E;
 }
 
 .why-card-gold {
-  background: #fffaf3;
-  border-left: 4px solid #d9a441;
+  background: #FFF6E3;
+  border-left: 4px solid #E2A233;
 }
 
 .why-top {
@@ -609,7 +609,7 @@
 .why-num {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #e8dcc4;
+  color: #EAD9B8;
   line-height: 1;
 }
 
@@ -621,21 +621,21 @@
   align-items: center;
   justify-content: center;
   font-size: 1.35rem;
-  background: #fff1cc;
-  color: #d9a441;
+  background: #FBEFCF;
+  color: #E2A233;
 }
 
 .why-card h3 {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #123a5c;
+  color: #17324E;
   margin: 0 0 0.5rem;
 }
 
 .why-card p {
   font-size: 0.98rem;
   line-height: 1.65;
-  color: #6b5d5e;
+  color: #4A3B29;
   margin: 0;
 }
 
@@ -660,7 +660,7 @@
   left: 6%;
   right: 6%;
   height: 2px;
-  background: #fffaf4;
+  background: #FFF8EC;
   z-index: 0;
 }
 
@@ -676,8 +676,8 @@
   margin: 0 auto 1.1rem;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #d9a441;
-  box-shadow: 0 10px 24px rgba(217, 164, 65, 0.3);
+  border: 2px solid #E2A233;
+  box-shadow: 0 10px 24px rgba(226, 162, 51, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -692,9 +692,9 @@
   height: 28px;
   padding: 0 6px;
   border-radius: 999px;
-  background: #fff1cc;
-  color: #8a5a1f;
-  border: 1.5px solid #d9a441;
+  background: #FBEFCF;
+  color: #7A4E1A;
+  border: 1.5px solid #E2A233;
   font-size: 0.78rem;
   font-weight: 600;
   display: flex;
@@ -704,13 +704,13 @@
 
 .journey-ico {
   font-size: 1.4rem;
-  color: #d9a441;
+  color: #E2A233;
 }
 
 .journey-step h3 {
   font-size: 1rem;
   font-weight: 600;
-  color: #123a5c;
+  color: #17324E;
   line-height: 1.3;
   margin: 0 0 0.45rem;
 }
@@ -718,7 +718,7 @@
 .journey-step p {
   font-size: 0.9rem;
   line-height: 1.55;
-  color: #8a7b7c;
+  color: #6B5A42;
   margin: 0 auto;
   max-width: 220px;
 }
@@ -730,7 +730,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #123a5c;
+  background: #17324E;
 }
 
 .about-stats-bg {
@@ -750,7 +750,7 @@
   height: 320px;
   left: -120px;
   top: -120px;
-  background: rgba(217, 164, 65, 0.12);
+  background: rgba(226, 162, 51, 0.12);
 }
 
 .stats-blob-b {
@@ -758,7 +758,7 @@
   height: 280px;
   right: -90px;
   bottom: -120px;
-  background: rgba(217, 164, 65, 0.1);
+  background: rgba(226, 162, 51, 0.1);
 }
 
 .stats-ring {
@@ -767,7 +767,7 @@
   top: -70px;
   width: 200px;
   height: 200px;
-  border: 2px solid rgba(217, 164, 65, 0.25);
+  border: 2px solid rgba(226, 162, 51, 0.25);
   border-radius: 50%;
 }
 
@@ -791,13 +791,13 @@
 .stat-value {
   font-size: clamp(2.4rem, 4.5vw, 3.2rem);
   font-weight: 600;
-  color: #d9a441;
+  color: #E2A233;
   line-height: 1;
 }
 
 .stat-label {
   font-size: 1rem;
-  color: #dbe6f0;
+  color: #E9D9A8;
   letter-spacing: 0;
 }
 
@@ -823,16 +823,16 @@
   text-align: center;
   text-decoration: none;
   background: #fff;
-  border: 1px solid #fffaf4;
+  border: 1px solid #FFF8EC;
   border-radius: 1.25rem;
   padding: 2rem 1.5rem 1.7rem;
-  box-shadow: 0 12px 30px rgba(18, 58, 92, 0.08);
+  box-shadow: 0 12px 30px rgba(23, 50, 78, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .author-mini:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 44px rgba(18, 58, 92, 0.16);
+  box-shadow: 0 20px 44px rgba(23, 50, 78, 0.16);
 }
 
 .am-avatar {
@@ -841,8 +841,8 @@
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 1rem;
-  border: 4px solid #fff1cc;
-  box-shadow: 0 10px 24px rgba(18, 58, 92, 0.18);
+  border: 4px solid #FBEFCF;
+  box-shadow: 0 10px 24px rgba(23, 50, 78, 0.18);
 }
 
 .am-avatar img {
@@ -856,14 +856,14 @@
   font-family: "Source Serif 4", Georgia, serif;
   font-size: 1.15rem;
   font-weight: 600;
-  color: #123a5c;
+  color: #17324E;
   margin-bottom: 0.35rem;
 }
 
 .am-genre {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #d9a441;
+  color: #E2A233;
   letter-spacing: 0;
 }
 
@@ -876,7 +876,7 @@
    AUTHOR QUOTE
    ============================================================ */
 .about-quote {
-  background: #fffaf4;
+  background: #FFF8EC;
 }
 
 .quote-wrap {
@@ -885,10 +885,10 @@
   margin: 0 auto;
   text-align: center;
   background: #fff;
-  border: 1px solid #fffaf4;
+  border: 1px solid #FFF8EC;
   border-radius: 1.75rem;
   padding: 3rem 2.5rem 2.6rem;
-  box-shadow: 0 20px 50px rgba(18, 58, 92, 0.12);
+  box-shadow: 0 20px 50px rgba(23, 50, 78, 0.12);
 }
 
 .quote-mark {
@@ -898,8 +898,8 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: #fff1cc;
-  color: #d9a441;
+  background: #FBEFCF;
+  color: #E2A233;
   font-size: 1.7rem;
   margin-bottom: 1.2rem;
 }
@@ -909,7 +909,7 @@
   font-size: clamp(1.25rem, 2.4vw, 1.6rem);
   font-weight: 500;
   line-height: 1.55;
-  color: #123a5c;
+  color: #17324E;
   margin: 0 0 1.8rem;
 }
 
@@ -925,7 +925,7 @@
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #fff1cc;
+  border: 3px solid #FBEFCF;
 }
 
 .qa-meta {
@@ -937,12 +937,12 @@
 
 .qa-meta strong {
   font-size: 1.05rem;
-  color: #123a5c;
+  color: #17324E;
 }
 
 .qa-role {
   font-size: 0.88rem;
-  color: #d9a441;
+  color: #E2A233;
   font-weight: 600;
 }
 
@@ -953,7 +953,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #123a5c;
+  background: #17324E;
 }
 
 .final-cta-bg {
@@ -973,7 +973,7 @@
   height: 360px;
   left: -140px;
   bottom: -140px;
-  background: rgba(217, 164, 65, 0.12);
+  background: rgba(226, 162, 51, 0.12);
 }
 
 .final-blob-b {
@@ -981,7 +981,7 @@
   height: 300px;
   right: -120px;
   top: -120px;
-  background: rgba(217, 164, 65, 0.12);
+  background: rgba(226, 162, 51, 0.12);
 }
 
 .final-ring {
@@ -990,7 +990,7 @@
   top: -70px;
   width: 210px;
   height: 210px;
-  border: 2px solid rgba(217, 164, 65, 0.22);
+  border: 2px solid rgba(226, 162, 51, 0.22);
   border-radius: 50%;
 }
 
@@ -1002,7 +1002,7 @@
 }
 
 .gold-on-navy {
-  color: #f0c25a;
+  color: #F0B23A;
 }
 
 .final-cta-copy h2 {
@@ -1018,7 +1018,7 @@
 .final-cta-copy p {
   font-size: 1.15rem;
   line-height: 1.7;
-  color: #dbe6f0;
+  color: #E9D9A8;
   max-width: 560px;
   margin: 0 auto 2rem;
 }
@@ -1047,8 +1047,8 @@
 }
 
 .final-cta-ghost:hover {
-  border-color: #d9a441;
-  color: #d9a441;
+  border-color: #E2A233;
+  color: #E2A233;
   transform: translateY(-2px);
 }
 
@@ -1209,7 +1209,7 @@
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #fffaf4;
+    background: #FFF8EC;
     z-index: 0;
   }
 
@@ -1241,7 +1241,7 @@
     border: none;
     font-size: 1.15rem;
     font-weight: 700;
-    color: #8a5a1f;
+    color: #7A4E1A;
   }
 
   .journey-step h3 {
