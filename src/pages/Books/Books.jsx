@@ -184,65 +184,129 @@ export default function Books() {
   return (
     <div className="store-page">
       {/* ================= HERO ================= */}
-      <section className="store-hero" aria-label="Our collection">
-        <div className="hero-bg" aria-hidden="true">
-          <div className="hero-blob-right">
-            <span className="hero-glow" />
-          </div>
-          <div className="hero-wave-left" />
-          <div className="hero-shape shape-a" />
-          <div className="hero-shape shape-b" />
-          <div className="hero-shape shape-c" />
-        </div>
+<section className="store-hero" aria-label="Our collection">
+  <div className="hero-bg" aria-hidden="true">
+    <div className="hero-blob-right">
+      <span className="hero-glow" />
+    </div>
 
-        <div className="hero-inner">
-          <div className="hero-copy">
-            <motion.div variants={staggerWrap} initial="hidden" animate="visible">
-              <motion.h1 variants={fadeUp} custom={1}>
-                Discover Stories
-                <br />
-                That <span className="accent">Inspire</span>
-              </motion.h1>
-              <motion.p variants={fadeUp} custom={2}>
-                Explore books published by talented authors from different
-                genres, crafted to inspire, educate, and entertain.
-              </motion.p>
-              <motion.div variants={fadeUp} custom={3} className="hero-actions">
-                <button
-                  className="btn-gold"
-                  onClick={() => scrollToSection("all-books")}
-                >
-                  Browse Collection <FaArrowRight className="arrow-ico" />
-                </button>
-                <button className="btn-outline" onClick={() => scrollToSection("store-cta")}>
-                  <FaPen /> Become an Author
-                </button>
-              </motion.div>
-            </motion.div>
-          </div>
+    <div className="hero-wave-left" />
 
-          <div className="hero-visual" aria-hidden="true">
-            <div className="store-stage">
-              <motion.div
-                className="book-stack"
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
-              >
-                {FLOATING_BOOKS.map((b) => (
-                  <div className={`floating-book ${b.className}`} key={b.className}>
-                    <img
-                      src={b.src}
-                      alt=""
-                      loading="lazy"
-                      style={{ rotate: b.rotation }}
-                    />
-                  </div>
-                ))}
-              </motion.div>
+    <div className="hero-shape shape-a" />
+    <div className="hero-shape shape-b" />
+    <div className="hero-shape shape-c" />
+
+    {/* Decorative dots */}
+    <div className="hero-dots dots-one" />
+    <div className="hero-dots dots-two" />
+
+    {/* Small stars */}
+    <span className="hero-star star-one">✦</span>
+    <span className="hero-star star-two">✦</span>
+    <span className="hero-star star-three">✦</span>
+  </div>
+
+  <div className="hero-inner">
+
+    {/* LEFT CONTENT */}
+    <div className="hero-copy">
+      <motion.div
+        variants={staggerWrap}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.span
+          className="hero-label"
+          variants={fadeUp}
+          custom={0}
+        >
+          OUR STORE
+        </motion.span>
+
+        <motion.div
+          className="hero-label-line"
+          variants={fadeUp}
+          custom={0}
+        />
+
+        <motion.h1 variants={fadeUp} custom={1}>
+          Books That
+          <br />
+          <span className="accent">Inspire.</span>
+          <br />
+          Stories That <span className="accent">Stay.</span>
+        </motion.h1>
+
+        <motion.div
+          className="hero-heading-line"
+          variants={fadeUp}
+          custom={2}
+        />
+
+        <motion.p variants={fadeUp} custom={3}>
+          Explore thoughtfully published books from emerging and
+          established authors, created to inspire new ideas,
+          perspectives, and conversations.
+        </motion.p>
+
+        <motion.div
+          variants={fadeUp}
+          custom={4}
+          className="hero-actions"
+        >
+          <button
+            className="btn-gold"
+            onClick={() => scrollToSection("all-books")}
+          >
+            Explore Collection
+            <FaArrowRight className="arrow-ico" />
+          </button>
+
+          <button
+            className="btn-outline"
+            onClick={() => scrollToSection("store-cta")}
+          >
+            <FaPen />
+            Become an Author
+          </button>
+        </motion.div>
+      </motion.div>
+    </div>
+
+    {/* BOOK VISUAL */}
+    <div className="hero-visual" aria-hidden="true">
+      <div className="store-stage">
+
+        {/* Large soft yellow circle */}
+        <div className="book-orbit" />
+
+        {/* Orbit line */}
+        <div className="orbit-ring orbit-ring-one" />
+        <div className="orbit-ring orbit-ring-two" />
+
+        {/* Small decorative dots */}
+        <div className="book-dots dots-left" />
+        <div className="book-dots dots-bottom" />
+
+        <div className="book-stack">
+          {FLOATING_BOOKS.map((b, index) => (
+            <div
+              className={`floating-book ${b.className}`}
+              key={b.className}
+            >
+              <img
+                src={b.src}
+                alt=""
+                loading="lazy"
+              />
             </div>
-          </div>
+          ))}
         </div>
-      </section>
+      </div>
+    </div>
+
+  </div>
+</section>
 
       {/* ================= FEATURED BOOKS ================= */}
       <section className="featured-section">
