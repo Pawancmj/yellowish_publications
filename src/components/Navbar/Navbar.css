@@ -256,63 +256,7 @@
 }
 
 
-/* =========================================================
-   CART
-========================================================= */
-
-.cart-button {
-  position: relative;
-
-  width: 42px;
-  height: 42px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #071a38;
-
-  text-decoration: none;
-
-  font-size: 20px;
-
-  transition:
-    color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.cart-button:hover {
-  color: #dc990d;
-
-  transform: translateY(-1px);
-}
-
-.cart-count {
-  position: absolute;
-
-  top: -1px;
-  right: -2px;
-
-  width: 17px;
-  height: 17px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #e7a315;
-
-  color: #fff;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  border: 2px solid #fffdf9;
-}
-
+ 
 
 /* =========================================================
    HAMBURGER

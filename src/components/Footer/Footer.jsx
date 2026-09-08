@@ -33,28 +33,37 @@ export default function Footer() {
           </div>
 
           <div className="col">
-            <h4 className="heading">Head Office</h4>
+  <h4 className="heading">Head Office</h4>
 
-            <div className="contact">
-  <FaPhoneAlt />
-  <a
-    className="contact-link"
-    href="tel:+919871569192"
-  >
-    +91 9871569192
-  </a>
-</div>
+  <div className="office">
+    <div className="contact">
+      <FaPhoneAlt className="contact-icon" />
+      <a
+        className="contact-link"
+        href="tel:+919871569192"
+      >
+        +91 9871569192
+      </a>
+    </div>
 
-<div className="contact">
-  <FaEnvelope />
-  <a
-    className="contact-link"
-    href="mailto:Yellowishpublication1@gmail.com"
-  >
-    Yellowishpublication1@gmail.com
-  </a>
+    <div className="contact">
+      <FaEnvelope className="contact-icon" />
+      <a
+        className="contact-link"
+        href="mailto:Yellowishpublication1@gmail.com"
+      >
+        Yellowishpublication1@gmail.com
+      </a>
+    </div>
+
+    <div className="contact address">
+      <FaMapMarkerAlt className="contact-icon" />
+      <span>
+        G-51, Govindpuram, Ghaziabad, U.P
+      </span>
+    </div>
+  </div>
 </div>
-          </div>
 
           <div className="col">
             <h4 className="heading">Follow Us</h4>
@@ -94,11 +103,11 @@ export default function Footer() {
         <div className="bottom-bar">
           <p>© 2025 Yellowish Publication. All rights reserved.</p>
 
-          <div>
-            <a href="/">Privacy Policy</a>
-            <span>|</span>
-            <a href="/">Terms of Service</a>
-          </div>
+          <div className="legal">
+  <NavLink to="/privacy-policy">Privacy Policy</NavLink>
+  <span>|</span>
+  <NavLink to="/terms">Terms of Service</NavLink>
+</div>
         </div>
       </div>
     </footer>

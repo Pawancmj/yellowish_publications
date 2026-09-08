@@ -141,15 +141,7 @@ export default function Navbar() {
             <span>Become an Author</span>
           </NavLink>
 
-          <NavLink
-            to="/cart"
-            className="cart-button"
-            aria-label="Shopping cart"
-          >
-            <FaShoppingCart />
-            <span className="cart-count">0</span>
-          </NavLink>
-
+          
         </div>
 
 

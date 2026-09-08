@@ -70,8 +70,8 @@ const FEATURES = [
   },
   {
     icon: FaPen,
-    title: "High Quality",
-    desc: "Professional editing, design, and print quality guaranteed.",
+    title: "Author Branding",
+    desc: "Build a strong personal brand that makes your book stand out.",
   },
 ];
 
@@ -563,35 +563,7 @@ useEffect(() => {
   </div>
 </section>
 
-{/* Section 9 — Pricing */}
-<section className="pricing-section">
-  <div className="container">
-    <div className="pricing-head">
-      <h2>Publishing Packages</h2>
-      <p>Simple, transparent pricing to bring your book to life.</p>
-    </div>
-
-    <div className="pricing-grid">
-      {PACKAGES.map((pkg, i) => (
-        <div className={`pricing-card ${pkg.featured ? "featured" : ""}`} key={pkg.name}>
-          <div className="pricing-header">
-            <span className="plan-icon">{["☆", "♛", "◇"][i]}</span>
-            <h3>{pkg.name}</h3>
-            <span className="price">{pkg.price}</span>
-          </div>
-          <div className="pricing-body">
-            <ul>
-              {pkg.features.map(feature => (
-                <li key={feature}><FaCheck className="check" />{feature}</li>
-              ))}
-            </ul>
-            <a href="/store" className="btn-gold" onClick={e => handleNavClick(e, "/store")}>KNOW MORE</a>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+ 
       {/* Section 10 — Distribution Channels */}
 <section className="distribution-section">
   <div className="distribution-container">
@@ -691,26 +663,7 @@ useEffect(() => {
 
   </div>
 </section>
-      {/* Section 11 — Reviews */}
-<section className="review-highlights">
-  <div className="container">
-    <span className="gold-label">★ ★ ★ &nbsp; GOOGLE CUSTOMER REVIEWS &nbsp; ★ ★ ★</span>
-    <h2>What Authors Think About Us</h2>
-    <div className="review-line">— ★ —</div>
-
-    <div className="reviews-grid">
-      {REVIEW_HIGHLIGHTS.map((review) => (
-        <div className="review-card" key={review.name}>
-          <img src={review.photo} alt={review.name} className="review-photo" />
-          <Stars rating={review.rating} />
-          <p className="review-quote">“{review.quote}”</p>
-          <span className="review-name">{review.name}</span>
-          <div className="card-line" />
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+      
 
 {/* Section 11-b — Trusted Authors */}
 <section className="trusted-authors">
@@ -753,7 +706,7 @@ useEffect(() => {
 
      <section className="video-section">
   <div className="container">
-    <span className="video-label">✦ VIDEO STORIES ✦</span>
+    <span className="video-label"> </span>
     <h2>Watch <span>Author Stories</span></h2>
     <p>Real stories. Real authors. Real impact.</p>
 
@@ -772,68 +725,7 @@ useEffect(() => {
   </div>
 </section>
 
-      <section className="google-reviews-section">
-  <div className="container">
-    <div className="gr-title">— ★ —</div>
-    <h2>Don't Just Believe What We Say</h2>
-    <p className="gr-sub">Read What Authors Have To Say About Us</p>
-
-    <div className="gr-card">
-      <div className="gr-summary">
-        <div className="gr-rating-box">
-          <div className="gr-logo"><FaGoogle /></div>
-          <div>
-            <b className="gr-score">4.5</b>
-            <Stars rating={4.5} />
-            <span className="gr-count">Based on 120+ Google reviews</span>
-          </div>
-        </div>
-
-        <div className="gr-bars">
-          {[["5 Star","68%"],["4 Star","22%"],["3 Star","7%"],["2 Star","2%"],["1 Star","1%"]].map(([star, value]) => (
-            <div className="gr-bar" key={star}>
-              <span>{star}</span>
-              <i><b style={{width:value}} /></i>
-              <span>{value}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="gr-happy">
-          <b>120+</b>
-          <span>Happy Authors</span>
-        </div>
-      </div>
-
-      <div className="gr-grid">
-        {GOOGLE_REVIEWS.map((review) => (
-          <div className="gr-review" key={review.name}>
-            <div className="gr-review-top">
-              <img
-                src={
-                  review.name === "Rahul Deb" ? author5 :
-                  review.name === "Dr. Heena Sachdeva" ? author2 : author3
-                }
-                alt={review.name}
-                className="gr-avatar"
-              />
-              <div>
-                <b className="gr-name">{review.name}</b>
-                <span className="gr-date">{review.date}</span>
-              </div>
-            </div>
-
-            <Stars rating={review.rating} />
-            <p className="gr-text">
-              {review.text} <span>Read more</span>
-            </p>
-            <small><FaGoogle /> Posted on Google</small>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
+       
     </div>
   );
 }

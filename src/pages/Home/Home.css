@@ -781,187 +781,156 @@
 
 /* ---------------- Stats ---------------- */
 
+/* =========================
+   Section 8 — Stats
+========================= */
+
 .stats-bar {
-  background: #fff8e7;
-  padding: 28px 0;
+  position: relative;
+  overflow: hidden;
+  background: #193955;
+  padding: 30px 0 60px;
+}
+
+/* Decorative shapes */
+.stats-bar::before {
+  content: "";
+  position: absolute;
+  left: -120px;
+  top: -120px;
+  width: 405px;
+  height: 405px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 0 0 70% 0;
+}
+
+.stats-bar::after {
+  content: "";
+  position: absolute;
+  right: -100px;
+  bottom: -180px;
+  width: 370px;
+  height: 370px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50% 0 0 0;
+}
+
+/* Top decorative circle */
+.stats-container::before {
+  content: "";
+  position: absolute;
+  right: 12%;
+  top: -130px;
+  width: 275px;
+  height: 275px;
+  border: 3px solid rgba(220, 167, 49, 0.28);
+  border-radius: 50%;
 }
 
 .stats-container {
+  position: relative;
+  z-index: 2;
+
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
+/* Individual stat */
 .stat {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  border-right: 1px solid #f1dfb5;
+
+  min-height: 120px;
+
+  border-right: 1px solid rgba(255, 239, 194, 0.75);
 }
 
-.stat:last-child { border: 0; }
-
-.stat-icon {
-  display: grid;
-  place-items: center;
-  width: 66px;
-  height: 66px;
-  border-radius: 50%;
-  background: #ffedbf;
-  color: #c98a00;
-  font-size: 2rem;
+.stat:last-child {
+  border-right: none;
 }
 
+.stat-content {
+  text-align: center;
+}
+
+/* Number */
 .stat-value {
   display: block;
-  color: #c98a00;
-  font-size: 2.2rem;
+
+  color: #f4ae24;
+  font-size: 4.4rem;
+  line-height: 1;
   font-weight: 700;
+  letter-spacing: -2px;
 }
 
+/* Label */
 .stat-label {
   display: block;
-  margin-top: 3px;
-  color: #26364a;
-  font-size: .95rem;
+
+  margin-top: 18px;
+
+  color: #ffe4a2;
+  font-size: 1.25rem;
+  font-weight: 400;
 }
 
-/* ---------------- Pricing ---------------- */
+/* =========================
+   Responsive
+========================= */
 
-.pricing-section {
-  background: #fffaf4;
-  padding: 38px 0 55px;
-}
+@media (max-width: 900px) {
+  .stats-bar {
+    padding: 50px 20px 80px;
+  }
 
-.pricing-head {
-  text-align: center;
-  margin-bottom: 48px;
-}
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 35px;
+  }
 
-.pricing-head h2 {
-  margin: 0 0 8px;
-  color: #123a5c;
-  font: 700 clamp(2rem, 4vw, 2.7rem) Georgia, serif;
-}
+  .stat:nth-child(2) {
+    border-right: none;
+  }
 
-.pricing-head p {
-  margin: 0;
-  color: #596273;
-  font-size: 1.05rem;
-}
+  .stat-value {
+    font-size: 3.5rem;
+  }
 
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  align-items: stretch;
-}
-
-.pricing-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: 20px;
-  overflow: visible;
-  box-shadow: 0 10px 30px rgba(120,90,40,.1);
-}
-
-.pricing-card.featured {
-  border: 2px solid #f6bd32;
-  transform: translateY(-22px);
-}
-
-.pricing-header {
-  position: relative;
-  padding: 55px 20px 20px;
-  text-align: center;
-  background: linear-gradient(180deg,#ffc94d,#fff8e9);
-  border-radius: 20px 20px 0 0;
-}
-
-.plan-icon {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: #fff;
-  color: #d59500;
-  font-size: 2rem;
-  box-shadow: 0 3px 12px rgba(120,90,40,.15);
-}
-
-.pricing-header h3 {
-  margin: 0 0 8px;
-  color: #123a5c;
-  font: 700 1.65rem Georgia, serif;
-}
-
-.price {
-  color: #cf9000;
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.pricing-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 22px 28px 28px;
-}
-
-.pricing-body ul {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 0 0 25px;
-  padding: 0;
-  list-style: none;
-}
-
-.pricing-body li {
-  display: flex;
-  gap: 10px;
-  color: #26364a;
-  font-size: .95rem;
-}
-
-.pricing-body .check {
-  color: #f4b51b;
-  flex-shrink: 0;
-  margin-top: 3px;
-}
-
-.pricing-body .btn-gold {
-  width: 100%;
-  margin-top: auto;
-}
-
-@media (max-width: 800px) {
-  .stats-container,
-  .pricing-grid { grid-template-columns: repeat(2,1fr); }
-
-  .stat { padding: 12px; }
-
-  .pricing-card.featured { transform: none; }
+  .stat-label {
+    font-size: 1.1rem;
+  }
 }
 
 @media (max-width: 550px) {
-  .stats-container,
-  .pricing-grid { grid-template-columns: 1fr; }
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
 
-  .stat {
-    border-right: 0;
-    border-bottom: 1px solid #f1dfb5;
-    padding: 14px;
+  .stat,
+  .stat:nth-child(2) {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 239, 194, 0.5);
+    padding: 25px 0;
+  }
+
+  .stat:last-child {
+    border-bottom: none;
+  }
+
+  .stat-value {
+    font-size: 3rem;
+  }
+
+  .stats-container::before {
+    display: none;
   }
 }
+ 
 /* ---------------- Section 10: Distribution ---------------- */
  
 
@@ -1409,7 +1378,7 @@
   }
 }
 .video-section {
-  background: #17120c;
+  background: #193955;
   padding: 50px 0;
   color: #fff;
 }

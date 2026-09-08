@@ -30,21 +30,16 @@
 
 .hero-eyebrow {
   margin: 0 0 8px;
-
   color: #df9200;
-
   font-family:
     "DM Sans",
     "Inter",
     system-ui,
     sans-serif;
-
   font-size: 13px;
   font-weight: 700;
-
   letter-spacing: 2px;
   line-height: 1.2;
-
   text-transform: uppercase;
 }
 
@@ -55,24 +50,18 @@
 
 .hero-title {
   margin: 0;
-
   color: #071b3a;
-
   font-family:
     Georgia,
     "Times New Roman",
     serif;
-
   font-size: clamp(
     44px,
     5vw,
     72px
   );
-
   line-height: 1.05;
-
   font-weight: 700;
-
   letter-spacing: -1.5px;
 }
 
@@ -87,32 +76,21 @@
 
 .hero-description {
   max-width: 680px;
-
-  margin:
-    18px
-    auto
-    0;
-
+  margin: 18px auto 0;
   color: #66616a;
-
   font-family:
     "DM Sans",
     "Inter",
     system-ui,
     sans-serif;
-
-  font-size: 15px;
-
+  font-size: 20px !important;
   line-height: 1.6;
-
   text-align: center;
 }
 
 
 /* ============================================================
    ORANGE BOOK SHOWCASE
-
-   Increased height so the orange section is larger.
 ============================================================ */
 
 .book-showcase {
@@ -134,24 +112,14 @@
 
 .book-showcase::before {
   content: "";
-
   position: absolute;
-
   z-index: 1;
-
   top: -38px;
   left: -4%;
-
   width: 108%;
   height: 76px;
-
   background: #fffdfa;
-
-  border-radius:
-    0
-    0
-    50%
-    50%;
+  border-radius: 0 0 50% 50%;
 }
 
 
@@ -177,9 +145,8 @@
 
 .hero-book-wrapper {
   min-width: 0;
-
+  width: 100%;
   display: flex;
-
   justify-content: center;
   align-items: flex-end;
 }
@@ -191,9 +158,7 @@
 
 .hero-book-link {
   display: block;
-
   width: 100%;
-
   text-decoration: none;
 }
 
@@ -221,27 +186,20 @@
   filter: drop-shadow(0 13px 9px rgba(0, 0, 0, 0.28));
   transition: transform 0.3s ease, filter 0.3s ease;
 }
+
+/* Fallback: agar missing image ho to layout stretch na ho */
+.hero-book img:not([src]), 
+.hero-book img[src=""] {
+  opacity: 0;
+}
+
 /* ============================================================
    BOOK HOVER
 ============================================================ */
 
 .hero-book:hover img {
-  transform:
-    translateY(-10px)
-    scale(1.035);
-
-  filter:
-    drop-shadow(
-      0
-      17px
-      12px
-      rgba(
-        0,
-        0,
-        0,
-        0.32
-      )
-    );
+  transform: translateY(-10px) scale(1.035);
+  filter: drop-shadow(0 17px 12px rgba(0, 0, 0, 0.32));
 }
 
 
@@ -251,86 +209,39 @@
 
 .book-arrow {
   position: absolute;
-
   z-index: 10;
-
   top: 58%;
-
   width: 42px;
   height: 42px;
-
   border: none;
-
   border-radius: 50%;
-
   background: #fffdfa;
-
   color: #17243a;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   font-family: Arial, sans-serif;
-
   font-size: 31px;
-
   line-height: 1;
-
   cursor: pointer;
-
-  box-shadow:
-    0
-    5px
-    14px
-    rgba(
-      0,
-      0,
-      0,
-      0.16
-    );
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.16);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
-
 
 .book-arrow:hover {
-  transform:
-    translateY(-50%)
-    scale(1.08);
-
+  transform: translateY(-50%) scale(1.08);
   background: #ffffff;
-
-  box-shadow:
-    0
-    8px
-    18px
-    rgba(
-      0,
-      0,
-      0,
-      0.22
-    );
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
 }
-
 
 .book-arrow-left {
   left: 24px;
-
-  transform:
-    translateY(-50%);
+  transform: translateY(-50%);
 }
-
 
 .book-arrow-right {
   right: 24px;
-
-  transform:
-    translateY(-50%);
+  transform: translateY(-50%);
 }
 
 
@@ -340,39 +251,15 @@
 
 .hero-info {
   position: relative;
-
   z-index: 20;
-
-  width: min(
-    1180px,
-    92%
-  );
-
+  width: min(1180px, 92%);
   min-height: 125px;
-
-  margin:
-    0
-    auto;
-
+  margin: 0 auto;
   display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
+  grid-template-columns: repeat(4, 1fr);
   align-items: stretch;
-
   background: #fff;
-
-  box-shadow:
-    0
-    8px
-    30px
-    rgba(
-      20,
-      30,
-      50,
-      0.08
-    );
+  box-shadow: 0 8px 30px rgba(20, 30, 50, 0.08);
 }
 
 
@@ -382,21 +269,12 @@
 
 .hero-info-item {
   min-width: 0;
-
-  padding:
-    20px
-    22px;
-
+  padding: 20px 22px;
   display: flex;
-
   align-items: center;
-
   gap: 14px;
-
-  border-right:
-    1px solid #e8e4dc;
+  border-right: 1px solid #e8e4dc;
 }
-
 
 .hero-info-item:last-child {
   border-right: none;
@@ -409,21 +287,14 @@
 
 .hero-info-icon {
   flex-shrink: 0;
-
   width: 48px;
   height: 48px;
-
   border-radius: 14px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   background: #f9e4b7;
-
   color: #df9200;
-
   font-size: 21px;
 }
 
@@ -433,31 +304,20 @@
 ============================================================ */
 
 .hero-info-item h3 {
-  margin:
-    0
-    0
-    5px;
-
+  margin: 0 0 5px;
   color: #17243a;
-
   font-family:
     Georgia,
     "Times New Roman",
     serif;
-
   font-size: 16px;
-
   line-height: 1.2;
 }
 
-
 .hero-info-item p {
   margin: 0;
-
   color: #777;
-
   font-size: 12px;
-
   line-height: 1.45;
 }
 
@@ -467,7 +327,6 @@
 ============================================================ */
 
 @media (min-width: 1400px) {
-
   .hero-heading {
     padding-top: 34px;
     padding-bottom: 30px;
@@ -486,47 +345,31 @@
     max-width: 720px;
   }
 
-
   .book-showcase {
-    /* Bigger orange area */
     height: 450px;
-
-    padding:
-      72px
-      70px
-      0;
+    padding: 72px 70px 0;
   }
-
 
   .hero-books {
-    width: min(
-      1350px,
-      94%
-    );
-
+    width: min(1350px, 94%);
     height: 370px;
-
     gap: 20px;
   }
-
 
   .hero-book {
     height: 350px;
     max-width: 205px;
   }
 
-
   .hero-book img {
     height: 350px;
   }
-
 
   .book-arrow {
     width: 46px;
     height: 46px;
     font-size: 34px;
   }
-
 }
 
 
@@ -535,100 +378,67 @@
 ============================================================ */
 
 @media (max-width: 1100px) {
-
   .hero-heading {
-    padding:
-      30px
-      20px
-      25px;
+    padding: 30px 20px 25px;
   }
-
 
   .hero-eyebrow {
     font-size: 12px;
   }
 
-
   .hero-title {
-    font-size: clamp(
-      42px,
-      6vw,
-      64px
-    );
+    font-size: clamp(42px, 6vw, 64px);
   }
-
 
   .hero-description {
     max-width: 650px;
     font-size: 14px;
   }
 
-
   .book-showcase {
     height: 385px;
-
-    padding:
-      60px
-      50px
-      0;
+    padding: 60px 50px 0;
   }
-
 
   .hero-books {
     width: 96%;
-
     height: 315px;
-
     gap: 12px;
   }
 
-
   .hero-book {
     height: 295px;
-
     max-width: 175px;
   }
-
 
   .hero-book img {
     height: 295px;
   }
 
-
   .book-arrow {
     width: 40px;
     height: 40px;
-
     font-size: 29px;
   }
-
 
   .book-arrow-left {
     left: 15px;
   }
 
-
   .book-arrow-right {
     right: 15px;
   }
 
-
   .hero-info-item {
-    padding:
-      18px
-      14px;
-
+    padding: 18px 14px;
     gap: 10px;
   }
-
 
   .hero-info-icon {
     width: 42px;
     height: 42px;
-
     font-size: 18px;
   }
-
 }
 
 
@@ -637,154 +447,94 @@
 ============================================================ */
 
 @media (max-width: 768px) {
-
   .hero-heading {
-    padding:
-      25px
-      15px
-      20px;
+    padding: 25px 15px 20px;
   }
-
 
   .hero-eyebrow {
     font-size: 10px;
-
     letter-spacing: 1.5px;
   }
 
-
   .hero-title {
     font-size: 38px;
-
     line-height: 1;
-
     letter-spacing: -0.5px;
   }
 
-
   .hero-description {
     max-width: 540px;
-
     margin-top: 14px;
-
     font-size: 13px;
-
     line-height: 1.5;
   }
 
-
-  /* ========================================================
-     ORANGE SECTION
-  ======================================================== */
-
   .book-showcase {
     height: 360px;
-
     margin-top: 30px;
-
-    padding:
-      55px
-      42px
-      0;
+    padding: 55px 42px 0;
   }
-
 
   .book-showcase::before {
     top: -40px;
-
     left: -10%;
-
     width: 120%;
-
     height: 80px;
   }
 
-
   .hero-books {
     width: 100%;
-
     height: 275px;
-
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
   }
 
-
   .hero-book {
     height: 255px;
-
     max-width: 150px;
   }
-
 
   .hero-book img {
     height: 255px;
   }
 
-
-  /* ========================================================
-     ARROWS
-  ======================================================== */
-
   .book-arrow {
     width: 35px;
     height: 35px;
-
     font-size: 26px;
   }
-
 
   .book-arrow-left {
     left: 8px;
   }
 
-
   .book-arrow-right {
     right: 8px;
   }
 
-
-  /* ========================================================
-     FEATURE STRIP
-  ======================================================== */
-
   .hero-info {
     width: 94%;
-
-    grid-template-columns:
-      repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
-
 
   .hero-info-item {
     min-height: 105px;
-
     padding: 15px;
-
     border-right: none;
-
-    border-bottom:
-      1px solid #e8e4dc;
+    border-bottom: 1px solid #e8e4dc;
   }
-
 
   .hero-info-item:nth-child(odd) {
-    border-right:
-      1px solid #e8e4dc;
+    border-right: 1px solid #e8e4dc;
   }
-
 
   .hero-info-item h3 {
     font-size: 14px;
   }
 
-
   .hero-info-item p {
     font-size: 11px;
   }
-
 }
 
 
@@ -793,103 +543,73 @@
 ============================================================ */
 
 @media (max-width: 480px) {
-
   .hero-heading {
-    padding:
-      24px
-      15px
-      18px;
+    padding: 24px 15px 18px;
   }
-
 
   .hero-eyebrow {
     font-size: 9px;
   }
 
-
   .hero-title {
     font-size: 31px;
-
     letter-spacing: -0.5px;
   }
-
 
   .hero-description {
     font-size: 12px;
   }
 
-
   .book-showcase {
     height: 330px;
-
-    padding:
-      50px
-      35px
-      0;
+    padding: 50px 35px 0;
   }
-
 
   .book-showcase::before {
     top: -35px;
-
     height: 70px;
   }
 
-
   .hero-books {
     height: 255px;
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
 
-
   .hero-book {
     height: 235px;
-
     max-width: 140px;
   }
-
 
   .hero-book img {
     height: 235px;
   }
 
-
   .book-arrow {
     width: 33px;
     height: 33px;
-
     font-size: 24px;
   }
-
 
   .book-arrow-left {
     left: 6px;
   }
 
-
   .book-arrow-right {
     right: 6px;
   }
-
 
   .hero-info {
     grid-template-columns: 1fr;
   }
 
-
   .hero-info-item {
     border-right: none !important;
   }
 
-
   .hero-info-item:last-child {
     border-bottom: none;
   }
-
 }
 
 
@@ -898,43 +618,34 @@
 ============================================================ */
 
 @media (max-width: 360px) {
-
   .hero-title {
     font-size: 28px;
   }
-
 
   .hero-eyebrow {
     font-size: 8px;
   }
 
-
   .hero-description {
     font-size: 10.5px;
   }
-
 
   .book-showcase {
     height: 315px;
   }
 
-
   .hero-books {
     height: 240px;
-
     gap: 7px;
   }
-
 
   .hero-book {
     height: 220px;
   }
 
-
   .hero-book img {
     height: 220px;
   }
-
 }
 
 
@@ -943,11 +654,9 @@
 ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-
   .hero-book img,
   .hero-book,
   .book-arrow {
     transition: none;
   }
-
 }
