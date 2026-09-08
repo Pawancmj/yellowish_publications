@@ -205,7 +205,7 @@ export default function Blog() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="gold-label">EDITOR'S PICK</span>
+               
               <h2>Featured Article</h2>
               <p>The story everyone is talking about this week.</p>
             </motion.div>
@@ -415,7 +415,7 @@ export default function Blog() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="gold-label">STAY IN THE LOOP</span>
+             
             <h2>Never Miss a Publishing Update</h2>
             <p>
               Get writing tips, author stories, and industry news delivered

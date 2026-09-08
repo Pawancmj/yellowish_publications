@@ -51,18 +51,14 @@
   text-decoration: none;
 }
 
+/* FINAL LOGO SIZE */
 .logo-img {
-  width: 58px;
-  height: 58px;
-
-  border-radius: 50%;
-
-  object-fit: cover;
-
-  box-shadow:
-    0 0 0 1px rgba(224, 169, 47, 0.3);
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
-
 .logo-content {
   display: flex;
   flex-direction: column;
@@ -586,3 +582,4 @@
     font-size: 25px;
   }
 }
+ 

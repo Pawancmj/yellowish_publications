@@ -444,43 +444,9 @@ export default function Books() {
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
-      <section id="store-cta" className="store-cta">
-        <div className="cta-decor" aria-hidden="true">
-          <div className="cta-blob-left">
-            <span className="cta-blob-left-fill" />
-          </div>
-          <div className="cta-blob-right">
-            <span className="cta-blob-right-fill" />
-          </div>
-        </div>
-        <div className="container cta-inner">
-          <motion.div
-            className="cta-copy"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="gold-label">HAVE A MANUSCRIPT?</span>
-            <h2>Can't find the perfect book?</h2>
-            <p>
-              We publish stories that deserve to be read. Whether it's yours or
-              one you're searching for, we'd love to help.
-            </p>
-            <div className="cta-actions">
-              <button className="btn-gold" onClick={() => scrollToSection("store-cta")}>
-                Contact Us <FaArrowRight className="arrow-ico" />
-              </button>
-              <Link to="/authors" className="btn-outline">
-                <FaPen /> Publish Your Book
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+       
 
-      {toast && <div className="toast-notice" role="status">{toast}</div>}
+      
     </div>
   );
 }

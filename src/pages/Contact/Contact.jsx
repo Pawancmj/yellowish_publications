@@ -478,80 +478,8 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* ================= WHY CONTACT US ================= */}
-      <section className="why-contact-section">
-        <div className="container">
-          <motion.div
-            className="section-head"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="contact-gold-label">WHY CONTACT US</span>
-            <h2>What You Get When You Reach Out</h2>
-            <p>Real people, honest advice, and a team that cares about your book.</p>
-          </motion.div>
-
-          <div className="why-grid">
-            {WHY_CONTACT.map((feature, i) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={feature.title}
-                  className="why-card"
-                  initial={{ opacity: 0, y: 28 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.6, delay: i * 0.08 }}
-                >
-                  <div className="why-icon">
-                    <Icon />
-                  </div>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.desc}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= MAP ================= */}
-      <section className="contact-map-section">
-        <div className="container">
-          <motion.div
-            className="section-head"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="contact-gold-label">FIND US</span>
-            <h2>Our Location</h2>
-            <p>Visit our head office in Ghaziabad, Uttar Pradesh.</p>
-          </motion.div>
-
-          <motion.div
-            className="map-wrap"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-          >
-            <iframe
-              title="Yellowish Publication office location"
-              src="https://www.google.com/maps?q=Ghaziabad,Uttar+Pradesh,India&output=embed"
-              width="100%"
-              height="420"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </motion.div>
-        </div>
-      </section>
+       
+       
 
       {/* ================= FAQ ================= */}
       <section className="contact-faq-section">
