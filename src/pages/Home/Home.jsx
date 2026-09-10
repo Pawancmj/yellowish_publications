@@ -113,44 +113,7 @@ const STATS = [
   { value: "24/7", label: "Author Support" },
 ];
 
-const PACKAGES = [
-  {
-    name: "Basic",
-    price: "₹4,999",
-    features: [
-      "Up to 100 pages",
-      "10 author copies",
-      "Standard cover design",
-      "Amazon & Flipkart listing",
-      "Email support",
-    ],
-  },
-  {
-    name: "Premium",
-    price: "₹9,999",
-    featured: true,
-    features: [
-      "Up to 250 pages",
-      "25 author copies",
-      "Custom cover + editing",
-      "Global distribution",
-      "Marketing assistance",
-      "Priority support",
-    ],
-  },
-  {
-    name: "Elite",
-    price: "₹14,999",
-    features: [
-      "Unlimited pages",
-      "50 author copies",
-      "Premium design + editing",
-      "Global + print distribution",
-      "Dedicated author manager",
-    ],
-  },
-];
-
+ 
 // ✅ FIXED — uses real imported logos, no broken DISTRIBUTION/rotate code
 const DISTRIBUTION_CHANNELS = [
   { name: "Flipkart", logo: flipkartLogo, desc: "Shop our books on Flipkart", link: "#" },
@@ -665,42 +628,71 @@ useEffect(() => {
 </section>
       
 
-{/* Section 11-b — Trusted Authors */}
+{/* ================= SECTION 11-B — TRUSTED AUTHORS ================= */}
 <section className="trusted-authors">
-  <div className="container">
-    <h2>
+  <div className="trusted-authors-container">
+
+    <h2 className="trusted-title">
       Trusted by <span>12,000+</span> Authors including{" "}
       <span>celebrities</span> and <span>influencers.</span>
     </h2>
 
-    <div className="review-line">— ★ —</div>
-
     <div className="trusted-slider">
-      <button className="slider-arrow" onClick={prevTrusted}>‹</button>
+
+      <button
+        className="slider-arrow slider-arrow-left"
+        onClick={prevTrusted}
+        aria-label="Previous"
+      >
+        ‹
+      </button>
 
       <div className="trusted-track">
-        {[0, 1, 2, 3].map((n) => (
-          <img
-            key={n}
-            src={TRUSTED_AUTHORS[(trustedIndex + n) % TRUSTED_AUTHORS.length]}
-            alt="Trusted author"
-            className="trusted-image"
-          />
-        ))}
+
+        {[0, 1, 2, 3].map((n) => {
+          const imageIndex =
+            (trustedIndex + n) % TRUSTED_AUTHORS.length;
+
+          return (
+            <div
+              className={`trusted-card trusted-card-${n + 1}`}
+              key={`${trustedIndex}-${n}`}
+            >
+              <img
+                src={TRUSTED_AUTHORS[imageIndex]}
+                alt="Trusted author"
+                className="trusted-image"
+              />
+            </div>
+          );
+        })}
+
       </div>
 
-      <button className="slider-arrow" onClick={nextTrusted}>›</button>
+      <button
+        className="slider-arrow slider-arrow-right"
+        onClick={nextTrusted}
+        aria-label="Next"
+      >
+        ›
+      </button>
+
     </div>
 
     <div className="slider-dots">
       {TRUSTED_AUTHORS.map((_, i) => (
-        <span
+        <button
           key={i}
-          className={i === trustedIndex ? "active" : ""}
+          type="button"
+          className={`slider-dot ${
+            i === trustedIndex ? "active" : ""
+          }`}
           onClick={() => setTrustedIndex(i)}
+          aria-label={`Slide ${i + 1}`}
         />
       ))}
     </div>
+
   </div>
 </section>
 

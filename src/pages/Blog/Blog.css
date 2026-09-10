@@ -110,264 +110,728 @@
 /* ============================================================
    Hero — premium editorial background (same as Homepage)
    ============================================================ */
+/* ============================================================
+   BLOG HERO — TEXT ONLY
+   ============================================================ */
+
 .blog-hero {
   position: relative;
   isolation: isolate;
+
+  min-height: 635px;
+
   overflow: hidden;
+
   background: #fffaf4;
+
+  border-bottom: 1px solid rgba(18, 58, 92, 0.08);
 }
+
+
+/* ============================================================
+   BACKGROUND
+   ============================================================ */
 
 .blog-hero .hero-bg {
   position: absolute;
   inset: 0;
+
   z-index: 0;
+
+  pointer-events: none;
+
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   DECORATIVE SHAPES
+   ============================================================ */
+
+.blog-hero .hero-deco {
+  position: absolute;
   pointer-events: none;
 }
 
-.blog-hero .hero-blob-right {
-  position: absolute;
-  top: -120px;
-  right: -160px;
-  width: 650px;
-  height: 520px;
-  background: #f3b51b;
-  border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%;
-  overflow: hidden;
-  animation: blogFloat 18s ease-in-out infinite;
-}
 
-.blog-hero .hero-glow {
-  position: absolute;
-  right: 30px;
-  bottom: -40px;
-  width: 360px;
-  height: 360px;
+/* Top-right cream circle */
+
+.blog-hero .hero-deco-top-right {
+  width: 470px;
+  height: 470px;
+
+  top: -310px;
+  right: -110px;
+
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(217, 164, 65, 0.45) 0%,
-    rgba(217, 164, 65, 0.22) 40%,
-    transparent 80%
-  );
-  filter: blur(80px);
+
+  background: #fff0cc;
 }
 
-.blog-hero .hero-wave-left {
-  position: absolute;
-  left: -60px;
-  bottom: -30px;
+
+/* Bottom-left cream shape */
+
+.blog-hero .hero-deco-bottom-left {
   width: 420px;
-  height: 80px;
-  background: #fff1cc;
-  border-radius: 70% 30% 45% 55% / 50% 50% 40% 60%;
-  animation: blogFloat 18s ease-in-out infinite;
-}
+  height: 420px;
 
-.blog-hero .hero-shape {
-  position: absolute;
+  left: -270px;
+  bottom: -285px;
+
   border-radius: 50%;
-  animation: blogFloat 16s ease-in-out infinite;
+
+  background: #fff0cc;
 }
 
-.blog-hero .hero-shape.shape-a {
-  left: 60px;
-  top: 24px;
-  width: 52px;
-  height: 52px;
-  background: #fdf1d9;
-  opacity: 0.65;
+
+/* Top-left outlined circle */
+
+.blog-hero .hero-deco-top-left {
+  width: 290px;
+  height: 290px;
+
+  left: -190px;
+  top: -170px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(217, 164, 65, 0.6);
+
+  background: transparent;
 }
 
-.blog-hero .hero-shape.shape-b {
-  left: 46%;
-  top: 20px;
-  width: 90px;
-  height: 38px;
-  background: #fff1cc;
-  opacity: 0.5;
-  border-radius: 9999px;
+
+/* Bottom-right outlined circle */
+
+.blog-hero .hero-deco-bottom-right {
+  width: 340px;
+  height: 340px;
+
+  right: -210px;
+  bottom: -250px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(217, 164, 65, 0.55);
+
+  background: transparent;
 }
 
-.blog-hero .hero-shape.shape-c {
-  left: 42%;
-  top: 190px;
-  width: 120px;
-  height: 52px;
-  background: #fdf1d9;
-  opacity: 0.55;
-  border-radius: 9999px;
+
+/* ============================================================
+   RINGS
+   ============================================================ */
+
+.blog-hero .hero-ring {
+  position: absolute;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(217, 164, 65, 0.18);
 }
 
-@keyframes blogFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
+
+/* Left ring */
+
+.blog-hero .hero-ring-left {
+  width: 240px;
+  height: 240px;
+
+  left: -155px;
+  top: 40px;
 }
+
+
+/* Right ring */
+
+.blog-hero .hero-ring-right {
+  width: 270px;
+  height: 270px;
+
+  right: -175px;
+  bottom: 25px;
+}
+
+
+/* ============================================================
+   HERO INNER
+   ============================================================ */
 
 .blog-hero .hero-inner {
   position: relative;
+
   z-index: 2;
+
+  width: 100%;
   max-width: 1200px;
+
+  min-height: 635px;
+
   margin: 0 auto;
-  padding: 72px 1.5rem 84px;
+
+  padding: 75px 1.5rem 70px;
+
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+
+  grid-template-columns: minmax(0, 1fr) 260px;
+
   align-items: center;
-  gap: 3rem;
+
+  gap: 70px;
 }
 
-.blog-hero .hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.1rem;
-  border-radius: 999px;
-  background: #fff1cc;
-  color: #8a5a1f;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+
+/* ============================================================
+   HERO COPY
+   ============================================================ */
+
+.blog-hero .hero-copy {
+  max-width: 850px;
 }
 
-.blog-hero .hero-badge svg {
+
+/* ============================================================
+   EYEBROW
+   ============================================================ */
+
+.blog-hero .blog-hero-eyebrow {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  margin-bottom: 25px;
+
+  color: #d39b24;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 3.5px;
+
+  line-height: 1;
+}
+
+
+.blog-hero .blog-hero-eyebrow span {
+  display: block;
+
+  width: 55px;
+  height: 1px;
+
+  background: #d9a441;
+
+  opacity: 0.8;
+}
+
+
+.blog-hero .blog-hero-eyebrow b {
   color: #d9a441;
+
+  font-size: 12px;
 }
+
+
+/* ============================================================
+   HEADING
+   ============================================================ */
 
 .blog-hero .hero-copy h1 {
-  font-family: "Source Serif 4", Georgia, serif;
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  margin: 0;
+
+  font-family:
+    "Source Serif 4",
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(4rem, 6.2vw, 5.8rem);
+
   font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -1px;
+
+  line-height: 0.98;
+
+  letter-spacing: -3px;
+
   color: #123a5c;
-  margin: 0 0 1.1rem;
 }
+
 
 .blog-hero .hero-copy h1 .accent {
   color: #d9a441;
 }
 
+
+/* ============================================================
+   DESCRIPTION
+   ============================================================ */
+
 .blog-hero .hero-copy p {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: #6b5d5e;
-  max-width: 440px;
-  margin: 0 0 2rem;
+  max-width: 700px;
+
+  margin: 30px 0 0;
+
+  color: #6b6260;
+
+  font-size: 17px;
+
+  line-height: 1.75;
+
+  font-weight: 400;
 }
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 
 .blog-hero .hero-actions {
   display: flex;
+
   align-items: center;
-  gap: 1rem;
+
+  gap: 18px;
+
+  margin-top: 36px;
+
   flex-wrap: wrap;
 }
 
-/* ---------- Editorial collage (fixed 580x460 stage, scaled responsively
-   the same way as the Home hero stage) ---------- */
-.blog-hero .hero-visual {
-  position: relative;
-  height: 414px;
-  width: 100%;
-  min-width: 0;
-  display: flex;
+
+/* ---------- Gold Button ---------- */
+
+.blog-hero .btn-gold {
+  min-height: 57px;
+
+  padding: 0 28px;
+
+  display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
-}
 
-.blog-stage {
-  position: relative;
-  width: 580px;
-  height: 460px;
-  flex-shrink: 0;
-  transform: scale(0.9);
-  transform-origin: center;
-}
+  gap: 14px;
 
-.blog-hero .thumb-mosaic {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+  border: 2px solid #d9a441;
 
-.floating-thumb {
-  position: absolute;
-  overflow: hidden;
-  border-radius: 0.9rem;
-  box-shadow: 0 18px 44px rgba(18, 58, 92, 0.2);
-  border: 4px solid #fff;
-}
-
-.floating-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 0.7rem;
-}
-
-.floating-thumb .thumb-label {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  background: rgba(18, 58, 92, 0.82);
-  color: #fff;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0;
+
+  background: #f3b51b;
+
+  color: #172d43;
+
+  font-weight: 700;
+
+  font-size: 15px;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 12px 25px rgba(217, 164, 65, 0.2);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
 }
 
-/* Focal story visual — right anchor */
-.floating-thumb.ft-focal {
-  width: 180px;
-  height: 240px;
-  left: 350px;
-  top: 18px;
-  z-index: 3;
+
+.blog-hero .btn-gold:hover {
+  transform: translateY(-3px);
+
+  background: #f5b91e;
+
+  box-shadow:
+    0 16px 30px rgba(217, 164, 65, 0.3);
 }
 
-/* Feature article card — top-left anchor */
-.floating-thumb.ft-article {
-  width: 216px;
-  height: 136px;
-  left: 20px;
-  top: 22px;
-  z-index: 2;
+
+.blog-hero .arrow-ico {
+  transition: transform 0.25s ease;
 }
 
-/* News card — bottom-left anchor */
-.floating-thumb.ft-news {
-  width: 200px;
-  height: 133px;
-  left: 18px;
-  top: 248px;
-  z-index: 2;
+
+.blog-hero .btn-gold:hover .arrow-ico {
+  transform: translateX(4px);
 }
 
-/* Small marketing book — bottom-centre accent */
-.floating-thumb.ft-marketing {
-  width: 126px;
-  height: 168px;
-  left: 400px;
-  top: 292px;
-  z-index: 2;
+
+/* ============================================================
+   OUTLINE BUTTON
+   ============================================================ */
+
+.blog-hero .btn-outline {
+  min-height: 57px;
+
+  padding: 0 27px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  border: 1px solid rgba(18, 58, 92, 0.35);
+
+  border-radius: 999px;
+
+  background: #fff;
+
+  color: #123a5c;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    color 0.25s ease;
 }
 
-/* Tiny review card — diagonal bridge accent */
-.floating-thumb.ft-review {
-  width: 120px;
-  height: 80px;
-  left: 252px;
-  top: 300px;
-  z-index: 1;
+
+.blog-hero .btn-outline:hover {
+  transform: translateY(-3px);
+
+  border-color: #d9a441;
+
+  color: #d39b24;
+
+  box-shadow:
+    0 10px 24px rgba(18, 58, 92, 0.08);
 }
 
+
+/* ============================================================
+   RIGHT SIDE TYPOGRAPHY
+   ============================================================ */
+
+.blog-hero .blog-hero-side-text {
+  display: flex;
+
+  align-items: center;
+
+  gap: 25px;
+
+  justify-self: end;
+
+  margin-top: 20px;
+}
+
+
+.blog-hero .side-line {
+  display: block;
+
+  width: 2px;
+
+  height: 155px;
+
+  background: #d9a441;
+}
+
+
+.blog-hero .blog-hero-side-text div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  color: #123a5c;
+
+  font-size: 16px;
+
+  font-weight: 500;
+
+  letter-spacing: 4px;
+
+  line-height: 1.35;
+}
+
+
+.blog-hero .blog-hero-side-text strong {
+  color: #d9a441;
+
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   BOTTOM KEYWORDS
+   ============================================================ */
+
+.blog-hero .blog-hero-bottom {
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+
+  margin-top: 65px;
+
+  color: #8a817b;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 3.5px;
+}
+
+
+.blog-hero .blog-hero-bottom i {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #d9a441;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  .blog-hero {
+    min-height: 600px;
+  }
+
+  .blog-hero .hero-inner {
+    min-height: 600px;
+
+    grid-template-columns: 1fr;
+
+    gap: 0;
+
+    padding: 70px 1.5rem;
+  }
+
+
+  .blog-hero .hero-copy {
+    max-width: 850px;
+
+    text-align: center;
+
+    margin: 0 auto;
+  }
+
+
+  .blog-hero .blog-hero-eyebrow {
+    justify-content: center;
+  }
+
+
+  .blog-hero .hero-copy p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .blog-hero .hero-actions {
+    justify-content: center;
+  }
+
+
+  .blog-hero .blog-hero-bottom {
+    justify-content: center;
+  }
+
+
+  .blog-hero .blog-hero-side-text {
+    display: none;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  .blog-hero {
+    min-height: 570px;
+  }
+
+
+  .blog-hero .hero-inner {
+    min-height: 570px;
+
+    padding: 62px 1.25rem 60px;
+  }
+
+
+  /* Eyebrow */
+
+  .blog-hero .blog-hero-eyebrow {
+    gap: 8px;
+
+    margin-bottom: 22px;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+  }
+
+
+  .blog-hero .blog-hero-eyebrow span {
+    width: 24px;
+  }
+
+
+  .blog-hero .blog-hero-eyebrow b {
+    font-size: 9px;
+  }
+
+
+  /* Heading */
+
+  .blog-hero .hero-copy h1 {
+    font-size: clamp(3rem, 13vw, 4.2rem);
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+  }
+
+
+  /* Description */
+
+  .blog-hero .hero-copy p {
+    margin-top: 24px;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+  }
+
+
+  /* Buttons */
+
+  .blog-hero .hero-actions {
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 30px;
+  }
+
+
+  .blog-hero .btn-gold,
+  .blog-hero .btn-outline {
+    width: 225px;
+
+    min-height: 54px;
+
+    padding: 0 20px;
+  }
+
+
+  /* Bottom */
+
+  .blog-hero .blog-hero-bottom {
+    gap: 11px;
+
+    margin-top: 43px;
+
+    font-size: 8px;
+
+    letter-spacing: 2.5px;
+  }
+
+
+  .blog-hero .blog-hero-bottom i {
+    width: 4px;
+
+    height: 4px;
+  }
+
+
+  /* Decorations */
+
+  .blog-hero .hero-deco-top-right {
+    width: 280px;
+    height: 280px;
+
+    top: -190px;
+    right: -120px;
+  }
+
+
+  .blog-hero .hero-deco-bottom-left {
+    width: 270px;
+    height: 270px;
+
+    left: -180px;
+    bottom: -190px;
+  }
+
+
+  .blog-hero .hero-ring-left {
+    width: 150px;
+    height: 150px;
+
+    left: -105px;
+    top: 75px;
+  }
+
+
+  .blog-hero .hero-ring-right {
+    width: 180px;
+    height: 180px;
+
+    right: -120px;
+    bottom: 40px;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 400px) {
+
+  .blog-hero .hero-inner {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+
+  .blog-hero .hero-copy h1 {
+    font-size: 2.85rem;
+  }
+
+
+  .blog-hero .hero-copy p {
+    font-size: 14px;
+  }
+
+
+  .blog-hero .blog-hero-bottom {
+    gap: 8px;
+
+    font-size: 7.5px;
+  }
+
+}
 /* ============================================================
    Featured Article
    ============================================================ */

@@ -1276,106 +1276,441 @@
   background: #e9a317;
 }
 
-/* ---------------- Section 12: Trusted Authors ---------------- */
+/* ============================================================
+   SECTION 11-B — TRUSTED AUTHORS
+   ============================================================ */
 
 .trusted-authors {
+  width: 100%;
   background: #fff;
-  padding: 25px 0 30px;
-  border-radius: 22px 22px 0 0;
-}
 
-.trusted-authors h2 {
-  margin: 0;
-  text-align: center;
-  color: #123a5c;
-  font-size: clamp(1.6rem,3vw,2rem);
-}
+  padding: 48px 0 28px;
 
-.trusted-authors h2 span {
-  color: #e5a016;
-}
-
-.review-line {
-  margin: 5px 0 20px;
-  text-align: center;
-  color: #e9a317;
-  font-size: 1.2rem;
-}
-
-.trusted-slider {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.trusted-track {
-  display: flex;
-  flex: 1;
-  gap: 14px;
   overflow: hidden;
 }
 
-.trusted-image {
-  width: calc(25% - 11px);
-  height: 335px;
-  flex-shrink: 0;
-  object-fit: cover;
-  border: 1px solid #f0dfbd;
-  border-radius: 14px;
+.trusted-authors-container {
+  width: 100%;
+  max-width: 2048px;
+
+  margin: 0 auto;
 }
 
-.slider-arrow {
-  width: 55px;
-  height: 55px;
-  flex-shrink: 0;
-  border: 0;
-  border-radius: 50%;
-  background: #ffedbf;
-  color: #26364a;
-  font-size: 2rem;
-  cursor: pointer;
+
+/* ============================================================
+   HEADING
+   ============================================================ */
+
+.trusted-title {
+  margin: 0 auto 90px;
+
+  padding: 0 25px;
+
+  text-align: center;
+
+  color: #2f2f2f;
+
+  font-size: clamp(1.8rem, 2.8vw, 2.65rem);
+
+  line-height: 1.25;
+
+  font-weight: 700;
+
+  letter-spacing: -0.6px;
 }
+
+.trusted-title span {
+  color: #e5a016;
+}
+
+
+/* ============================================================
+   SLIDER
+   ============================================================ */
+
+.trusted-slider {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 25px;
+}
+
+
+/* ============================================================
+   TRACK
+   ============================================================ */
+
+.trusted-track {
+  display: flex;
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 0;
+
+  width: calc(100% - 150px);
+
+  max-width: 1800px;
+
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.trusted-card {
+  flex-shrink: 0;
+
+  overflow: hidden;
+
+  background: #fff;
+
+  border: 1.5px solid #e5a016;
+
+  border-radius: 4px;
+
+  position: relative;
+
+  box-sizing: border-box;
+}
+
+
+/* ------------------------------------------------------------
+   FIRST — LARGE
+   ------------------------------------------------------------ */
+
+.trusted-card-1 {
+  width: 25%;
+
+  height: 390px;
+
+  z-index: 4;
+}
+
+
+/* ------------------------------------------------------------
+   SECOND — SMALL
+   ------------------------------------------------------------ */
+
+.trusted-card-2 {
+  width: 15%;
+
+  height: 320px;
+
+  margin-left: 0;
+
+  z-index: 2;
+}
+
+
+/* ------------------------------------------------------------
+   THIRD — SMALL
+   ------------------------------------------------------------ */
+
+.trusted-card-3 {
+  width: 15%;
+
+  height: 320px;
+
+  z-index: 2;
+}
+
+
+/* ------------------------------------------------------------
+   FOURTH — LARGE
+   ------------------------------------------------------------ */
+
+.trusted-card-4 {
+  width: 32%;
+
+  height: 390px;
+
+  z-index: 4;
+}
+
+
+/* ============================================================
+   IMAGES
+   ============================================================ */
+
+.trusted-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  margin: 0;
+}
+
+
+/* ============================================================
+   ARROWS
+   ============================================================ */
+
+.slider-arrow {
+  width: 60px;
+  height: 80px;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #111;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 5rem;
+
+  font-weight: 200;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.slider-arrow:hover {
+  color: #e5a016;
+
+  transform: scale(1.08);
+}
+
+.slider-arrow:active {
+  transform: scale(0.95);
+}
+
+
+/* ============================================================
+   DOTS
+   ============================================================ */
 
 .slider-dots {
   display: flex;
+
   justify-content: center;
-  gap: 8px;
-  margin-top: 20px;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-top: 12px;
 }
 
-.slider-dots span {
+.slider-dot {
   width: 10px;
   height: 10px;
+
+  padding: 0;
+
+  border: none;
+
   border-radius: 50%;
-  background: #ddd;
+
+  background: #d5d5d5;
+
   cursor: pointer;
+
+  transition:
+    width 0.25s ease,
+    background 0.25s ease;
 }
 
-.slider-dots .active {
-  background: #e9a317;
+.slider-dot.active {
+  width: 10px;
+  height: 10px;
+
+  background: #e5a016;
 }
 
-@media (max-width: 800px) {
-  .trusted-image {
-    width: calc(50% - 7px);
-    height: 280px;
-  }
-}
 
-@media (max-width: 550px) {
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1600px) {
+
   .trusted-track {
-    gap: 8px;
+    width: 88%;
+    max-width: 1800px;
   }
 
-  .trusted-image {
-    width: 100%;
-    height: 280px;
+  .trusted-card-1 {
+    width: 25%;
+    height: 390px;
+  }
+
+  .trusted-card-2 {
+    width: 15%;
+    height: 320px;
+  }
+
+  .trusted-card-3 {
+    width: 15%;
+    height: 320px;
+  }
+
+  .trusted-card-4 {
+    width: 32%;
+    height: 390px;
+  }
+
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .trusted-title {
+    margin-bottom: 55px;
+
+    font-size: 2rem;
+  }
+
+  .trusted-slider {
+    gap: 10px;
+  }
+
+  .trusted-track {
+    width: calc(100% - 90px);
+  }
+
+  .trusted-card-1 {
+    width: 28%;
+    height: 300px;
+  }
+
+  .trusted-card-2 {
+    width: 17%;
+    height: 245px;
+  }
+
+  .trusted-card-3 {
+    width: 17%;
+    height: 245px;
+  }
+
+  .trusted-card-4 {
+    width: 34%;
+    height: 300px;
   }
 
   .slider-arrow {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 60px;
+
+    font-size: 4rem;
   }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .trusted-authors {
+    padding: 35px 0 25px;
+  }
+
+  .trusted-title {
+    padding: 0 20px;
+
+    margin-bottom: 30px;
+
+    font-size: 1.45rem;
+
+    line-height: 1.35;
+  }
+
+  .trusted-slider {
+    gap: 4px;
+  }
+
+  .trusted-track {
+    width: calc(100% - 55px);
+
+    display: flex;
+  }
+
+  /* Mobile shows only one full image */
+  .trusted-card-1,
+  .trusted-card-2,
+  .trusted-card-3,
+  .trusted-card-4 {
+    width: 100%;
+
+    height: 300px;
+
+    display: none;
+  }
+
+  .trusted-card-1 {
+    display: block;
+  }
+
+  .slider-arrow {
+    width: 25px;
+    height: 55px;
+
+    font-size: 3rem;
+  }
+
+  .slider-dots {
+    margin-top: 15px;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 450px) {
+
+  .trusted-title {
+    font-size: 1.3rem;
+
+    margin-bottom: 25px;
+  }
+
+  .trusted-card-1 {
+    height: 270px;
+  }
+
+  .slider-arrow {
+    width: 22px;
+
+    font-size: 2.6rem;
+  }
+
 }
 .video-section {
   background: #193955;

@@ -223,76 +223,102 @@ export default function Contact() {
   return (
     <div className="contact-page">
       {/* ================= HERO ================= */}
-      <section className="contact-hero" aria-label="Contact Yellowish Publication">
-        <div className="contact-hero-bg" aria-hidden="true">
-          <div className="chero-blob-right">
-            <span className="chero-glow" />
-          </div>
-          <div className="chero-wave-left" />
-          <div className="chero-shape shape-a" />
-          <div className="chero-shape shape-b" />
-          <div className="chero-shape shape-c" />
-        </div>
+      {/* ================= HERO ================= */}
+<section
+  className="contact-hero"
+  aria-label="Contact Yellowish Publication"
+>
+  {/* CSS-only decorative background */}
+  <div className="contact-hero-bg" aria-hidden="true">
+    <span className="hero-deco hero-deco-top-left" />
+    <span className="hero-deco hero-deco-top-right" />
+    <span className="hero-deco hero-deco-bottom-left" />
+    <span className="hero-deco hero-deco-bottom-right" />
 
-        <div className="contact-hero-inner">
-          <div className="contact-hero-copy">
-            <motion.div variants={staggerWrap} initial="hidden" animate="visible">
-              <motion.h1 variants={fadeUp} custom={1}>
-                Let's Start Your
-                <br />
-                <span className="accent">Publishing Journey</span>
-              </motion.h1>
-              <motion.p variants={fadeUp} custom={2}>
-                Whether you're ready to publish your first book or simply have
-                questions, we're here to help.
-              </motion.p>
-              <motion.div variants={fadeUp} custom={3} className="contact-hero-actions">
-                <button
-                  className="btn-gold"
-                  onClick={() => scrollToSection("contact-form")}
-                >
-                  Contact Now <FaArrowRight className="arrow-ico" />
-                </button>
-                <button
-                  className="contact-btn-outline"
-                  onClick={(e) => handleNavClick(e, "/store")}
-                >
-                  <FaBookOpen /> Explore Books
-                </button>
-              </motion.div>
-            </motion.div>
-          </div>
+    <span className="hero-ring hero-ring-left" />
+    <span className="hero-ring hero-ring-right" />
+  </div>
 
-          <div className="contact-hero-visual" aria-hidden="true">
-            <div className="contact-stage">
-              <motion.div
-                className="contact-floating-stage"
-                animate={{ y: [0, -5, 0] }}
-                transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
-              >
-                <span className="pg-glow pg-glow-pink" />
-                <span className="pg-glow pg-glow-cream" />
-                <span className="pg-glow pg-glow-white" />
+  <div className="contact-hero-inner">
 
-                {/* Focal book */}
-                <div className="pbook pbook-main">
-                  <div className="pbook-glow" />
-                  <div className="pbook-inner">
-                    <img src={book1} alt="" loading="lazy" />
-                  </div>
-                </div>
-                {/* Single supporting book */}
-                <div className="pbook pbook-accent">
-                  <div className="pbook-inner">
-                    <img src={book9} alt="" loading="lazy" />
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <motion.div
+      className="contact-hero-copy"
+      variants={staggerWrap}
+      initial="hidden"
+      animate="visible"
+    >
 
+      {/* Eyebrow */}
+      <motion.div
+        className="contact-hero-eyebrow"
+        variants={fadeUp}
+        custom={0}
+      >
+        <span></span>
+        PUBLISH
+        <b>•</b>
+        INSPIRE
+        <b>•</b>
+        IMPACT
+        <span></span>
+      </motion.div>
+
+      {/* Main heading */}
+      <motion.h1 variants={fadeUp} custom={1}>
+        Your Story
+        <br />
+        <span className="accent">
+          Deserves to Be Read.
+        </span>
+      </motion.h1>
+
+      {/* Description */}
+      <motion.p variants={fadeUp} custom={2}>
+        From your first idea to the final published book,
+        we're here to help turn your words into something
+        that makes an impact.
+      </motion.p>
+
+      {/* Buttons */}
+      <motion.div
+        variants={fadeUp}
+        custom={3}
+        className="contact-hero-actions"
+      >
+        <button
+          className="btn-gold"
+          onClick={() => scrollToSection("contact-form")}
+        >
+          Start Your Journey
+          <FaArrowRight className="arrow-ico" />
+        </button>
+
+        <button
+          className="contact-btn-outline"
+          onClick={(e) => handleNavClick(e, "/store")}
+        >
+          Explore Our Books
+          <span className="outline-arrow">↗</span>
+        </button>
+      </motion.div>
+
+      {/* Bottom keywords */}
+      <motion.div
+        className="contact-hero-bottom"
+        variants={fadeUp}
+        custom={4}
+      >
+        <span>AUTHORS</span>
+        <i></i>
+        <span>READERS</span>
+        <i></i>
+        <span>IDEAS</span>
+      </motion.div>
+
+    </motion.div>
+
+  </div>
+</section>
       {/* ================= CONTACT INFORMATION ================= */}
       <section className="contact-info-section">
         <div className="container">

@@ -132,67 +132,123 @@ export default function Blog() {
   return (
     <div className="blog-page">
       {/* ================= HERO ================= */}
-      <section className="blog-hero" aria-label="Our Blog">
-        <div className="hero-bg" aria-hidden="true">
-          <div className="hero-blob-right">
-            <span className="hero-glow" />
-          </div>
-          <div className="hero-wave-left" />
-          <div className="hero-shape shape-a" />
-          <div className="hero-shape shape-b" />
-          <div className="hero-shape shape-c" />
-        </div>
+<section className="blog-hero" aria-label="Our Blog">
 
-        <div className="hero-inner">
-          <div className="hero-copy">
-            <motion.div variants={staggerWrap} initial="hidden" animate="visible">
-              <motion.h1 variants={fadeUp} custom={1}>
-                Insights, Stories
-                <br />& <span className="accent">Publishing Tips</span>
-              </motion.h1>
-              <motion.p variants={fadeUp} custom={2}>
-                Explore articles about writing, publishing, book marketing,
-                author success stories and industry insights.
-              </motion.p>
-              <motion.div variants={fadeUp} custom={3} className="hero-actions">
-                <button
-                  className="btn-gold"
-                  onClick={() => scrollToSection("blog-feed")}
-                >
-                  Latest Articles <FaArrowRight className="arrow-ico" />
-                </button>
-                <Link
-                  to="/about"
-                  className="btn-outline"
-                  onClick={(e) => handleNavClick(e, "/about")}
-                >
-                  <FaPen /> Become an Author
-                </Link>
-              </motion.div>
-            </motion.div>
-          </div>
+  {/* CSS-only background decorations */}
+  <div className="hero-bg" aria-hidden="true">
+    <span className="hero-deco hero-deco-top-left" />
+    <span className="hero-deco hero-deco-top-right" />
+    <span className="hero-deco hero-deco-bottom-left" />
+    <span className="hero-deco hero-deco-bottom-right" />
 
-          <div className="hero-visual" aria-hidden="true">
-            <div className="blog-stage">
-              <motion.div
-                className="thumb-mosaic"
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 7, ease: "easeInOut", repeat: Infinity }}
-              >
-                {FLOATING_THUMBS.map((t) => (
-                  <div
-                    className={`floating-thumb ${t.className}`}
-                    key={t.className}
-                  >
-                    <img src={t.src} alt="" loading="lazy" style={{ rotate: t.rotation }} />
-                    <span className="thumb-label">{t.label}</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <span className="hero-ring hero-ring-left" />
+    <span className="hero-ring hero-ring-right" />
+  </div>
+
+  <div className="hero-inner">
+
+    <motion.div
+      className="hero-copy"
+      variants={staggerWrap}
+      initial="hidden"
+      animate="visible"
+    >
+
+      {/* Eyebrow */}
+      <motion.div
+        className="blog-hero-eyebrow"
+        variants={fadeUp}
+        custom={0}
+      >
+        <span></span>
+        BOOKS
+        <b>•</b>
+        IDEAS
+        <b>•</b>
+        IMPACT
+        <span></span>
+      </motion.div>
+
+
+      {/* Main heading */}
+      <motion.h1 variants={fadeUp} custom={1}>
+        Stories That
+        <br />
+        <span className="accent">Inspire Change</span>
+      </motion.h1>
+
+
+      {/* Description */}
+      <motion.p variants={fadeUp} custom={2}>
+        At Yellowish Publication, we believe every story has
+        the power to spark a thought, build a community and
+        create a lasting impact.
+      </motion.p>
+
+
+      {/* Buttons */}
+      <motion.div
+        variants={fadeUp}
+        custom={3}
+        className="hero-actions"
+      >
+
+        <button
+          className="btn-gold"
+          onClick={() => scrollToSection("blog-feed")}
+        >
+          Explore Latest Articles
+          <FaArrowRight className="arrow-ico" />
+        </button>
+
+        <Link
+          to="/about"
+          className="btn-outline"
+          onClick={(e) => handleNavClick(e, "/about")}
+        >
+          <FaPen />
+          Become an Author
+        </Link>
+
+      </motion.div>
+
+
+      {/* Bottom keywords */}
+      <motion.div
+        className="blog-hero-bottom"
+        variants={fadeUp}
+        custom={4}
+      >
+        <span>WRITING</span>
+        <i></i>
+        <span>PUBLISHING</span>
+        <i></i>
+        <span>IMPACT</span>
+      </motion.div>
+
+    </motion.div>
+
+
+    {/* Right-side text accent — NO IMAGE */}
+    <motion.div
+      className="blog-hero-side-text"
+      variants={fadeUp}
+      initial="hidden"
+      animate="visible"
+      custom={2}
+    >
+      <span className="side-line"></span>
+
+      <div>
+        <span>NEW</span>
+        <span>PERSPECTIVES.</span>
+        <span>BETTER</span>
+        <strong>TOMORROWS.</strong>
+      </div>
+    </motion.div>
+
+  </div>
+</section>
 
       {/* ================= FEATURED ARTICLE ================= */}
       {featured && (
