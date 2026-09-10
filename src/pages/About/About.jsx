@@ -185,117 +185,150 @@ export default function About() {
 
   return (
     <div className="about-page">
-      {/* ================= HERO ================= */}
-      <section className="about-hero" aria-label="About Yellowish Publication">
-        <div className="about-hero-bg" aria-hidden="true">
-          <div className="ah-blob-right">
-            <span className="ah-glow" />
-          </div>
-          <div className="ah-wave-left" />
-          <div className="ah-shape shape-a" />
-          <div className="ah-shape shape-b" />
-          <div className="ah-shape shape-c" />
+     {/* ================= HERO ================= */}
+<section
+  className="about-hero"
+  aria-label="About Yellowish Publication"
+>
+  <div className="about-hero-bg" aria-hidden="true">
+    <div className="ah-blob-right" />
+    <div className="ah-wave-left" />
+    <div className="ah-shape shape-a" />
+    <div className="ah-shape shape-b" />
+    <div className="ah-shape shape-c" />
+  </div>
+
+  <div className="about-hero-inner">
+    <motion.div
+      className="ah-copy"
+      variants={staggerWrap}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Editorial Label */}
+      <motion.div
+        className="ah-badge"
+        variants={fadeUp}
+        custom={0}
+      >
+        ABOUT YELLOWISH PUBLICATION
+      </motion.div>
+
+      {/* Main Heading */}
+      <motion.h1
+        variants={slideFromLeft}
+        custom={1}
+      >
+        Where Ideas
+        <span className="ah-accent">
+          Become Stories.
+        </span>
+      </motion.h1>
+
+      {/* Description */}
+      <motion.p
+        variants={fadeUp}
+        custom={2}
+      >
+        From manuscript to publication, we help authors bring
+        their stories to readers.
+      </motion.p>
+
+      {/* Buttons */}
+      <motion.div
+        variants={fadeUp}
+        custom={3}
+        className="ah-actions"
+      >
+        <Link to="/store" className="btn-gold">
+          Explore Our Books
+          <FaArrowRight className="arrow-ico" />
+        </Link>
+
+        <Link to="/authors" className="ah-ghost">
+          Meet Our Authors
+        </Link>
+      </motion.div>
+    </motion.div>
+  </div>
+</section>
+
+     {/* ============================================================
+          OUR STORY
+          NO IMAGE
+          WHITE BACKGROUND
+         ============================================================ */}
+
+      <section
+        className="about-story"
+        aria-label="Our story"
+      >
+        <div
+          className="about-story-bg"
+          aria-hidden="true"
+        >
+          <span className="story-line story-line-one" />
+          <span className="story-line story-line-two" />
+          <span className="story-ring story-ring-one" />
         </div>
 
-        <div className="about-hero-inner">
-          <motion.div
-            className="ah-copy"
-            variants={staggerWrap}
-            initial="hidden"
-            animate="visible"
-          >
-<motion.h1 variants={slideFromLeft} custom={1}>
-              Where Ideas Become Stories
-              <br />
-              <span className="ah-accent">Stories.</span>
-            </motion.h1>
-            <motion.p variants={fadeUp} custom={2}>
-              From manuscript to publication, we help authors bring their stories to readers.
-            </motion.p>
-            <motion.div variants={fadeUp} custom={3} className="ah-actions">
-              <Link to="/store" className="btn-gold">
-                Explore Our Books <FaArrowRight className="arrow-ico" />
-              </Link>
-              <Link to="/authors" className="ah-ghost">
-                Meet Our Authors
-              </Link>
-            </motion.div>
-          </motion.div>
+        <div className="container story-content">
 
           <motion.div
-            className="ah-visual"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            className="story-copy"
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+            transition={{
+              duration: 0.7,
+            }}
           >
-            <div className="ah-frame">
-              <img
-                src={heroVisual}
-                alt="An author at work with Yellowish Publication"
-                loading="lazy"
-              />
+            <span className="gold-label">
+              OUR STORY
+            </span>
+
+            <h2>
+              Turning Ideas Into
+              <br />
+              <span>Stories That Matter</span>
+            </h2>
+
+            <div className="story-divider">
+              <span />
+              <span />
+              <span />
             </div>
+
+            <p>
+              Yellowish Publication was built with a simple
+              purpose — to help authors turn their ideas into
+              books that connect with readers.
+            </p>
+
+            <p>
+              From publishing and design to distribution, we
+              support authors throughout their journey and
+              help their stories reach the world.
+            </p>
+
+            <blockquote className="story-highlight">
+              <span className="quote-mark-small">
+                <FaQuoteLeft />
+              </span>
+
+              <span>
+                Every great book begins with an idea.
+                We help bring it to life.
+              </span>
+            </blockquote>
           </motion.div>
+
         </div>
       </section>
 
-     {/* ================= OUR STORY ================= */}
-<section className="about-story" aria-label="Our story">
-  <div className="about-story-bg" aria-hidden="true">
-    <span className="story-blob" />
-    <span className="story-ring" />
-  </div>
-
-  <div className="container story-grid">
-
-    {/* IMAGE */}
-    <motion.div
-      className="story-visual"
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.7 }}
-    >
-      <div className="story-frame">
-        <img
-          src={storyImage}
-          alt="Yellowish Publication"
-          loading="lazy"
-        />
-      </div>
-    </motion.div>
-
-    {/* CONTENT */}
-    <motion.div
-      className="story-copy"
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, delay: 0.1 }}
-    >
-      <span className="gold-label">OUR STORY</span>
-
-      <h2>
-        Turning Ideas Into <span>Stories That Matter</span>
-      </h2>
-
-      <p>
-        Yellowish Publication was built with a simple purpose — to help
-        authors turn their ideas into books that connect with readers.
-      </p>
-
-      <p>
-        From publishing and design to distribution, we support authors
-        throughout their journey and help their stories reach the world.
-      </p>
-
-      <blockquote className="story-highlight">
-        Every great book begins with an idea. We help bring it to life.
-      </blockquote>
-    </motion.div>
-
-  </div>
-</section>
       {/* ================= MISSION & VISION ================= */}
       <section className="about-mission" aria-label="Our mission and vision">
         <div className="container">

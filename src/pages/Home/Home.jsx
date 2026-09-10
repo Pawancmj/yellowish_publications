@@ -519,7 +519,7 @@ useEffect(() => {
   <div className="container stats-container">
     {STATS.map((stat, i) => (
       <div className="stat" key={stat.label}>
-        <span className="stat-icon">{["♧", "▢", "◎", "◉"][i]}</span>
+         
         <div><span className="stat-value">{stat.value}</span><span className="stat-label">{stat.label}</span></div>
       </div>
     ))}

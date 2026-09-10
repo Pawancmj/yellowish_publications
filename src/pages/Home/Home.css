@@ -914,7 +914,7 @@
   .stat,
   .stat:nth-child(2) {
     border-right: none;
-    border-bottom: 1px solid rgba(255, 239, 194, 0.5);
+    
     padding: 25px 0;
   }
 
