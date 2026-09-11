@@ -107,8 +107,8 @@ const TESTIMONIALS = [
 ];
 
 const STATS = [
-  { value: "15K+", label: "Authors" },
-  { value: "20K+", label: "Books Published" },
+  { value: "3K+", label: "Authors" },
+  { value: "5K+", label: "Books Published" },
   { value: "150+", label: "Countries" },
   { value: "24/7", label: "Author Support" },
 ];

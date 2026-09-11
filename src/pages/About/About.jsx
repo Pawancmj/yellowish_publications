@@ -134,6 +134,18 @@ const JOURNEY = [
     title: "Distribution",
     desc: "Your book reaches readers across the globe.",
   },
+  {
+    num: "06",
+    icon: FaBullhorn,
+    title: "Marketing",
+    desc: "Build awareness and connect your book with the right readers.",
+  },
+  {
+    num: "07",
+    icon: FaPalette,
+    title: "Author Branding",
+    desc: "Build your author identity and grow your presence beyond the book.",
+  },
 ];
 
 const STATS = [
