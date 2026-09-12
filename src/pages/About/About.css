@@ -544,12 +544,7 @@
    ============================================================ */
 
 .ah-copy::after {
-  content:
-    "NEW\A"
-    "PERSPECTIVES.\A"
-    "BETTER\A"
-    "TOMORROWS.";
-
+   
   white-space: pre;
 
   position: absolute;

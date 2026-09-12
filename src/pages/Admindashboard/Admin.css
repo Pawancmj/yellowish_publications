@@ -524,3 +524,373 @@
     padding: 10px 8px;
   }
 }
+/* =========================================================
+   TRUSTED AUTHORS MANAGEMENT
+========================================================= */
+
+.trusted-authors-management {
+  width: 100%;
+}
+
+.trusted-authors-management .section-header {
+  gap: 20px;
+}
+
+.trusted-authors-management .section-header > div:first-child {
+  min-width: 0;
+}
+
+.trusted-authors-management .section-header h2 {
+  margin: 0 0 6px;
+}
+
+.trusted-authors-management .section-header p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   TRUSTED AUTHORS GRID
+========================= */
+
+.trusted-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(240px, 1fr)
+  );
+  gap: 20px;
+}
+
+
+/* =========================
+   TRUSTED AUTHOR CARD
+========================= */
+
+.trusted-admin-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trusted-admin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.trusted-admin-image-wrapper {
+  width: 100%;
+  height: 340px;
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.trusted-admin-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* =========================
+   CARD INFO
+========================= */
+
+.trusted-admin-info {
+  padding: 15px;
+}
+
+.trusted-admin-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.trusted-admin-user strong {
+  color: #333;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trusted-likes {
+  display: block;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.trusted-caption {
+  margin: 0;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* =========================
+   ACTIVE / HIDDEN STATUS
+========================= */
+
+.trusted-status {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.trusted-status.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.trusted-status.hidden {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.trusted-admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 15px 15px;
+}
+
+.trusted-admin-actions .edit-btn,
+.trusted-admin-actions .delete-btn {
+  margin: 0;
+  width: 38px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.trusted-empty-state {
+  grid-column: 1 / -1;
+  background: #fff;
+  border: 1px dashed #d5d5d5;
+  border-radius: 10px;
+  padding: 50px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.trusted-empty-state > svg {
+  font-size: 42px;
+  color: #ffd700;
+  margin-bottom: 15px;
+}
+
+.trusted-empty-state h3 {
+  margin: 0 0 8px;
+  color: #333;
+}
+
+.trusted-empty-state p {
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   TRUSTED AUTHOR MODAL
+========================================================= */
+
+.trusted-author-modal {
+  max-width: 650px;
+}
+
+.trusted-author-modal h2 {
+  margin-top: 0;
+}
+
+
+/* =========================
+   UPLOAD INPUT
+========================= */
+
+.trusted-author-modal input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  background: #fafafa;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.trusted-author-modal input[type="file"]:hover {
+  border-color: #ffd700;
+  background: #fffdf0;
+}
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+.trusted-upload-preview {
+  width: 100%;
+  margin: 10px 0 20px;
+  padding: 15px;
+  background: #f8f8f8;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trusted-upload-preview img {
+  display: block;
+  width: 100%;
+  max-height: 350px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+
+/* =========================
+   ACTIVE CHECKBOX
+========================= */
+
+.trusted-active-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 5px;
+  color: #444;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.trusted-active-checkbox input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+
+/* =========================
+   FORM ERROR
+========================= */
+
+.trusted-form-error {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 15px;
+  padding: 10px 12px;
+  background: #f8d7da;
+  border-radius: 5px;
+  color: #721c24;
+  font-size: 14px;
+}
+
+
+/* =========================
+   UPLOAD SPINNER
+========================= */
+
+.trusted-spinner {
+  animation: trusted-upload-spin 1s linear infinite;
+}
+
+@keyframes trusted-upload-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   TRUSTED AUTHORS RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+  .trusted-admin-grid {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
+  }
+
+  .trusted-admin-image-wrapper {
+    height: 300px;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .trusted-authors-management
+    .section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .trusted-authors-management
+    .section-header
+    .add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .trusted-admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trusted-admin-image-wrapper {
+    height: 380px;
+  }
+
+  .trusted-author-modal {
+    width: 94%;
+    max-height: 90vh;
+    padding: 20px;
+  }
+
+  .trusted-author-modal .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

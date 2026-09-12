@@ -146,6 +146,8 @@ const REVIEW_HIGHLIGHTS = [
   },
 ];
 
+ 
+
 const VIDEO_TILES = [
   { img: aboutImage },
   { img: book9 },
@@ -197,7 +199,15 @@ function Stars({ rating }) {
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { books, getBookCover, addLead } = useData();
+
+  const {
+    books,
+    getBookCover,
+    addLead,
+    trustedAuthorPosts,
+  } = useData();
+
+  // baaki code...
 
   const [activeCategory, setActiveCategory] = useState("All Books");
 
@@ -250,24 +260,47 @@ export default function Home() {
 
   const galleryBooks = books.slice(0, 10);
 
- const TRUSTED_AUTHORS = [
-  googleauthor1, googleauthor2, googleauthor3, googleauthor4,
-  googleauthor5, googleauthor6, googleauthor7, googleauthor8,
-];
+ const [trustedIndex, setTrustedIndex] = useState(0);
 
-const [trustedIndex, setTrustedIndex] = useState(0);
+const nextTrusted = () => {
+  if (!trustedAuthorPosts.length) return;
 
-const nextTrusted = () =>
-  setTrustedIndex((i) => (i + 1) % TRUSTED_AUTHORS.length);
+  setTrustedIndex(
+    (i) => (i + 1) % trustedAuthorPosts.length
+  );
+};
 
-const prevTrusted = () =>
-  setTrustedIndex((i) => (i - 1 + TRUSTED_AUTHORS.length) % TRUSTED_AUTHORS.length);
+const prevTrusted = () => {
+  if (!trustedAuthorPosts.length) return;
+
+  setTrustedIndex(
+    (i) =>
+      (i - 1 + trustedAuthorPosts.length) %
+      trustedAuthorPosts.length
+  );
+};
 
 useEffect(() => {
-  const timer = setInterval(nextTrusted, 3500);
-  return () => clearInterval(timer);
-}, []);
+  if (!trustedAuthorPosts.length) return;
 
+  const timer = setInterval(() => {
+    setTrustedIndex(
+      (i) => (i + 1) % trustedAuthorPosts.length
+    );
+  }, 3500);
+
+  return () => clearInterval(timer);
+}, [trustedAuthorPosts.length]);
+
+// Keep index valid when posts are added/deleted
+useEffect(() => {
+  if (
+    trustedAuthorPosts.length > 0 &&
+    trustedIndex >= trustedAuthorPosts.length
+  ) {
+    setTrustedIndex(0);
+  }
+}, [trustedAuthorPosts.length, trustedIndex]);
   const filteredGallery =
     activeCategory === "All Books"
       ? galleryBooks
@@ -633,7 +666,7 @@ useEffect(() => {
   <div className="trusted-authors-container">
 
     <h2 className="trusted-title">
-      Trusted by <span>12,000+</span> Authors including{" "}
+      Trusted by <span>3,000+</span> Authors including{" "}
       <span>celebrities</span> and <span>influencers.</span>
     </h2>
 
@@ -649,23 +682,35 @@ useEffect(() => {
 
       <div className="trusted-track">
 
-        {[0, 1, 2, 3].map((n) => {
-          const imageIndex =
-            (trustedIndex + n) % TRUSTED_AUTHORS.length;
+        {trustedAuthorPosts.length > 0 ? (
+          [0, 1, 2, 3].map((n) => {
+            const imageIndex =
+              (trustedIndex + n) % trustedAuthorPosts.length;
 
-          return (
-            <div
-              className={`trusted-card trusted-card-${n + 1}`}
-              key={`${trustedIndex}-${n}`}
-            >
-              <img
-                src={TRUSTED_AUTHORS[imageIndex]}
-                alt="Trusted author"
-                className="trusted-image"
-              />
-            </div>
-          );
-        })}
+            const post = trustedAuthorPosts[imageIndex];
+
+            return (
+              <div
+                className={`trusted-card trusted-card-${n + 1}`}
+                key={`${post.id}-${trustedIndex}-${n}`}
+              >
+                <img
+                  src={post.imageUrl}
+                  alt={
+                    post.username
+                      ? `${post.username} - Trusted author`
+                      : "Trusted author"
+                  }
+                  className="trusted-image"
+                />
+              </div>
+            );
+          })
+        ) : (
+          <div className="trusted-empty">
+            No trusted author posts available.
+          </div>
+        )}
 
       </div>
 
@@ -679,41 +724,22 @@ useEffect(() => {
 
     </div>
 
-    <div className="slider-dots">
-      {TRUSTED_AUTHORS.map((_, i) => (
-        <button
-          key={i}
-          type="button"
-          className={`slider-dot ${
-            i === trustedIndex ? "active" : ""
-          }`}
-          onClick={() => setTrustedIndex(i)}
-          aria-label={`Slide ${i + 1}`}
-        />
-      ))}
-    </div>
+    {trustedAuthorPosts.length > 0 && (
+      <div className="slider-dots">
+        {trustedAuthorPosts.map((post, i) => (
+          <button
+            key={post.id || i}
+            type="button"
+            className={`slider-dot ${
+              i === trustedIndex ? "active" : ""
+            }`}
+            onClick={() => setTrustedIndex(i)}
+            aria-label={`Slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    )}
 
-  </div>
-</section>
-
-     <section className="video-section">
-  <div className="container">
-    <span className="video-label"> </span>
-    <h2>Watch <span>Author Stories</span></h2>
-    <p>Real stories. Real authors. Real impact.</p>
-
-    <div className="video-grid">
-      {VIDEO_TILES.map((tile, i) => (
-        <div className="video-tile" key={i}>
-          <img src={tile.img} alt="Author story" />
-          <div className="play-btn"><FaPlay /></div>
-          <div className="tile-info">
-            <b>{tile.title}</b>
-            <span>━━━━</span>
-          </div>
-        </div>
-      ))}
-    </div>
   </div>
 </section>
 

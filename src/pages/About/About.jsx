@@ -546,30 +546,7 @@ export default function About() {
 
        
 
-      {/* ================= AUTHOR QUOTE ================= */}
-      <section className="about-quote" aria-label="Author testimonial">
-        <div className="container">
-          <motion.figure
-            className="quote-wrap"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="quote-mark" aria-hidden="true">
-              <FaQuoteLeft />
-            </span>
-            <blockquote>{TESTIMONIAL.quote}</blockquote>
-            <figcaption className="quote-author">
-              <img src={TESTIMONIAL.photo} alt={TESTIMONIAL.name} loading="lazy" />
-              <span className="qa-meta">
-                <strong>{TESTIMONIAL.name}</strong>
-                <span className="qa-role">{TESTIMONIAL.role}</span>
-              </span>
-            </figcaption>
-          </motion.figure>
-        </div>
-      </section>
+       
 
        
     </div>

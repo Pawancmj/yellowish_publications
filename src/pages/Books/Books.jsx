@@ -251,22 +251,14 @@ export default function Books() {
       animate="visible"
     >
 
-      <motion.span
-        className="hero-side-number"
-        variants={fadeUp}
-        custom={2}
-      >
-        01
-      </motion.span>
-
+       
       <motion.p
         className="hero-description"
         variants={fadeUp}
         custom={3}
       >
-        Explore thoughtfully published books from emerging
-        and established authors — created to inspire new
-        ideas, perspectives, and meaningful conversations.
+        Discover compelling books from emerging and established authors, thoughtfully published to bring powerful stories, fresh perspectives, and ideas that stay with you.
+
       </motion.p>
 
       <motion.div
