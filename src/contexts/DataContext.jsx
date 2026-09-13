@@ -9,7 +9,7 @@ import React, {
   useCallback,
 } from "react";
 
-import { db, auth, storage } from "../firebase";
+import { db, auth } from "../firebase";
 
 import {
   collection,
@@ -24,14 +24,10 @@ import {
   setDoc,
 } from "firebase/firestore";
 
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
-
 import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
+  signInAnonymously,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 import { books as initialBooks } from "../data/books";
 import { authors as initialAuthors } from "../data/author";
@@ -77,7 +73,8 @@ export function DataProvider({ children }) {
   const [hero, setHero] = useState(null);
 
   // Trusted Authors
-  const [trustedAuthorPosts, setTrustedAuthorPosts] = useState([]);
+  const [trustedAuthorPosts, setTrustedAuthorPosts] =
+    useState([]);
 
   // Loading states
   const [heroLoading, setHeroLoading] = useState(true);
@@ -115,13 +112,17 @@ export function DataProvider({ children }) {
       auth,
       async (user) => {
         if (!user) {
-          await signInAnonymously(auth).catch(console.error);
+          await signInAnonymously(auth).catch(
+            console.error
+          );
         } else {
           setCurrentUser({
             uid: FIXED_USER_ID,
           });
 
-          console.log("✅ Auth ready - Full CRUD enabled");
+          console.log(
+            "✅ Auth ready - Full CRUD enabled"
+          );
         }
       }
     );
@@ -275,10 +276,11 @@ export function DataProvider({ children }) {
     leadsUnsubscribeRef.current = onSnapshot(
       leadsQuery,
       (snapshot) => {
-        const leadsData = snapshot.docs.map((d) => ({
-          id: d.id,
-          ...d.data(),
-        }));
+        const leadsData =
+          snapshot.docs.map((d) => ({
+            id: d.id,
+            ...d.data(),
+          }));
 
         console.log(
           `📝 LIVE: ${leadsData.length} leads from Firestore`
@@ -291,11 +293,11 @@ export function DataProvider({ children }) {
               ? a.createdAt.toDate()
               : new Date(a.createdAt || 0);
 
-            const db = b.createdAt?.toDate
+            const dbDate = b.createdAt?.toDate
               ? b.createdAt.toDate()
               : new Date(b.createdAt || 0);
 
-            return db - da;
+            return dbDate - da;
           }
         );
 
@@ -317,47 +319,48 @@ export function DataProvider({ children }) {
       collection(db, "leads")
     );
 
-    publicLeadsUnsubscribeRef.current = onSnapshot(
-      publicLeadsQuery,
-      (snapshot) => {
-        const publicLeadsData =
-          snapshot.docs.map((d) => ({
-            id: d.id,
-            ...d.data(),
-          }));
+    publicLeadsUnsubscribeRef.current =
+      onSnapshot(
+        publicLeadsQuery,
+        (snapshot) => {
+          const publicLeadsData =
+            snapshot.docs.map((d) => ({
+              id: d.id,
+              ...d.data(),
+            }));
 
-        setLeads((existingLeads) => {
-          const byId = new Map();
+          setLeads((existingLeads) => {
+            const byId = new Map();
 
-          [
-            ...existingLeads,
-            ...publicLeadsData,
-          ].forEach((lead) => {
-            byId.set(lead.id, lead);
-          });
+            [
+              ...existingLeads,
+              ...publicLeadsData,
+            ].forEach((lead) => {
+              byId.set(lead.id, lead);
+            });
 
-          return Array.from(byId.values()).sort(
-            (a, b) => {
+            return Array.from(
+              byId.values()
+            ).sort((a, b) => {
               const da = a.createdAt?.toDate
                 ? a.createdAt.toDate()
                 : new Date(a.createdAt || 0);
 
-              const db = b.createdAt?.toDate
+              const dbDate = b.createdAt?.toDate
                 ? b.createdAt.toDate()
                 : new Date(b.createdAt || 0);
 
-              return db - da;
-            }
+              return dbDate - da;
+            });
+          });
+        },
+        (error) => {
+          console.error(
+            "Public leads listener error:",
+            error
           );
-        });
-      },
-      (error) => {
-        console.error(
-          "Public leads listener error:",
-          error
-        );
-      }
-    );
+        }
+      );
 
     // ==========================================================
     // SAFETY TIMEOUT
@@ -480,10 +483,11 @@ export function DataProvider({ children }) {
       "📸 Starting Trusted Authors listener..."
     );
 
-    const trustedAuthorsRef = collection(
-      db,
-      `users/${FIXED_USER_ID}/trustedAuthorPosts`
-    );
+    const trustedAuthorsRef =
+      collection(
+        db,
+        `users/${FIXED_USER_ID}/trustedAuthorPosts`
+      );
 
     trustedAuthorsUnsubscribeRef.current =
       onSnapshot(
@@ -539,6 +543,9 @@ export function DataProvider({ children }) {
         trustedAuthorsUnsubscribeRef.current
       ) {
         trustedAuthorsUnsubscribeRef.current();
+
+        trustedAuthorsUnsubscribeRef.current =
+          null;
       }
     };
   }, []);
@@ -561,99 +568,104 @@ export function DataProvider({ children }) {
             )
           );
 
-          const unsubCheck = onSnapshot(
-            booksQuery,
-            async (snapshot) => {
-              unsubCheck();
+          const unsubCheck =
+            onSnapshot(
+              booksQuery,
+              async (snapshot) => {
+                unsubCheck();
 
-              if (
-                snapshot.docs.length === 0 &&
-                !hasSeededRef.current
-              ) {
-                hasSeededRef.current = true;
+                if (
+                  snapshot.docs.length === 0 &&
+                  !hasSeededRef.current
+                ) {
+                  hasSeededRef.current = true;
 
-                console.log(
-                  "🌱 Seeding initial data to Firestore..."
-                );
+                  console.log(
+                    "🌱 Seeding initial data to Firestore..."
+                  );
 
-                // ------------------------------------------------
-                // Seed books
-                // ------------------------------------------------
+                  // ------------------------------------------------
+                  // Seed books
+                  // ------------------------------------------------
 
-                for (const book of initialBooks) {
-                  const bookData = {
-                    ...book,
-                  };
-
-                  if (
-                    typeof bookData.cover !==
-                      "string" ||
-                    !bookData.cover.startsWith(
-                      "http"
-                    )
+                  for (
+                    const book of initialBooks
                   ) {
-                    delete bookData.cover;
+                    const bookData = {
+                      ...book,
+                    };
+
+                    if (
+                      typeof bookData.cover !==
+                        "string" ||
+                      !bookData.cover.startsWith(
+                        "http"
+                      )
+                    ) {
+                      delete bookData.cover;
+                    }
+
+                    await setDoc(
+                      doc(
+                        db,
+                        `users/${FIXED_USER_ID}/books`,
+                        book.id
+                      ),
+                      {
+                        ...bookData,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                      },
+                      {
+                        merge: true,
+                      }
+                    );
                   }
 
-                  await setDoc(
-                    doc(
-                      db,
-                      `users/${FIXED_USER_ID}/books`,
-                      book.id
-                    ),
-                    {
-                      ...bookData,
-                      createdAt: new Date(),
-                      updatedAt: new Date(),
-                    },
-                    {
-                      merge: true,
-                    }
-                  );
-                }
+                  // ------------------------------------------------
+                  // Seed authors
+                  // ------------------------------------------------
 
-                // ------------------------------------------------
-                // Seed authors
-                // ------------------------------------------------
-
-                for (const author of initialAuthors) {
-                  const authorData = {
-                    ...author,
-                  };
-
-                  if (
-                    typeof authorData.photo !==
-                      "string" ||
-                    !authorData.photo.startsWith(
-                      "http"
-                    )
+                  for (
+                    const author of initialAuthors
                   ) {
-                    delete authorData.photo;
+                    const authorData = {
+                      ...author,
+                    };
+
+                    if (
+                      typeof authorData.photo !==
+                        "string" ||
+                      !authorData.photo.startsWith(
+                        "http"
+                      )
+                    ) {
+                      delete authorData.photo;
+                    }
+
+                    await setDoc(
+                      doc(
+                        db,
+                        `users/${FIXED_USER_ID}/authors`,
+                        author.id
+                      ),
+                      {
+                        ...authorData,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                      },
+                      {
+                        merge: true,
+                      }
+                    );
                   }
 
-                  await setDoc(
-                    doc(
-                      db,
-                      `users/${FIXED_USER_ID}/authors`,
-                      author.id
-                    ),
-                    {
-                      ...authorData,
-                      createdAt: new Date(),
-                      updatedAt: new Date(),
-                    },
-                    {
-                      merge: true,
-                    }
+                  console.log(
+                    "✅ Initial data seeded to Firestore"
                   );
                 }
-
-                console.log(
-                  "✅ Initial data seeded to Firestore"
-                );
               }
-            }
-          );
+            );
         } catch (error) {
           console.error(
             "❌ Seed error:",
@@ -680,48 +692,52 @@ export function DataProvider({ children }) {
           const blogsQuery =
             blogListQuery();
 
-          const unsubCheck = onSnapshot(
-            blogsQuery,
-            async (snapshot) => {
-              unsubCheck();
+          const unsubCheck =
+            onSnapshot(
+              blogsQuery,
+              async (snapshot) => {
+                unsubCheck();
 
-              if (
-                snapshot.docs.length > 0 ||
-                hasSeededBlogsRef.current
-              ) {
-                return;
-              }
+                if (
+                  snapshot.docs.length > 0 ||
+                  hasSeededBlogsRef.current
+                ) {
+                  return;
+                }
 
-              hasSeededBlogsRef.current =
-                true;
+                hasSeededBlogsRef.current =
+                  true;
 
-              console.log(
-                "🌱 Seeding blogs to Firestore..."
-              );
+                console.log(
+                  "🌱 Seeding blogs to Firestore..."
+                );
 
-              const seeds = buildSeedBlogs();
+                const seeds =
+                  buildSeedBlogs();
 
-              for (const seed of seeds) {
-                await setDoc(
-                  blogDocRef(seed.id),
-                  seed,
-                  {
-                    merge: true,
-                  }
+                for (
+                  const seed of seeds
+                ) {
+                  await setDoc(
+                    blogDocRef(seed.id),
+                    seed,
+                    {
+                      merge: true,
+                    }
+                  );
+                }
+
+                console.log(
+                  `✅ ${seeds.length} blogs seeded to Firestore`
+                );
+              },
+              (error) => {
+                console.error(
+                  "❌ Blogs seed check error:",
+                  error
                 );
               }
-
-              console.log(
-                `✅ ${seeds.length} blogs seeded to Firestore`
-              );
-            },
-            (error) => {
-              console.error(
-                "❌ Blogs seed check error:",
-                error
-              );
-            }
-          );
+            );
         } catch (error) {
           console.error(
             "❌ Blogs seed error:",
@@ -920,14 +936,14 @@ export function DataProvider({ children }) {
     async (leadData) => {
       try {
         if (!auth.currentUser) {
-          await signInAnonymously(auth).catch(
-            (authError) => {
-              console.warn(
-                "Anonymous auth failed, trying public Firestore write:",
-                authError.message
-              );
-            }
-          );
+          await signInAnonymously(
+            auth
+          ).catch((authError) => {
+            console.warn(
+              "Anonymous auth failed, trying public Firestore write:",
+              authError.message
+            );
+          });
         }
 
         const cleanLead = {
@@ -1065,7 +1081,10 @@ export function DataProvider({ children }) {
   const updateBlogDoc = useCallback(
     async (id, data) => {
       try {
-        await updateBlog(id, data);
+        await updateBlog(
+          id,
+          data
+        );
 
         console.log(
           "✅ Blog updated:",
@@ -1148,6 +1167,8 @@ export function DataProvider({ children }) {
 
   // ============================================================
   // 13. TRUSTED AUTHORS CRUD
+  // FIRESTORE ONLY
+  // PUBLIC IMAGE URL APPROACH
   // ============================================================
 
   // ------------------------------------------------------------
@@ -1157,96 +1178,113 @@ export function DataProvider({ children }) {
   const addTrustedAuthorPost =
     useCallback(
       async ({
-        file,
+        imageUrl,
         username,
         likes,
         caption,
         instagramUrl,
         isActive = true,
       }) => {
-        if (!file) {
-          throw new Error(
-            "Please select an image."
-          );
-        }
-
         try {
-          const safeFileName =
-            file.name.replace(
-              /[^a-zA-Z0-9._-]/g,
-              "_"
+          // ====================================================
+          // VALIDATION
+          // ====================================================
+
+          const cleanImageUrl =
+            typeof imageUrl === "string"
+              ? imageUrl.trim()
+              : "";
+
+          const cleanUsername =
+            typeof username === "string"
+              ? username.trim()
+              : "";
+
+          if (!cleanImageUrl) {
+            throw new Error(
+              "Please enter a public image URL."
             );
+          }
 
-          const imagePath =
-            `trusted-author-posts/${Date.now()}-${safeFileName}`;
-
-          const imageRef =
-            ref(
-              storage,
-              imagePath
+          if (!cleanUsername) {
+            throw new Error(
+              "Please enter the username."
             );
+          }
 
-          console.log(
-            "📤 Uploading trusted author image..."
-          );
+          // ====================================================
+          // URL VALIDATION
+          // ====================================================
 
-          // Upload image to Firebase Storage
-          await uploadBytes(
-            imageRef,
-            file,
-            {
-              contentType:
-                file.type ||
-                "image/jpeg",
+          try {
+            const parsedUrl =
+              new URL(cleanImageUrl);
+
+            if (
+              parsedUrl.protocol !==
+                "http:" &&
+              parsedUrl.protocol !==
+                "https:"
+            ) {
+              throw new Error();
             }
-          );
+          } catch {
+            throw new Error(
+              "Please enter a valid public image URL."
+            );
+          }
 
-          console.log(
-            "✅ Image uploaded to Storage"
-          );
+          // ====================================================
+          // FIRESTORE REFERENCE
+          // ====================================================
 
-          // Generate download URL
-          const imageUrl =
-            await getDownloadURL(
-              imageRef
+          const trustedAuthorsRef =
+            collection(
+              db,
+              `users/${FIXED_USER_ID}/trustedAuthorPosts`
             );
 
-          console.log(
-            "🔗 Image URL generated"
-          );
+          // ====================================================
+          // CREATE FIRESTORE DOCUMENT
+          // ====================================================
 
-          // Save metadata in Firestore
+          const postData = {
+            imageUrl:
+              cleanImageUrl,
+
+            username:
+              cleanUsername,
+
+            likes:
+              typeof likes === "string"
+                ? likes.trim()
+                : "",
+
+            caption:
+              typeof caption === "string"
+                ? caption.trim()
+                : "",
+
+            instagramUrl:
+              typeof instagramUrl ===
+              "string"
+                ? instagramUrl.trim()
+                : "",
+
+            isActive:
+              isActive !== false,
+
+            createdAt:
+              serverTimestamp(),
+
+            updatedAt:
+              serverTimestamp(),
+          };
+
           const docRef =
             await addDoc(
-              collection(
-                db,
-                `users/${FIXED_USER_ID}/trustedAuthorPosts`
-              ),
-              {
-                imageUrl,
-                imagePath,
-
-                username:
-                  username?.trim() || "",
-
-                likes:
-                  likes?.trim() || "",
-
-                caption:
-                  caption?.trim() || "",
-
-                instagramUrl:
-                  instagramUrl?.trim() || "",
-
-                isActive:
-                  isActive !== false,
-
-                createdAt:
-                  serverTimestamp(),
-
-                updatedAt:
-                  serverTimestamp(),
-              }
+              trustedAuthorsRef,
+              postData
             );
 
           console.log(
@@ -1256,7 +1294,8 @@ export function DataProvider({ children }) {
 
           return {
             id: docRef.id,
-            imageUrl,
+            imageUrl:
+              cleanImageUrl,
           };
         } catch (error) {
           console.error(
@@ -1278,10 +1317,15 @@ export function DataProvider({ children }) {
     useCallback(
       async (id, data) => {
         try {
-          const {
-            file,
-            ...fields
-          } = data;
+          if (!id) {
+            throw new Error(
+              "Trusted author ID is required."
+            );
+          }
+
+          // ====================================================
+          // FIRESTORE DOCUMENT
+          // ====================================================
 
           const postRef =
             doc(
@@ -1290,7 +1334,6 @@ export function DataProvider({ children }) {
               id
             );
 
-          // Get existing post
           const existingSnapshot =
             await getDoc(postRef);
 
@@ -1302,101 +1345,166 @@ export function DataProvider({ children }) {
             );
           }
 
-          const existingPost =
-            existingSnapshot.data();
+          // ====================================================
+          // PREPARE UPDATE DATA
+          // ====================================================
 
-          let imageUrl =
-            existingPost.imageUrl;
+          const updateData = {
+            updatedAt:
+              serverTimestamp(),
+          };
 
-          let imagePath =
-            existingPost.imagePath;
+          // ====================================================
+          // IMAGE URL
+          // ====================================================
 
-          // ------------------------------------------------------
-          // Replace image if a new file was selected
-          // ------------------------------------------------------
+          if (
+            data.imageUrl !== undefined
+          ) {
+            const cleanImageUrl =
+              typeof data.imageUrl ===
+              "string"
+                ? data.imageUrl.trim()
+                : "";
 
-          if (file) {
-            // Delete old image
-            if (
-              existingPost.imagePath
-            ) {
-              try {
-                await deleteObject(
-                  ref(
-                    storage,
-                    existingPost.imagePath
-                  )
-                );
-
-                console.log(
-                  "🗑️ Old trusted author image deleted"
-                );
-              } catch (
-                storageError
-              ) {
-                console.warn(
-                  "⚠️ Old image could not be deleted:",
-                  storageError.message
-                );
-              }
+            if (!cleanImageUrl) {
+              throw new Error(
+                "Please enter a public image URL."
+              );
             }
 
-            const safeFileName =
-              file.name.replace(
-                /[^a-zA-Z0-9._-]/g,
-                "_"
-              );
+            try {
+              const parsedUrl =
+                new URL(cleanImageUrl);
 
-            imagePath =
-              `trusted-author-posts/${Date.now()}-${safeFileName}`;
-
-            const imageRef =
-              ref(
-                storage,
-                imagePath
-              );
-
-            // Upload new image
-            await uploadBytes(
-              imageRef,
-              file,
-              {
-                contentType:
-                  file.type ||
-                  "image/jpeg",
+              if (
+                parsedUrl.protocol !==
+                  "http:" &&
+                parsedUrl.protocol !==
+                  "https:"
+              ) {
+                throw new Error();
               }
-            );
-
-            console.log(
-              "✅ New trusted author image uploaded"
-            );
-
-            // Get new download URL
-            imageUrl =
-              await getDownloadURL(
-                imageRef
+            } catch {
+              throw new Error(
+                "Please enter a valid public image URL."
               );
+            }
+
+            updateData.imageUrl =
+              cleanImageUrl;
           }
 
-          // ------------------------------------------------------
-          // Update Firestore
-          // ------------------------------------------------------
+          // ====================================================
+          // USERNAME
+          // ====================================================
+
+          if (
+            data.username !== undefined
+          ) {
+            const cleanUsername =
+              typeof data.username ===
+              "string"
+                ? data.username.trim()
+                : "";
+
+            if (!cleanUsername) {
+              throw new Error(
+                "Please enter the username."
+              );
+            }
+
+            updateData.username =
+              cleanUsername;
+          }
+
+          // ====================================================
+          // LIKES
+          // ====================================================
+
+          if (
+            data.likes !== undefined
+          ) {
+            updateData.likes =
+              typeof data.likes ===
+              "string"
+                ? data.likes.trim()
+                : "";
+          }
+
+          // ====================================================
+          // CAPTION
+          // ====================================================
+
+          if (
+            data.caption !== undefined
+          ) {
+            updateData.caption =
+              typeof data.caption ===
+              "string"
+                ? data.caption.trim()
+                : "";
+          }
+
+          // ====================================================
+          // INSTAGRAM URL
+          // ====================================================
+
+          if (
+            data.instagramUrl !==
+            undefined
+          ) {
+            updateData.instagramUrl =
+              typeof data.instagramUrl ===
+              "string"
+                ? data.instagramUrl.trim()
+                : "";
+          }
+
+          // ====================================================
+          // ACTIVE STATUS
+          // ====================================================
+
+          if (
+            data.isActive !== undefined
+          ) {
+            updateData.isActive =
+              data.isActive !== false;
+          }
+
+          // ====================================================
+          // REMOVE UNDEFINED VALUES
+          // ====================================================
+
+          Object.keys(
+            updateData
+          ).forEach((key) => {
+            if (
+              updateData[key] ===
+              undefined
+            ) {
+              delete updateData[key];
+            }
+          });
+
+          // ====================================================
+          // UPDATE FIRESTORE
+          // ====================================================
 
           await updateDoc(
             postRef,
-            {
-              ...fields,
-              imageUrl,
-              imagePath,
-              updatedAt:
-                serverTimestamp(),
-            }
+            updateData
           );
 
           console.log(
             "✅ Trusted author updated:",
             id
           );
+
+          return {
+            success: true,
+            id,
+          };
         } catch (error) {
           console.error(
             "❌ Update trusted author failed:",
@@ -1417,40 +1525,15 @@ export function DataProvider({ children }) {
     useCallback(
       async (post) => {
         try {
-          // ------------------------------------------------------
-          // Delete image from Firebase Storage
-          // ------------------------------------------------------
-
-          if (post.imagePath) {
-            try {
-              const imageRef =
-                ref(
-                  storage,
-                  post.imagePath
-                );
-
-              await deleteObject(
-                imageRef
-              );
-
-              console.log(
-                "🗑️ Trusted author image deleted from Storage"
-              );
-            } catch (
-              storageError
-            ) {
-              // Continue deleting Firestore document
-              // even if Storage file doesn't exist
-              console.warn(
-                "⚠️ Storage image could not be deleted:",
-                storageError.message
-              );
-            }
+          if (!post?.id) {
+            throw new Error(
+              "Trusted author ID is required."
+            );
           }
 
-          // ------------------------------------------------------
-          // Delete Firestore document
-          // ------------------------------------------------------
+          // ====================================================
+          // DELETE FIRESTORE DOCUMENT ONLY
+          // ====================================================
 
           await deleteDoc(
             doc(
@@ -1464,6 +1547,11 @@ export function DataProvider({ children }) {
             "✅ Trusted author deleted:",
             post.id
           );
+
+          return {
+            success: true,
+            id: post.id,
+          };
         } catch (error) {
           console.error(
             "❌ Delete trusted author failed:",

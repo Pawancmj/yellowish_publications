@@ -672,10 +672,12 @@ useEffect(() => {
 
     <div className="trusted-slider">
 
+      {/* LEFT ARROW */}
       <button
         className="slider-arrow slider-arrow-left"
         onClick={prevTrusted}
-        aria-label="Previous"
+        aria-label="Previous trusted author posts"
+        type="button"
       >
         ‹
       </button>
@@ -683,16 +685,18 @@ useEffect(() => {
       <div className="trusted-track">
 
         {trustedAuthorPosts.length > 0 ? (
-          [0, 1, 2, 3].map((n) => {
-            const imageIndex =
-              (trustedIndex + n) % trustedAuthorPosts.length;
+          trustedAuthorPosts.map((post, index) => {
+            const position =
+              (index - trustedIndex + trustedAuthorPosts.length) %
+              trustedAuthorPosts.length;
 
-            const post = trustedAuthorPosts[imageIndex];
+            // Only render the 4 visible cards
+            if (position > 3) return null;
 
             return (
               <div
-                className={`trusted-card trusted-card-${n + 1}`}
-                key={`${post.id}-${trustedIndex}-${n}`}
+                className={`trusted-card trusted-card-${position + 1}`}
+                key={post.id}
               >
                 <img
                   src={post.imageUrl}
@@ -702,6 +706,11 @@ useEffect(() => {
                       : "Trusted author"
                   }
                   className="trusted-image"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/500x600.png?text=Image+Unavailable";
+                  }}
                 />
               </div>
             );
@@ -714,16 +723,19 @@ useEffect(() => {
 
       </div>
 
+      {/* RIGHT ARROW */}
       <button
         className="slider-arrow slider-arrow-right"
         onClick={nextTrusted}
-        aria-label="Next"
+        aria-label="Next trusted author posts"
+        type="button"
       >
         ›
       </button>
 
     </div>
 
+    {/* DOTS */}
     {trustedAuthorPosts.length > 0 && (
       <div className="slider-dots">
         {trustedAuthorPosts.map((post, i) => (
@@ -734,7 +746,7 @@ useEffect(() => {
               i === trustedIndex ? "active" : ""
             }`}
             onClick={() => setTrustedIndex(i)}
-            aria-label={`Slide ${i + 1}`}
+            aria-label={`Show trusted author post ${i + 1}`}
           />
         ))}
       </div>

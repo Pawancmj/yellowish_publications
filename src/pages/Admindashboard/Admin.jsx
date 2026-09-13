@@ -23,6 +23,10 @@ import {
 
 import "./Admin.css";
 
+/* ================================================================
+   ADMIN DASHBOARD
+================================================================ */
+
 const Admin = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
@@ -56,11 +60,17 @@ const Admin = () => {
 
   const [showBookForm, setShowBookForm] = useState(false);
   const [showAuthorForm, setShowAuthorForm] = useState(false);
-  const [showTrustedAuthorForm, setShowTrustedAuthorForm] = useState(false);
+  const [showTrustedAuthorForm, setShowTrustedAuthorForm] =
+    useState(false);
 
   const [editingBook, setEditingBook] = useState(null);
   const [editingAuthor, setEditingAuthor] = useState(null);
-  const [editingTrustedAuthor, setEditingTrustedAuthor] = useState(null);
+  const [editingTrustedAuthor, setEditingTrustedAuthor] =
+    useState(null);
+
+  /* ================================================================
+     AUTH
+  ================================================================ */
 
   useEffect(() => {
     if (!currentUser) {
@@ -81,12 +91,14 @@ const Admin = () => {
     return <div>Redirecting to login...</div>;
   }
 
-  // =========================
-  // BOOK HANDLERS
-  // =========================
+  /* ================================================================
+     BOOK HANDLERS
+  ================================================================ */
 
   const handleDeleteBook = (id) => {
-    if (window.confirm("Are you sure you want to delete this book?")) {
+    if (
+      window.confirm("Are you sure you want to delete this book?")
+    ) {
       deleteBook(id);
     }
   };
@@ -96,12 +108,14 @@ const Admin = () => {
     setShowBookForm(true);
   };
 
-  // =========================
-  // AUTHOR HANDLERS
-  // =========================
+  /* ================================================================
+     AUTHOR HANDLERS
+  ================================================================ */
 
   const handleDeleteAuthor = (id) => {
-    if (window.confirm("Are you sure you want to delete this author?")) {
+    if (
+      window.confirm("Are you sure you want to delete this author?")
+    ) {
       deleteAuthor(id);
     }
   };
@@ -111,9 +125,9 @@ const Admin = () => {
     setShowAuthorForm(true);
   };
 
-  // =========================
-  // TRUSTED AUTHOR HANDLERS
-  // =========================
+  /* ================================================================
+     TRUSTED AUTHOR HANDLERS
+  ================================================================ */
 
   const handleEditTrustedAuthor = (post) => {
     setEditingTrustedAuthor(post);
@@ -132,8 +146,15 @@ const Admin = () => {
     try {
       await deleteTrustedAuthorPost(post);
     } catch (error) {
-      console.error("Failed to delete Trusted Author:", error);
-      alert(error?.message || "Failed to delete Trusted Author post.");
+      console.error(
+        "Failed to delete Trusted Author:",
+        error
+      );
+
+      alert(
+        error?.message ||
+          "Failed to delete Trusted Author post."
+      );
     }
   };
 
@@ -142,26 +163,42 @@ const Admin = () => {
     setShowTrustedAuthorForm(true);
   };
 
+  /* ================================================================
+     RENDER
+  ================================================================ */
+
   return (
     <div className="admin-dashboard">
+
       {/* ================= HEADER ================= */}
 
       <div className="admin-header">
+
         <h1>Admin Dashboard</h1>
 
         <div className="admin-user-info">
-          <span>Welcome, {currentUser.email}</span>
 
-          <button onClick={handleLogout} className="logout-btn">
+          <span>
+            Welcome, {currentUser.email}
+          </span>
+
+          <button
+            onClick={handleLogout}
+            className="logout-btn"
+          >
             Logout
           </button>
+
         </div>
+
       </div>
 
       <div className="admin-content">
+
         {/* ================= STATS ================= */}
 
         <div className="admin-stats">
+
           <div className="stat-card">
             <FaBook />
 
@@ -202,38 +239,59 @@ const Admin = () => {
             <FaInstagram />
 
             <div>
-              <h3>{trustedAuthorPosts?.length || 0}</h3>
+              <h3>
+                {trustedAuthorPosts?.length || 0}
+              </h3>
+
               <p>Trusted Authors</p>
             </div>
           </div>
+
         </div>
 
         {/* ================= TABS ================= */}
 
         <div className="admin-tabs">
+
           <button
-            className={activeTab === "books" ? "tab-active" : "tab"}
+            className={
+              activeTab === "books"
+                ? "tab-active"
+                : "tab"
+            }
             onClick={() => setActiveTab("books")}
           >
             <FaBook /> Manage Books
           </button>
 
           <button
-            className={activeTab === "authors" ? "tab-active" : "tab"}
+            className={
+              activeTab === "authors"
+                ? "tab-active"
+                : "tab"
+            }
             onClick={() => setActiveTab("authors")}
           >
             <FaUser /> Manage Authors
           </button>
 
           <button
-            className={activeTab === "leads" ? "tab-active" : "tab"}
+            className={
+              activeTab === "leads"
+                ? "tab-active"
+                : "tab"
+            }
             onClick={() => setActiveTab("leads")}
           >
             <FaEnvelope /> Manage Leads
           </button>
 
           <button
-            className={activeTab === "blogs" ? "tab-active" : "tab"}
+            className={
+              activeTab === "blogs"
+                ? "tab-active"
+                : "tab"
+            }
             onClick={() => setActiveTab("blogs")}
           >
             <FaPen /> Manage Blogs
@@ -241,19 +299,28 @@ const Admin = () => {
 
           <button
             className={
-              activeTab === "trustedAuthors" ? "tab-active" : "tab"
+              activeTab === "trustedAuthors"
+                ? "tab-active"
+                : "tab"
             }
-            onClick={() => setActiveTab("trustedAuthors")}
+            onClick={() =>
+              setActiveTab("trustedAuthors")
+            }
           >
             <FaInstagram /> Trusted Authors
           </button>
 
           <button
-            className={activeTab === "hero" ? "tab-active" : "tab"}
+            className={
+              activeTab === "hero"
+                ? "tab-active"
+                : "tab"
+            }
             onClick={() => setActiveTab("hero")}
           >
             <FaHome /> Manage Hero
           </button>
+
         </div>
 
         {/* =========================================================
@@ -262,7 +329,9 @@ const Admin = () => {
 
         {activeTab === "books" && (
           <div className="books-management">
+
             <div className="section-header">
+
               <h2>Books Management</h2>
 
               <button
@@ -274,10 +343,13 @@ const Admin = () => {
               >
                 <FaPlus /> Add New Book
               </button>
+
             </div>
 
             <div className="data-table">
+
               <table>
+
                 <thead>
                   <tr>
                     <th>Cover</th>
@@ -291,9 +363,11 @@ const Admin = () => {
                 </thead>
 
                 <tbody>
+
                   {books.length > 0 ? (
                     books.map((book) => (
                       <tr key={book.id}>
+
                         <td>
                           <img
                             src={getBookCover(book)}
@@ -314,32 +388,48 @@ const Admin = () => {
                         <td>{book.year}</td>
 
                         <td>
+
                           <button
                             className="edit-btn"
-                            onClick={() => handleEditBook(book)}
+                            onClick={() =>
+                              handleEditBook(book)
+                            }
+                            title="Edit book"
                           >
                             <FaEdit />
                           </button>
 
                           <button
                             className="delete-btn"
-                            onClick={() => handleDeleteBook(book.id)}
+                            onClick={() =>
+                              handleDeleteBook(book.id)
+                            }
+                            title="Delete book"
                           >
                             <FaTrash />
                           </button>
+
                         </td>
+
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="7" className="no-data">
+                      <td
+                        colSpan="7"
+                        className="no-data"
+                      >
                         No books available
                       </td>
                     </tr>
                   )}
+
                 </tbody>
+
               </table>
+
             </div>
+
           </div>
         )}
 
@@ -349,7 +439,9 @@ const Admin = () => {
 
         {activeTab === "authors" && (
           <div className="authors-management">
+
             <div className="section-header">
+
               <h2>Authors Management</h2>
 
               <button
@@ -361,10 +453,13 @@ const Admin = () => {
               >
                 <FaPlus /> Add New Author
               </button>
+
             </div>
 
             <div className="data-table">
+
               <table>
+
                 <thead>
                   <tr>
                     <th>Photo</th>
@@ -376,10 +471,13 @@ const Admin = () => {
                 </thead>
 
                 <tbody>
+
                   {authors.length > 0 ? (
                     authors.map((author) => (
                       <tr key={author.id}>
+
                         <td>
+
                           <img
                             src={getAuthorPhoto(author)}
                             alt={author.name}
@@ -390,39 +488,63 @@ const Admin = () => {
                                 "https://via.placeholder.com/150x150.png?text=No+Photo";
                             }}
                           />
+
                         </td>
 
                         <td>{author.name}</td>
                         <td>{author.genre}</td>
-                        <td>{author.books}</td>
 
                         <td>
+                          {Array.isArray(author.books)
+                            ? author.books.join(", ")
+                            : author.books || "-"}
+                        </td>
+
+                        <td>
+
                           <button
                             className="edit-btn"
-                            onClick={() => handleEditAuthor(author)}
+                            onClick={() =>
+                              handleEditAuthor(author)
+                            }
+                            title="Edit author"
                           >
                             <FaEdit />
                           </button>
 
                           <button
                             className="delete-btn"
-                            onClick={() => handleDeleteAuthor(author.id)}
+                            onClick={() =>
+                              handleDeleteAuthor(
+                                author.id
+                              )
+                            }
+                            title="Delete author"
                           >
                             <FaTrash />
                           </button>
+
                         </td>
+
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" className="no-data">
+                      <td
+                        colSpan="5"
+                        className="no-data"
+                      >
                         No authors available
                       </td>
                     </tr>
                   )}
+
                 </tbody>
+
               </table>
+
             </div>
+
           </div>
         )}
 
@@ -432,20 +554,28 @@ const Admin = () => {
 
         {activeTab === "blogs" && (
           <div className="blogs-management">
+
             <div className="section-header">
+
               <h2>Blogs Management</h2>
 
               <button
                 className="add-btn"
-                onClick={() => navigate("/admin/blogs/new")}
+                onClick={() =>
+                  navigate("/admin/blogs/new")
+                }
               >
                 <FaPlus /> Add New Blog
               </button>
+
             </div>
 
             <div className="data-table">
+
               <table>
+
                 <thead>
+
                   <tr>
                     <th>Title</th>
                     <th>Author</th>
@@ -453,51 +583,78 @@ const Admin = () => {
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
+
                 </thead>
 
                 <tbody>
+
                   {blogs && blogs.length > 0 ? (
                     blogs.slice(0, 10).map((blog) => (
                       <tr key={blog.id}>
+
                         <td>{blog.title}</td>
-                        <td>{blog.author || "-"}</td>
-                        <td>{blog.category || "-"}</td>
+
+                        <td>
+                          {blog.author || "-"}
+                        </td>
+
+                        <td>
+                          {blog.category || "-"}
+                        </td>
+
                         <td>{blog.status}</td>
 
                         <td>
+
                           <button
                             className="edit-btn"
                             onClick={() =>
-                              navigate(`/admin/blogs/${blog.id}/edit`)
+                              navigate(
+                                `/admin/blogs/${blog.id}/edit`
+                              )
                             }
+                            title="Edit blog"
                           >
                             <FaEdit />
                           </button>
+
                         </td>
+
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" className="no-data">
+                      <td
+                        colSpan="5"
+                        className="no-data"
+                      >
                         No blogs available
                       </td>
                     </tr>
                   )}
+
                 </tbody>
+
               </table>
+
             </div>
 
             <div
               className="section-header"
               style={{ marginTop: "1.5rem" }}
             >
+
               <button
                 className="add-btn"
-                onClick={() => navigate("/admin/blogs")}
+                onClick={() =>
+                  navigate("/admin/blogs")
+                }
               >
                 <FaPen /> Open Full Blog Management
               </button>
+
             </div>
+
           </div>
         )}
 
@@ -507,13 +664,19 @@ const Admin = () => {
 
         {activeTab === "leads" && (
           <div className="leads-management">
+
             <div className="section-header">
+
               <h2>Leads & Contacts</h2>
+
             </div>
 
             <div className="data-table">
+
               <table>
+
                 <thead>
+
                   <tr>
                     <th>Date</th>
                     <th>Type</th>
@@ -523,24 +686,31 @@ const Admin = () => {
                     <th>Message</th>
                     <th>Actions</th>
                   </tr>
+
                 </thead>
 
                 <tbody>
+
                   {leads && leads.length > 0 ? (
                     leads.map((lead) => (
                       <tr key={lead.id}>
+
                         <td>
                           {lead.createdAt?.toDate
                             ? lead.createdAt
                                 .toDate()
                                 .toLocaleDateString()
-                            : new Date(
+                            : lead.createdAt
+                            ? new Date(
                                 lead.createdAt
-                              ).toLocaleDateString()}
+                              ).toLocaleDateString()
+                            : "-"}
                         </td>
 
                         <td>
-                          {lead.type === "newsletter" && (
+
+                          {lead.type ===
+                            "newsletter" && (
                             <span className="badge badge-info">
                               Newsletter
                             </span>
@@ -552,25 +722,39 @@ const Admin = () => {
                             </span>
                           )}
 
-                          {lead.type === "author_request" && (
+                          {lead.type ===
+                            "author_request" && (
                             <span className="badge badge-success">
                               Author Reqs
                             </span>
                           )}
+
                         </td>
 
-                        <td>{lead.name || "-"}</td>
-                        <td>{lead.email}</td>
-                        <td>{lead.phone || "-"}</td>
+                        <td>
+                          {lead.name || "-"}
+                        </td>
 
-                        <td style={{ maxWidth: "200px" }}>
+                        <td>{lead.email}</td>
+
+                        <td>
+                          {lead.phone || "-"}
+                        </td>
+
+                        <td
+                          style={{
+                            maxWidth: "200px",
+                          }}
+                        >
                           {lead.message || "-"}
                         </td>
 
                         <td>
+
                           <button
                             className="delete-btn"
                             onClick={() => {
+
                               if (
                                 window.confirm(
                                   "Are you sure you want to delete this lead?"
@@ -578,23 +762,34 @@ const Admin = () => {
                               ) {
                                 deleteLead(lead.id);
                               }
+
                             }}
+                            title="Delete lead"
                           >
                             <FaTrash />
                           </button>
+
                         </td>
+
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="7" className="no-data">
+                      <td
+                        colSpan="7"
+                        className="no-data"
+                      >
                         No leads available
                       </td>
                     </tr>
                   )}
+
                 </tbody>
+
               </table>
+
             </div>
+
           </div>
         )}
 
@@ -604,14 +799,21 @@ const Admin = () => {
 
         {activeTab === "trustedAuthors" && (
           <div className="trusted-authors-management">
+
             <div className="section-header">
+
               <div>
+
                 <h2>Trusted Authors</h2>
 
                 <p>
-                  Upload Instagram screenshots/posts that will appear in
-                  the Trusted Authors section on the Home page.
+                  Paste a public image URL (e.g. an
+                  Unsplash link or your own hosted
+                  screenshot). It will appear
+                  automatically in the Trusted Authors
+                  section on the Home page.
                 </p>
+
               </div>
 
               <button
@@ -620,41 +822,50 @@ const Admin = () => {
               >
                 <FaPlus /> Add Trusted Author
               </button>
+
             </div>
 
             <div className="trusted-admin-grid">
+
               {trustedAuthorPosts &&
               trustedAuthorPosts.length > 0 ? (
+
                 trustedAuthorPosts.map((post) => (
+
                   <div
                     className="trusted-admin-card"
                     key={post.id}
                   >
+
                     {/* IMAGE */}
 
                     <div className="trusted-admin-image-wrapper">
+
                       <img
                         src={post.imageUrl}
                         alt={
-                          post.username
-                            ? post.username
-                            : "Trusted author"
+                          post.username ||
+                          "Trusted author"
                         }
                         className="trusted-admin-image"
                         loading="lazy"
                         onError={(e) => {
-                          e.target.src =
+                          e.currentTarget.src =
                             "https://via.placeholder.com/500x600.png?text=Image+Unavailable";
                         }}
                       />
+
                     </div>
 
                     {/* INFO */}
 
                     <div className="trusted-admin-info">
+
                       <div className="trusted-admin-user">
+
                         <strong>
-                          {post.username || "No username"}
+                          {post.username ||
+                            "No username"}
                         </strong>
 
                         {post.isActive !== false ? (
@@ -666,6 +877,7 @@ const Admin = () => {
                             Hidden
                           </span>
                         )}
+
                       </div>
 
                       {post.likes && (
@@ -679,15 +891,30 @@ const Admin = () => {
                           {post.caption}
                         </p>
                       )}
+
+                      {post.instagramUrl && (
+                        <a
+                          href={post.instagramUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="trusted-instagram-link"
+                        >
+                          <FaInstagram /> View Instagram
+                        </a>
+                      )}
+
                     </div>
 
                     {/* ACTIONS */}
 
                     <div className="trusted-admin-actions">
+
                       <button
                         className="edit-btn"
                         onClick={() =>
-                          handleEditTrustedAuthor(post)
+                          handleEditTrustedAuthor(
+                            post
+                          )
                         }
                         title="Edit"
                       >
@@ -697,24 +924,34 @@ const Admin = () => {
                       <button
                         className="delete-btn"
                         onClick={() =>
-                          handleDeleteTrustedAuthor(post)
+                          handleDeleteTrustedAuthor(
+                            post
+                          )
                         }
                         title="Delete"
                       >
                         <FaTrash />
                       </button>
+
                     </div>
+
                   </div>
+
                 ))
+
               ) : (
+
                 <div className="trusted-empty-state">
+
                   <FaImages />
 
-                  <h3>No Trusted Author posts yet</h3>
+                  <h3>
+                    No Trusted Author posts yet
+                  </h3>
 
                   <p>
-                    Upload your first Instagram screenshot to
-                    display it on the Home page.
+                    Add your first testimonial image
+                    URL to display it on the Home page.
                   </p>
 
                   <button
@@ -723,9 +960,13 @@ const Admin = () => {
                   >
                     <FaPlus /> Add Trusted Author
                   </button>
+
                 </div>
+
               )}
+
             </div>
+
           </div>
         )}
 
@@ -735,16 +976,21 @@ const Admin = () => {
 
         {activeTab === "hero" && (
           <div className="hero-management">
+
             <div className="section-header">
+
               <h2>Hero Section Management</h2>
+
             </div>
 
             <div className="hero-manager-card">
+
               <p className="hero-manager-hint">
-                Choose a book for each of the four floating
-                positions on the right side of the Home page hero.
-                The selected book&apos;s cover and its detail-page
-                link are used automatically — no uploads or IDs
+                Choose a book for each of the four
+                floating positions on the right side of
+                the Home page hero. The selected book's
+                cover and its detail-page link are used
+                automatically — no uploads or IDs
                 required. Save to publish.
               </p>
 
@@ -754,32 +1000,48 @@ const Admin = () => {
                 books={books}
                 getBookCover={getBookCover}
                 onSave={async (images) => {
-                  const result = await updateHero({ images });
+                  const result = await updateHero({
+                    images,
+                  });
+
                   return result;
                 }}
               />
+
             </div>
+
           </div>
         )}
+
       </div>
 
       {/* =========================================================
-          BOOK FORM MODAL
+          BOOK FORM
       ========================================================= */}
 
       {showBookForm && (
         <BookForm
           book={editingBook}
+
           onSave={(bookData) => {
+
             if (editingBook) {
-              updateBook(editingBook.id, bookData);
+
+              updateBook(
+                editingBook.id,
+                bookData
+              );
+
             } else {
+
               addBook(bookData);
+
             }
 
             setShowBookForm(false);
             setEditingBook(null);
           }}
+
           onCancel={() => {
             setShowBookForm(false);
             setEditingBook(null);
@@ -788,22 +1050,32 @@ const Admin = () => {
       )}
 
       {/* =========================================================
-          AUTHOR FORM MODAL
+          AUTHOR FORM
       ========================================================= */}
 
       {showAuthorForm && (
         <AuthorForm
           author={editingAuthor}
+
           onSave={(authorData) => {
+
             if (editingAuthor) {
-              updateAuthor(editingAuthor.id, authorData);
+
+              updateAuthor(
+                editingAuthor.id,
+                authorData
+              );
+
             } else {
+
               addAuthor(authorData);
+
             }
 
             setShowAuthorForm(false);
             setEditingAuthor(null);
           }}
+
           onCancel={() => {
             setShowAuthorForm(false);
             setEditingAuthor(null);
@@ -812,26 +1084,35 @@ const Admin = () => {
       )}
 
       {/* =========================================================
-          TRUSTED AUTHOR FORM MODAL
+          TRUSTED AUTHOR FORM
       ========================================================= */}
 
       {showTrustedAuthorForm && (
         <TrustedAuthorForm
           post={editingTrustedAuthor}
+
           onSave={async (data) => {
+
             try {
+
               if (editingTrustedAuthor) {
+
                 await updateTrustedAuthorPost(
                   editingTrustedAuthor.id,
                   data
                 );
+
               } else {
+
                 await addTrustedAuthorPost(data);
+
               }
 
               setShowTrustedAuthorForm(false);
               setEditingTrustedAuthor(null);
+
             } catch (error) {
+
               console.error(
                 "Failed to save Trusted Author:",
                 error
@@ -840,28 +1121,35 @@ const Admin = () => {
               throw error;
             }
           }}
+
           onCancel={() => {
             setShowTrustedAuthorForm(false);
             setEditingTrustedAuthor(null);
           }}
         />
       )}
+
     </div>
   );
 };
 
 /* ================================================================
    TRUSTED AUTHOR FORM
+   IMPORTANT:
+   Uses an image URL (matches DataContext's
+   addTrustedAuthorPost / updateTrustedAuthorPost,
+   which store imageUrl directly in Firestore —
+   no Firebase Storage upload involved).
 ================================================================ */
 
-const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
-  const [file, setFile] = useState(null);
-
-  const [preview, setPreview] = useState(
-    post?.imageUrl || ""
-  );
+const TrustedAuthorForm = ({
+  post,
+  onSave,
+  onCancel,
+}) => {
 
   const [formData, setFormData] = useState({
+    imageUrl: post?.imageUrl || "",
     username: post?.username || "",
     likes: post?.likes || "",
     caption: post?.caption || "",
@@ -869,82 +1157,203 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
     isActive: post?.isActive !== false,
   });
 
+  const [imageLoadFailed, setImageLoadFailed] =
+    useState(false);
+
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files?.[0];
-
-    if (!selectedFile) return;
-
-    if (!selectedFile.type.startsWith("image/")) {
-      setError("Please select an image file.");
-      return;
-    }
-
-    if (selectedFile.size > 10 * 1024 * 1024) {
-      setError("Image must be smaller than 10 MB.");
-      return;
-    }
-
-    setError("");
-    setFile(selectedFile);
-
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreview(objectUrl);
-  };
+  /* ================================================================
+     INPUT CHANGE
+  ================================================================ */
 
   const handleInputChange = (field, value) => {
+
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
+
+    if (field === "imageUrl") {
+      setImageLoadFailed(false);
+    }
+
   };
 
+  /* ================================================================
+     URL VALIDATION
+  ================================================================ */
+
+  const isValidURL = (url) => {
+
+    if (!url || !url.trim()) {
+      return false;
+    }
+
+    try {
+
+      const parsed = new URL(
+        url.trim()
+      );
+
+      return (
+        parsed.protocol === "http:" ||
+        parsed.protocol === "https:"
+      );
+
+    } catch {
+
+      return false;
+
+    }
+  };
+
+  /* ================================================================
+     SUBMIT
+  ================================================================ */
+
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
-    if (!post && !file) {
-      setError("Please select an Instagram screenshot.");
+    if (saving) return;
+
+    setError("");
+
+    const trimmedImageUrl =
+      formData.imageUrl.trim();
+
+    const trimmedUsername =
+      formData.username.trim();
+
+    const trimmedInstagramUrl =
+      formData.instagramUrl.trim();
+
+    /* ============================================================
+       IMAGE URL VALIDATION
+    ============================================================ */
+
+    /*
+     * New post:
+     * imageUrl is compulsory.
+     *
+     * Edit post:
+     * Existing imageUrl can remain if user
+     * doesn't change it — but if the field is
+     * cleared entirely, that's still invalid,
+     * since Firestore requires a non-empty URL.
+     */
+
+    if (!trimmedImageUrl) {
+
+      setError(
+        "Please enter a public image URL."
+      );
+
       return;
     }
 
-    if (formData.instagramUrl.trim()) {
-      try {
-        new URL(formData.instagramUrl.trim());
-      } catch {
+    if (!isValidURL(trimmedImageUrl)) {
+
+      setError(
+        "Please enter a valid image URL."
+      );
+
+      return;
+    }
+
+    /* ============================================================
+       USERNAME
+    ============================================================ */
+
+    if (!trimmedUsername) {
+
+      setError(
+        "Please enter the username."
+      );
+
+      return;
+    }
+
+    /* ============================================================
+       INSTAGRAM URL
+    ============================================================ */
+
+    if (trimmedInstagramUrl) {
+
+      if (
+        !isValidURL(
+          trimmedInstagramUrl
+        )
+      ) {
+
         setError(
-          "Please enter a valid Instagram URL, for example https://instagram.com/username"
+          "Please enter a valid Instagram URL."
         );
+
         return;
       }
     }
 
     setSaving(true);
-    setError("");
 
     try {
+
+      /*
+       * DataContext's addTrustedAuthorPost /
+       * updateTrustedAuthorPost store imageUrl
+       * directly in Firestore after validating it —
+       * no file upload step.
+       */
+
       await onSave({
-        file,
-        username: formData.username,
-        likes: formData.likes,
-        caption: formData.caption,
-        instagramUrl: formData.instagramUrl,
-        isActive: formData.isActive,
+
+        imageUrl: trimmedImageUrl,
+
+        username: trimmedUsername,
+
+        likes:
+          formData.likes.trim(),
+
+        caption:
+          formData.caption.trim(),
+
+        instagramUrl:
+          trimmedInstagramUrl,
+
+        isActive:
+          formData.isActive,
+
       });
+
     } catch (err) {
-      console.error(err);
-      setError(
-        err?.message || "Failed to save Trusted Author post."
+
+      console.error(
+        "Failed to save Trusted Author:",
+        err
       );
+
+      setError(
+        err?.message ||
+          "Failed to save Trusted Author post."
+      );
+
     } finally {
+
       setSaving(false);
+
     }
   };
 
+  /* ================================================================
+     RENDER
+  ================================================================ */
+
   return (
     <div className="modal-overlay">
+
       <div className="modal-content trusted-author-modal">
+
         <h2>
           {post
             ? "Edit Trusted Author"
@@ -952,43 +1361,85 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
         </h2>
 
         <form onSubmit={handleSubmit}>
-          {/* IMAGE */}
+
+          {/* ======================================================
+              IMAGE URL
+          ====================================================== */}
 
           <div className="form-group">
+
             <label>
-              Instagram Screenshot{" "}
-              {!post && "*"}
+              Image URL *
             </label>
 
             <input
-              type="file"
-              accept="image/png,image/jpeg,image/jpg,image/webp"
-              onChange={handleFileChange}
+              type="text"
+              value={formData.imageUrl}
+              onChange={(e) =>
+                handleInputChange(
+                  "imageUrl",
+                  e.target.value
+                )
+              }
+              placeholder="https://images.unsplash.com/..."
+              disabled={saving}
+              required
             />
 
             <small className="help-text">
-              Upload the Instagram screenshot exactly as you
-              want it to appear on the Home page. Maximum size:
-              10 MB.
+              Paste a public image URL — e.g. an
+              Unsplash link or a screenshot hosted
+              elsewhere.
             </small>
+
           </div>
 
-          {/* PREVIEW */}
+          {/* ======================================================
+              IMAGE PREVIEW
+          ====================================================== */}
 
-          {preview && (
+          {formData.imageUrl.trim() &&
+            !imageLoadFailed && (
+
             <div className="trusted-upload-preview">
+
               <img
-                src={preview}
+                src={formData.imageUrl.trim()}
                 alt="Trusted Author preview"
+                onError={() => {
+                  setImageLoadFailed(true);
+                }}
+                onLoad={() => {
+                  setImageLoadFailed(false);
+                }}
               />
+
             </div>
+
           )}
 
-          {/* USERNAME + LIKES */}
+          {formData.imageUrl.trim() &&
+            imageLoadFailed && (
+
+            <p className="help-text">
+              Couldn't load a preview for this URL —
+              double check it's a direct, public
+              image link.
+            </p>
+
+          )}
+
+          {/* ======================================================
+              USERNAME + LIKES
+          ====================================================== */}
 
           <div className="form-row">
+
             <div className="form-group">
-              <label>Username</label>
+
+              <label>
+                Username *
+              </label>
 
               <input
                 type="text"
@@ -1000,11 +1451,17 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
                   )
                 }
                 placeholder="@username"
+                disabled={saving}
+                required
               />
+
             </div>
 
             <div className="form-group">
-              <label>Likes</label>
+
+              <label>
+                Likes
+              </label>
 
               <input
                 type="text"
@@ -1016,14 +1473,22 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
                   )
                 }
                 placeholder="12.6k"
+                disabled={saving}
               />
+
             </div>
+
           </div>
 
-          {/* INSTAGRAM URL */}
+          {/* ======================================================
+              INSTAGRAM URL
+          ====================================================== */}
 
           <div className="form-group">
-            <label>Instagram URL</label>
+
+            <label>
+              Instagram URL
+            </label>
 
             <input
               type="url"
@@ -1035,13 +1500,20 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
                 )
               }
               placeholder="https://instagram.com/username"
+              disabled={saving}
             />
+
           </div>
 
-          {/* CAPTION */}
+          {/* ======================================================
+              CAPTION
+          ====================================================== */}
 
           <div className="form-group">
-            <label>Caption</label>
+
+            <label>
+              Caption
+            </label>
 
             <textarea
               value={formData.caption}
@@ -1053,12 +1525,17 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
               }
               rows="4"
               placeholder="Optional caption"
+              disabled={saving}
             />
+
           </div>
 
-          {/* ACTIVE */}
+          {/* ======================================================
+              ACTIVE
+          ====================================================== */}
 
           <label className="trusted-active-checkbox">
+
             <input
               type="checkbox"
               checked={formData.isActive}
@@ -1068,24 +1545,39 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
                   e.target.checked
                 )
               }
+              disabled={saving}
             />
 
             <span>
               Show this post on Home page
             </span>
+
           </label>
 
-          {/* ERROR */}
+          {/* ======================================================
+              ERROR
+          ====================================================== */}
 
           {error && (
+
             <div className="error-text trusted-form-error">
-              <FaExclamationCircle /> {error}
+
+              <FaExclamationCircle />
+
+              {" "}
+
+              {error}
+
             </div>
+
           )}
 
-          {/* BUTTONS */}
+          {/* ======================================================
+              BUTTONS
+          ====================================================== */}
 
           <div className="form-buttons">
+
             <button
               type="button"
               onClick={onCancel}
@@ -1100,20 +1592,32 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
               className="save-btn"
               disabled={saving}
             >
+
               {saving ? (
+
                 <>
                   <FaSpinner className="trusted-spinner" />
-                  Uploading...
+                  Saving...
                 </>
+
               ) : post ? (
+
                 "Update"
+
               ) : (
-                "Upload"
+
+                "Save"
+
               )}
+
             </button>
+
           </div>
+
         </form>
+
       </div>
+
     </div>
   );
 };
@@ -1122,121 +1626,201 @@ const TrustedAuthorForm = ({ post, onSave, onCancel }) => {
    BOOK FORM
 ================================================================ */
 
-const BookForm = ({ book, onSave, onCancel }) => {
+const BookForm = ({
+  book,
+  onSave,
+  onCancel,
+}) => {
+
   const [formData, setFormData] = useState({
-    title: book?.title || "",
-    subtitle: book?.subtitle || "",
-    author: book?.author || "",
-    genre: book?.genre || "Fiction",
-    price: book?.price || "",
-    year: book?.year || new Date().getFullYear(),
-    cover: book?.cover || "",
-    description: book?.description || "",
+
+    title:
+      book?.title || "",
+
+    subtitle:
+      book?.subtitle || "",
+
+    author:
+      book?.author || "",
+
+    genre:
+      book?.genre || "Fiction",
+
+    price:
+      book?.price || "",
+
+    year:
+      book?.year ||
+      new Date().getFullYear(),
+
+    cover:
+      book?.cover || "",
+
+    description:
+      book?.description || "",
+
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] =
+    useState({});
 
   const isValidURL = (url) => {
-    if (!url || url.trim() === "") return true;
 
-    const urlPattern =
-      /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w\.-]*)*\/?(\?[a-zA-Z0-9_-]+=[\w%-]+(&[a-zA-Z0-9_-]+=[\w%-]+)*)?$/i;
-
-    if (urlPattern.test(url)) return true;
+    if (!url || url.trim() === "") {
+      return true;
+    }
 
     try {
+
       new URL(url);
+
       return true;
+
     } catch {
+
       try {
-        new URL("https://" + url);
+
+        new URL(
+          "https://" + url
+        );
+
         return true;
+
       } catch {
+
         return false;
+
       }
     }
   };
 
   const validateForm = () => {
+
     const newErrors = {};
 
     if (!formData.title.trim()) {
-      newErrors.title = "Title is required";
+
+      newErrors.title =
+        "Title is required";
+
     }
 
     if (!formData.author.trim()) {
-      newErrors.author = "Author is required";
+
+      newErrors.author =
+        "Author is required";
+
     }
 
     if (
       !formData.price ||
       parseFloat(formData.price) <= 0
     ) {
-      newErrors.price = "Valid price is required";
+
+      newErrors.price =
+        "Valid price is required";
+
     }
 
-    const currentYear = new Date().getFullYear();
+    const currentYear =
+      new Date().getFullYear();
 
     if (
       !formData.year ||
       parseInt(formData.year) < 1000 ||
-      parseInt(formData.year) > currentYear + 10
-    ) {
-      newErrors.year = `Year must be between 1000 and ${
+      parseInt(formData.year) >
         currentYear + 10
-      }`;
+    ) {
+
+      newErrors.year =
+        `Year must be between 1000 and ${
+          currentYear + 10
+        }`;
+
     }
 
     if (
       formData.cover &&
       !isValidURL(formData.cover)
     ) {
+
       newErrors.cover =
         "Please enter a valid URL.";
+
     }
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return (
+      Object.keys(newErrors).length === 0
+    );
   };
 
   const handleSubmit = (e) => {
+
     e.preventDefault();
 
     if (validateForm()) {
+
       onSave({
+
         ...formData,
-        price: parseFloat(formData.price),
-        year: parseInt(formData.year),
+
+        price:
+          parseFloat(
+            formData.price
+          ),
+
+        year:
+          parseInt(
+            formData.year
+          ),
+
       });
+
     }
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData({
-      ...formData,
+  const handleInputChange = (
+    field,
+    value
+  ) => {
+
+    setFormData((prev) => ({
+      ...prev,
       [field]: value,
-    });
+    }));
 
     if (errors[field]) {
-      setErrors({
-        ...errors,
+
+      setErrors((prev) => ({
+        ...prev,
         [field]: "",
-      });
+      }));
+
     }
   };
 
   return (
     <div className="modal-overlay">
+
       <div className="modal-content">
+
         <h2>
-          {book ? "Edit Book" : "Add New Book"}
+          {book
+            ? "Edit Book"
+            : "Add New Book"}
         </h2>
 
         <form onSubmit={handleSubmit}>
+
           <div className="form-row">
+
             <div className="form-group">
-              <label>Title *</label>
+
+              <label>
+                Title *
+              </label>
 
               <input
                 type="text"
@@ -1248,7 +1832,9 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   )
                 }
                 className={
-                  errors.title ? "input-error" : ""
+                  errors.title
+                    ? "input-error"
+                    : ""
                 }
                 required
               />
@@ -1258,10 +1844,14 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   {errors.title}
                 </span>
               )}
+
             </div>
 
             <div className="form-group">
-              <label>Subtitle</label>
+
+              <label>
+                Subtitle
+              </label>
 
               <input
                 type="text"
@@ -1273,12 +1863,18 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   )
                 }
               />
+
             </div>
+
           </div>
 
           <div className="form-row">
+
             <div className="form-group">
-              <label>Author *</label>
+
+              <label>
+                Author *
+              </label>
 
               <input
                 type="text"
@@ -1290,7 +1886,9 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   )
                 }
                 className={
-                  errors.author ? "input-error" : ""
+                  errors.author
+                    ? "input-error"
+                    : ""
                 }
                 required
               />
@@ -1300,10 +1898,14 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   {errors.author}
                 </span>
               )}
+
             </div>
 
             <div className="form-group">
-              <label>Genre *</label>
+
+              <label>
+                Genre *
+              </label>
 
               <select
                 value={formData.genre}
@@ -1315,35 +1917,84 @@ const BookForm = ({ book, onSave, onCancel }) => {
                 }
                 required
               >
-                <option value="Fiction">Fiction</option>
-                <option value="Poetry">Poetry</option>
-                <option value="History">History</option>
-                <option value="Self-Help">Self-Help</option>
-                <option value="Academic">Academic</option>
-                <option value="Psychology">Psychology</option>
-                <option value="Science">Science</option>
-                <option value="Management">Management</option>
-                <option value="Dharma">Dharma</option>
-                <option value="Nature">Nature</option>
-                <option value="Business">Business</option>
-                <option value="Astronomy">Astronomy</option>
+
+                <option value="Fiction">
+                  Fiction
+                </option>
+
+                <option value="Poetry">
+                  Poetry
+                </option>
+
+                <option value="History">
+                  History
+                </option>
+
+                <option value="Self-Help">
+                  Self-Help
+                </option>
+
+                <option value="Academic">
+                  Academic
+                </option>
+
+                <option value="Psychology">
+                  Psychology
+                </option>
+
+                <option value="Science">
+                  Science
+                </option>
+
+                <option value="Management">
+                  Management
+                </option>
+
+                <option value="Dharma">
+                  Dharma
+                </option>
+
+                <option value="Nature">
+                  Nature
+                </option>
+
+                <option value="Business">
+                  Business
+                </option>
+
+                <option value="Astronomy">
+                  Astronomy
+                </option>
+
                 <option value="Mathematics">
                   Mathematics
                 </option>
-                <option value="Law">Law</option>
+
+                <option value="Law">
+                  Law
+                </option>
+
                 <option value="Spiritual Growth">
                   Spiritual Growth
                 </option>
+
                 <option value="Epic Fantasy">
                   Epic Fantasy
                 </option>
+
               </select>
+
             </div>
+
           </div>
 
           <div className="form-row">
+
             <div className="form-group">
-              <label>Price (₹) *</label>
+
+              <label>
+                Price (₹) *
+              </label>
 
               <input
                 type="number"
@@ -1357,7 +2008,9 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   )
                 }
                 className={
-                  errors.price ? "input-error" : ""
+                  errors.price
+                    ? "input-error"
+                    : ""
                 }
                 required
               />
@@ -1367,15 +2020,22 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   {errors.price}
                 </span>
               )}
+
             </div>
 
             <div className="form-group">
-              <label>Year *</label>
+
+              <label>
+                Year *
+              </label>
 
               <input
                 type="number"
                 min="1000"
-                max={new Date().getFullYear() + 10}
+                max={
+                  new Date().getFullYear() +
+                  10
+                }
                 value={formData.year}
                 onChange={(e) =>
                   handleInputChange(
@@ -1384,7 +2044,9 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   )
                 }
                 className={
-                  errors.year ? "input-error" : ""
+                  errors.year
+                    ? "input-error"
+                    : ""
                 }
                 required
               />
@@ -1394,11 +2056,16 @@ const BookForm = ({ book, onSave, onCancel }) => {
                   {errors.year}
                 </span>
               )}
+
             </div>
+
           </div>
 
           <div className="form-group">
-            <label>Cover Image URL</label>
+
+            <label>
+              Cover Image URL
+            </label>
 
             <input
               type="text"
@@ -1411,7 +2078,9 @@ const BookForm = ({ book, onSave, onCancel }) => {
               }
               placeholder="https://example.com/image.jpg"
               className={
-                errors.cover ? "input-error" : ""
+                errors.cover
+                  ? "input-error"
+                  : ""
               }
             />
 
@@ -1424,10 +2093,14 @@ const BookForm = ({ book, onSave, onCancel }) => {
             <small className="help-text">
               Supported formats: image URL
             </small>
+
           </div>
 
           <div className="form-group">
-            <label>Description</label>
+
+            <label>
+              Description
+            </label>
 
             <textarea
               value={formData.description}
@@ -1440,9 +2113,11 @@ const BookForm = ({ book, onSave, onCancel }) => {
               rows="4"
               placeholder="Enter book description..."
             />
+
           </div>
 
           <div className="form-buttons">
+
             <button
               type="button"
               onClick={onCancel}
@@ -1455,11 +2130,18 @@ const BookForm = ({ book, onSave, onCancel }) => {
               type="submit"
               className="save-btn"
             >
-              {book ? "Update" : "Add"} Book
+              {book
+                ? "Update"
+                : "Add"}{" "}
+              Book
             </button>
+
           </div>
+
         </form>
+
       </div>
+
     </div>
   );
 };
@@ -1468,85 +2150,157 @@ const BookForm = ({ book, onSave, onCancel }) => {
    AUTHOR FORM
 ================================================================ */
 
-const AuthorForm = ({ author, onSave, onCancel }) => {
-  const [formData, setFormData] = useState({
-    name: author?.name || "",
-    genre: author?.genre || "Fiction",
-    photo: author?.photo || "",
-    bio: author?.bio || "",
-    books: author?.books || [],
-  });
+const AuthorForm = ({
+  author,
+  onSave,
+  onCancel,
+}) => {
 
-  const [errors, setErrors] = useState({});
+  const [formData, setFormData] =
+    useState({
+
+      name:
+        author?.name || "",
+
+      genre:
+        author?.genre || "Fiction",
+
+      photo:
+        author?.photo || "",
+
+      bio:
+        author?.bio || "",
+
+      books:
+        author?.books || [],
+
+    });
+
+  const [errors, setErrors] =
+    useState({});
 
   const isValidURL = (url) => {
-    if (!url || url.trim() === "") return true;
+
+    if (!url || url.trim() === "") {
+      return true;
+    }
 
     try {
+
       new URL(url);
+
       return true;
+
     } catch {
+
       try {
-        new URL("https://" + url);
+
+        new URL(
+          "https://" + url
+        );
+
         return true;
+
       } catch {
+
         return false;
+
       }
     }
   };
 
   const validateForm = () => {
+
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+
+      newErrors.name =
+        "Name is required";
+
     }
 
     if (
       formData.photo &&
       !isValidURL(formData.photo)
     ) {
+
       newErrors.photo =
         "Please enter a valid URL for the photo";
+
     }
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return (
+      Object.keys(newErrors).length === 0
+    );
   };
 
   const handleSubmit = (e) => {
+
     e.preventDefault();
 
     if (validateForm()) {
-      onSave(formData);
+
+      const normalizedBooks =
+        typeof formData.books === "string"
+          ? formData.books
+              .split(",")
+              .map((book) => book.trim())
+              .filter(Boolean)
+          : formData.books;
+
+      onSave({
+
+        ...formData,
+
+        books:
+          normalizedBooks,
+
+      });
+
     }
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData({
-      ...formData,
+  const handleInputChange = (
+    field,
+    value
+  ) => {
+
+    setFormData((prev) => ({
+      ...prev,
       [field]: value,
-    });
+    }));
 
     if (errors[field]) {
-      setErrors({
-        ...errors,
+
+      setErrors((prev) => ({
+        ...prev,
         [field]: "",
-      });
+      }));
+
     }
   };
 
   return (
     <div className="modal-overlay">
+
       <div className="modal-content">
+
         <h2>
-          {author ? "Edit Author" : "Add New Author"}
+          {author
+            ? "Edit Author"
+            : "Add New Author"}
         </h2>
 
         <form onSubmit={handleSubmit}>
+
           <div className="form-group">
-            <label>Name *</label>
+
+            <label>
+              Name *
+            </label>
 
             <input
               type="text"
@@ -1558,7 +2312,9 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
                 )
               }
               className={
-                errors.name ? "input-error" : ""
+                errors.name
+                  ? "input-error"
+                  : ""
               }
               required
             />
@@ -1568,10 +2324,14 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
                 {errors.name}
               </span>
             )}
+
           </div>
 
           <div className="form-group">
-            <label>Genre *</label>
+
+            <label>
+              Genre *
+            </label>
 
             <select
               value={formData.genre}
@@ -1583,11 +2343,14 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
               }
               required
             >
+
               <option value="Fiction">
                 Fiction Writer
               </option>
 
-              <option value="Poetry">Poet</option>
+              <option value="Poetry">
+                Poet
+              </option>
 
               <option value="History">
                 Historian
@@ -1617,7 +2380,9 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
                 Dharma / Spirituality
               </option>
 
-              <option value="Law">Law</option>
+              <option value="Law">
+                Law
+              </option>
 
               <option value="Mathematics">
                 Mathematics
@@ -1626,11 +2391,16 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
               <option value="Fantasy">
                 Fantasy Writer
               </option>
+
             </select>
+
           </div>
 
           <div className="form-group">
-            <label>Photo URL</label>
+
+            <label>
+              Photo URL
+            </label>
 
             <input
               type="text"
@@ -1643,7 +2413,9 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
               }
               placeholder="https://example.com/photo.jpg"
               className={
-                errors.photo ? "input-error" : ""
+                errors.photo
+                  ? "input-error"
+                  : ""
               }
             />
 
@@ -1656,10 +2428,14 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
             <small className="help-text">
               Enter a URL for the author's photo
             </small>
+
           </div>
 
           <div className="form-group">
-            <label>Biography</label>
+
+            <label>
+              Biography
+            </label>
 
             <textarea
               value={formData.bio}
@@ -1672,13 +2448,21 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
               rows="4"
               placeholder="Tell us about the author..."
             />
+
           </div>
 
           <div className="form-group">
-            <label>Books</label>
+
+            <label>
+              Books
+            </label>
 
             <textarea
-              value={formData.books}
+              value={
+                Array.isArray(formData.books)
+                  ? formData.books.join(", ")
+                  : formData.books
+              }
               onChange={(e) =>
                 handleInputChange(
                   "books",
@@ -1686,11 +2470,13 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
                 )
               }
               rows="4"
-              placeholder="Enter the books..."
+              placeholder="Enter the books separated by commas..."
             />
+
           </div>
 
           <div className="form-buttons">
+
             <button
               type="button"
               onClick={onCancel}
@@ -1703,11 +2489,18 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
               type="submit"
               className="save-btn"
             >
-              {author ? "Update" : "Add"} Author
+              {author
+                ? "Update"
+                : "Add"}{" "}
+              Author
             </button>
+
           </div>
+
         </form>
+
       </div>
+
     </div>
   );
 };
@@ -1717,26 +2510,31 @@ const AuthorForm = ({ author, onSave, onCancel }) => {
 ================================================================ */
 
 const HERO_SLOTS = [
+
   {
     id: "hero-1",
     label: "Hero Book 1",
     position: "Left / upper area",
   },
+
   {
     id: "hero-2",
     label: "Hero Book 2",
     position: "Upper / right area",
   },
+
   {
     id: "hero-3",
     label: "Hero Book 3",
     position: "Lower / center area",
   },
+
   {
     id: "hero-4",
     label: "Hero Book 4",
     position: "Right / lower area",
   },
+
 ];
 
 const HeroManager = ({
@@ -1746,47 +2544,84 @@ const HeroManager = ({
   getBookCover,
   onSave,
 }) => {
-  const [slots, setSlots] = useState([]);
-  const [saving, setSaving] = useState(false);
-  const [savedMsg, setSavedMsg] = useState("");
-  const [error, setError] = useState("");
+
+  const [slots, setSlots] =
+    useState([]);
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const [savedMsg, setSavedMsg] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
 
   useEffect(() => {
+
     if (!heroLoading) {
-      const heroImages = Array.isArray(hero?.images)
-        ? hero.images
-        : [];
+
+      const heroImages =
+        Array.isArray(hero?.images)
+          ? hero.images
+          : [];
 
       setSlots(
+
         HERO_SLOTS.map((slot) => {
-          const existing = heroImages.find(
-            (img) => img.id === slot.id
-          );
+
+          const existing =
+            heroImages.find(
+              (img) =>
+                img.id === slot.id
+            );
 
           return {
+
             id: slot.id,
-            bookId: existing?.bookId || "",
+
+            bookId:
+              existing?.bookId || "",
+
           };
+
         })
+
       );
+
     }
+
   }, [hero, heroLoading]);
 
-  const updateSlotBook = (id, bookId) => {
+  const updateSlotBook = (
+    id,
+    bookId
+  ) => {
+
     setSlots((prev) =>
       prev.map((s) =>
         s.id === id
-          ? { ...s, bookId }
+          ? {
+              ...s,
+              bookId,
+            }
           : s
       )
     );
+
   };
 
   const clearSlot = (id) => {
-    updateSlotBook(id, "");
+
+    updateSlotBook(
+      id,
+      ""
+    );
+
   };
 
   const handleSave = async (e) => {
+
     e.preventDefault();
 
     if (saving) return;
@@ -1796,29 +2631,42 @@ const HeroManager = ({
     setError("");
 
     try {
-      const result = await onSave(slots);
+
+      const result =
+        await onSave(slots);
 
       if (result?.error) {
+
         setError(
           result.error.message ||
             "Failed to save the hero books."
         );
+
       } else {
+
         setSavedMsg(
           "Hero books saved successfully."
         );
+
       }
+
     } catch (err) {
+
       setError(
         err?.message ||
           "Failed to save the hero books."
       );
+
     } finally {
+
       setSaving(false);
+
     }
+
   };
 
   const handleDelete = async () => {
+
     if (
       !window.confirm(
         "Clear all four hero book selections and restore the default covers?"
@@ -1834,54 +2682,84 @@ const HeroManager = ({
     setError("");
 
     try {
-      const result = await onSave(
-        HERO_SLOTS.map((slot) => ({
-          id: slot.id,
-          bookId: "",
-        }))
-      );
+
+      const result =
+        await onSave(
+
+          HERO_SLOTS.map((slot) => ({
+
+            id: slot.id,
+            bookId: "",
+
+          }))
+
+        );
 
       if (result?.error) {
+
         setError(
           result.error.message ||
             "Failed to clear the hero books."
         );
+
       } else {
+
         setSavedMsg(
           "Hero books cleared. Default covers restored."
         );
+
       }
+
     } catch (err) {
+
       setError(
         err?.message ||
           "Failed to clear the hero books."
       );
+
     } finally {
+
       setSaving(false);
+
     }
+
   };
 
   if (heroLoading) {
+
     return (
+
       <div className="hero-manager-loading">
+
         <FaSpinner className="hero-manager-spin" />
+
         Loading hero settings…
+
       </div>
+
     );
+
   }
 
   return (
+
     <form
       onSubmit={handleSave}
       className="hero-manager-form"
     >
-      <div className="hero-slots">
-        {HERO_SLOTS.map((slot) => {
-          const current = slots.find(
-            (s) => s.id === slot.id
-          );
 
-          const bookId = current?.bookId || "";
+      <div className="hero-slots">
+
+        {HERO_SLOTS.map((slot) => {
+
+          const current =
+            slots.find(
+              (s) =>
+                s.id === slot.id
+            );
+
+          const bookId =
+            current?.bookId || "";
 
           const selectedBook =
             books.find(
@@ -1890,30 +2768,42 @@ const HeroManager = ({
                 String(bookId)
             ) || null;
 
-          const heroSlot = (
-            hero?.images || []
-          ).find(
-            (img) => img.id === slot.id
-          );
+          const heroSlot =
+            (hero?.images || []).find(
+              (img) =>
+                img.id === slot.id
+            );
 
           const legacyImage =
-            !bookId && heroSlot?.imageUrl
+            !bookId &&
+            heroSlot?.imageUrl
               ? heroSlot.imageUrl
               : "";
 
           return (
+
             <div
               className="hero-slot"
               key={slot.id}
             >
-              <div className="hero-slot-header">
-                <h3>{slot.label}</h3>
 
-                <span>{slot.position}</span>
+              <div className="hero-slot-header">
+
+                <h3>
+                  {slot.label}
+                </h3>
+
+                <span>
+                  {slot.position}
+                </span>
+
               </div>
 
               <label className="hero-slot-book">
-                <span>Select Book</span>
+
+                <span>
+                  Select Book
+                </span>
 
                 <select
                   value={bookId}
@@ -1924,37 +2814,54 @@ const HeroManager = ({
                     )
                   }
                 >
+
                   <option value="">
                     Select a book…
                   </option>
 
                   {books.map((b) => (
+
                     <option
                       key={b.id}
                       value={b.id}
                     >
                       {b.title || b.id}
                     </option>
+
                   ))}
+
                 </select>
+
               </label>
 
               {legacyImage && (
+
                 <p className="hero-slot-legacy">
-                  Legacy image present — select a
-                  book to make this slot clickable.
+
+                  Legacy image present —
+                  select a book to make
+                  this slot clickable.
+
                 </p>
+
               )}
 
               {selectedBook ? (
+
                 <div className="hero-slot-preview">
+
                   <img
-                    src={getBookCover(selectedBook)}
-                    alt={selectedBook.title}
+                    src={getBookCover(
+                      selectedBook
+                    )}
+                    alt={
+                      selectedBook.title
+                    }
                     loading="lazy"
                   />
 
                   <div className="hero-slot-preview-meta">
+
                     <strong>
                       {selectedBook.title}
                     </strong>
@@ -1965,54 +2872,88 @@ const HeroManager = ({
                         selectedBook.authorsName ||
                         "Unknown"}
                     </span>
+
                   </div>
 
                   <button
                     type="button"
                     className="hero-slot-clear"
                     onClick={() =>
-                      clearSlot(slot.id)
+                      clearSlot(
+                        slot.id
+                      )
                     }
                   >
                     Clear
                   </button>
+
                 </div>
+
               ) : (
+
                 <p className="hero-slot-empty">
                   No book selected
                 </p>
+
               )}
+
             </div>
+
           );
+
         })}
+
       </div>
 
       {error && (
+
         <div className="hero-manager-msg error">
-          <FaExclamationCircle /> {error}
+
+          <FaExclamationCircle />
+
+          {" "}
+
+          {error}
+
         </div>
+
       )}
 
       {savedMsg && (
+
         <div className="hero-manager-msg success">
-          <FaCheckCircle /> {savedMsg}
+
+          <FaCheckCircle />
+
+          {" "}
+
+          {savedMsg}
+
         </div>
+
       )}
 
       <div className="hero-manager-actions">
+
         <button
           type="submit"
           className="save-btn"
           disabled={saving}
         >
+
           {saving ? (
+
             <>
               <FaSpinner className="hero-manager-spin" />
               Saving…
             </>
+
           ) : (
+
             "Save Changes"
+
           )}
+
         </button>
 
         <button
@@ -2021,10 +2962,15 @@ const HeroManager = ({
           onClick={handleDelete}
           disabled={saving}
         >
+
           <FaTrash /> Clear All
+
         </button>
+
       </div>
+
     </form>
+
   );
 };
 
