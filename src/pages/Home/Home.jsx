@@ -265,32 +265,26 @@ export default function Home() {
 const nextTrusted = () => {
   if (!trustedAuthorPosts.length) return;
 
-  setTrustedIndex(
-    (i) => (i + 1) % trustedAuthorPosts.length
-  );
+  setTrustedIndex((current) => {
+    const next = current + 2;
+
+    return next >= trustedAuthorPosts.length
+      ? 0
+      : next;
+  });
 };
 
 const prevTrusted = () => {
   if (!trustedAuthorPosts.length) return;
 
-  setTrustedIndex(
-    (i) =>
-      (i - 1 + trustedAuthorPosts.length) %
-      trustedAuthorPosts.length
-  );
+  setTrustedIndex((current) => {
+    const prev = current - 2;
+
+    return prev < 0
+      ? Math.max(0, trustedAuthorPosts.length - 2)
+      : prev;
+  });
 };
-
-useEffect(() => {
-  if (!trustedAuthorPosts.length) return;
-
-  const timer = setInterval(() => {
-    setTrustedIndex(
-      (i) => (i + 1) % trustedAuthorPosts.length
-    );
-  }, 3500);
-
-  return () => clearInterval(timer);
-}, [trustedAuthorPosts.length]);
 
 // Keep index valid when posts are added/deleted
 useEffect(() => {
@@ -676,46 +670,105 @@ useEffect(() => {
       <button
         className="slider-arrow slider-arrow-left"
         onClick={prevTrusted}
-        aria-label="Previous trusted author posts"
+        aria-label="Previous trusted authors"
         type="button"
       >
         ‹
       </button>
 
+      {/* SLIDER */}
       <div className="trusted-track">
 
-        {trustedAuthorPosts.length > 0 ? (
-          trustedAuthorPosts.map((post, index) => {
-            const position =
-              (index - trustedIndex + trustedAuthorPosts.length) %
-              trustedAuthorPosts.length;
+        {trustedAuthorPosts.length > 0 && (
+          <>
+            {/* ================= PAIR 1 ================= */}
+            <div className="trusted-pair trusted-pair-1">
 
-            // Only render the 4 visible cards
-            if (position > 3) return null;
+              {/* BIG PROFILE */}
+              {trustedAuthorPosts[trustedIndex] && (
+                <div className="trusted-card trusted-profile-card">
+                  <img
+                    src={trustedAuthorPosts[trustedIndex].imageUrl}
+                    alt={
+                      trustedAuthorPosts[trustedIndex].username
+                        ? `${trustedAuthorPosts[trustedIndex].username} profile`
+                        : "Trusted author profile"
+                    }
+                    className="trusted-image"
+                  />
+                </div>
+              )}
 
-            return (
-              <div
-                className={`trusted-card trusted-card-${position + 1}`}
-                key={post.id}
-              >
-                <img
-                  src={post.imageUrl}
-                  alt={
-                    post.username
-                      ? `${post.username} - Trusted author`
-                      : "Trusted author"
-                  }
-                  className="trusted-image"
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      "https://via.placeholder.com/500x600.png?text=Image+Unavailable";
-                  }}
-                />
+              {/* SMALL POST */}
+              {trustedAuthorPosts[
+                (trustedIndex + 1) % trustedAuthorPosts.length
+              ] && (
+                <div className="trusted-card trusted-post-card">
+                  <img
+                    src={
+                      trustedAuthorPosts[
+                        (trustedIndex + 1) %
+                          trustedAuthorPosts.length
+                      ].imageUrl
+                    }
+                    alt="Trusted author post"
+                    className="trusted-image"
+                  />
+                </div>
+              )}
+
+            </div>
+
+            {/* ================= PAIR 2 ================= */}
+            {trustedAuthorPosts.length >= 4 && (
+              <div className="trusted-pair trusted-pair-2">
+
+                {/* SMALL POST */}
+                <div className="trusted-card trusted-post-card">
+                  <img
+                    src={
+                      trustedAuthorPosts[
+                        (trustedIndex + 2) %
+                          trustedAuthorPosts.length
+                      ].imageUrl
+                    }
+                    alt="Trusted author post"
+                    className="trusted-image"
+                  />
+                </div>
+
+                {/* BIG PROFILE */}
+                <div className="trusted-card trusted-profile-card">
+                  <img
+                    src={
+                      trustedAuthorPosts[
+                        (trustedIndex + 3) %
+                          trustedAuthorPosts.length
+                      ].imageUrl
+                    }
+                    alt={
+                      trustedAuthorPosts[
+                        (trustedIndex + 3) %
+                          trustedAuthorPosts.length
+                      ].username
+                        ? `${
+                            trustedAuthorPosts[
+                              (trustedIndex + 3) %
+                                trustedAuthorPosts.length
+                            ].username
+                          } profile`
+                        : "Trusted author profile"
+                    }
+                    className="trusted-image"
+                  />
+                </div>
+
               </div>
-            );
-          })
-        ) : (
+            )}
+          </>
+        )}
+
+        {trustedAuthorPosts.length === 0 && (
           <div className="trusted-empty">
             No trusted author posts available.
           </div>
@@ -727,7 +780,7 @@ useEffect(() => {
       <button
         className="slider-arrow slider-arrow-right"
         onClick={nextTrusted}
-        aria-label="Next trusted author posts"
+        aria-label="Next trusted authors"
         type="button"
       >
         ›
@@ -738,24 +791,31 @@ useEffect(() => {
     {/* DOTS */}
     {trustedAuthorPosts.length > 0 && (
       <div className="slider-dots">
-        {trustedAuthorPosts.map((post, i) => (
-          <button
-            key={post.id || i}
-            type="button"
-            className={`slider-dot ${
-              i === trustedIndex ? "active" : ""
-            }`}
-            onClick={() => setTrustedIndex(i)}
-            aria-label={`Show trusted author post ${i + 1}`}
-          />
-        ))}
+        {Array.from(
+          {
+            length: Math.ceil(
+              trustedAuthorPosts.length / 2
+            ),
+          },
+          (_, i) => (
+            <button
+              key={i}
+              type="button"
+              className={`slider-dot ${
+                Math.floor(trustedIndex / 2) === i
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() => setTrustedIndex(i * 2)}
+              aria-label={`Show trusted author group ${i + 1}`}
+            />
+          )
+        )}
       </div>
     )}
 
   </div>
 </section>
-
-       
     </div>
   );
 }
