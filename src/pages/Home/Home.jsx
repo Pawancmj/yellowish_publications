@@ -263,25 +263,23 @@ export default function Home() {
  const [trustedIndex, setTrustedIndex] = useState(0);
 
 const nextTrusted = () => {
-  if (!trustedAuthorPosts.length) return;
+  if (trustedAuthorPosts.length < 4) return;
 
   setTrustedIndex((current) => {
-    const next = current + 2;
+    const next = current + 4;
 
-    return next >= trustedAuthorPosts.length
-      ? 0
-      : next;
+    return next >= trustedAuthorPosts.length ? 0 : next;
   });
 };
 
 const prevTrusted = () => {
-  if (!trustedAuthorPosts.length) return;
+  if (trustedAuthorPosts.length < 4) return;
 
   setTrustedIndex((current) => {
-    const prev = current - 2;
+    const prev = current - 4;
 
     return prev < 0
-      ? Math.max(0, trustedAuthorPosts.length - 2)
+      ? Math.max(0, trustedAuthorPosts.length - 4)
       : prev;
   });
 };
@@ -654,7 +652,6 @@ useEffect(() => {
   </div>
 </section>
       
-
 {/* ================= SECTION 11-B — TRUSTED AUTHORS ================= */}
 <section className="trusted-authors">
   <div className="trusted-authors-container">
@@ -676,11 +673,12 @@ useEffect(() => {
         ‹
       </button>
 
-      {/* SLIDER */}
+      {/* ================= TRUSTED AUTHORS CONTENT ================= */}
       <div className="trusted-track">
 
         {trustedAuthorPosts.length > 0 && (
-          <>
+          <div className="trusted-pairs-wrapper">
+
             {/* ================= PAIR 1 ================= */}
             <div className="trusted-pair trusted-pair-1">
 
@@ -707,8 +705,7 @@ useEffect(() => {
                   <img
                     src={
                       trustedAuthorPosts[
-                        (trustedIndex + 1) %
-                          trustedAuthorPosts.length
+                        (trustedIndex + 1) % trustedAuthorPosts.length
                       ].imageUrl
                     }
                     alt="Trusted author post"
@@ -728,8 +725,7 @@ useEffect(() => {
                   <img
                     src={
                       trustedAuthorPosts[
-                        (trustedIndex + 2) %
-                          trustedAuthorPosts.length
+                        (trustedIndex + 2) % trustedAuthorPosts.length
                       ].imageUrl
                     }
                     alt="Trusted author post"
@@ -742,19 +738,16 @@ useEffect(() => {
                   <img
                     src={
                       trustedAuthorPosts[
-                        (trustedIndex + 3) %
-                          trustedAuthorPosts.length
+                        (trustedIndex + 3) % trustedAuthorPosts.length
                       ].imageUrl
                     }
                     alt={
                       trustedAuthorPosts[
-                        (trustedIndex + 3) %
-                          trustedAuthorPosts.length
+                        (trustedIndex + 3) % trustedAuthorPosts.length
                       ].username
                         ? `${
                             trustedAuthorPosts[
-                              (trustedIndex + 3) %
-                                trustedAuthorPosts.length
+                              (trustedIndex + 3) % trustedAuthorPosts.length
                             ].username
                           } profile`
                         : "Trusted author profile"
@@ -765,7 +758,8 @@ useEffect(() => {
 
               </div>
             )}
-          </>
+
+          </div>
         )}
 
         {trustedAuthorPosts.length === 0 && (
@@ -787,32 +781,6 @@ useEffect(() => {
       </button>
 
     </div>
-
-    {/* DOTS */}
-    {trustedAuthorPosts.length > 0 && (
-      <div className="slider-dots">
-        {Array.from(
-          {
-            length: Math.ceil(
-              trustedAuthorPosts.length / 2
-            ),
-          },
-          (_, i) => (
-            <button
-              key={i}
-              type="button"
-              className={`slider-dot ${
-                Math.floor(trustedIndex / 2) === i
-                  ? "active"
-                  : ""
-              }`}
-              onClick={() => setTrustedIndex(i * 2)}
-              aria-label={`Show trusted author group ${i + 1}`}
-            />
-          )
-        )}
-      </div>
-    )}
 
   </div>
 </section>
