@@ -87,7 +87,7 @@ function AuthorBio({ bio }) {
 export default function Authors() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authors, loading, getAuthorPhoto, addLead } = useData();
+  const { authors, loading, getAuthorPhoto, addLead, authorsHero } = useData();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -205,6 +205,26 @@ export default function Authors() {
 
   const featured = authors.slice(0, 2);
 
+  // Portraits floating on the right side of the hero.
+  // Managed from the Admin Panel → "Authors Hero Images".
+  // Falls back to the bundled defaults when nothing is saved.
+  const heroPortraits = useMemo(() => {
+    const saved = Array.isArray(authorsHero?.images)
+      ? authorsHero.images.filter(
+          (src) => typeof src === "string" && src
+        )
+      : [];
+
+    const list = saved.length
+      ? saved.slice(0, HERO_PORTRAITS.length)
+      : HERO_PORTRAITS.map((p) => p.src);
+
+    return list.map((src, i) => ({
+      src,
+      className: `spot-${i + 1}`,
+    }));
+  }, [authorsHero]);
+
   if (loading) {
     return (
       <div className="authors-wrapper">
@@ -268,7 +288,7 @@ export default function Authors() {
           </div>
 
           <div className="hero-visual" aria-hidden="true">
-            {HERO_PORTRAITS.map((p) => (
+            {heroPortraits.map((p) => (
               <div className={`portrait-w ${p.className}`} key={p.className}>
                 <motion.img
                   src={p.src}

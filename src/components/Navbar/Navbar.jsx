@@ -10,6 +10,38 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
 
+  // Same action as the hero button on the Authors page (Authors.jsx):
+  // open /authors and smoothly scroll down to its become-author form
+  // (retried until the section has rendered).
+  const scrollToBecomeAuthor = (attempt = 0) => {
+    const el = document.getElementById("become-author");
+
+    if (!el) {
+      if (attempt < 40) {
+        setTimeout(
+          () => scrollToBecomeAuthor(attempt + 1),
+          150
+        );
+      }
+      return;
+    }
+
+    const navbarHeight = 78;
+    const offset = 24;
+    const top =
+      el.getBoundingClientRect().top +
+      window.pageYOffset -
+      navbarHeight -
+      offset;
+
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
+  const handleBecomeAuthor = () => {
+    closeMenu();
+    scrollToBecomeAuthor();
+  };
+
   useEffect(() => {
     if (isOpen) {
       const prevOverflow = document.body.style.overflow;
@@ -134,8 +166,9 @@ export default function Navbar() {
         <div className="nav-actions">
 
           <NavLink
-            to="/author"
+            to="/authors"
             className="author-button"
+            onClick={handleBecomeAuthor}
           >
             <FaPen />
             <span>Become an Author</span>
@@ -266,8 +299,8 @@ export default function Navbar() {
 
 
         <NavLink
-          to="/author"
-          onClick={closeMenu}
+          to="/authors"
+          onClick={handleBecomeAuthor}
           className="mobile-author-button"
         >
           <FaPen />

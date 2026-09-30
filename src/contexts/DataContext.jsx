@@ -47,6 +47,12 @@ import {
   updateHero as updateHeroDoc,
 } from "../services/heroModel";
 
+import {
+  authorsHeroDocRef,
+  normalizeAuthorsHero,
+  updateAuthorsHero as updateAuthorsHeroDoc,
+} from "../services/authorsHeroModel";
+
 import { buildSeedBlogs } from "../data/seedBlogs";
 
 const FIXED_USER_ID = "shared-app-user";
@@ -71,6 +77,7 @@ export function DataProvider({ children }) {
   const [leads, setLeads] = useState([]);
   const [blogs, setBlogs] = useState([]);
   const [hero, setHero] = useState(null);
+  const [authorsHero, setAuthorsHero] = useState(null);
 
   // Trusted Authors
   const [trustedAuthorPosts, setTrustedAuthorPosts] =
@@ -78,6 +85,8 @@ export function DataProvider({ children }) {
 
   // Loading states
   const [heroLoading, setHeroLoading] = useState(true);
+  const [authorsHeroLoading, setAuthorsHeroLoading] =
+    useState(true);
   const [loading, setLoading] = useState(true);
   const [blogsLoading, setBlogsLoading] = useState(true);
 
@@ -94,6 +103,7 @@ export function DataProvider({ children }) {
   const publicLeadsUnsubscribeRef = useRef(null);
   const blogsUnsubscribeRef = useRef(null);
   const heroUnsubscribeRef = useRef(null);
+  const authorsHeroUnsubscribeRef = useRef(null);
   const trustedAuthorsUnsubscribeRef = useRef(null);
 
   // ============================================================
@@ -470,6 +480,40 @@ export function DataProvider({ children }) {
     return () => {
       if (heroUnsubscribeRef.current) {
         heroUnsubscribeRef.current();
+      }
+    };
+  }, []);
+
+  // ============================================================
+  // 4B. AUTHORS PAGE HERO
+  // ============================================================
+
+  useEffect(() => {
+    authorsHeroUnsubscribeRef.current = onSnapshot(
+      authorsHeroDocRef(),
+      (snapshot) => {
+        setAuthorsHero(
+          snapshot.exists()
+            ? normalizeAuthorsHero(snapshot)
+            : null
+        );
+
+        setAuthorsHeroLoading(false);
+      },
+      (error) => {
+        console.error(
+          "❌ Authors hero listener error:",
+          error
+        );
+
+        setAuthorsHero(null);
+        setAuthorsHeroLoading(false);
+      }
+    );
+
+    return () => {
+      if (authorsHeroUnsubscribeRef.current) {
+        authorsHeroUnsubscribeRef.current();
       }
     };
   }, []);
@@ -1166,6 +1210,36 @@ export function DataProvider({ children }) {
   );
 
   // ============================================================
+  // 12B. AUTHORS PAGE HERO
+  // ============================================================
+
+  const updateAuthorsHero = useCallback(
+    async (data) => {
+      try {
+        await updateAuthorsHeroDoc(data);
+
+        console.log(
+          "✅ Authors hero images updated"
+        );
+
+        return {
+          error: null,
+        };
+      } catch (error) {
+        console.error(
+          "❌ Update authors hero images failed (admin only):",
+          error.message
+        );
+
+        return {
+          error,
+        };
+      }
+    },
+    []
+  );
+
+  // ============================================================
   // 13. TRUSTED AUTHORS CRUD
   // FIRESTORE ONLY
   // PUBLIC IMAGE URL APPROACH
@@ -1578,6 +1652,7 @@ export function DataProvider({ children }) {
     leads,
     blogs,
     hero,
+    authorsHero,
 
     // Trusted Authors
     trustedAuthorPosts,
@@ -1587,6 +1662,7 @@ export function DataProvider({ children }) {
     // ----------------------------------------------------------
 
     heroLoading,
+    authorsHeroLoading,
     loading,
     blogsLoading,
 
@@ -1632,6 +1708,12 @@ export function DataProvider({ children }) {
     // ----------------------------------------------------------
 
     updateHero,
+
+    // ----------------------------------------------------------
+    // Authors Page Hero
+    // ----------------------------------------------------------
+
+    updateAuthorsHero,
 
     // ----------------------------------------------------------
     // Trusted Authors

@@ -258,7 +258,20 @@ export default function Home() {
     }
   };
 
-  const galleryBooks = books.slice(0, 10);
+  const galleryBooks = books;
+
+  const galleryRef = useRef(null);
+
+  const scrollGallery = (direction) => {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+    gallery.scrollBy({ left: direction * gallery.clientWidth, behavior: "smooth" });
+  };
+
+  // Start the gallery from the beginning whenever the category changes
+  useEffect(() => {
+    galleryRef.current?.scrollTo({ left: 0 });
+  }, [activeCategory]);
 
  const [trustedIndex, setTrustedIndex] = useState(0);
 
@@ -482,25 +495,45 @@ useEffect(() => {
             ))}
           </div>
           {filteredGallery.length > 0 ? (
-            <div className="books-gallery">
-              {filteredGallery.map((book) => (
-                <div
-                  className="book-tile"
-                  key={book.id}
-                  onClick={(e) => handleNavClick(e, `/book/${book.id}`)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <img
-                    src={getBookCover(book)}
-                    alt={book.title}
-                    loading="lazy"
-                    onError={(e) => {
-                      e.target.src =
-                        "https://via.placeholder.com/200x300.png?text=No+Cover";
-                    }}
-                  />
-                </div>
-              ))}
+            <div className="books-slider">
+              <button
+                type="button"
+                className="slider-arrow slider-arrow-left"
+                onClick={() => scrollGallery(-1)}
+                aria-label="Previous books"
+              >
+                ‹
+              </button>
+
+              <div className="books-gallery" ref={galleryRef}>
+                {filteredGallery.map((book) => (
+                  <div
+                    className="book-tile"
+                    key={book.id}
+                    onClick={(e) => handleNavClick(e, `/book/${book.id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img
+                      src={getBookCover(book)}
+                      alt={book.title}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.src =
+                          "https://via.placeholder.com/200x300.png?text=No+Cover";
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                className="slider-arrow slider-arrow-right"
+                onClick={() => scrollGallery(1)}
+                aria-label="Next books"
+              >
+                ›
+              </button>
             </div>
           ) : (
             <p className="no-books">No books in this category yet. Check back soon!</p>

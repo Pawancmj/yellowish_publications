@@ -1,9 +1,14 @@
 // src/pages/Admindashboard/Admin.jsx
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
+import {
+  AUTHORS_HERO_MAX_IMAGES,
+  DEFAULT_AUTHORS_HERO_IMAGES,
+} from "../../services/authorsHeroModel";
+import { fileToDataUrl } from "../../services/imageToDataUrl";
 
 import {
   FaEdit,
@@ -19,6 +24,7 @@ import {
   FaExclamationCircle,
   FaInstagram,
   FaImages,
+  FaUpload,
 } from "react-icons/fa";
 
 import "./Admin.css";
@@ -48,6 +54,11 @@ const Admin = () => {
     hero,
     heroLoading,
     updateHero,
+
+    // Authors page hero images
+    authorsHero,
+    authorsHeroLoading,
+    updateAuthorsHero,
 
     // Trusted Authors
     trustedAuthorPosts,
@@ -319,6 +330,17 @@ const Admin = () => {
             onClick={() => setActiveTab("hero")}
           >
             <FaHome /> Manage Hero
+          </button>
+
+          <button
+            className={
+              activeTab === "authorsHero"
+                ? "tab-active"
+                : "tab"
+            }
+            onClick={() => setActiveTab("authorsHero")}
+          >
+            <FaImages /> Authors Hero Images
           </button>
 
         </div>
@@ -1001,6 +1023,51 @@ const Admin = () => {
                 getBookCover={getBookCover}
                 onSave={async (images) => {
                   const result = await updateHero({
+                    images,
+                  });
+
+                  return result;
+                }}
+              />
+
+            </div>
+
+          </div>
+        )}
+
+        {/* =========================================================
+            AUTHORS HERO IMAGES
+        ========================================================= */}
+
+        {activeTab === "authorsHero" && (
+          <div className="authors-hero-management">
+
+            <div className="section-header">
+
+              <div>
+
+                <h2>Authors Page Hero Images</h2>
+
+                <p>
+                  Manage the portraits floating on the
+                  right side of the Authors page hero
+                  (/authors). Paste an image URL or upload
+                  an image — saved straight to Firestore,
+                  no Firebase Storage needed. Save to
+                  publish.
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="hero-manager-card">
+
+              <AuthorsHeroManager
+                authorsHero={authorsHero}
+                authorsHeroLoading={authorsHeroLoading}
+                onSave={async (images) => {
+                  const result = await updateAuthorsHero({
                     images,
                   });
 
@@ -2964,6 +3031,440 @@ const HeroManager = ({
         >
 
           <FaTrash /> Clear All
+
+        </button>
+
+      </div>
+
+    </form>
+
+  );
+};
+
+/* ================================================================
+   AUTHORS PAGE HERO IMAGE MANAGER
+=============================================================== */
+
+const AuthorsHeroManager = ({
+  authorsHero,
+  authorsHeroLoading,
+  onSave,
+}) => {
+
+  const [images, setImages] =
+    useState([]);
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const [savedMsg, setSavedMsg] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
+
+  const fileRef = useRef(null);
+
+  useEffect(() => {
+
+    if (!authorsHeroLoading) {
+
+      const saved =
+        Array.isArray(authorsHero?.images)
+          ? authorsHero.images
+          : [];
+
+      const urls =
+        saved.length > 0
+          ? saved
+          : DEFAULT_AUTHORS_HERO_IMAGES;
+
+      setImages(
+        urls.map((url) => ({
+          url,
+          broken: false,
+        }))
+      );
+
+    }
+
+  }, [authorsHero, authorsHeroLoading]);
+
+  const updateImage = (index, url) => {
+
+    setSavedMsg("");
+
+    setImages((prev) =>
+      prev.map((img, i) =>
+        i === index
+          ? {
+              url,
+              broken: false,
+            }
+          : img
+      )
+    );
+
+  };
+
+  const markBroken = (index) => {
+
+    setImages((prev) =>
+      prev.map((img, i) =>
+        i === index
+          ? {
+              ...img,
+              broken: true,
+            }
+          : img
+      )
+    );
+
+  };
+
+  const removeImage = (index) => {
+
+    setSavedMsg("");
+
+    setImages((prev) =>
+      prev.filter((_, i) => i !== index)
+    );
+
+  };
+
+  const addImage = (url = "") => {
+
+    setSavedMsg("");
+
+    setImages((prev) =>
+      prev.length >= AUTHORS_HERO_MAX_IMAGES
+        ? prev
+        : [
+            ...prev,
+            {
+              url,
+              broken: false,
+            },
+          ]
+    );
+
+  };
+
+  const handleUpload = async (file) => {
+
+    if (!file) return;
+
+    const type =
+      (file.type || "").toLowerCase();
+
+    if (!type.startsWith("image/")) {
+      setError(
+        "Please select a valid image file (JPG, PNG or WebP)."
+      );
+      return;
+    }
+
+    setError("");
+    setSavedMsg("");
+
+    try {
+
+      // Base64 data URL stored inline in Firestore — the same
+      // approach as blog images, no Firebase Storage needed.
+      const dataUrl = await fileToDataUrl(file, {
+        maxDimension: 600,
+      });
+
+      addImage(dataUrl);
+
+    } catch (err) {
+      setError(
+        err.message ||
+          "Could not process this image."
+      );
+    } finally {
+      if (fileRef.current) {
+        fileRef.current.value = "";
+      }
+    }
+
+  };
+
+  const handleSave = async (e) => {
+
+    e.preventDefault();
+
+    if (saving) return;
+
+    setSavedMsg("");
+    setError("");
+
+    // Every listed portrait must hold an image URL or an
+    // uploaded data URL before it can be published.
+    if (
+      images.some(
+        (img) =>
+          !img.url || img.url.trim() === ""
+      )
+    ) {
+      setError(
+        "Each portrait needs an image URL or an uploaded image. Remove the empty slots first."
+      );
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+
+      const result =
+        await onSave(
+          images
+            .map((img) => img.url)
+            .filter(
+              (url) =>
+                url &&
+                url.trim() !== ""
+            )
+        );
+
+      if (result?.error) {
+
+        setError(
+          result.error.message ||
+            "Failed to save the authors hero images."
+        );
+
+      } else {
+
+        setSavedMsg(
+          "Authors hero images saved successfully."
+        );
+
+      }
+
+    } catch (err) {
+      setError(
+        err?.message ||
+          "Failed to save the authors hero images."
+      );
+    } finally {
+      setSaving(false);
+    }
+
+  };
+
+  if (authorsHeroLoading) {
+
+    return (
+      <div className="hero-manager-loading">
+        <FaSpinner className="hero-manager-spin" />
+        Loading authors hero images…
+      </div>
+    );
+
+  }
+
+  const atLimit =
+    images.length >= AUTHORS_HERO_MAX_IMAGES;
+
+  return (
+
+    <form
+      onSubmit={handleSave}
+      className="hero-manager-form"
+    >
+
+      <p className="hero-manager-hint">
+        Up to {AUTHORS_HERO_MAX_IMAGES} portraits, in
+        order, for the floating positions on the right
+        side of the Authors page hero (/authors). Paste
+        an image URL or upload one, remove any portrait
+        you do not want, then Save. If none are left the
+        default portraits are used again.
+      </p>
+
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={(e) =>
+          handleUpload(
+            e.target.files && e.target.files[0]
+          )
+        }
+      />
+
+      <div className="hero-slots">
+
+        {images.map((img, index) => {
+
+          const isDataUrl =
+            img.url.startsWith("data:");
+
+          return (
+
+            <div
+              className="hero-slot"
+              key={`authors-hero-${index}`}
+            >
+
+              <div className="hero-slot-header">
+
+                <h3>
+                  Portrait {index + 1}
+                </h3>
+
+                <span>
+                  Position {index + 1} / {AUTHORS_HERO_MAX_IMAGES}
+                </span>
+
+              </div>
+
+              <div className="ahero-preview">
+
+                {img.url && !img.broken ? (
+                  <img
+                    src={img.url}
+                    alt={`Portrait ${index + 1}`}
+                    onError={() =>
+                      markBroken(index)
+                    }
+                  />
+                ) : (
+                  <span>
+                    {img.broken
+                      ? "Image could not be loaded — check the link."
+                      : "No image yet"}
+                  </span>
+                )}
+
+              </div>
+
+              <label className="ahero-url">
+
+                <span>Image URL</span>
+
+                <input
+                  type="text"
+                  value={
+                    isDataUrl ? "" : img.url
+                  }
+                  placeholder={
+                    isDataUrl
+                      ? "Uploaded image — paste a URL to replace it"
+                      : "https://example.com/author.jpg"
+                  }
+                  onChange={(e) =>
+                    updateImage(
+                      index,
+                      e.target.value
+                    )
+                  }
+                />
+
+              </label>
+
+              <div className="ahero-card-actions">
+
+                <button
+                  type="button"
+                  className="hero-slot-clear"
+                  onClick={() =>
+                    removeImage(index)
+                  }
+                  disabled={saving}
+                >
+                  <FaTrash /> Remove
+                </button>
+
+              </div>
+
+            </div>
+
+          );
+
+        })}
+
+        {images.length === 0 && (
+
+          <div className="ahero-empty">
+
+            <FaImages />
+
+            <span>
+              No portraits configured — the default
+              portraits stay in use until you add one.
+            </span>
+
+          </div>
+
+        )}
+
+      </div>
+
+      {error && (
+
+        <div className="hero-manager-msg error">
+          <FaExclamationCircle />
+
+          {" "}
+
+          {error}
+        </div>
+
+      )}
+
+      {savedMsg && (
+
+        <div className="hero-manager-msg success">
+          <FaCheckCircle />
+
+          {" "}
+
+          {savedMsg}
+        </div>
+
+      )}
+
+      <div className="hero-manager-actions">
+
+        <button
+          type="button"
+          className="add-btn"
+          onClick={() =>
+            fileRef.current &&
+            fileRef.current.click()
+          }
+          disabled={saving || atLimit}
+        >
+          <FaUpload /> Upload Image
+        </button>
+
+        <button
+          type="button"
+          className="add-btn"
+          onClick={() => addImage()}
+          disabled={saving || atLimit}
+        >
+          <FaPlus /> Add Image
+        </button>
+
+        <button
+          type="submit"
+          className="save-btn"
+          disabled={saving}
+        >
+
+          {saving ? (
+            <>
+              <FaSpinner className="hero-manager-spin" />
+              Saving…
+            </>
+          ) : (
+            "Save Changes"
+          )}
 
         </button>
 
