@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../contexts/DataContext";
 import "./Home.css";
 
-// Assets
+// Assets for home
 import aboutImage from "../../assets/About.png";
 import heroImage from "../../assets/hero.png";
 
@@ -20,7 +20,7 @@ import book1 from "../../assets/book1.png";
 import book5 from "../../assets/book5.png";
 import book9 from "../../assets/book9.png";
 import book13 from "../../assets/book13.png";
-
+// test author
 import author1 from "../../assets/author1.png";
 import author2 from "../../assets/author2.png";
 import author3 from "../../assets/author3.png";
@@ -113,7 +113,7 @@ const STATS = [
   { value: "24/7", label: "Author Support" },
 ];
 
- 
+
 // ✅ FIXED — uses real imported logos, no broken DISTRIBUTION/rotate code
 const DISTRIBUTION_CHANNELS = [
   { name: "Flipkart", logo: flipkartLogo, desc: "Shop our books on Flipkart", link: "#" },
@@ -146,7 +146,7 @@ const REVIEW_HIGHLIGHTS = [
   },
 ];
 
- 
+
 
 const VIDEO_TILES = [
   { img: aboutImage },
@@ -211,7 +211,7 @@ export default function Home() {
 
   const [activeCategory, setActiveCategory] = useState("All Books");
 
-  // ✅ Distribution carousel hooks — added here, inside the component
+  //  Distribution carousel hooks — added here, inside the component
   const distTrackRef = useRef(null);
   const [distActiveDot, setDistActiveDot] = useState(0);
   const [distPerView, setDistPerView] = useState(6);
@@ -273,59 +273,59 @@ export default function Home() {
     galleryRef.current?.scrollTo({ left: 0 });
   }, [activeCategory]);
 
- const [trustedIndex, setTrustedIndex] = useState(0);
+  const [trustedIndex, setTrustedIndex] = useState(0);
 
-const nextTrusted = () => {
-  if (trustedAuthorPosts.length < 4) return;
+  const nextTrusted = () => {
+    if (trustedAuthorPosts.length < 4) return;
 
-  setTrustedIndex((current) => {
-    const next = current + 4;
+    setTrustedIndex((current) => {
+      const next = current + 4;
 
-    return next >= trustedAuthorPosts.length ? 0 : next;
-  });
-};
+      return next >= trustedAuthorPosts.length ? 0 : next;
+    });
+  };
 
-const prevTrusted = () => {
-  if (trustedAuthorPosts.length < 4) return;
+  const prevTrusted = () => {
+    if (trustedAuthorPosts.length < 4) return;
 
-  setTrustedIndex((current) => {
-    const prev = current - 4;
+    setTrustedIndex((current) => {
+      const prev = current - 4;
 
-    return prev < 0
-      ? Math.max(0, trustedAuthorPosts.length - 4)
-      : prev;
-  });
-};
+      return prev < 0
+        ? Math.max(0, trustedAuthorPosts.length - 4)
+        : prev;
+    });
+  };
 
-// Keep index valid when posts are added/deleted
-useEffect(() => {
-  if (
-    trustedAuthorPosts.length > 0 &&
-    trustedIndex >= trustedAuthorPosts.length
-  ) {
-    setTrustedIndex(0);
-  }
-}, [trustedAuthorPosts.length, trustedIndex]);
+  // Keep index valid when posts are added/deleted
+  useEffect(() => {
+    if (
+      trustedAuthorPosts.length > 0 &&
+      trustedIndex >= trustedAuthorPosts.length
+    ) {
+      setTrustedIndex(0);
+    }
+  }, [trustedAuthorPosts.length, trustedIndex]);
   const filteredGallery =
     activeCategory === "All Books"
       ? galleryBooks
       : galleryBooks.filter((book) => {
-          const genre = (book.genre || "").toLowerCase();
-          const subtitle = (book.subtitle || "").toLowerCase();
-          if (activeCategory === "Fiction") {
-            return /fiction|fantasy/i.test(genre) || /tale|story|novel/i.test(subtitle);
-          }
-          if (activeCategory === "Poetry") {
-            return /poetry|poem/i.test(genre) || /poetry|poem|verse/i.test(subtitle);
-          }
-          if (activeCategory === "Academic") {
-            return /academic|management|mathematics|maths|law|psychology|science|astronomy|business|nature|research/i.test(genre);
-          }
-          if (activeCategory === "Hindi") {
-            return /hindi/i.test(genre + " " + subtitle);
-          }
-          return true;
-        });
+        const genre = (book.genre || "").toLowerCase();
+        const subtitle = (book.subtitle || "").toLowerCase();
+        if (activeCategory === "Fiction") {
+          return /fiction|fantasy/i.test(genre) || /tale|story|novel/i.test(subtitle);
+        }
+        if (activeCategory === "Poetry") {
+          return /poetry|poem/i.test(genre) || /poetry|poem|verse/i.test(subtitle);
+        }
+        if (activeCategory === "Academic") {
+          return /academic|management|mathematics|maths|law|psychology|science|astronomy|business|nature|research/i.test(genre);
+        }
+        if (activeCategory === "Hindi") {
+          return /hindi/i.test(genre + " " + subtitle);
+        }
+        return true;
+      });
 
   const validatePhone = (phone) => {
     const phoneRegex = /^[0-9]{10}$/;
@@ -542,281 +542,280 @@ useEffect(() => {
       </section>
 
       {/* Section 7 — Testimonials */}
-<section className="testimonials-section">
-  <div className="container">
-    <h2>Loved by Authors Worldwide</h2>
-    <p className="testimonials-subtitle">
-      Real stories from real authors who turned<br />
-      their ideas into impact with Yellowish Publication.
-    </p>
+      <section className="testimonials-section">
+        <div className="container">
+          <h2>Loved by Authors Worldwide</h2>
+          <p className="testimonials-subtitle">
+            Real stories from real authors who turned<br />
+            their ideas into impact with Yellowish Publication.
+          </p>
 
-    <div className="testimonials-grid">
-      {TESTIMONIALS.map((t) => (
-        <div className="testimonial-card" key={t.name}>
-          <div className="t-avatar-wrap">
-            <img src={t.photo} alt={t.name} className="t-avatar" loading="lazy" />
+          <div className="testimonials-grid">
+            {TESTIMONIALS.map((t) => (
+              <div className="testimonial-card" key={t.name}>
+                <div className="t-avatar-wrap">
+                  <img src={t.photo} alt={t.name} className="t-avatar" loading="lazy" />
+                </div>
+
+                <div className="t-body">
+                  <span className="quote-open">“</span>
+                  <p className="t-quote">{t.quote}</p>
+                  <div className="t-divider" />
+                  <span className="t-name">{t.name}</span>
+                  <span className="t-role">{t.role}</span>
+                </div>
+
+                <span className="quote-close">”</span>
+              </div>
+            ))}
           </div>
-
-          <div className="t-body">
-            <span className="quote-open">“</span>
-            <p className="t-quote">{t.quote}</p>
-            <div className="t-divider" />
-            <span className="t-name">{t.name}</span>
-            <span className="t-role">{t.role}</span>
-          </div>
-
-          <span className="quote-close">”</span>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* Section 8 — Stats */}
-<section className="stats-bar">
-  <div className="container stats-container">
-    {STATS.map((stat, i) => (
-      <div className="stat" key={stat.label}>
-         
-        <div><span className="stat-value">{stat.value}</span><span className="stat-label">{stat.label}</span></div>
-      </div>
-    ))}
-  </div>
-</section>
+      <section className="stats-bar">
+        <div className="container stats-container">
+          {STATS.map((stat, i) => (
+            <div className="stat" key={stat.label}>
 
- 
+              <div><span className="stat-value">{stat.value}</span><span className="stat-label">{stat.label}</span></div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+
       {/* Section 10 — Distribution Channels */}
-<section className="distribution-section">
-  <div className="distribution-container">
+      <section className="distribution-section">
+        <div className="distribution-container">
 
-    <div className="dist-heading-wrap">
-      <h2 className="dist-heading">Our Distribution Channels</h2>
-      <p className="dist-subheading">
-        Our books are available across leading platforms worldwide.
-      </p>
-    </div>
-
-    <div className="dist-marquee">
-      <div className="dist-track">
-
-        {/* First set */}
-        {DISTRIBUTION_CHANNELS.map((channel, i) => (
-          <div className="dist-card" key={`first-${i}`}>
-            <div className="dist-icon">
-              <img
-                src={channel.logo}
-                alt={`${channel.name} logo`}
-                loading="lazy"
-              />
-            </div>
-
-            <h3 className="dist-name">{channel.name}</h3>
-
-            <p className="dist-desc">{channel.desc}</p>
-
-            <a
-              className="dist-cart"
-              href={channel.link}
-              aria-label={`Shop on ${channel.name}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-1.5 6h11M9 21a1 1 0 100-2 1 1 0 000 2zM18 21a1 1 0 100-2 1 1 0 000 2z"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
+          <div className="dist-heading-wrap">
+            <h2 className="dist-heading">Our Distribution Channels</h2>
+            <p className="dist-subheading">
+              Our books are available across leading platforms worldwide.
+            </p>
           </div>
-        ))}
 
-        {/* Duplicate set for seamless infinite scrolling */}
-        {DISTRIBUTION_CHANNELS.map((channel, i) => (
-          <div className="dist-card" key={`second-${i}`}>
-            <div className="dist-icon">
-              <img
-                src={channel.logo}
-                alt={`${channel.name} logo`}
-                loading="lazy"
-              />
+          <div className="dist-marquee">
+            <div className="dist-track">
+
+              {/* First set */}
+              {DISTRIBUTION_CHANNELS.map((channel, i) => (
+                <div className="dist-card" key={`first-${i}`}>
+                  <div className="dist-icon">
+                    <img
+                      src={channel.logo}
+                      alt={`${channel.name} logo`}
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <h3 className="dist-name">{channel.name}</h3>
+
+                  <p className="dist-desc">{channel.desc}</p>
+
+                  <a
+                    className="dist-cart"
+                    href={channel.link}
+                    aria-label={`Shop on ${channel.name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-1.5 6h11M9 21a1 1 0 100-2 1 1 0 000 2zM18 21a1 1 0 100-2 1 1 0 000 2z"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              ))}
+
+              {/* Duplicate set for seamless infinite scrolling */}
+              {DISTRIBUTION_CHANNELS.map((channel, i) => (
+                <div className="dist-card" key={`second-${i}`}>
+                  <div className="dist-icon">
+                    <img
+                      src={channel.logo}
+                      alt={`${channel.name} logo`}
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <h3 className="dist-name">{channel.name}</h3>
+
+                  <p className="dist-desc">{channel.desc}</p>
+
+                  <a
+                    className="dist-cart"
+                    href={channel.link}
+                    aria-label={`Shop on ${channel.name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-1.5 6h11M9 21a1 1 0 100-2 1 1 0 000-2zM18 21a1 1 0 100-2 1 1 0 000 2z"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              ))}
+
             </div>
-
-            <h3 className="dist-name">{channel.name}</h3>
-
-            <p className="dist-desc">{channel.desc}</p>
-
-            <a
-              className="dist-cart"
-              href={channel.link}
-              aria-label={`Shop on ${channel.name}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-1.5 6h11M9 21a1 1 0 100-2 1 1 0 000-2zM18 21a1 1 0 100-2 1 1 0 000 2z"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
           </div>
-        ))}
 
-      </div>
-    </div>
+        </div>
+      </section>
 
-  </div>
-</section>
-      
-{/* ================= SECTION 11-B — TRUSTED AUTHORS ================= */}
-<section className="trusted-authors">
-  <div className="trusted-authors-container">
+      {/* ================= SECTION 11-B — TRUSTED AUTHORS ================= */}
+      <section className="trusted-authors">
+        <div className="trusted-authors-container">
 
-    <h2 className="trusted-title">
-      Trusted by <span>3,000+</span> Authors including{" "}
-      <span>celebrities</span> and <span>influencers.</span>
-    </h2>
+          <h2 className="trusted-title">
+            Trusted by <span>3,000+</span> Authors including{" "}
+            <span>celebrities</span> and <span>influencers.</span>
+          </h2>
 
-    <div className="trusted-slider">
+          <div className="trusted-slider">
 
-      {/* LEFT ARROW */}
-      <button
-        className="slider-arrow slider-arrow-left"
-        onClick={prevTrusted}
-        aria-label="Previous trusted authors"
-        type="button"
-      >
-        ‹
-      </button>
+            {/* LEFT ARROW */}
+            <button
+              className="slider-arrow slider-arrow-left"
+              onClick={prevTrusted}
+              aria-label="Previous trusted authors"
+              type="button"
+            >
+              ‹
+            </button>
 
-      {/* ================= TRUSTED AUTHORS CONTENT ================= */}
-      <div className="trusted-track">
+            {/* ================= TRUSTED AUTHORS CONTENT ================= */}
+            <div className="trusted-track">
 
-        {trustedAuthorPosts.length > 0 && (
-          <div className="trusted-pairs-wrapper">
+              {trustedAuthorPosts.length > 0 && (
+                <div className="trusted-pairs-wrapper">
 
-            {/* ================= PAIR 1 ================= */}
-            <div className="trusted-pair trusted-pair-1">
+                  {/* ================= PAIR 1 ================= */}
+                  <div className="trusted-pair trusted-pair-1">
 
-              {/* BIG PROFILE */}
-              {trustedAuthorPosts[trustedIndex] && (
-                <div className="trusted-card trusted-profile-card">
-                  <img
-                    src={trustedAuthorPosts[trustedIndex].imageUrl}
-                    alt={
-                      trustedAuthorPosts[trustedIndex].username
-                        ? `${trustedAuthorPosts[trustedIndex].username} profile`
-                        : "Trusted author profile"
-                    }
-                    className="trusted-image"
-                  />
-                </div>
-              )}
+                    {/* BIG PROFILE */}
+                    {trustedAuthorPosts[trustedIndex] && (
+                      <div className="trusted-card trusted-profile-card">
+                        <img
+                          src={trustedAuthorPosts[trustedIndex].imageUrl}
+                          alt={
+                            trustedAuthorPosts[trustedIndex].username
+                              ? `${trustedAuthorPosts[trustedIndex].username} profile`
+                              : "Trusted author profile"
+                          }
+                          className="trusted-image"
+                        />
+                      </div>
+                    )}
 
-              {/* SMALL POST */}
-              {trustedAuthorPosts[
-                (trustedIndex + 1) % trustedAuthorPosts.length
-              ] && (
-                <div className="trusted-card trusted-post-card">
-                  <img
-                    src={
-                      trustedAuthorPosts[
-                        (trustedIndex + 1) % trustedAuthorPosts.length
-                      ].imageUrl
-                    }
-                    alt="Trusted author post"
-                    className="trusted-image"
-                  />
-                </div>
-              )}
+                    {/* SMALL POST */}
+                    {trustedAuthorPosts[
+                      (trustedIndex + 1) % trustedAuthorPosts.length
+                    ] && (
+                        <div className="trusted-card trusted-post-card">
+                          <img
+                            src={
+                              trustedAuthorPosts[
+                                (trustedIndex + 1) % trustedAuthorPosts.length
+                              ].imageUrl
+                            }
+                            alt="Trusted author post"
+                            className="trusted-image"
+                          />
+                        </div>
+                      )}
 
-            </div>
+                  </div>
 
-            {/* ================= PAIR 2 ================= */}
-            {trustedAuthorPosts.length >= 4 && (
-              <div className="trusted-pair trusted-pair-2">
+                  {/* ================= PAIR 2 ================= */}
+                  {trustedAuthorPosts.length >= 4 && (
+                    <div className="trusted-pair trusted-pair-2">
 
-                {/* SMALL POST */}
-                <div className="trusted-card trusted-post-card">
-                  <img
-                    src={
-                      trustedAuthorPosts[
-                        (trustedIndex + 2) % trustedAuthorPosts.length
-                      ].imageUrl
-                    }
-                    alt="Trusted author post"
-                    className="trusted-image"
-                  />
-                </div>
+                      {/* SMALL POST */}
+                      <div className="trusted-card trusted-post-card">
+                        <img
+                          src={
+                            trustedAuthorPosts[
+                              (trustedIndex + 2) % trustedAuthorPosts.length
+                            ].imageUrl
+                          }
+                          alt="Trusted author post"
+                          className="trusted-image"
+                        />
+                      </div>
 
-                {/* BIG PROFILE */}
-                <div className="trusted-card trusted-profile-card">
-                  <img
-                    src={
-                      trustedAuthorPosts[
-                        (trustedIndex + 3) % trustedAuthorPosts.length
-                      ].imageUrl
-                    }
-                    alt={
-                      trustedAuthorPosts[
-                        (trustedIndex + 3) % trustedAuthorPosts.length
-                      ].username
-                        ? `${
+                      {/* BIG PROFILE */}
+                      <div className="trusted-card trusted-profile-card">
+                        <img
+                          src={
+                            trustedAuthorPosts[
+                              (trustedIndex + 3) % trustedAuthorPosts.length
+                            ].imageUrl
+                          }
+                          alt={
                             trustedAuthorPosts[
                               (trustedIndex + 3) % trustedAuthorPosts.length
                             ].username
-                          } profile`
-                        : "Trusted author profile"
-                    }
-                    className="trusted-image"
-                  />
+                              ? `${trustedAuthorPosts[
+                                (trustedIndex + 3) % trustedAuthorPosts.length
+                              ].username
+                              } profile`
+                              : "Trusted author profile"
+                          }
+                          className="trusted-image"
+                        />
+                      </div>
+
+                    </div>
+                  )}
+
                 </div>
+              )}
 
-              </div>
-            )}
+              {trustedAuthorPosts.length === 0 && (
+                <div className="trusted-empty">
+                  No trusted author posts available.
+                </div>
+              )}
+
+            </div>
+
+            {/* RIGHT ARROW */}
+            <button
+              className="slider-arrow slider-arrow-right"
+              onClick={nextTrusted}
+              aria-label="Next trusted authors"
+              type="button"
+            >
+              ›
+            </button>
 
           </div>
-        )}
 
-        {trustedAuthorPosts.length === 0 && (
-          <div className="trusted-empty">
-            No trusted author posts available.
-          </div>
-        )}
-
-      </div>
-
-      {/* RIGHT ARROW */}
-      <button
-        className="slider-arrow slider-arrow-right"
-        onClick={nextTrusted}
-        aria-label="Next trusted authors"
-        type="button"
-      >
-        ›
-      </button>
-
-    </div>
-
-  </div>
-</section>
+        </div>
+      </section>
     </div>
   );
 }
