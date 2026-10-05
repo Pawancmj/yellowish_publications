@@ -42,13 +42,17 @@ html, body {
 
 /* ============================================================
    Canonical book-cover frame (public website).
-   Every book cover uses a fixed aspect-ratio container plus
-   object-fit: contain, so covers with different original
-   resolutions/aspect ratios keep the same visual image area —
-   without stretching, squashing or cropping.
+   Every book cover uses a fixed 2:3 portrait container plus
+   img width/height 100% + object-fit: cover, so covers with
+   different original resolutions/aspect ratios ALWAYS render
+   at exactly the same visible width and height — the visible
+   image area never depends on the source dimensions (no
+   letterboxing, no taller/shorter books in the same row).
+   Cover only trims outer edge margins; book covers are ~2:3,
+   so no titles/text are cut and nothing is distorted.
    ============================================================ */
 :root {
-  --book-cover-ratio: 3 / 4;
+  --book-cover-ratio: 2 / 3;
 }
 
 h1, h2, h3, h4, h5, h6 {

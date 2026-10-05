@@ -1654,17 +1654,17 @@
 .cta-book img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .cb-1 {
-  width: 156px;
+  width: 142px;
   left: 12%;
   top: 4%;
 }
 
 .cb-2 {
-  width: 122px;
+  width: 142px;
   right: 16%;
   top: 22%;
 }
@@ -1950,11 +1950,11 @@
   }
 
   .cb-1 {
-    width: 120px;
+    width: 110px;
   }
 
   .cb-2 {
-    width: 96px;
+    width: 110px;
   }
 
   .cb-3 {

@@ -170,19 +170,18 @@
 .hero-book {
   width: 100%;
   max-width: 235px;
-  height: 355px;
+  aspect-ratio: var(--book-cover-ratio);
+  height: auto;
   margin: 0 auto;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  display: block;
   transition: transform 0.3s ease;
 }
 
 .hero-book img {
   display: block;
   width: 100%;
-  height: 355px;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   filter: drop-shadow(0 13px 9px rgba(0, 0, 0, 0.28));
   transition: transform 0.3s ease, filter 0.3s ease;
 }
@@ -357,12 +356,7 @@
   }
 
   .hero-book {
-    height: 350px;
     max-width: 205px;
-  }
-
-  .hero-book img {
-    height: 350px;
   }
 
   .book-arrow {
@@ -407,12 +401,7 @@
   }
 
   .hero-book {
-    height: 295px;
     max-width: 175px;
-  }
-
-  .hero-book img {
-    height: 295px;
   }
 
   .book-arrow {
@@ -490,12 +479,7 @@
   }
 
   .hero-book {
-    height: 255px;
     max-width: 150px;
-  }
-
-  .hero-book img {
-    height: 255px;
   }
 
   .book-arrow {
@@ -577,12 +561,7 @@
   }
 
   .hero-book {
-    height: 235px;
     max-width: 140px;
-  }
-
-  .hero-book img {
-    height: 235px;
   }
 
   .book-arrow {
@@ -637,14 +616,6 @@
   .hero-books {
     height: 240px;
     gap: 7px;
-  }
-
-  .hero-book {
-    height: 220px;
-  }
-
-  .hero-book img {
-    height: 220px;
   }
 }
 
