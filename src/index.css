@@ -40,6 +40,17 @@ html, body {
   box-sizing: border-box;
 }
 
+/* ============================================================
+   Canonical book-cover frame (public website).
+   Every book cover uses a fixed aspect-ratio container plus
+   object-fit: contain, so covers with different original
+   resolutions/aspect ratios keep the same visual image area —
+   without stretching, squashing or cropping.
+   ============================================================ */
+:root {
+  --book-cover-ratio: 3 / 4;
+}
+
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-family: 'Source Serif 4', Georgia, serif;

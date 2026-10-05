@@ -599,7 +599,7 @@
   overflow: hidden;
   background: #FFF6E9;
   border: 1px solid #FFE3E6;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: var(--book-cover-ratio);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -14,9 +14,11 @@
   width: 100%;
   max-width: 350px;
   height: auto;
+  aspect-ratio: var(--book-cover-ratio);
+  object-fit: contain;
+  background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  object-fit: cover;
 }
 
 .book-details-info {

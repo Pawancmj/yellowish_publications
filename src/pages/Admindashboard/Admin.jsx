@@ -1,6 +1,6 @@
 // src/pages/Admindashboard/Admin.jsx
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
@@ -8,7 +8,6 @@ import {
   AUTHORS_HERO_MAX_IMAGES,
   DEFAULT_AUTHORS_HERO_IMAGES,
 } from "../../services/authorsHeroModel";
-import { fileToDataUrl } from "../../services/imageToDataUrl";
 
 import {
   FaEdit,
@@ -24,8 +23,9 @@ import {
   FaExclamationCircle,
   FaInstagram,
   FaImages,
-  FaUpload,
 } from "react-icons/fa";
+
+import ImageUpload from "../../components/ImageUpload/ImageUpload";
 
 import "./Admin.css";
 
@@ -1224,9 +1224,6 @@ const TrustedAuthorForm = ({
     isActive: post?.isActive !== false,
   });
 
-  const [imageLoadFailed, setImageLoadFailed] =
-    useState(false);
-
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -1240,10 +1237,6 @@ const TrustedAuthorForm = ({
       ...prev,
       [field]: value,
     }));
-
-    if (field === "imageUrl") {
-      setImageLoadFailed(false);
-    }
 
   };
 
@@ -1274,6 +1267,12 @@ const TrustedAuthorForm = ({
 
     }
   };
+
+  // Image value: a public http(s) URL OR an uploaded image
+  // stored as a base64 data URL (same Firestore field).
+  const isValidImageValue = (value) =>
+    value.startsWith("data:image/") ||
+    isValidURL(value);
 
   /* ================================================================
      SUBMIT
@@ -1314,16 +1313,16 @@ const TrustedAuthorForm = ({
     if (!trimmedImageUrl) {
 
       setError(
-        "Please enter a public image URL."
+        "Please upload an image or paste an image URL."
       );
 
       return;
     }
 
-    if (!isValidURL(trimmedImageUrl)) {
+    if (!isValidImageValue(trimmedImageUrl)) {
 
       setError(
-        "Please enter a valid image URL."
+        "Please upload an image or enter a valid image URL."
       );
 
       return;
@@ -1433,68 +1432,24 @@ const TrustedAuthorForm = ({
               IMAGE URL
           ====================================================== */}
 
-          <div className="form-group">
-
-            <label>
-              Image URL *
-            </label>
-
-            <input
-              type="text"
-              value={formData.imageUrl}
-              onChange={(e) =>
-                handleInputChange(
-                  "imageUrl",
-                  e.target.value
-                )
-              }
-              placeholder="https://images.unsplash.com/..."
-              disabled={saving}
-              required
-            />
-
-            <small className="help-text">
-              Paste a public image URL — e.g. an
-              Unsplash link or a screenshot hosted
-              elsewhere.
-            </small>
-
-          </div>
-
           {/* ======================================================
-              IMAGE PREVIEW
+              IMAGE — direct upload (base64) OR URL paste, with preview
           ====================================================== */}
 
-          {formData.imageUrl.trim() &&
-            !imageLoadFailed && (
+          <div className="form-group">
 
-            <div className="trusted-upload-preview">
+            <ImageUpload
+              label="Image"
+              required
+              value={formData.imageUrl}
+              onChange={(value) =>
+                handleInputChange("imageUrl", value)
+              }
+              disabled={saving}
+              help="Upload an image (JPG, JPEG, PNG or WEBP) or paste a public image URL — e.g. an Unsplash link."
+            />
 
-              <img
-                src={formData.imageUrl.trim()}
-                alt="Trusted Author preview"
-                onError={() => {
-                  setImageLoadFailed(true);
-                }}
-                onLoad={() => {
-                  setImageLoadFailed(false);
-                }}
-              />
-
-            </div>
-
-          )}
-
-          {formData.imageUrl.trim() &&
-            imageLoadFailed && (
-
-            <p className="help-text">
-              Couldn't load a preview for this URL —
-              double check it's a direct, public
-              image link.
-            </p>
-
-          )}
+          </div>
 
           {/* ======================================================
               USERNAME + LIKES
@@ -1812,7 +1767,7 @@ const BookForm = ({
     ) {
 
       newErrors.cover =
-        "Please enter a valid URL.";
+        "Please enter a valid image URL.";
 
     }
 
@@ -2130,36 +2085,15 @@ const BookForm = ({
 
           <div className="form-group">
 
-            <label>
-              Cover Image URL
-            </label>
-
-            <input
-              type="text"
+            <ImageUpload
+              label="Cover Image"
               value={formData.cover}
-              onChange={(e) =>
-                handleInputChange(
-                  "cover",
-                  e.target.value
-                )
+              onChange={(value) =>
+                handleInputChange("cover", value)
               }
-              placeholder="https://example.com/image.jpg"
-              className={
-                errors.cover
-                  ? "input-error"
-                  : ""
-              }
+              errorText={errors.cover}
+              help="Upload a cover (JPG, JPEG, PNG or WEBP) or paste an image URL."
             />
-
-            {errors.cover && (
-              <span className="error-text">
-                {errors.cover}
-              </span>
-            )}
-
-            <small className="help-text">
-              Supported formats: image URL
-            </small>
 
           </div>
 
@@ -2293,7 +2227,7 @@ const AuthorForm = ({
     ) {
 
       newErrors.photo =
-        "Please enter a valid URL for the photo";
+        "Please enter a valid image URL for the photo";
 
     }
 
@@ -2465,36 +2399,15 @@ const AuthorForm = ({
 
           <div className="form-group">
 
-            <label>
-              Photo URL
-            </label>
-
-            <input
-              type="text"
+            <ImageUpload
+              label="Photo"
               value={formData.photo}
-              onChange={(e) =>
-                handleInputChange(
-                  "photo",
-                  e.target.value
-                )
+              onChange={(value) =>
+                handleInputChange("photo", value)
               }
-              placeholder="https://example.com/photo.jpg"
-              className={
-                errors.photo
-                  ? "input-error"
-                  : ""
-              }
+              errorText={errors.photo}
+              help="Upload a photo (JPG, JPEG, PNG or WEBP) or paste an image URL."
             />
-
-            {errors.photo && (
-              <span className="error-text">
-                {errors.photo}
-              </span>
-            )}
-
-            <small className="help-text">
-              Enter a URL for the author's photo
-            </small>
 
           </div>
 
@@ -3063,8 +2976,6 @@ const AuthorsHeroManager = ({
   const [error, setError] =
     useState("");
 
-  const fileRef = useRef(null);
-
   useEffect(() => {
 
     if (!authorsHeroLoading) {
@@ -3079,12 +2990,7 @@ const AuthorsHeroManager = ({
           ? saved
           : DEFAULT_AUTHORS_HERO_IMAGES;
 
-      setImages(
-        urls.map((url) => ({
-          url,
-          broken: false,
-        }))
-      );
+      setImages(urls);
 
     }
 
@@ -3096,27 +3002,7 @@ const AuthorsHeroManager = ({
 
     setImages((prev) =>
       prev.map((img, i) =>
-        i === index
-          ? {
-              url,
-              broken: false,
-            }
-          : img
-      )
-    );
-
-  };
-
-  const markBroken = (index) => {
-
-    setImages((prev) =>
-      prev.map((img, i) =>
-        i === index
-          ? {
-              ...img,
-              broken: true,
-            }
-          : img
+        i === index ? url : img
       )
     );
 
@@ -3132,61 +3018,15 @@ const AuthorsHeroManager = ({
 
   };
 
-  const addImage = (url = "") => {
+  const addImage = () => {
 
     setSavedMsg("");
 
     setImages((prev) =>
       prev.length >= AUTHORS_HERO_MAX_IMAGES
         ? prev
-        : [
-            ...prev,
-            {
-              url,
-              broken: false,
-            },
-          ]
+        : [...prev, ""]
     );
-
-  };
-
-  const handleUpload = async (file) => {
-
-    if (!file) return;
-
-    const type =
-      (file.type || "").toLowerCase();
-
-    if (!type.startsWith("image/")) {
-      setError(
-        "Please select a valid image file (JPG, PNG or WebP)."
-      );
-      return;
-    }
-
-    setError("");
-    setSavedMsg("");
-
-    try {
-
-      // Base64 data URL stored inline in Firestore — the same
-      // approach as blog images, no Firebase Storage needed.
-      const dataUrl = await fileToDataUrl(file, {
-        maxDimension: 600,
-      });
-
-      addImage(dataUrl);
-
-    } catch (err) {
-      setError(
-        err.message ||
-          "Could not process this image."
-      );
-    } finally {
-      if (fileRef.current) {
-        fileRef.current.value = "";
-      }
-    }
 
   };
 
@@ -3203,12 +3043,11 @@ const AuthorsHeroManager = ({
     // uploaded data URL before it can be published.
     if (
       images.some(
-        (img) =>
-          !img.url || img.url.trim() === ""
+        (url) => !url || url.trim() === ""
       )
     ) {
       setError(
-        "Each portrait needs an image URL or an uploaded image. Remove the empty slots first."
+        "Each portrait needs an image or an image URL. Fill in or remove the empty slots first."
       );
       return;
     }
@@ -3220,7 +3059,6 @@ const AuthorsHeroManager = ({
       const result =
         await onSave(
           images
-            .map((img) => img.url)
             .filter(
               (url) =>
                 url &&
@@ -3284,26 +3122,9 @@ const AuthorsHeroManager = ({
         default portraits are used again.
       </p>
 
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={(e) =>
-          handleUpload(
-            e.target.files && e.target.files[0]
-          )
-        }
-      />
-
       <div className="hero-slots">
 
-        {images.map((img, index) => {
-
-          const isDataUrl =
-            img.url.startsWith("data:");
-
-          return (
+        {images.map((url, index) => (
 
             <div
               className="hero-slot"
@@ -3322,49 +3143,17 @@ const AuthorsHeroManager = ({
 
               </div>
 
-              <div className="ahero-preview">
-
-                {img.url && !img.broken ? (
-                  <img
-                    src={img.url}
-                    alt={`Portrait ${index + 1}`}
-                    onError={() =>
-                      markBroken(index)
-                    }
-                  />
-                ) : (
-                  <span>
-                    {img.broken
-                      ? "Image could not be loaded — check the link."
-                      : "No image yet"}
-                  </span>
-                )}
-
-              </div>
-
-              <label className="ahero-url">
-
-                <span>Image URL</span>
-
-                <input
-                  type="text"
-                  value={
-                    isDataUrl ? "" : img.url
-                  }
-                  placeholder={
-                    isDataUrl
-                      ? "Uploaded image — paste a URL to replace it"
-                      : "https://example.com/author.jpg"
-                  }
-                  onChange={(e) =>
-                    updateImage(
-                      index,
-                      e.target.value
-                    )
-                  }
-                />
-
-              </label>
+              <ImageUpload
+                compact
+                label=""
+                showRemove={false}
+                value={url}
+                onChange={(value) =>
+                  updateImage(index, value)
+                }
+                disabled={saving}
+                placeholder="https://example.com/author.jpg"
+              />
 
               <div className="ahero-card-actions">
 
@@ -3383,9 +3172,7 @@ const AuthorsHeroManager = ({
 
             </div>
 
-          );
-
-        })}
+        ))}
 
         {images.length === 0 && (
 
@@ -3429,18 +3216,6 @@ const AuthorsHeroManager = ({
       )}
 
       <div className="hero-manager-actions">
-
-        <button
-          type="button"
-          className="add-btn"
-          onClick={() =>
-            fileRef.current &&
-            fileRef.current.click()
-          }
-          disabled={saving || atLimit}
-        >
-          <FaUpload /> Upload Image
-        </button>
 
         <button
           type="button"

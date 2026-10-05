@@ -28,7 +28,7 @@
 /* Cover â€” ~75â€“80% of the visible card, rounded top corners only */
 .book-cover-wrap {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--book-cover-ratio);
   overflow: hidden;
   background: #fbe4e6;
   border-radius: 15px 15px 0 0;
@@ -43,7 +43,7 @@
 .book-cover {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.3s ease;
 }
 
@@ -342,7 +342,6 @@
   }
 
   .book-cover-wrap {
-    aspect-ratio: 3 / 4;
     border-radius: 14px 14px 0 0;
   }
 

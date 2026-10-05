@@ -1276,7 +1276,7 @@ export function DataProvider({ children }) {
 
           if (!cleanImageUrl) {
             throw new Error(
-              "Please enter a public image URL."
+              "Please upload an image or paste an image URL."
             );
           }
 
@@ -1287,25 +1287,27 @@ export function DataProvider({ children }) {
           }
 
           // ====================================================
-          // URL VALIDATION
+          // IMAGE VALIDATION (public URL or uploaded data URL)
           // ====================================================
 
-          try {
-            const parsedUrl =
-              new URL(cleanImageUrl);
+          if (!cleanImageUrl.startsWith("data:image/")) {
+            try {
+              const parsedUrl =
+                new URL(cleanImageUrl);
 
-            if (
-              parsedUrl.protocol !==
-                "http:" &&
-              parsedUrl.protocol !==
-                "https:"
-            ) {
-              throw new Error();
+              if (
+                parsedUrl.protocol !==
+                  "http:" &&
+                parsedUrl.protocol !==
+                  "https:"
+              ) {
+                throw new Error();
+              }
+            } catch {
+              throw new Error(
+                "Please enter a valid image URL."
+              );
             }
-          } catch {
-            throw new Error(
-              "Please enter a valid public image URL."
-            );
           }
 
           // ====================================================
@@ -1443,26 +1445,28 @@ export function DataProvider({ children }) {
 
             if (!cleanImageUrl) {
               throw new Error(
-                "Please enter a public image URL."
+                "Please upload an image or paste an image URL."
               );
             }
 
-            try {
-              const parsedUrl =
-                new URL(cleanImageUrl);
+            if (!cleanImageUrl.startsWith("data:image/")) {
+              try {
+                const parsedUrl =
+                  new URL(cleanImageUrl);
 
-              if (
-                parsedUrl.protocol !==
-                  "http:" &&
-                parsedUrl.protocol !==
-                  "https:"
-              ) {
-                throw new Error();
+                if (
+                  parsedUrl.protocol !==
+                    "http:" &&
+                  parsedUrl.protocol !==
+                    "https:"
+                ) {
+                  throw new Error();
+                }
+              } catch {
+                throw new Error(
+                  "Please enter a valid image URL."
+                );
               }
-            } catch {
-              throw new Error(
-                "Please enter a valid public image URL."
-              );
             }
 
             updateData.imageUrl =
@@ -1740,6 +1744,13 @@ export function DataProvider({ children }) {
     } else if (
       book.cover &&
       typeof book.cover === "string" &&
+      book.cover.startsWith("data:image/")
+    ) {
+      // Uploaded cover stored inline as a base64 data URL.
+      result = book.cover;
+    } else if (
+      book.cover &&
+      typeof book.cover === "string" &&
       book.cover.startsWith("/assets/")
     ) {
       result = book.cover;
@@ -1777,6 +1788,13 @@ export function DataProvider({ children }) {
       typeof author.photo === "string" &&
       author.photo.startsWith("http")
     ) {
+      result = author.photo;
+    } else if (
+      author.photo &&
+      typeof author.photo === "string" &&
+      author.photo.startsWith("data:image/")
+    ) {
+      // Uploaded photo stored inline as a base64 data URL.
       result = author.photo;
     } else if (
       author.image &&

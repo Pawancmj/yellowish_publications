@@ -1,0 +1,226 @@
+/* Shared admin image field — upload (base64, no Firebase Storage) + URL paste.
+   Styled to match the Admin Panel: neutral borders, green primary action,
+   red destructive action. */
+
+.image-upload {
+  width: 100%;
+}
+
+.image-upload,
+.image-upload * {
+  box-sizing: border-box;
+}
+
+.image-upload-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Preview / empty state */
+.image-upload-preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px;
+  max-height: 360px;
+  padding: 10px;
+  background: #f8f8f8;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.image-upload-preview img {
+  display: block;
+  width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.image-upload-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #888;
+  font-size: 14px;
+}
+
+.image-upload-empty svg {
+  font-size: 1.6rem;
+  color: #bbb;
+}
+
+.image-upload-preview-failed {
+  padding: 12px;
+  color: #c0392b;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Processing overlay */
+.image-upload-busy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.image-upload-spin {
+  animation: image-upload-spin 0.9s linear infinite;
+}
+
+@keyframes image-upload-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Action buttons */
+.image-upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.image-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.image-upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.image-upload-btn.upload {
+  background: #28a745;
+  color: #fff;
+}
+
+.image-upload-btn.upload:hover:not(:disabled) {
+  background: #218838;
+}
+
+.image-upload-btn.remove {
+  background: #dc3545;
+  color: #fff;
+}
+
+.image-upload-btn.remove:hover:not(:disabled) {
+  background: #c82333;
+}
+
+/* URL paste row */
+.image-upload-url {
+  position: relative;
+  margin-top: 10px;
+}
+
+.image-upload-url input {
+  width: 100%;
+  padding: 9px 34px 9px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.image-upload-url input:disabled {
+  background: #f5f5f5;
+}
+
+.image-upload-url-icon {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+/* Messages */
+.image-upload-error {
+  margin: 8px 0 0;
+  color: #c0392b;
+  font-size: 13px;
+}
+
+.image-upload-help {
+  display: block;
+  margin-top: 6px;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* Compact mode — used inside the authors-hero portrait cards and the
+   rich-text editor popover. */
+.image-upload.compact .image-upload-label {
+  font-size: 12px;
+  color: #888;
+}
+
+.image-upload.compact .image-upload-preview {
+  min-height: 100px;
+  max-height: 170px;
+  padding: 8px;
+  margin-top: 10px;
+}
+
+.image-upload.compact .image-upload-preview img {
+  max-height: 150px;
+}
+
+.image-upload.compact .image-upload-actions {
+  margin-top: 8px;
+}
+
+.image-upload.compact .image-upload-btn {
+  padding: 7px 12px;
+  font-size: 12.5px;
+}
+
+.image-upload.compact .image-upload-url {
+  margin-top: 8px;
+}
+
+.image-upload.compact .image-upload-url input {
+  padding: 8px 30px 8px 9px;
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .image-upload-actions {
+    flex-direction: column;
+  }
+
+  .image-upload-actions .image-upload-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

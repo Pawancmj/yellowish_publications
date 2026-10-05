@@ -6,8 +6,8 @@
 // Output is HTML. On save, the parent normalizes it (`normalizeContentHtml`)
 // so the public Blog Detail page can render it with its existing styles.
 
-import { useRef, useState } from "react";
-import { fileToDataUrl } from "../../services/imageToDataUrl";
+import { useState } from "react";
+import ImageUpload from "../ImageUpload/ImageUpload";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -52,13 +52,10 @@ const ToolButton = ({ active, disabled, onClick, title, children }) => (
 );
 
 export default function RichTextEditor({ value = "", onChange, placeholder = "Start writing your blog..." }) {
-  const imageFileRef = useRef(null);
   const [linkOpen, setLinkOpen] = useState(false);
   const [href, setHref] = useState("");
   const [imageOpen, setImageOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  const [imageBusy, setImageBusy] = useState(false);
-  const [imageError, setImageError] = useState("");
 
   const editor = useEditor({
     extensions: [
@@ -101,26 +98,8 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
   };
 
   const insertImage = () => {
-    setImageError("");
     setImageUrl(editor?.getAttributes("image")?.src || "");
     setImageOpen((o) => !o);
-  };
-
-  const handleImageFile = async (file) => {
-    if (!file) return;
-    setImageError("");
-    setImageBusy(true);
-    try {
-      const dataUrl = await fileToDataUrl(file, { maxDimension: 800, quality: 0.7 });
-      editor.chain().focus().setImage({ src: dataUrl, alt: "" }).run();
-      setImageOpen(false);
-      setImageUrl("");
-    } catch (err) {
-      setImageError(err.message || "Could not process this image.");
-    } finally {
-      setImageBusy(false);
-      if (imageFileRef.current) imageFileRef.current.value = "";
-    }
   };
 
   const applyImage = () => {
@@ -229,28 +208,22 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
           </ToolButton>
           {imageOpen && (
             <div className="rte-link-pop rte-image-pop">
-              <button
-                type="button"
-                className="rte-image-upload"
-                onClick={() => imageFileRef.current && imageFileRef.current.click()}
-                disabled={imageBusy}
-              >
-                {imageBusy ? "Processing…" : "Upload image"}
-              </button>
-              <input
-                ref={imageFileRef}
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={(e) => handleImageFile(e.target.files && e.target.files[0])}
-              />
-              <div className="rte-image-or">— or paste URL —</div>
-              <input
-                type="text"
-                placeholder="https://example.com/image.jpg"
+              <ImageUpload
+                compact
+                label=""
+                showRemove={false}
                 value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                onKeyDown={(e) => {
+                onChange={(next) => {
+                  setImageUrl(next);
+                  // A freshly uploaded image is inserted straight away;
+                  // pasted URLs wait for the Insert button / Enter key.
+                  if (next && next.startsWith("data:")) {
+                    editor.chain().focus().setImage({ src: next, alt: "" }).run();
+                    setImageOpen(false);
+                    setImageUrl("");
+                  }
+                }}
+                onUrlKeyDown={(e) => {
                   if (e.key === "Enter") applyImage();
                   if (e.key === "Escape") setImageOpen(false);
                 }}
@@ -258,7 +231,6 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "St
               <button type="button" className="rte-link-apply" onClick={applyImage} disabled={!imageUrl.trim()}>
                 Insert
               </button>
-              {imageError && <div className="rte-image-error">{imageError}</div>}
             </div>
           )}
         </div>

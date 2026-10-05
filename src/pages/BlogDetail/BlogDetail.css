@@ -1643,17 +1643,18 @@
 
 .cta-book {
   position: absolute;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: var(--book-cover-ratio);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 26px 54px rgba(18, 58, 92, 0.24);
   border: 5px solid #fff;
+  background: #fff;
 }
 
 .cta-book img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .cb-1 {
