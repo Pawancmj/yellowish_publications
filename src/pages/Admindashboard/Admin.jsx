@@ -1646,13 +1646,49 @@ const TrustedAuthorForm = ({
 
 /* ================================================================
    BOOK FORM
-================================================================ */
+=============================================================== */
+
+const CUSTOM_GENRE_VALUE = "__custom__";
+
+const PREDEFINED_GENRES = [
+  "Fiction",
+  "Poetry",
+  "History",
+  "Self-Help",
+  "Academic",
+  "Psychology",
+  "Science",
+  "Management",
+  "Dharma",
+  "Nature",
+  "Business",
+  "Astronomy",
+  "Mathematics",
+  "Law",
+  "Spiritual Growth",
+  "Epic Fantasy",
+];
 
 const BookForm = ({
   book,
   onSave,
   onCancel,
 }) => {
+
+  const initialGenre =
+    book?.genre || "Fiction";
+
+  const initialGenreIsPredefined =
+    PREDEFINED_GENRES.includes(initialGenre);
+
+  // Custom genre text kept separately; formData.genre holds the
+  // sentinel while the admin is in "Add Custom Genre" mode.
+  const [customGenre, setCustomGenre] =
+    useState(
+      initialGenreIsPredefined
+        ? ""
+        : initialGenre
+    );
 
   const [formData, setFormData] = useState({
 
@@ -1665,8 +1701,9 @@ const BookForm = ({
     author:
       book?.author || "",
 
-    genre:
-      book?.genre || "Fiction",
+    genre: initialGenreIsPredefined
+      ? initialGenre
+      : CUSTOM_GENRE_VALUE,
 
     price:
       book?.price || "",
@@ -1762,6 +1799,16 @@ const BookForm = ({
     }
 
     if (
+      formData.genre === CUSTOM_GENRE_VALUE &&
+      !customGenre.trim()
+    ) {
+
+      newErrors.genre =
+        "Please enter a custom genre.";
+
+    }
+
+    if (
       formData.cover &&
       !isValidURL(formData.cover)
     ) {
@@ -1787,6 +1834,11 @@ const BookForm = ({
       onSave({
 
         ...formData,
+
+        genre:
+          formData.genre === CUSTOM_GENRE_VALUE
+            ? customGenre.trim()
+            : formData.genre,
 
         price:
           parseFloat(
@@ -2004,7 +2056,50 @@ const BookForm = ({
                   Epic Fantasy
                 </option>
 
+                <option value={CUSTOM_GENRE_VALUE}>
+                  Add Custom Genre
+                </option>
+
               </select>
+
+              {formData.genre ===
+                CUSTOM_GENRE_VALUE && (
+                <>
+                  <label>
+                    Custom Genre *
+                  </label>
+
+                  <input
+                    type="text"
+                    value={customGenre}
+                    onChange={(e) => {
+                      setCustomGenre(
+                        e.target.value
+                      );
+
+                      if (errors.genre) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          genre: "",
+                        }));
+                      }
+                    }}
+                    placeholder="e.g. Psychology, Self Help, Spirituality"
+                    className={
+                      errors.genre
+                        ? "input-error"
+                        : ""
+                    }
+                    autoFocus
+                  />
+                </>
+              )}
+
+              {errors.genre && (
+                <span className="error-text">
+                  {errors.genre}
+                </span>
+              )}
 
             </div>
 

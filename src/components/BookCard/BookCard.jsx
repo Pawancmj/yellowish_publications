@@ -88,7 +88,9 @@ export default function BookCard({
             }}
           />
         </Link>
-        <span className="card-badge">{badge}</span>
+        {badge ? (
+          <span className="card-badge">{badge}</span>
+        ) : null}
 
         {/* Hover overlay — details fade in inside the cover image */}
         <div className="card-overlay">

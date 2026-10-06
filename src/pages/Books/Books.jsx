@@ -28,7 +28,43 @@ const FLOATING_BOOKS = [
   { src: book1, className: "fl-4", rotation: 5 },
 ];
 
-const BADGES = ["Editor's Choice", "Best Seller", "New Release"];
+// Badge is derived ONLY from the book's own data — never from the book's
+// position, index, category or sorting order. A book with no badge/status
+// field in its data gets no badge at all.
+const getBookBadge = (book) => {
+  if (!book) return "";
+
+  const explicit =
+    typeof book.badge === "string"
+      ? book.badge.trim()
+      : "";
+
+  if (explicit) return explicit;
+
+  if (
+    book.isBestSeller === true ||
+    book.bestSeller === true
+  ) {
+    return "Best Seller";
+  }
+
+  if (
+    book.isNewRelease === true ||
+    book.newRelease === true
+  ) {
+    return "New Release";
+  }
+
+  if (
+    book.isEditorsChoice === true ||
+    book.isEditorChoice === true ||
+    book.editorsChoice === true
+  ) {
+    return "Editor's Choice";
+  }
+
+  return "";
+};
 
 const RATINGS = [4.9, 4.8, 4.7, 4.6, 4.5, 4.4, 4.3, 4.2, 4.1, 4.0, 4.9, 4.8, 4.7, 4.6, 4.5, 4.4];
 
@@ -163,7 +199,7 @@ export default function Books() {
   };
 
   const renderCard = (book, i, baseIndex) => {
-    const badge = BADGES[baseIndex % BADGES.length];
+    const badge = getBookBadge(book);
     const rating = RATINGS[baseIndex % RATINGS.length] || 4.5;
     const coverUrl = getBookCover(book);
 
@@ -308,9 +344,7 @@ export default function Books() {
           <div className="featured-list">
             {featured.map((book, i) => {
               const baseIndex = books.findIndex((b) => b.id === book.id);
-              const badge = BADGES[
-                (baseIndex < 0 ? i : baseIndex) % BADGES.length
-              ];
+              const badge = getBookBadge(book);
               const rating = RATINGS[
                 (baseIndex < 0 ? i : baseIndex) % RATINGS.length
               ] || 4.5;
