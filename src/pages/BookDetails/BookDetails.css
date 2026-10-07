@@ -9,16 +9,41 @@
   margin: 0 auto;
 }
 
+.book-details-cover-wrap {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  max-width: 350px;
+}
+
 .book-details-cover {
-      flex: 1;
-      width: 100%;
-      max-width: 350px;
-      height: auto;
-      aspect-ratio: var(--book-cover-ratio);
-      object-fit: cover;
-      background: #fff;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--book-cover-ratio);
+  object-fit: cover;
+  background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.book-details-badge {
+  position: absolute;
+  left: 0.9rem;
+  top: 0.9rem;
+  z-index: 2;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  background: #d9a441;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  box-shadow: 0 6px 14px rgba(217, 164, 65, 0.4);
+  max-width: calc(100% - 1.8rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .book-details-info {
@@ -166,6 +191,7 @@
     align-items: center;
   }
 
+  .book-details-cover-wrap,
   .book-details-cover,
   .book-details-info {
     flex: none;        /* stop flex stretching */
@@ -175,8 +201,16 @@
     min-width: 0;      /* neutralize the 280px desktop min-width at 320px */
   }
 
-  .book-details-cover {
+  .book-details-cover-wrap {
     max-width: 300px;
+  }
+
+  .book-details-badge {
+    left: 0.7rem;
+    top: 0.7rem;
+    max-width: calc(100% - 1.4rem);
+    padding: 0.26rem 0.65rem;
+    font-size: 0.64rem;
   }
 
   .details-buttons {

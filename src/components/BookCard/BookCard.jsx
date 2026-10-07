@@ -63,6 +63,11 @@ export default function BookCard({
   handleNavClick,
   shareBook,
 }) {
+  const customBadge =
+    typeof book.customBadge === "string"
+      ? book.customBadge.trim()
+      : "";
+
   return (
     <motion.article
       className="book-card"
@@ -88,8 +93,15 @@ export default function BookCard({
             }}
           />
         </Link>
-        {badge ? (
-          <span className="card-badge">{badge}</span>
+        {badge || customBadge ? (
+          <div className="card-badge-stack">
+            {badge ? (
+              <span className="card-badge">{badge}</span>
+            ) : null}
+            {customBadge ? (
+              <span className="card-badge">{customBadge}</span>
+            ) : null}
+          </div>
         ) : null}
 
         {/* Hover overlay — details fade in inside the cover image */}

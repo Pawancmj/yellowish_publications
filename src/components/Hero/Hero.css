@@ -168,6 +168,7 @@
 ============================================================ */
 
 .hero-book {
+  position: relative;
   width: 100%;
   max-width: 235px;
   aspect-ratio: var(--book-cover-ratio);
@@ -175,6 +176,26 @@
   margin: 0 auto;
   display: block;
   transition: transform 0.3s ease;
+}
+
+.hero-book-badge {
+  position: absolute;
+  left: 0.7rem;
+  top: 0.7rem;
+  z-index: 2;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  background: #d9a441;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  box-shadow: 0 6px 14px rgba(217, 164, 65, 0.4);
+  max-width: calc(100% - 1.4rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
 }
 
 .hero-book img {

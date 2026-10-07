@@ -608,6 +608,7 @@
 }
 
 .book-tile {
+  position: relative;
   border-radius: 1rem;
   overflow: hidden;
   background: #FFF6E9;
@@ -617,6 +618,26 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-tile-badge {
+  position: absolute;
+  left: 0.9rem;
+  top: 0.9rem;
+  z-index: 2;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  background: #d9a441;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  box-shadow: 0 6px 14px rgba(217, 164, 65, 0.4);
+  max-width: calc(100% - 1.8rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
 }
 
 .book-tile:hover {
@@ -2349,6 +2370,14 @@
     flex: 0 0 calc(50% - 0.5rem);
     scroll-snap-align: start;
     min-width: 0;
+  }
+
+  .book-tile-badge {
+    left: 0.7rem;
+    top: 0.7rem;
+    max-width: calc(100% - 1.4rem);
+    padding: 0.26rem 0.65rem;
+    font-size: 0.64rem;
   }
 }
 

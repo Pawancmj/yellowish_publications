@@ -31,6 +31,7 @@ import {
 
 import { books as initialBooks } from "../data/books";
 import { authors as initialAuthors } from "../data/author";
+import { seedTestimonials } from "../data/testimonials";
 
 import {
   blogListQuery,
@@ -83,6 +84,11 @@ export function DataProvider({ children }) {
   const [trustedAuthorPosts, setTrustedAuthorPosts] =
     useState([]);
 
+  // Author Testimonials ("Loved by Authors Worldwide")
+  // Static seed shown until the Firestore listener connects.
+  const [testimonials, setTestimonials] =
+    useState(seedTestimonials);
+
   // Loading states
   const [heroLoading, setHeroLoading] = useState(true);
   const [authorsHeroLoading, setAuthorsHeroLoading] =
@@ -105,6 +111,7 @@ export function DataProvider({ children }) {
   const heroUnsubscribeRef = useRef(null);
   const authorsHeroUnsubscribeRef = useRef(null);
   const trustedAuthorsUnsubscribeRef = useRef(null);
+  const testimonialsUnsubscribeRef = useRef(null);
 
   // ============================================================
   // SEED REFS
@@ -112,6 +119,7 @@ export function DataProvider({ children }) {
 
   const hasSeededRef = useRef(false);
   const hasSeededBlogsRef = useRef(false);
+  const hasSeededTestimonialsRef = useRef(false);
 
   // ============================================================
   // 1. AUTH
@@ -595,6 +603,87 @@ export function DataProvider({ children }) {
   }, []);
 
   // ============================================================
+  // 5b. PUBLIC AUTHOR TESTIMONIALS
+  // ============================================================
+
+  useEffect(() => {
+    console.log(
+      "💬 Starting Author Testimonials listener..."
+    );
+
+    const testimonialsRef = collection(
+      db,
+      `users/${FIXED_USER_ID}/testimonials`
+    );
+
+    testimonialsUnsubscribeRef.current =
+      onSnapshot(
+        testimonialsRef,
+        (snapshot) => {
+          const items = snapshot.docs
+            .map((d) => ({
+              id: d.id,
+              ...d.data(),
+            }))
+            // Display order configured in the Admin Panel
+            .sort((a, b) => {
+              const orderA = Number(a.order);
+              const orderB = Number(b.order);
+
+              const safeA = Number.isFinite(
+                orderA
+              )
+                ? orderA
+                : 999;
+
+              const safeB = Number.isFinite(
+                orderB
+              )
+                ? orderB
+                : 999;
+
+              if (safeA !== safeB) {
+                return safeA - safeB;
+              }
+
+              return String(
+                a.name || ""
+              ).localeCompare(
+                String(b.name || "")
+              );
+            });
+
+          console.log(
+            `💬 LIVE: ${items.length} testimonials from Firestore`
+          );
+
+          setTestimonials(items);
+        },
+        (error) => {
+          console.error(
+            "❌ Testimonials listener error:",
+            error
+          );
+
+          // Keep whatever is already shown
+          // (static seed) instead of blanking
+          // the public section.
+        }
+      );
+
+    return () => {
+      if (
+        testimonialsUnsubscribeRef.current
+      ) {
+        testimonialsUnsubscribeRef.current();
+
+        testimonialsUnsubscribeRef.current =
+          null;
+      }
+    };
+  }, []);
+
+  // ============================================================
   // 6. SEED DATA ONCE
   // ============================================================
 
@@ -791,6 +880,110 @@ export function DataProvider({ children }) {
       };
 
       checkAndSeedBlogs();
+    }
+  }, [currentUser]);
+
+  // ============================================================
+  // 7b. SEED TESTIMONIALS ONCE
+  // ============================================================
+
+  useEffect(() => {
+    if (
+      currentUser?.uid &&
+      !hasSeededTestimonialsRef.current
+    ) {
+      hasSeededTestimonialsRef.current = true;
+
+      const checkAndSeedTestimonials =
+        async () => {
+          try {
+            const markerRef = doc(
+              db,
+              `users/${FIXED_USER_ID}/settings`,
+              "testimonialsSeeded"
+            );
+
+            // Persistent marker: once seeding has
+            // happened, never reseed — otherwise
+            // deleting every testimonial in the
+            // Admin Panel would resurrect them.
+            const marker =
+              await getDoc(markerRef);
+
+            if (marker.exists()) {
+              return;
+            }
+
+            const unsubCheck = onSnapshot(
+              collection(
+                db,
+                `users/${FIXED_USER_ID}/testimonials`
+              ),
+              async (snapshot) => {
+                unsubCheck();
+
+                if (snapshot.docs.length > 0) {
+                  // Collection already has content
+                  // (seeded earlier or created by
+                  // hand) — just mark it done.
+                  await setDoc(
+                    markerRef,
+                    { seeded: true },
+                    { merge: true }
+                  ).catch(() => {});
+
+                  return;
+                }
+
+                console.log(
+                  "🌱 Seeding testimonials to Firestore..."
+                );
+
+                for (const testimonial of seedTestimonials) {
+                  const { id, ...data } =
+                    testimonial;
+
+                  await setDoc(
+                    doc(
+                      db,
+                      `users/${FIXED_USER_ID}/testimonials`,
+                      id
+                    ),
+                    {
+                      ...data,
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                    },
+                    { merge: true }
+                  );
+                }
+
+                await setDoc(
+                  markerRef,
+                  { seeded: true },
+                  { merge: true }
+                ).catch(() => {});
+
+                console.log(
+                  `✅ ${seedTestimonials.length} testimonials seeded to Firestore`
+                );
+              },
+              (error) => {
+                console.error(
+                  "❌ Testimonials seed check error:",
+                  error
+                );
+              }
+            );
+          } catch (error) {
+            console.error(
+              "❌ Testimonials seed error:",
+              error
+            );
+          }
+        };
+
+      checkAndSeedTestimonials();
     }
   }, [currentUser]);
 
@@ -1643,6 +1836,183 @@ export function DataProvider({ children }) {
     );
 
   // ============================================================
+  // AUTHOR TESTIMONIAL CRUD
+  // ============================================================
+
+  const TESTIMONIALS_PATH = `users/${FIXED_USER_ID}/testimonials`;
+
+  const cleanTestimonial = (data) => {
+    const cleanName =
+      typeof data?.name === "string"
+        ? data.name.trim()
+        : "";
+
+    const cleanDesignation =
+      typeof data?.designation === "string"
+        ? data.designation.trim()
+        : "";
+
+    const cleanMessage =
+      typeof data?.message === "string"
+        ? data.message.trim()
+        : "";
+
+    const cleanImage =
+      typeof data?.image === "string"
+        ? data.image.trim()
+        : "";
+
+    if (!cleanName) {
+      throw new Error("Please enter the author name.");
+    }
+
+    if (!cleanDesignation) {
+      throw new Error(
+        "Please enter the author designation."
+      );
+    }
+
+    if (!cleanMessage) {
+      throw new Error(
+        "Please enter the testimonial message."
+      );
+    }
+
+    if (!cleanImage) {
+      throw new Error(
+        "Please upload an image or paste an image URL."
+      );
+    }
+
+    // Image: uploaded data URL, public URL,
+    // or a site-relative path like
+    // /seed-testimonials/author5.png
+    if (
+      !cleanImage.startsWith("data:image/") &&
+      !cleanImage.startsWith("/") &&
+      !/^https?:\/\//i.test(cleanImage)
+    ) {
+      throw new Error(
+        "Please enter a valid image URL."
+      );
+    }
+
+    const parsedOrder = Number(data?.order);
+
+    const cleanOrder = Number.isFinite(
+      parsedOrder
+    )
+      ? Math.round(parsedOrder)
+      : 999;
+
+    return {
+      name: cleanName,
+      designation: cleanDesignation,
+      message: cleanMessage,
+      image: cleanImage,
+      order: cleanOrder,
+    };
+  };
+
+  const addTestimonial = useCallback(
+    async (data) => {
+      try {
+        const testimonialData =
+          cleanTestimonial(data);
+
+        const docRef = await addDoc(
+          collection(db, TESTIMONIALS_PATH),
+          {
+            ...testimonialData,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          }
+        );
+
+        console.log(
+          "✅ TESTIMONIAL ADDED:",
+          docRef.id
+        );
+
+        return docRef.id;
+      } catch (error) {
+        console.error(
+          "❌ Add testimonial failed:",
+          error
+        );
+
+        throw error;
+      }
+    },
+    []
+  );
+
+  const updateTestimonial = useCallback(
+    async (id, data) => {
+      try {
+        if (!id) {
+          throw new Error(
+            "Testimonial ID is required."
+          );
+        }
+
+        const testimonialData =
+          cleanTestimonial(data);
+
+        await updateDoc(
+          doc(db, TESTIMONIALS_PATH, id),
+          {
+            ...testimonialData,
+            updatedAt: serverTimestamp(),
+          }
+        );
+
+        console.log(
+          "✅ TESTIMONIAL UPDATED:",
+          id
+        );
+      } catch (error) {
+        console.error(
+          "❌ Update testimonial failed:",
+          error
+        );
+
+        throw error;
+      }
+    },
+    []
+  );
+
+  const deleteTestimonial = useCallback(
+    async (id) => {
+      try {
+        if (!id) {
+          throw new Error(
+            "Testimonial ID is required."
+          );
+        }
+
+        await deleteDoc(
+          doc(db, TESTIMONIALS_PATH, id)
+        );
+
+        console.log(
+          "✅ TESTIMONIAL DELETED:",
+          id
+        );
+      } catch (error) {
+        console.error(
+          "❌ Delete testimonial failed:",
+          error
+        );
+
+        throw error;
+      }
+    },
+    []
+  );
+
+  // ============================================================
   // CONTEXT VALUE
   // ============================================================
 
@@ -1660,6 +2030,9 @@ export function DataProvider({ children }) {
 
     // Trusted Authors
     trustedAuthorPosts,
+
+    // Author Testimonials
+    testimonials,
 
     // ----------------------------------------------------------
     // Loading
@@ -1726,6 +2099,14 @@ export function DataProvider({ children }) {
     addTrustedAuthorPost,
     updateTrustedAuthorPost,
     deleteTrustedAuthorPost,
+
+    // ----------------------------------------------------------
+    // Author Testimonials
+    // ----------------------------------------------------------
+
+    addTestimonial,
+    updateTestimonial,
+    deleteTestimonial,
   };
 
   // ============================================================

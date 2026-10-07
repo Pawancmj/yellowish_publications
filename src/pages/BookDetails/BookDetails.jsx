@@ -66,15 +66,25 @@ export default function BookDetails() {
 
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
 
+  const customBadge =
+    typeof book.customBadge === "string"
+      ? book.customBadge.trim()
+      : "";
+
   return (
     <div className="book-details">
-      <img 
-        src={getBookCover ? getBookCover(book) : (book.cover || book.image || "https://via.placeholder.com/300x450?text=No+Image")} 
-        loading="lazy"
-        onError={(e) => { e.target.src = "https://via.placeholder.com/300x450?text=No+Image"; }}
-        alt={book.title} 
-        className="book-details-cover" 
-      />
+      <div className="book-details-cover-wrap">
+        <img 
+          src={getBookCover ? getBookCover(book) : (book.cover || book.image || "https://via.placeholder.com/300x450?text=No+Image")} 
+          loading="lazy"
+          onError={(e) => { e.target.src = "https://via.placeholder.com/300x450?text=No+Image"; }}
+          alt={book.title} 
+          className="book-details-cover" 
+        />
+        {customBadge ? (
+          <span className="book-details-badge">{customBadge}</span>
+        ) : null}
+      </div>
       
       <div className="book-details-info">
         <h1>{book.title}</h1>

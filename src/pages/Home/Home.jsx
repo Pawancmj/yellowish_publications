@@ -75,37 +75,6 @@ const FEATURES = [
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    name: "Rahul Deb",
-    role: "Published Author",
-    quote:
-      "Yellowish Publication made my publishing journey smooth and exciting. Their team is simply the best!",
-    photo: author5,
-  },
-  {
-    name: "Dr. Heena Sachdeva",
-    role: "Academic Author",
-    quote:
-      "Thanks to Yellowish Publication, my book reached readers across the globe. Highly recommended!",
-    photo: author2,
-  },
-  {
-    name: "Mukul Dagar",
-    role: "Author & Mentor",
-    quote:
-      "From editing to cover design, every detail was handled with care. Truly a five-star publishing experience.",
-    photo: author3,
-  },
-  {
-    name: "Sarfaraz Khader",
-    role: "Bestselling Author",
-    quote:
-      "They treated my manuscript like their own. Patient, professional, and incredibly supportive throughout.",
-    photo: author4,
-  },
-];
-
 const STATS = [
   { value: "3K+", label: "Authors" },
   { value: "5K+", label: "Books Published" },
@@ -205,6 +174,7 @@ export default function Home() {
     getBookCover,
     addLead,
     trustedAuthorPosts,
+    testimonials,
   } = useData();
 
   // baaki code...
@@ -506,24 +476,34 @@ export default function Home() {
               </button>
 
               <div className="books-gallery" ref={galleryRef}>
-                {filteredGallery.map((book) => (
-                  <div
-                    className="book-tile"
-                    key={book.id}
-                    onClick={(e) => handleNavClick(e, `/book/${book.id}`)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <img
-                      src={getBookCover(book)}
-                      alt={book.title}
-                      loading="lazy"
-                      onError={(e) => {
-                        e.target.src =
-                          "https://via.placeholder.com/200x300.png?text=No+Cover";
-                      }}
-                    />
-                  </div>
-                ))}
+                {filteredGallery.map((book) => {
+                  const customBadge =
+                    typeof book.customBadge === "string"
+                      ? book.customBadge.trim()
+                      : "";
+
+                  return (
+                    <div
+                      className="book-tile"
+                      key={book.id}
+                      onClick={(e) => handleNavClick(e, `/book/${book.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <img
+                        src={getBookCover(book)}
+                        alt={book.title}
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.src =
+                            "https://via.placeholder.com/200x300.png?text=No+Cover";
+                        }}
+                      />
+                      {customBadge ? (
+                        <span className="book-tile-badge">{customBadge}</span>
+                      ) : null}
+                    </div>
+                  );
+                })}
               </div>
 
               <button
@@ -551,18 +531,18 @@ export default function Home() {
           </p>
 
           <div className="testimonials-grid">
-            {TESTIMONIALS.map((t) => (
-              <div className="testimonial-card" key={t.name}>
+            {(testimonials || []).map((t) => (
+              <div className="testimonial-card" key={t.id || t.name}>
                 <div className="t-avatar-wrap">
-                  <img src={t.photo} alt={t.name} className="t-avatar" loading="lazy" />
+                  <img src={t.image} alt={t.name} className="t-avatar" loading="lazy" />
                 </div>
 
                 <div className="t-body">
                   <span className="quote-open">“</span>
-                  <p className="t-quote">{t.quote}</p>
+                  <p className="t-quote">{t.message}</p>
                   <div className="t-divider" />
                   <span className="t-name">{t.name}</span>
-                  <span className="t-role">{t.role}</span>
+                  <span className="t-role">{t.designation}</span>
                 </div>
 
                 <span className="quote-close">”</span>

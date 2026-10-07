@@ -42,6 +42,7 @@ export default function Hero() {
           id: book.id || `book-${Math.random()}`,
           title: book.title || "Published Book",
           src,
+          customBadge: book.customBadge,
         });
       });
     }
@@ -188,6 +189,10 @@ export default function Hero() {
         <div className="hero-books">
           {visibleBooks.map((book) => {
             const isFallback = String(book.id).includes("fallback");
+            const customBadge =
+              typeof book.customBadge === "string"
+                ? book.customBadge.trim()
+                : "";
 
             return (
               <div key={`slot-${book.slotIndex}`} className="hero-book-wrapper">
@@ -195,6 +200,9 @@ export default function Hero() {
                   <div className="hero-book-link">
                     <div className="hero-book">
                       <img src={book.src} alt={book.title} />
+                      {customBadge ? (
+                        <span className="hero-book-badge">{customBadge}</span>
+                      ) : null}
                     </div>
                   </div>
                 ) : (
@@ -205,6 +213,9 @@ export default function Hero() {
                   >
                     <div className="hero-book">
                       <img src={book.src} alt={book.title} />
+                      {customBadge ? (
+                        <span className="hero-book-badge">{customBadge}</span>
+                      ) : null}
                     </div>
                   </Link>
                 )}

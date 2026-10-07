@@ -23,6 +23,7 @@ import {
   FaExclamationCircle,
   FaInstagram,
   FaImages,
+  FaQuoteLeft,
 } from "react-icons/fa";
 
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
@@ -65,6 +66,12 @@ const Admin = () => {
     addTrustedAuthorPost,
     updateTrustedAuthorPost,
     deleteTrustedAuthorPost,
+
+    // Author Testimonials
+    testimonials,
+    addTestimonial,
+    updateTestimonial,
+    deleteTestimonial,
   } = useData();
 
   const [activeTab, setActiveTab] = useState("books");
@@ -73,10 +80,14 @@ const Admin = () => {
   const [showAuthorForm, setShowAuthorForm] = useState(false);
   const [showTrustedAuthorForm, setShowTrustedAuthorForm] =
     useState(false);
+  const [showTestimonialForm, setShowTestimonialForm] =
+    useState(false);
 
   const [editingBook, setEditingBook] = useState(null);
   const [editingAuthor, setEditingAuthor] = useState(null);
   const [editingTrustedAuthor, setEditingTrustedAuthor] =
+    useState(null);
+  const [editingTestimonial, setEditingTestimonial] =
     useState(null);
 
   /* ================================================================
@@ -172,6 +183,56 @@ const Admin = () => {
   const openNewTrustedAuthorForm = () => {
     setEditingTrustedAuthor(null);
     setShowTrustedAuthorForm(true);
+  };
+
+  /* ================================================================
+     TESTIMONIAL HANDLERS
+  ================================================================ */
+
+  const getNextTestimonialOrder = () => {
+    const orders = (testimonials || []).map((t) =>
+      Number.isFinite(Number(t.order))
+        ? Number(t.order)
+        : 0
+    );
+
+    return orders.length
+      ? Math.max(...orders) + 1
+      : 1;
+  };
+
+  const handleEditTestimonial = (testimonial) => {
+    setEditingTestimonial(testimonial);
+    setShowTestimonialForm(true);
+  };
+
+  const handleDeleteTestimonial = async (testimonial) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this testimonial?"
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await deleteTestimonial(testimonial.id);
+    } catch (error) {
+      console.error(
+        "Failed to delete testimonial:",
+        error
+      );
+
+      alert(
+        error?.message ||
+          "Failed to delete testimonial."
+      );
+    }
+  };
+
+  const openNewTestimonialForm = () => {
+    setEditingTestimonial(null);
+    setShowTestimonialForm(true);
   };
 
   /* ================================================================
@@ -341,6 +402,17 @@ const Admin = () => {
             onClick={() => setActiveTab("authorsHero")}
           >
             <FaImages /> Authors Hero Images
+          </button>
+
+          <button
+            className={
+              activeTab === "testimonials"
+                ? "tab-active"
+                : "tab"
+            }
+            onClick={() => setActiveTab("testimonials")}
+          >
+            <FaQuoteLeft /> Author Testimonials
           </button>
 
         </div>
@@ -1080,6 +1152,144 @@ const Admin = () => {
           </div>
         )}
 
+        {/* =========================================================
+            AUTHOR TESTIMONIALS
+        ========================================================= */}
+
+        {activeTab === "testimonials" && (
+          <div className="testimonials-management">
+
+            <div className="section-header">
+
+              <h2>Author Testimonials</h2>
+
+              <button
+                className="add-btn"
+                onClick={openNewTestimonialForm}
+              >
+                <FaPlus /> Add Testimonial
+              </button>
+
+            </div>
+
+            <div className="data-table">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Testimonial</th>
+                    <th>Order</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                  {testimonials &&
+                  testimonials.length > 0 ? (
+                    testimonials.map(
+                      (testimonial) => (
+                        <tr key={testimonial.id}>
+
+                          <td>
+                            <img
+                              src={
+                                testimonial.image
+                              }
+                              alt={
+                                testimonial.name
+                              }
+                              className="table-photo"
+                              loading="lazy"
+                              onError={(e) => {
+                                e.target.src =
+                                  "https://via.placeholder.com/150x150.png?text=No+Photo";
+                              }}
+                            />
+                          </td>
+
+                          <td>
+                            {testimonial.name}
+                          </td>
+
+                          <td>
+                            {
+                              testimonial
+                                .designation
+                            }
+                          </td>
+
+                          <td className="testimonial-message-cell">
+                            {testimonial.message}
+                          </td>
+
+                          <td>
+                            {Number.isFinite(
+                              Number(
+                                testimonial.order
+                              )
+                            )
+                              ? Number(
+                                  testimonial.order
+                                )
+                              : "-"}
+                          </td>
+
+                          <td>
+
+                            <button
+                              className="edit-btn"
+                              onClick={() =>
+                                handleEditTestimonial(
+                                  testimonial
+                                )
+                              }
+                              title="Edit testimonial"
+                            >
+                              <FaEdit />
+                            </button>
+
+                            <button
+                              className="delete-btn"
+                              onClick={() =>
+                                handleDeleteTestimonial(
+                                  testimonial
+                                )
+                              }
+                              title="Delete testimonial"
+                            >
+                              <FaTrash />
+                            </button>
+
+                          </td>
+
+                        </tr>
+                      )
+                    )
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="no-data"
+                      >
+                        No testimonials available
+                      </td>
+                    </tr>
+                  )}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+        )}
+
       </div>
 
       {/* =========================================================
@@ -1192,6 +1402,45 @@ const Admin = () => {
           onCancel={() => {
             setShowTrustedAuthorForm(false);
             setEditingTrustedAuthor(null);
+          }}
+        />
+      )}
+
+      {/* =========================================================
+          TESTIMONIAL FORM
+      ========================================================= */}
+
+      {showTestimonialForm && (
+        <TestimonialForm
+          testimonial={editingTestimonial}
+          nextOrder={getNextTestimonialOrder()}
+
+          onSave={async (data) => {
+            try {
+              if (editingTestimonial) {
+                await updateTestimonial(
+                  editingTestimonial.id,
+                  data
+                );
+              } else {
+                await addTestimonial(data);
+              }
+
+              setShowTestimonialForm(false);
+              setEditingTestimonial(null);
+            } catch (error) {
+              console.error(
+                "Failed to save testimonial:",
+                error
+              );
+
+              throw error;
+            }
+          }}
+
+          onCancel={() => {
+            setShowTestimonialForm(false);
+            setEditingTestimonial(null);
           }}
         />
       )}
@@ -1715,6 +1964,9 @@ const BookForm = ({
     cover:
       book?.cover || "",
 
+    customBadge:
+      book?.customBadge || "",
+
     description:
       book?.description || "",
 
@@ -1849,6 +2101,12 @@ const BookForm = ({
           parseInt(
             formData.year
           ),
+
+        customBadge:
+          (
+            formData.customBadge ||
+            ""
+          ).trim(),
 
       });
 
@@ -2189,6 +2447,31 @@ const BookForm = ({
               errorText={errors.cover}
               help="Upload a cover (JPG, JPEG, PNG or WEBP) or paste an image URL."
             />
+
+          </div>
+
+          <div className="form-group">
+
+            <label>
+              Custom Badge
+            </label>
+
+            <input
+              type="text"
+              value={formData.customBadge}
+              onChange={(e) =>
+                handleInputChange(
+                  "customBadge",
+                  e.target.value
+                )
+              }
+              placeholder="e.g. New Release, Best Seller, Limited Edition"
+            />
+
+            <small className="image-upload-help">
+              Optional. Shown as a pill on the book cover image
+              (top-left corner) — leave empty to hide it.
+            </small>
 
           </div>
 
@@ -3342,6 +3625,215 @@ const AuthorsHeroManager = ({
 
     </form>
 
+  );
+};
+
+/* ================================================================
+   TESTIMONIAL FORM
+   Add / edit one "Loved by Authors Worldwide" card.
+   The author image uses the shared ImageUpload component (direct
+   file upload from the computer → compressed base64 preview →
+   stored in the Firestore `image` field; URL paste still works).
+================================================================ */
+
+const TestimonialForm = ({
+  testimonial,
+  nextOrder,
+  onSave,
+  onCancel,
+}) => {
+  const [formData, setFormData] = useState({
+    name: testimonial?.name || "",
+    designation: testimonial?.designation || "",
+    message: testimonial?.message || "",
+    image: testimonial?.image || "",
+    order:
+      testimonial?.order !== undefined &&
+      testimonial?.order !== null
+        ? testimonial.order
+        : nextOrder || 1,
+  });
+
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (saving) return;
+    setError("");
+
+    const trimmedName = formData.name.trim();
+    const trimmedDesignation = formData.designation.trim();
+    const trimmedMessage = formData.message.trim();
+    const trimmedImage = formData.image.trim();
+
+    if (!trimmedName) {
+      setError("Please enter the author name.");
+      return;
+    }
+
+    if (!trimmedDesignation) {
+      setError("Please enter the author designation.");
+      return;
+    }
+
+    if (!trimmedMessage) {
+      setError("Please enter the testimonial message.");
+      return;
+    }
+
+    if (!trimmedImage) {
+      setError("Please upload an image or paste an image URL.");
+      return;
+    }
+
+    const parsedOrder = Number(formData.order);
+
+    if (!Number.isFinite(parsedOrder)) {
+      setError("Please enter a valid display order.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await onSave({
+        name: trimmedName,
+        designation: trimmedDesignation,
+        message: trimmedMessage,
+        image: trimmedImage,
+        order: Math.round(parsedOrder),
+      });
+    } catch (err) {
+      console.error("Failed to save testimonial:", err);
+      setError(err?.message || "Failed to save testimonial.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content testimonial-modal">
+        <h2>
+          {testimonial ? "Edit Testimonial" : "Add Testimonial"}
+        </h2>
+
+        <form onSubmit={handleSubmit}>
+
+          {/* IMAGE — direct upload (base64) OR URL paste, with preview */}
+          <div className="form-group">
+            <ImageUpload
+              label="Author Image"
+              required
+              value={formData.image}
+              onChange={(value) => handleInputChange("image", value)}
+              disabled={saving}
+              help="Upload the author photo (JPG, JPEG, PNG or WEBP) from your computer, or paste a public image URL."
+            />
+          </div>
+
+          {/* NAME + DESIGNATION */}
+          <div className="form-row">
+            <div className="form-group">
+              <label>Author Name *</label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) =>
+                  handleInputChange("name", e.target.value)
+                }
+                placeholder="e.g. Rahul Deb"
+                disabled={saving}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Designation *</label>
+              <input
+                type="text"
+                value={formData.designation}
+                onChange={(e) =>
+                  handleInputChange("designation", e.target.value)
+                }
+                placeholder="e.g. Published Author"
+                disabled={saving}
+                required
+              />
+            </div>
+          </div>
+
+          {/* MESSAGE */}
+          <div className="form-group">
+            <label>Testimonial Message *</label>
+            <textarea
+              value={formData.message}
+              onChange={(e) =>
+                handleInputChange("message", e.target.value)
+              }
+              rows="4"
+              placeholder="What the author says about Yellowish Publication"
+              disabled={saving}
+              required
+            />
+          </div>
+
+          {/* DISPLAY ORDER */}
+          <div className="form-group">
+            <label>Display Order</label>
+            <input
+              type="number"
+              value={formData.order}
+              onChange={(e) =>
+                handleInputChange("order", e.target.value)
+              }
+              placeholder="1"
+              disabled={saving}
+            />
+            <small className="testimonial-order-help">
+              Lower numbers appear first in the "Loved by Authors
+              Worldwide" section on the Home page.
+            </small>
+          </div>
+
+          {/* ERROR */}
+          {error && (
+            <div className="error-text trusted-form-error">
+              <FaExclamationCircle /> {error}
+            </div>
+          )}
+
+          {/* BUTTONS */}
+          <div className="form-buttons">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="cancel-btn"
+              disabled={saving}
+            >
+              Cancel
+            </button>
+
+            <button type="submit" className="save-btn" disabled={saving}>
+              {saving ? (
+                <>
+                  <FaSpinner className="trusted-spinner" /> Saving...
+                </>
+              ) : testimonial ? (
+                "Update"
+              ) : (
+                "Save"
+              )}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
   );
 };
 
