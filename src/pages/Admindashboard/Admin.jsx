@@ -1466,6 +1466,7 @@ const TrustedAuthorForm = ({
 
   const [formData, setFormData] = useState({
     imageUrl: post?.imageUrl || "",
+    imageUrl2: post?.imageUrl2 || "",
     username: post?.username || "",
     likes: post?.likes || "",
     caption: post?.caption || "",
@@ -1538,6 +1539,9 @@ const TrustedAuthorForm = ({
     const trimmedImageUrl =
       formData.imageUrl.trim();
 
+    const trimmedImageUrl2 =
+      formData.imageUrl2.trim();
+
     const trimmedUsername =
       formData.username.trim();
 
@@ -1572,6 +1576,22 @@ const TrustedAuthorForm = ({
 
       setError(
         "Please upload an image or enter a valid image URL."
+      );
+
+      return;
+    }
+
+    /* ============================================================
+       IMAGE 2 VALIDATION (optional second image)
+    ============================================================ */
+
+    if (
+      trimmedImageUrl2 &&
+      !isValidImageValue(trimmedImageUrl2)
+    ) {
+
+      setError(
+        "Please upload an image or enter a valid image URL for Image 2."
       );
 
       return;
@@ -1624,6 +1644,8 @@ const TrustedAuthorForm = ({
       await onSave({
 
         imageUrl: trimmedImageUrl,
+
+        imageUrl2: trimmedImageUrl2,
 
         username: trimmedUsername,
 
@@ -1696,6 +1718,24 @@ const TrustedAuthorForm = ({
               }
               disabled={saving}
               help="Upload an image (JPG, JPEG, PNG or WEBP) or paste a public image URL — e.g. an Unsplash link."
+            />
+
+          </div>
+
+          {/* ======================================================
+              IMAGE 2 — optional, shown next to Image 1 on Home
+          ====================================================== */}
+
+          <div className="form-group">
+
+            <ImageUpload
+              label="Image 2"
+              value={formData.imageUrl2}
+              onChange={(value) =>
+                handleInputChange("imageUrl2", value)
+              }
+              disabled={saving}
+              help="Optional — second image, displayed side-by-side with Image 1 on the Home page."
             />
 
           </div>

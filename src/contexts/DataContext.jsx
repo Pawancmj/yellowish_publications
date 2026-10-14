@@ -1446,6 +1446,7 @@ export function DataProvider({ children }) {
     useCallback(
       async ({
         imageUrl,
+        imageUrl2,
         username,
         likes,
         caption,
@@ -1460,6 +1461,11 @@ export function DataProvider({ children }) {
           const cleanImageUrl =
             typeof imageUrl === "string"
               ? imageUrl.trim()
+              : "";
+
+          const cleanImageUrl2 =
+            typeof imageUrl2 === "string"
+              ? imageUrl2.trim()
               : "";
 
           const cleanUsername =
@@ -1504,6 +1510,32 @@ export function DataProvider({ children }) {
           }
 
           // ====================================================
+          // IMAGE 2 VALIDATION (optional second image)
+          // ====================================================
+
+          if (cleanImageUrl2) {
+            if (!cleanImageUrl2.startsWith("data:image/")) {
+              try {
+                const parsedUrl =
+                  new URL(cleanImageUrl2);
+
+                if (
+                  parsedUrl.protocol !==
+                    "http:" &&
+                  parsedUrl.protocol !==
+                    "https:"
+                ) {
+                  throw new Error();
+                }
+              } catch {
+                throw new Error(
+                  "Please enter a valid image URL for Image 2."
+                );
+              }
+            }
+          }
+
+          // ====================================================
           // FIRESTORE REFERENCE
           // ====================================================
 
@@ -1520,6 +1552,9 @@ export function DataProvider({ children }) {
           const postData = {
             imageUrl:
               cleanImageUrl,
+
+            imageUrl2:
+              cleanImageUrl2,
 
             username:
               cleanUsername,
@@ -1664,6 +1699,45 @@ export function DataProvider({ children }) {
 
             updateData.imageUrl =
               cleanImageUrl;
+          }
+
+          // ====================================================
+          // IMAGE URL 2 (optional second image)
+          // ====================================================
+
+          if (
+            data.imageUrl2 !== undefined
+          ) {
+            const cleanImageUrl2 =
+              typeof data.imageUrl2 ===
+              "string"
+                ? data.imageUrl2.trim()
+                : "";
+
+            if (cleanImageUrl2) {
+              if (!cleanImageUrl2.startsWith("data:image/")) {
+                try {
+                  const parsedUrl =
+                    new URL(cleanImageUrl2);
+
+                  if (
+                    parsedUrl.protocol !==
+                      "http:" &&
+                    parsedUrl.protocol !==
+                      "https:"
+                  ) {
+                    throw new Error();
+                  }
+                } catch {
+                  throw new Error(
+                    "Please enter a valid image URL for Image 2."
+                  );
+                }
+              }
+            }
+
+            updateData.imageUrl2 =
+              cleanImageUrl2;
           }
 
           // ====================================================

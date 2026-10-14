@@ -53,6 +53,37 @@
   background: #218838;
 }
 
+/* ---------- Back to dashboard ---------- */
+.ab-back-dashboard {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  border: 1px solid #123a5c;
+  border-radius: 10px;
+  background: #fff;
+  color: #123a5c;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: background 0.25s, color 0.25s;
+}
+
+.ab-back-dashboard:hover {
+  background: #123a5c;
+  color: #fff;
+}
+
+@media (max-width: 560px) {
+  .ab-back-dashboard {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* ---------- Stats ---------- */
 .ab-stats {
   display: grid;

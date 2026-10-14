@@ -16,6 +16,7 @@ import {
   FaExclamationCircle,
   FaPen,
   FaTable,
+  FaArrowLeft,
 } from "react-icons/fa";
 import { formatBlogDate, formatViews } from "../../services/blogModel";
 import "./AdminBlogs.css";
@@ -136,6 +137,10 @@ export default function AdminBlogs() {
   return (
     <div className="admin-blogs-page">
       <Toast message={toast?.message} type={toast?.type} />
+
+      <Link to="/admin121-secret" className="ab-back-dashboard">
+        <FaArrowLeft /> Back to Admin Dashboard
+      </Link>
 
       <div className="ab-header">
         <div>

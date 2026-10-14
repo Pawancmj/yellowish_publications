@@ -165,6 +165,41 @@ function Stars({ rating }) {
   );
 }
 
+/* ================================================================
+   TRUSTED DUO
+   Renders one Trusted Author entry inside its card: Image 1 and
+   Image 2 side-by-side at exactly equal width and height.
+   Entries with only Image 1 (legacy records) render a single
+   full-size image, exactly as before.
+================================================================ */
+
+function TrustedDuo({ post, primaryAlt }) {
+  const primaryImage = post.imageUrl || post.imageUrl2 || "";
+  const secondaryImage =
+    post.imageUrl && post.imageUrl2 ? post.imageUrl2 : "";
+
+  return (
+    <div className="trusted-duo">
+      <img
+        src={primaryImage}
+        alt={primaryAlt}
+        className="trusted-image"
+      />
+      {secondaryImage ? (
+        <img
+          src={secondaryImage}
+          alt={
+            post.username
+              ? `${post.username} second image`
+              : "Trusted author second image"
+          }
+          className="trusted-image"
+        />
+      ) : null}
+    </div>
+  );
+}
+
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -698,14 +733,13 @@ export default function Home() {
                     {/* BIG PROFILE */}
                     {trustedAuthorPosts[trustedIndex] && (
                       <div className="trusted-card trusted-profile-card">
-                        <img
-                          src={trustedAuthorPosts[trustedIndex].imageUrl}
-                          alt={
+                        <TrustedDuo
+                          post={trustedAuthorPosts[trustedIndex]}
+                          primaryAlt={
                             trustedAuthorPosts[trustedIndex].username
                               ? `${trustedAuthorPosts[trustedIndex].username} profile`
                               : "Trusted author profile"
                           }
-                          className="trusted-image"
                         />
                       </div>
                     )}
@@ -715,14 +749,13 @@ export default function Home() {
                       (trustedIndex + 1) % trustedAuthorPosts.length
                     ] && (
                         <div className="trusted-card trusted-post-card">
-                          <img
-                            src={
+                          <TrustedDuo
+                            post={
                               trustedAuthorPosts[
                                 (trustedIndex + 1) % trustedAuthorPosts.length
-                              ].imageUrl
+                              ]
                             }
-                            alt="Trusted author post"
-                            className="trusted-image"
+                            primaryAlt="Trusted author post"
                           />
                         </div>
                       )}
@@ -735,26 +768,25 @@ export default function Home() {
 
                       {/* SMALL POST */}
                       <div className="trusted-card trusted-post-card">
-                        <img
-                          src={
+                        <TrustedDuo
+                          post={
                             trustedAuthorPosts[
                               (trustedIndex + 2) % trustedAuthorPosts.length
-                            ].imageUrl
+                            ]
                           }
-                          alt="Trusted author post"
-                          className="trusted-image"
+                          primaryAlt="Trusted author post"
                         />
                       </div>
 
                       {/* BIG PROFILE */}
                       <div className="trusted-card trusted-profile-card">
-                        <img
-                          src={
+                        <TrustedDuo
+                          post={
                             trustedAuthorPosts[
                               (trustedIndex + 3) % trustedAuthorPosts.length
-                            ].imageUrl
+                            ]
                           }
-                          alt={
+                          primaryAlt={
                             trustedAuthorPosts[
                               (trustedIndex + 3) % trustedAuthorPosts.length
                             ].username
@@ -764,7 +796,6 @@ export default function Home() {
                               } profile`
                               : "Trusted author profile"
                           }
-                          className="trusted-image"
                         />
                       </div>
 
