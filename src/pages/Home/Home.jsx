@@ -166,36 +166,15 @@ function Stars({ rating }) {
 }
 
 /* ================================================================
-   TRUSTED DUO
-   Renders one Trusted Author entry inside its card: Image 1 and
-   Image 2 side-by-side at exactly equal width and height.
-   Entries with only Image 1 (legacy records) render a single
-   full-size image, exactly as before.
+   TRUSTED CARD
+   Renders ONE image of a Trusted Author entry inside its own
+   bordered card (big "profile" card or small "post" card).
 ================================================================ */
 
-function TrustedDuo({ post, primaryAlt }) {
-  const primaryImage = post.imageUrl || post.imageUrl2 || "";
-  const secondaryImage =
-    post.imageUrl && post.imageUrl2 ? post.imageUrl2 : "";
-
+function TrustedCard({ src, alt, variant }) {
   return (
-    <div className="trusted-duo">
-      <img
-        src={primaryImage}
-        alt={primaryAlt}
-        className="trusted-image"
-      />
-      {secondaryImage ? (
-        <img
-          src={secondaryImage}
-          alt={
-            post.username
-              ? `${post.username} second image`
-              : "Trusted author second image"
-          }
-          className="trusted-image"
-        />
-      ) : null}
+    <div className={`trusted-card trusted-${variant}-card`}>
+      <img src={src} alt={alt} className="trusted-image" />
     </div>
   );
 }
@@ -281,23 +260,23 @@ export default function Home() {
   const [trustedIndex, setTrustedIndex] = useState(0);
 
   const nextTrusted = () => {
-    if (trustedAuthorPosts.length < 4) return;
+    if (trustedAuthorPosts.length < 2) return;
 
     setTrustedIndex((current) => {
-      const next = current + 4;
+      const next = current + 2;
 
       return next >= trustedAuthorPosts.length ? 0 : next;
     });
   };
 
   const prevTrusted = () => {
-    if (trustedAuthorPosts.length < 4) return;
+    if (trustedAuthorPosts.length < 2) return;
 
     setTrustedIndex((current) => {
-      const prev = current - 4;
+      const prev = current - 2;
 
       return prev < 0
-        ? Math.max(0, trustedAuthorPosts.length - 4)
+        ? Math.max(0, trustedAuthorPosts.length - 2)
         : prev;
     });
   };
@@ -727,77 +706,84 @@ export default function Home() {
               {trustedAuthorPosts.length > 0 && (
                 <div className="trusted-pairs-wrapper">
 
-                  {/* ================= PAIR 1 ================= */}
-                  <div className="trusted-pair trusted-pair-1">
+                  {/* ================= PAIR 1 — current entry: BIG (Image 1) + SMALL (Image 2) ================= */}
+                  {trustedAuthorPosts[trustedIndex] && (
+                    <div className="trusted-pair trusted-pair-1">
 
-                    {/* BIG PROFILE */}
-                    {trustedAuthorPosts[trustedIndex] && (
-                      <div className="trusted-card trusted-profile-card">
-                        <TrustedDuo
-                          post={trustedAuthorPosts[trustedIndex]}
-                          primaryAlt={
+                      {/* BIG PROFILE — Image 1 */}
+                      <TrustedCard
+                        src={trustedAuthorPosts[trustedIndex].imageUrl}
+                        alt={
+                          trustedAuthorPosts[trustedIndex].username
+                            ? `${trustedAuthorPosts[trustedIndex].username} profile`
+                            : "Trusted author profile"
+                        }
+                        variant="profile"
+                      />
+
+                      {/* SMALL POST — Image 2 (optional) */}
+                      {trustedAuthorPosts[trustedIndex].imageUrl2 && (
+                        <TrustedCard
+                          src={trustedAuthorPosts[trustedIndex].imageUrl2}
+                          alt={
                             trustedAuthorPosts[trustedIndex].username
-                              ? `${trustedAuthorPosts[trustedIndex].username} profile`
-                              : "Trusted author profile"
+                              ? `${trustedAuthorPosts[trustedIndex].username} post`
+                              : "Trusted author post"
                           }
+                          variant="post"
                         />
-                      </div>
-                    )}
-
-                    {/* SMALL POST */}
-                    {trustedAuthorPosts[
-                      (trustedIndex + 1) % trustedAuthorPosts.length
-                    ] && (
-                        <div className="trusted-card trusted-post-card">
-                          <TrustedDuo
-                            post={
-                              trustedAuthorPosts[
-                                (trustedIndex + 1) % trustedAuthorPosts.length
-                              ]
-                            }
-                            primaryAlt="Trusted author post"
-                          />
-                        </div>
                       )}
 
-                  </div>
+                    </div>
+                  )}
 
-                  {/* ================= PAIR 2 ================= */}
-                  {trustedAuthorPosts.length >= 4 && (
+                  {/* ================= PAIR 2 — next entry: SMALL (Image 2) + BIG (Image 1), mirrored ================= */}
+                  {trustedAuthorPosts.length >= 2 && (
                     <div className="trusted-pair trusted-pair-2">
 
-                      {/* SMALL POST */}
-                      <div className="trusted-card trusted-post-card">
-                        <TrustedDuo
-                          post={
-                            trustedAuthorPosts[
-                              (trustedIndex + 2) % trustedAuthorPosts.length
-                            ]
-                          }
-                          primaryAlt="Trusted author post"
-                        />
-                      </div>
-
-                      {/* BIG PROFILE */}
-                      <div className="trusted-card trusted-profile-card">
-                        <TrustedDuo
-                          post={
-                            trustedAuthorPosts[
-                              (trustedIndex + 3) % trustedAuthorPosts.length
-                            ]
-                          }
-                          primaryAlt={
-                            trustedAuthorPosts[
-                              (trustedIndex + 3) % trustedAuthorPosts.length
-                            ].username
-                              ? `${trustedAuthorPosts[
-                                (trustedIndex + 3) % trustedAuthorPosts.length
+                      {/* SMALL POST — Image 2 (optional) */}
+                      {trustedAuthorPosts[
+                        (trustedIndex + 1) % trustedAuthorPosts.length
+                      ].imageUrl2 && (
+                          <TrustedCard
+                            src={
+                              trustedAuthorPosts[
+                                (trustedIndex + 1) % trustedAuthorPosts.length
+                              ].imageUrl2
+                            }
+                            alt={
+                              trustedAuthorPosts[
+                                (trustedIndex + 1) % trustedAuthorPosts.length
                               ].username
-                              } profile`
-                              : "Trusted author profile"
-                          }
-                        />
-                      </div>
+                                ? `${trustedAuthorPosts[
+                                  (trustedIndex + 1) % trustedAuthorPosts.length
+                                ].username
+                                } post`
+                                : "Trusted author post"
+                            }
+                            variant="post"
+                          />
+                        )}
+
+                      {/* BIG PROFILE — Image 1 */}
+                      <TrustedCard
+                        src={
+                          trustedAuthorPosts[
+                            (trustedIndex + 1) % trustedAuthorPosts.length
+                          ].imageUrl
+                        }
+                        alt={
+                          trustedAuthorPosts[
+                            (trustedIndex + 1) % trustedAuthorPosts.length
+                          ].username
+                            ? `${trustedAuthorPosts[
+                              (trustedIndex + 1) % trustedAuthorPosts.length
+                            ].username
+                            } profile`
+                            : "Trusted author profile"
+                        }
+                        variant="profile"
+                      />
 
                     </div>
                   )}
