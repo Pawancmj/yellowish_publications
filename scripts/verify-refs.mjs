@@ -11,6 +11,9 @@ function walk(d) {
     else if (/\.(js|jsx)$/.test(e.name)) {
       const c = readFileSync(p, "utf8");
       for (const m of c.matchAll(/["'`](\/seed-(?:blog|testimonials)\/[^"'`\s)]+)["'`]/g)) {
+        // Skip dynamic templates (PUBLIC_URL-style helpers); only literal URLs
+        // can be checked against dist/ files.
+        if (m[1].includes("${")) continue;
         refs.add(m[1]);
       }
     }

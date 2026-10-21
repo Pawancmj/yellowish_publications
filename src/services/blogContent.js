@@ -67,12 +67,27 @@ function inlineText(text) {
 }
 
 /**
+ * Legacy seeded posts stored Vite dev-server asset URLs (/src/assets/<name>.png)
+ * in their content HTML; those paths never exist in production builds. Rewrite
+ * them to the stable public copies in /seed-blog/. No-op for other URLs.
+ */
+export function repairLegacyAssetSrcs(html) {
+  if (typeof html !== "string" || !html) return html || "";
+  return html.replace(
+    /\/src\/assets\/([^/"']+)\.(?:png|webp|jpe?g)/gi,
+    (_, name) => `/seed-blog/${name.toLowerCase()}.png`
+  );
+}
+
+/**
  * Normalize editor HTML for storage/display:
  *  - ensure every h2/h3 has a unique id (for the public table of contents)
  *  - apply the public article CSS classes (article-h2/h3, article-list, etc.)
  *  - keep text-align inline styles (rendered by article CSS)
+ *  - repair legacy dev-asset paths so saved documents self-heal
  */
 export function normalizeContentHtml(html) {
+  html = repairLegacyAssetSrcs(html);
   if (typeof DOMParser === "undefined") return html || "";
   const doc = new DOMParser().parseFromString(html || "", "text/html");
   const body = doc.body;

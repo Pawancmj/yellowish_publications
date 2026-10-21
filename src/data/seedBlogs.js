@@ -51,6 +51,18 @@ function toPublicUrl(asset) {
   );
 }
 
+// Content HTML embeds the same asset URLs (bundled /assets/<name>-<hash>.webp
+// in a production build, /src/assets/<name>.webp in dev). Rewrite them to the
+// stable /seed-blog/ copies so seeded documents never reference build-hashed
+// or dev-only paths.
+function toPublicContentUrls(html) {
+  let out = html;
+  for (const [from, to] of Object.entries(assetMap)) {
+    if (from && to && from !== to) out = out.split(from).join(to);
+  }
+  return out;
+}
+
 function parseDate(dateString) {
   const d = new Date(`${dateString}, 2026 12:00:00`);
   return isNaN(d.getTime()) ? new Date() : d;
@@ -69,7 +81,7 @@ export function buildSeedBlogs() {
       title: post.title,
       slug: post.slug,
       excerpt: post.excerpt,
-      content: blocksToHtml(post.content),
+      content: toPublicContentUrls(blocksToHtml(post.content)),
       featuredImage: toPublicUrl(post.image),
       author: post.author,
       authorRole: post.role || "",

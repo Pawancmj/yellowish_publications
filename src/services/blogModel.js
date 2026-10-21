@@ -4,7 +4,7 @@
 
 import { collection, addDoc, doc, updateDoc, deleteDoc, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
-import { normalizeContentHtml } from "./blogContent";
+import { normalizeContentHtml, repairLegacyAssetSrcs } from "./blogContent";
 
 export const FIXED_USER_ID = "shared-app-user";
 export const BLOG_COLLECTION = `users/${FIXED_USER_ID}/blogs`;
@@ -29,6 +29,7 @@ export function normalizeBlog(raw) {
   return {
     id: raw.id,
     ...data,
+    content: typeof data.content === "string" ? repairLegacyAssetSrcs(data.content) : data.content,
     createdAt: toDate(data.createdAt),
     updatedAt: toDate(data.updatedAt),
     publishedAt: toDate(data.publishedAt),
