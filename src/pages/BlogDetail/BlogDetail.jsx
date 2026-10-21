@@ -39,15 +39,16 @@ import {
 } from "../../services/blogModel";
 import { updatePageMeta, resetPageMeta } from "../../utils/seo";
 
-import author1 from "../../assets/author1.png";
-import author2 from "../../assets/author2.png";
-import author3 from "../../assets/author3.png";
+import author1 from "../../assets/author1.webp";
+import author2 from "../../assets/author2.webp";
+import author3 from "../../assets/author3.webp";
 
-import book6 from "../../assets/book6.png";
-import book9 from "../../assets/book9.png";
-import book13 from "../../assets/book13.png";
+import book6 from "../../assets/book6.webp";
+import book9 from "../../assets/book9.webp";
+import book13 from "../../assets/book13.webp";
 
 import "./BlogDetail.css";
+import { NO_ARTICLE_IMAGE_PLACEHOLDER } from "../../utils/coverPlaceholder";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 26 },
@@ -597,10 +598,15 @@ export default function BlogDetail() {
             <img
               src={post.featuredImage}
               alt={post.title}
-              loading="lazy"
+              width={1100}
+              height={619}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
               onError={(e) => {
-                e.target.src =
-                  "https://via.placeholder.com/1200x675.png?text=Article+Image";
+                if (e.currentTarget.dataset.fallback) return;
+                e.currentTarget.dataset.fallback = "1";
+                e.currentTarget.src = NO_ARTICLE_IMAGE_PLACEHOLDER;
               }}
             />
           </motion.figure>

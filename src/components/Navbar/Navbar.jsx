@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FaPen, FaShoppingCart } from "react-icons/fa";
 import "./Navbar.css";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/logo.webp";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -111,16 +111,6 @@ export default function Navbar() {
 
           <li>
             <NavLink
-              to="/about"
-              onClick={closeMenu}
-              className="navLink"
-            >
-              About Us
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
               to="/authors"
               onClick={closeMenu}
               className="navLink"
@@ -156,6 +146,16 @@ export default function Navbar() {
               className="navLink"
             >
               Contact Us
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/about"
+              onClick={closeMenu}
+              className="navLink"
+            >
+              About Us
             </NavLink>
           </li>
 
@@ -247,16 +247,6 @@ export default function Navbar() {
 
           <li>
             <NavLink
-              to="/about"
-              onClick={closeMenu}
-              className="navLink"
-            >
-              About Us
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
               to="/authors"
               onClick={closeMenu}
               className="navLink"
@@ -292,6 +282,16 @@ export default function Navbar() {
               className="navLink"
             >
               Contact Us
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/about"
+              onClick={closeMenu}
+              className="navLink"
+            >
+              About Us
             </NavLink>
           </li>
 

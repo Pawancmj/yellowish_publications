@@ -132,22 +132,6 @@
   transform: translateY(0);
 }
 
-.card-overlay .card-rating {
-  margin: 0;
-}
-
-.card-overlay .star {
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.card-overlay .star.filled {
-  color: #f6b93b;
-}
-
-.card-overlay .card-rating > span {
-  color: #fff;
-}
-
 .card-overlay .card-desc {
   color: #fff;
   font-size: 0.78rem;
@@ -301,32 +285,6 @@
   color: #123a5c;
 }
 
-.card-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.card-rating .stars {
-  display: flex;
-  gap: 2px;
-}
-
-.star {
-  color: #ddd;
-  font-size: 0.82rem;
-}
-
-.star.filled {
-  color: #f6b93b;
-}
-
-.card-rating > span {
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: #9a8b8c;
-}
-
 /* Touch devices â€” hover unavailable, keep the overlay content visible */
 @media (hover: none) {
   .card-overlay {
@@ -392,22 +350,10 @@
     transform: none;
   }
 
-  /* Rating only — the long description is reserved for the card info /
+  /* The long description is reserved for the card info /
      detail view so the compact overlay never buries the cover art. */
   .card-overlay .card-desc {
     display: none;
-  }
-
-  .card-overlay .card-rating {
-    gap: 0.35rem;
-  }
-
-  .card-overlay .star {
-    font-size: 0.68rem;
-  }
-
-  .card-overlay .card-rating > span {
-    font-size: 0.66rem;
   }
 
   /* Action controls — comfortable tap targets in a row */

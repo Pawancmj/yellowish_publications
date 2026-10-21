@@ -16,11 +16,12 @@ import {
 
 import { formatBlogDate, formatReadingTime } from "../../services/blogModel";
 
-import aboutImage from "../../assets/About.png";
-import heroImage from "../../assets/hero.png";
-import book6 from "../../assets/book6.png";
-import book9 from "../../assets/book9.png";
-import book13 from "../../assets/book13.png";
+import aboutImage from "../../assets/About.webp";
+import heroImage from "../../assets/hero.webp";
+import { NO_ARTICLE_IMAGE_PLACEHOLDER } from "../../utils/coverPlaceholder";
+import book6 from "../../assets/book6.webp";
+import book9 from "../../assets/book9.webp";
+import book13 from "../../assets/book13.webp";
 
 import "./Blog.css";
 
@@ -68,7 +69,9 @@ export default function Blog() {
   const blogCategories = useMemo(() => {
     const unique = Array.from(
       new Set(publishedBlogs.map((p) => p.category).filter(Boolean))
-    ).sort();
+    )
+      .filter((cat) => cat !== "Interviews")
+      .sort();
     return ["All", ...unique];
   }, [publishedBlogs]);
 
@@ -277,10 +280,14 @@ export default function Blog() {
                 <img
                   src={featured.featuredImage}
                   alt={featured.title}
+                  width={600}
+                  height={400}
                   loading="lazy"
+                  decoding="async"
                   onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/600x400.png?text=Article+Image";
+                    if (e.currentTarget.dataset.fallback) return;
+                    e.currentTarget.dataset.fallback = "1";
+                    e.currentTarget.src = NO_ARTICLE_IMAGE_PLACEHOLDER;
                   }}
                 />
                 <span className="fp-category">{featured.category}</span>
@@ -390,10 +397,14 @@ export default function Blog() {
                       <img
                         src={post.featuredImage}
                         alt={post.title}
+                        width={600}
+                        height={400}
                         loading="lazy"
+                        decoding="async"
                         onError={(e) => {
-                          e.target.src =
-                            "https://via.placeholder.com/600x400.png?text=Article+Image";
+                          if (e.currentTarget.dataset.fallback) return;
+                          e.currentTarget.dataset.fallback = "1";
+                          e.currentTarget.src = NO_ARTICLE_IMAGE_PLACEHOLDER;
                         }}
                       />
                       <span className="post-category">{post.category}</span>

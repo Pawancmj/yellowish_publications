@@ -4,23 +4,23 @@
 // Blog Detail page. Block types: p, h2, h3, ul, ol, quote,
 // image, table, code, highlight.
 
-import AboutImg from "../assets/About.png";
-import StoryImg from "../assets/Story.png";
-import heroImg from "../assets/hero.png";
+import AboutImg from "../assets/About.webp";
+import StoryImg from "../assets/Story.webp";
+import heroImg from "../assets/hero.webp";
 
-import book1 from "../assets/book1.png";
-import book2 from "../assets/book2.png";
-import book4 from "../assets/book4.png";
-import book5 from "../assets/book5.png";
-import book6 from "../assets/book6.png";
-import book9 from "../assets/book9.png";
-import book16 from "../assets/book16.png";
+import book1 from "../assets/book1.webp";
+import book2 from "../assets/book2.webp";
+import book4 from "../assets/book4.webp";
+import book5 from "../assets/book5.webp";
+import book6 from "../assets/book6.webp";
+import book9 from "../assets/book9.webp";
+import book16 from "../assets/book16.webp";
 
-import author1 from "../assets/author1.png";
-import author2 from "../assets/author2.png";
-import author3 from "../assets/author3.png";
-import author4 from "../assets/author4.png";
-import author5 from "../assets/author5.png";
+import author1 from "../assets/author1.webp";
+import author2 from "../assets/author2.webp";
+import author3 from "../assets/author3.webp";
+import author4 from "../assets/author4.webp";
+import author5 from "../assets/author5.webp";
 
 export const blogCategories = [
   "All",

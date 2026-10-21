@@ -6,7 +6,6 @@ import {
   FaStar,
   FaStarHalfAlt,
   FaRegStar,
-  FaCheck,
   FaSearch,
   FaBookOpen,
   FaArrowRight,
@@ -18,11 +17,11 @@ import {
 } from "react-icons/fa";
 import { useData } from "../../contexts/DataContext";
 
-import author1 from "../../assets/author1.png";
-import author2 from "../../assets/author2.png";
-import author3 from "../../assets/author3.png";
-import author4 from "../../assets/author4.png";
-import author5 from "../../assets/author5.png";
+import author1 from "../../assets/author1.webp";
+import author2 from "../../assets/author2.webp";
+import author3 from "../../assets/author3.webp";
+import author4 from "../../assets/author4.webp";
+import author5 from "../../assets/author5.webp";
 
 import "./Authors.css";
 
@@ -316,7 +315,6 @@ export default function Authors() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="gold-label">FEATURED TALENT</span>
             <h2>Featured Authors</h2>
             <p>Handpicked storytellers making waves across the globe.</p>
           </motion.div>
@@ -340,18 +338,10 @@ export default function Authors() {
                       e.target.src = author5;
                     }}
                   />
-                  <span className="verified-badge" title="Verified Author">
-                    <FaCheck />
-                  </span>
                 </div>
                 <div className="f-body">
                   <div className="f-topline">
                     <h3>{author.name}</h3>
-                    <span className="genre-tag">
-                      {author.genre
-                        ? author.genre.split("/")[0].trim()
-                        : "Various"}
-                    </span>
                   </div>
                   <span className="books-label">
                     <FaBookOpen />{" "}
@@ -478,9 +468,6 @@ export default function Authors() {
                         <span>{rating.toFixed(1)}</span>
                       </div>
                       <h3>{author.name}</h3>
-                      <span className="genre-tag genre-multi">
-                        {author.genre || "Various"}
-                      </span>
                       <span className="books-label">
                         <FaBookOpen />{" "}
                         {author.books ? author.books.length : 0} Books Published

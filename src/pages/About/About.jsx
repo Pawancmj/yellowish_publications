@@ -6,9 +6,9 @@ import { updatePageMeta, resetPageMeta } from "../../utils/seo";
 import "./About.css";
 
 // Assets — existing publishing / author imagery only.
-import heroVisual from "../../assets/About.png";
-import storyImage from "../../assets/Story.png";
-import testimonialPhoto from "../../assets/author4.png";
+import heroVisual from "../../assets/About.webp";
+import storyImage from "../../assets/Story.webp";
+import testimonialPhoto from "../../assets/author4.webp";
 
 // React Icons
 import {

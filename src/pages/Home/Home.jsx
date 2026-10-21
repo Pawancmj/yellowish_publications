@@ -4,8 +4,8 @@ import { useData } from "../../contexts/DataContext";
 import "./Home.css";
 
 // Assets for home
-import aboutImage from "../../assets/About.png";
-import heroImage from "../../assets/hero.png";
+import aboutImage from "../../assets/About.webp";
+import heroImage from "../../assets/hero.webp";
 
 // Distribution channel logos
 import amazonLogo from "../../assets/distribution/amazon.svg";
@@ -16,27 +16,19 @@ import appleBooksLogo from "../../assets/distribution/apple-books.svg";
 import barnesNobleLogo from "../../assets/distribution/barnes-noble.svg";
 import koboLogo from "../../assets/distribution/kobo.svg";
 
-import book1 from "../../assets/book1.png";
-import book5 from "../../assets/book5.png";
-import book9 from "../../assets/book9.png";
-import book13 from "../../assets/book13.png";
+import book1 from "../../assets/book1.webp";
+import book5 from "../../assets/book5.webp";
+import book9 from "../../assets/book9.webp";
+import book13 from "../../assets/book13.webp";
 // test author
-import author1 from "../../assets/author1.png";
-import author2 from "../../assets/author2.png";
-import author3 from "../../assets/author3.png";
-import author4 from "../../assets/author4.png";
-import author5 from "../../assets/author5.png";
-/*Authors below google review*/
-import googleauthor1 from "../../assets/author-1.png";
-import googleauthor2 from "../../assets/author-2.png";
-import googleauthor3 from "../../assets/author-3.png";
-import googleauthor4 from "../../assets/author-4.png";
-import googleauthor5 from "../../assets/author-5.png";
-import googleauthor6 from "../../assets/author-6.png";
-import googleauthor7 from "../../assets/author-7.png";
-import googleauthor8 from "../../assets/author-8.png";
+import author1 from "../../assets/author1.webp";
+import author2 from "../../assets/author2.webp";
+import author3 from "../../assets/author3.webp";
+import author4 from "../../assets/author4.webp";
+import author5 from "../../assets/author5.webp";
 
 import Hero from "../../components/Hero/Hero";
+import { NO_COVER_PLACEHOLDER } from "../../utils/coverPlaceholder";
 
 // React Icons
 import {
@@ -174,7 +166,16 @@ function Stars({ rating }) {
 function TrustedCard({ src, alt, variant }) {
   return (
     <div className={`trusted-card trusted-${variant}-card`}>
-      <img src={src} alt={alt} className="trusted-image" />
+      <img
+        src={src}
+        alt={alt}
+        className="trusted-image"
+        loading="lazy"
+        decoding="async"
+        onError={(e) => {
+          e.currentTarget.style.visibility = "hidden";
+        }}
+      />
     </div>
   );
 }
@@ -506,10 +507,14 @@ export default function Home() {
                       <img
                         src={getBookCover(book)}
                         alt={book.title}
+                        width={400}
+                        height={600}
                         loading="lazy"
+                        decoding="async"
                         onError={(e) => {
-                          e.target.src =
-                            "https://via.placeholder.com/200x300.png?text=No+Cover";
+                          if (e.currentTarget.dataset.fallback) return;
+                          e.currentTarget.dataset.fallback = "1";
+                          e.currentTarget.src = NO_COVER_PLACEHOLDER;
                         }}
                       />
                       {customBadge ? (
@@ -548,7 +553,15 @@ export default function Home() {
             {(testimonials || []).map((t) => (
               <div className="testimonial-card" key={t.id || t.name}>
                 <div className="t-avatar-wrap">
-                  <img src={t.image} alt={t.name} className="t-avatar" loading="lazy" />
+                  <img
+                    src={t.image}
+                    alt={t.name}
+                    className="t-avatar"
+                    width={118}
+                    height={118}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
 
                 <div className="t-body">

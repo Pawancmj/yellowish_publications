@@ -1,10 +1,10 @@
 // src/data/authors.js
 
-import author1 from "../assets/author1.png";
-import author2 from "../assets/author2.png";
-import author3 from "../assets/author3.png";
-import author4 from "../assets/author4.png";
-import author5 from "../assets/author5.png";
+import author1 from "../assets/author1.webp";
+import author2 from "../assets/author2.webp";
+import author3 from "../assets/author3.webp";
+import author4 from "../assets/author4.webp";
+import author5 from "../assets/author5.webp";
 
 export const authors = [
   {

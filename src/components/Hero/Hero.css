@@ -175,6 +175,8 @@
   height: auto;
   margin: 0 auto;
   display: block;
+  background: #fff6e9;
+  border-radius: 2px;
   transition: transform 0.3s ease;
 }
 

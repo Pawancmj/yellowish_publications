@@ -20,8 +20,8 @@ import {
   FaPaperclip,
 } from "react-icons/fa";
 
-import book1 from "../../assets/book1.png";
-import book9 from "../../assets/book9.png";
+import book1 from "../../assets/book1.webp";
+import book9 from "../../assets/book9.webp";
 
 import "./Contact.css";
 

@@ -1,20 +1,20 @@
 // Import all book covers
-import book1 from "../assets/book1.png";
-import book2 from "../assets/book2.png";
-import book3 from "../assets/book3.png";
-import book4 from "../assets/book4.png";
-import book5 from "../assets/book5.png";
-import book6 from "../assets/book6.png";
-import book7 from "../assets/book7.png";
-import book8 from "../assets/book8.png";
-import book9 from "../assets/book9.png";
-import book10 from "../assets/book10.png";
-import book11 from "../assets/book11.png";
-import book12 from "../assets/book12.png";
-import book13 from "../assets/book13.png";
-import book14 from "../assets/book14.png";
-import book15 from "../assets/book15.png";
-import book16 from "../assets/book16.png";
+import book1 from "../assets/book1.webp";
+import book2 from "../assets/book2.webp";
+import book3 from "../assets/book3.webp";
+import book4 from "../assets/book4.webp";
+import book5 from "../assets/book5.webp";
+import book6 from "../assets/book6.webp";
+import book7 from "../assets/book7.webp";
+import book8 from "../assets/book8.webp";
+import book9 from "../assets/book9.webp";
+import book10 from "../assets/book10.webp";
+import book11 from "../assets/book11.webp";
+import book12 from "../assets/book12.webp";
+import book13 from "../assets/book13.webp";
+import book14 from "../assets/book14.webp";
+import book15 from "../assets/book15.webp";
+import book16 from "../assets/book16.webp";
 
 export const books = [
   {

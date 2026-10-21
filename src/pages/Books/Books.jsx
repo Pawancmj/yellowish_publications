@@ -11,10 +11,10 @@ import {
 
 import BookCard from "../../components/BookCard/BookCard";
 
-import book1 from "../../assets/book1.png";
-import book5 from "../../assets/book5.png";
-import book9 from "../../assets/book9.png";
-import book13 from "../../assets/book13.png";
+import book1 from "../../assets/book1.webp";
+import book5 from "../../assets/book5.webp";
+import book9 from "../../assets/book9.webp";
+import book13 from "../../assets/book13.webp";
 
 import "./Books.css";
 
@@ -65,8 +65,6 @@ const getBookBadge = (book) => {
 
   return "";
 };
-
-const RATINGS = [4.9, 4.8, 4.7, 4.6, 4.5, 4.4, 4.3, 4.2, 4.1, 4.0, 4.9, 4.8, 4.7, 4.6, 4.5, 4.4];
 
 const SORT_OPTIONS = [
   { value: "", label: "Default" },
@@ -200,7 +198,6 @@ export default function Books() {
 
   const renderCard = (book, i, baseIndex) => {
     const badge = getBookBadge(book);
-    const rating = RATINGS[baseIndex % RATINGS.length] || 4.5;
     const coverUrl = getBookCover(book);
 
     return (
@@ -208,7 +205,6 @@ export default function Books() {
         key={book.id}
         book={book}
         index={i}
-        rating={rating}
         badge={badge}
         cover={coverUrl}
         handleNavClick={handleNavClick}
@@ -345,15 +341,11 @@ export default function Books() {
             {featured.map((book, i) => {
               const baseIndex = books.findIndex((b) => b.id === book.id);
               const badge = getBookBadge(book);
-              const rating = RATINGS[
-                (baseIndex < 0 ? i : baseIndex) % RATINGS.length
-              ] || 4.5;
               return (
                 <BookCard
                   key={book.id}
                   book={book}
                   index={i}
-                  rating={rating}
                   badge={badge}
                   cover={getBookCover(book)}
                   handleNavClick={handleNavClick}

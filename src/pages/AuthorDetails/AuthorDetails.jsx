@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaBookOpen, FaQuoteLeft } from "react-icons/fa";
 import { useData } from "../../contexts/DataContext";
+import { NO_PHOTO_PLACEHOLDER } from "../../utils/coverPlaceholder";
 import "./AuthorDetails.css";
 
 export default function AuthorDetails() {
@@ -59,8 +60,15 @@ export default function AuthorDetails() {
           <img 
             src={getAuthorPhoto(author)} 
             alt={author.name} 
+            width={220}
+            height={220}
             loading="lazy"
-            onError={(e) => { e.target.src = "https://via.placeholder.com/200x200.png?text=No+Photo"; }}
+            decoding="async"
+            onError={(e) => {
+              if (e.currentTarget.dataset.fallback) return;
+              e.currentTarget.dataset.fallback = "1";
+              e.currentTarget.src = NO_PHOTO_PLACEHOLDER;
+            }}
           />
         </div>
         <div className="author-info">

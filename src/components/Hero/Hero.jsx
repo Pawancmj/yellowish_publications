@@ -5,10 +5,10 @@ import { useEffect, useMemo, useState } from "react";
 import "./Hero.css";
 import { useData } from "../../contexts/DataContext";
 
-import book5 from "../../assets/book5.png";
-import book16 from "../../assets/book16.png";
-import book13 from "../../assets/book13.png";
-import book9 from "../../assets/book9.png";
+import book5 from "../../assets/book5.webp";
+import book16 from "../../assets/book16.webp";
+import book13 from "../../assets/book13.webp";
+import book9 from "../../assets/book9.webp";
 
 
 const FALLBACK_POOL = [
@@ -106,6 +106,24 @@ export default function Hero() {
     return expanded;
   }, [books, getBookCover]);
 
+  /* Prefetch the next slide window so covers are warm before they rotate in */
+  useEffect(() => {
+    if (!sliderBooks.length) return;
+    const prefetch = () => {
+      for (let i = 0; i < VISIBLE_BOOKS; i++) {
+        const targetIndex = (currentIndex + VISIBLE_BOOKS + i) % sliderBooks.length;
+        const src = sliderBooks[targetIndex]?.src;
+        if (src) {
+          const img = new Image();
+          img.decoding = "async";
+          img.src = src;
+        }
+      }
+    };
+    const raf = requestAnimationFrame(prefetch);
+    return () => cancelAnimationFrame(raf);
+  }, [currentIndex, sliderBooks]);
+
   /* =========================================
       NAVIGATION
   ========================================= */
@@ -199,7 +217,15 @@ export default function Hero() {
                 {isFallback ? (
                   <div className="hero-book-link">
                     <div className="hero-book">
-                      <img src={book.src} alt={book.title} />
+                      <img
+                        src={book.src}
+                        alt={book.title}
+                        width={470}
+                        height={705}
+                        loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
+                      />
                       {customBadge ? (
                         <span className="hero-book-badge">{customBadge}</span>
                       ) : null}
@@ -212,7 +238,15 @@ export default function Hero() {
                     aria-label={`View ${book.title}`}
                   >
                     <div className="hero-book">
-                      <img src={book.src} alt={book.title} />
+                      <img
+                        src={book.src}
+                        alt={book.title}
+                        width={470}
+                        height={705}
+                        loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
+                      />
                       {customBadge ? (
                         <span className="hero-book-badge">{customBadge}</span>
                       ) : null}

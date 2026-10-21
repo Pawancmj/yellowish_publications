@@ -1,0 +1,226 @@
+{
+  "files": {
+    "src/assets/About.png": {
+      "srcHash": "1d61638b1736e3f896c94aa0b474c95c4574f3a3",
+      "settingsKey": "1:banner-1400-q74",
+      "output": "src/assets/About.webp"
+    },
+    "src/assets/author1.png": {
+      "srcHash": "07a7d3933c469e3a55b0c778e777bae0a9773484",
+      "settingsKey": "1:author-640-q74",
+      "output": "src/assets/author1.webp"
+    },
+    "src/assets/author2.png": {
+      "srcHash": "aca85e5628d43390c1cb00533d482608f107a331",
+      "settingsKey": "1:author-640-q74",
+      "output": "src/assets/author2.webp"
+    },
+    "src/assets/author3.png": {
+      "srcHash": "f8ac4b32ac11520671921189aeb7357343996758",
+      "settingsKey": "1:author-640-q74",
+      "output": "src/assets/author3.webp"
+    },
+    "src/assets/author4.png": {
+      "srcHash": "db83129f9ae3e704bcd9be8533cd3c0c1f82f3a4",
+      "settingsKey": "1:author-640-q74",
+      "output": "src/assets/author4.webp"
+    },
+    "src/assets/author5.png": {
+      "srcHash": "df7be47ea64ef33093e0073281829a599a484653",
+      "settingsKey": "1:author-640-q74",
+      "output": "src/assets/author5.webp"
+    },
+    "src/assets/book1.png": {
+      "srcHash": "fcc902d76a2c270f282684ff124bb60640b8fe3b",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book1.webp"
+    },
+    "src/assets/book10.png": {
+      "srcHash": "ce89abdf06c5513d332fb7fe42bdcbcb456b5ea4",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book10.webp"
+    },
+    "src/assets/book11.png": {
+      "srcHash": "dba0fc2d42bc86dc6f221adb26e78450f32da4ba",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book11.webp"
+    },
+    "src/assets/book12.png": {
+      "srcHash": "32ffaecea324bfb1f700b0a8d363c2845ad764a8",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book12.webp"
+    },
+    "src/assets/book13.png": {
+      "srcHash": "66e20cde753518f3f98724a8cc20a039520e0930",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book13.webp"
+    },
+    "src/assets/book14.png": {
+      "srcHash": "4ea9e98c1d3e7328e806601ec256a62143d9ead4",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book14.webp"
+    },
+    "src/assets/book15.png": {
+      "srcHash": "047f658b117229ff07e2a7e7dd1c3e080cfe74ce",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book15.webp"
+    },
+    "src/assets/book16.png": {
+      "srcHash": "84610af1261368dc05d40db1e63b9fca2488fd5e",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book16.webp"
+    },
+    "src/assets/book2.png": {
+      "srcHash": "7469d2a01367010902c807a7649a46f769b69cc8",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book2.webp"
+    },
+    "src/assets/book3.png": {
+      "srcHash": "0deb4f39cbf06215bb33d4731b8c05556f9610e4",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book3.webp"
+    },
+    "src/assets/book4.png": {
+      "srcHash": "4481c6f82c00c8da2854f9365e43ab664c1de11a",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book4.webp"
+    },
+    "src/assets/book5.png": {
+      "srcHash": "b1fe79e0dc9f1ade00fb20ba5aefa5d215848436",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book5.webp"
+    },
+    "src/assets/book6.png": {
+      "srcHash": "caf49f2863a5e1a186badcba4266089356ac5247",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book6.webp"
+    },
+    "src/assets/book7.png": {
+      "srcHash": "7e3a07885d5b4c96aadde5c18fa6b2905837904a",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book7.webp"
+    },
+    "src/assets/book8.png": {
+      "srcHash": "1932bf2a515dc18ac8866cb09f826cad10624c4e",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book8.webp"
+    },
+    "src/assets/book9.png": {
+      "srcHash": "45f6dff56c84c7a5584a4ee49d73a5ea406e24e1",
+      "settingsKey": "1:book-640-q72",
+      "output": "src/assets/book9.webp"
+    },
+    "src/assets/hero.png": {
+      "srcHash": "44647c0abe5c358c984d5f7045929ea597cf3802",
+      "settingsKey": "1:banner-1600-q74",
+      "output": "src/assets/hero.webp"
+    },
+    "src/assets/logo.png": {
+      "srcHash": "a387cef2666aa8fe25e4baef40537c6e59a452b0",
+      "settingsKey": "1:logo",
+      "output": "src/assets/logo.webp"
+    },
+    "src/assets/Story.png": {
+      "srcHash": "d8eb950057e3059d8bf3c69ac79e44fa533b94c8",
+      "settingsKey": "1:banner-1400-q74",
+      "output": "src/assets/Story.webp"
+    },
+    "public/seed-blog/about.png": {
+      "srcHash": "e99ea805f037002a34c3e0ce02c207076a16edfe",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/about.png"
+    },
+    "public/seed-blog/author1.png": {
+      "srcHash": "3285a326123462d667474633bd5118534b9e0735",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/author1.png"
+    },
+    "public/seed-blog/author2.png": {
+      "srcHash": "4654dca75a3cc762151dd90c0718288675f7598a",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/author2.png"
+    },
+    "public/seed-blog/author3.png": {
+      "srcHash": "dbd924f19759ad171b957002c4ba943b1b2e94bf",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/author3.png"
+    },
+    "public/seed-blog/author4.png": {
+      "srcHash": "0a5d8bb30cf7ac9bf367199b60bceeae7baf5c4f",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/author4.png"
+    },
+    "public/seed-blog/author5.png": {
+      "srcHash": "4d56c8095dc1f0411a965ec65ec3d1d7103c2542",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/author5.png"
+    },
+    "public/seed-blog/book1.png": {
+      "srcHash": "1fc9ea9e975b4e06445c5f3289eff0036afe9e39",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/book1.png"
+    },
+    "public/seed-blog/book16.png": {
+      "srcHash": "e6697d6c8bea3ab8f3a225c703d7ef2aeade7f34",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/book16.png"
+    },
+    "public/seed-blog/book2.png": {
+      "srcHash": "a4d827949a8b3cd386c7e083de4a7fb2fb2a6a33",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/book2.png"
+    },
+    "public/seed-blog/book4.png": {
+      "srcHash": "0524966e360e5126080b48856c2233ff108acbf1",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/book4.png"
+    },
+    "public/seed-blog/book5.png": {
+      "srcHash": "81a40eb5d3b6ce6718f634279105eb6d8b937121",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/book5.png"
+    },
+    "public/seed-blog/book6.png": {
+      "srcHash": "4c15a68c68171e7a0784e9e4ebb96131302b8221",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/book6.png"
+    },
+    "public/seed-blog/book9.png": {
+      "srcHash": "070537d05dd145f06ff309d62aef2621fd39462f",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/book9.png"
+    },
+    "public/seed-blog/hero.png": {
+      "srcHash": "e8a742a385201a739ad77f3ba844406fff4f1d3d",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/hero.png"
+    },
+    "public/seed-blog/story.png": {
+      "srcHash": "9f772d4b1d9db077b98d341900a26edd593da203",
+      "settingsKey": "1:seed-seed-blog-png-1200-p85-j78",
+      "output": "public/seed-blog/story.png"
+    },
+    "public/seed-testimonials/author2.png": {
+      "srcHash": "71dabb09de41582618afbd260af6dac055dff39d",
+      "settingsKey": "1:seed-seed-testimonials-png-320-p90-j80",
+      "output": "public/seed-testimonials/author2.png"
+    },
+    "public/seed-testimonials/author3.png": {
+      "srcHash": "f8a85a3fdb5247c992aea5548231f51d89dafae0",
+      "settingsKey": "1:seed-seed-testimonials-png-320-p90-j80",
+      "output": "public/seed-testimonials/author3.png"
+    },
+    "public/seed-testimonials/author4.png": {
+      "srcHash": "5151a9dcf1c2a3c08e0723dc9b687d8d0ee36708",
+      "settingsKey": "1:seed-seed-testimonials-png-320-p90-j80",
+      "output": "public/seed-testimonials/author4.png"
+    },
+    "public/seed-testimonials/author5.png": {
+      "srcHash": "2da4d8313948fe5565d8a306ab02e0c137bd5d46",
+      "settingsKey": "1:seed-seed-testimonials-png-320-p90-j80",
+      "output": "public/seed-testimonials/author5.png"
+    }
+  },
+  "settingsVersion": 1,
+  "updatedAt": "2026-10-20T10:22:49.459Z"
+}

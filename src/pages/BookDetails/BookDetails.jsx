@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useData } from "../../contexts/DataContext";
 import { FaWhatsapp } from "react-icons/fa";
+import { NO_COVER_PLACEHOLDER } from "../../utils/coverPlaceholder";
 import "./BookDetails.css";
 
 // Same business WhatsApp number used in the Footer and Contact page
@@ -75,9 +76,17 @@ export default function BookDetails() {
     <div className="book-details">
       <div className="book-details-cover-wrap">
         <img 
-          src={getBookCover ? getBookCover(book) : (book.cover || book.image || "https://via.placeholder.com/300x450?text=No+Image")} 
-          loading="lazy"
-          onError={(e) => { e.target.src = "https://via.placeholder.com/300x450?text=No+Image"; }}
+          src={getBookCover ? getBookCover(book) : (book.cover || book.image || NO_COVER_PLACEHOLDER)} 
+          width={600}
+          height={900}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          onError={(e) => {
+            if (e.currentTarget.dataset.fallback) return;
+            e.currentTarget.dataset.fallback = "1";
+            e.currentTarget.src = NO_COVER_PLACEHOLDER;
+          }}
           alt={book.title} 
           className="book-details-cover" 
         />

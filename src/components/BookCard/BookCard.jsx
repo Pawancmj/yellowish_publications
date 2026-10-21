@@ -3,13 +3,11 @@ import { motion } from "framer-motion";
 import {
   FaShareAlt,
   FaWhatsapp,
-  FaStar,
-  FaStarHalfAlt,
-  FaRegStar,
   FaBookOpen,
 } from "react-icons/fa";
 
 import "./BookCard.css";
+import { NO_COVER_PLACEHOLDER } from "../../utils/coverPlaceholder";
 
 const WHATSAPP_NUMBER = "919876543210";
 
@@ -39,25 +37,9 @@ const buildWhatsAppLink = (book) => {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 };
 
-function Stars({ rating }) {
-  const full = Math.floor(rating);
-  const half = rating % 1 >= 0.5;
-  return (
-    <span className="stars" aria-label={`${rating} out of 5 stars`}>
-      {Array.from({ length: 5 }).map((_, i) => {
-        if (i < full) return <FaStar key={i} className="star filled" />;
-        if (i === full && half)
-          return <FaStarHalfAlt key={i} className="star filled" />;
-        return <FaRegStar key={i} className="star" />;
-      })}
-    </span>
-  );
-}
-
 export default function BookCard({
   book,
   index = 0,
-  rating,
   badge,
   cover,
   handleNavClick,
@@ -86,10 +68,14 @@ export default function BookCard({
             src={cover}
             alt={book.title}
             className="book-cover"
+            width={400}
+            height={600}
             loading="lazy"
+            decoding="async"
             onError={(e) => {
-              e.target.src =
-                "https://via.placeholder.com/200x300.png?text=No+Cover";
+              if (e.currentTarget.dataset.fallback) return;
+              e.currentTarget.dataset.fallback = "1";
+              e.currentTarget.src = NO_COVER_PLACEHOLDER;
             }}
           />
         </Link>
@@ -107,10 +93,6 @@ export default function BookCard({
         {/* Hover overlay — details fade in inside the cover image */}
         <div className="card-overlay">
           <div className="card-overlay-inner">
-            <div className="card-rating">
-              <Stars rating={rating} />
-              <span>{rating.toFixed(1)}</span>
-            </div>
             <p className="card-desc">
               {book.description
                 ? book.description.split(".").slice(0, 2).join(".") + "."

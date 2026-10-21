@@ -32,6 +32,10 @@ import {
 import { books as initialBooks } from "../data/books";
 import { authors as initialAuthors } from "../data/author";
 import { seedTestimonials } from "../data/testimonials";
+import {
+  NO_COVER_PLACEHOLDER,
+  NO_PHOTO_PLACEHOLDER,
+} from "../utils/coverPlaceholder";
 
 import {
   blogListQuery,
@@ -2223,8 +2227,7 @@ export function DataProvider({ children }) {
       ) {
         result = original.cover;
       } else {
-        result =
-          "https://via.placeholder.com/200x300.png?text=No+Cover";
+        result = NO_COVER_PLACEHOLDER;
       }
     }
 
@@ -2271,8 +2274,7 @@ export function DataProvider({ children }) {
       ) {
         result = original.photo;
       } else {
-        result =
-          "https://via.placeholder.com/150x150.png?text=No+Photo";
+        result = NO_PHOTO_PLACEHOLDER;
       }
     }
 
