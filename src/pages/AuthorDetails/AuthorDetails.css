@@ -53,7 +53,7 @@
   position: relative;
 }
 .author-books li::before {
-  content: "ðŸ“˜";
+  content: "\1F4D8";
   position: absolute;
   left: 0;
 }
