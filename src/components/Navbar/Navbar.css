@@ -51,10 +51,11 @@
   text-decoration: none;
 }
 
-/* FINAL LOGO SIZE */
+/* FINAL LOGO SIZE — no !important so the responsive sizes below apply;
+   86px keeps the image box inside the 90px navbar bar. */
 .logo-img {
-  width: 100px !important;
-  height: 100px !important;
+  width: 86px;
+  height: 86px;
   object-fit: contain !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -353,6 +354,7 @@
 .mobile-logo img {
   width: 50px;
   height: 50px;
+  object-fit: contain;
 
   border-radius: 50%;
 }

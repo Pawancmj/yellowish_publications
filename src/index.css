@@ -43,13 +43,12 @@ html, body {
 /* ============================================================
    Canonical book-cover frame (public website).
    Every book cover uses a fixed 2:3 portrait container plus
-   img width/height 100% + object-fit: cover, so covers with
+   img width/height 100% + object-fit: contain, so covers with
    different original resolutions/aspect ratios ALWAYS render
-   at exactly the same visible width and height — the visible
-   image area never depends on the source dimensions (no
-   letterboxing, no taller/shorter books in the same row).
-   Cover only trims outer edge margins; book covers are ~2:3,
-   so no titles/text are cut and nothing is distorted.
+   inside exactly the same frame — the COMPLETE cover stays
+   visible (nothing cropped, titles/art intact) and nothing
+   is distorted. Letterboxed areas show the frame's own
+   background color so the result looks intentional.
    ============================================================ */
 :root {
   --book-cover-ratio: 2 / 3;

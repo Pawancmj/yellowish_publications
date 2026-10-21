@@ -60,8 +60,8 @@ export default function AuthorDetails() {
           <img 
             src={getAuthorPhoto(author)} 
             alt={author.name} 
-            width={220}
-            height={220}
+            width={200}
+            height={200}
             loading="lazy"
             decoding="async"
             onError={(e) => {
