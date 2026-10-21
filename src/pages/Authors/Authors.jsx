@@ -229,7 +229,13 @@ export default function Authors() {
     return counts;
   }, [authors, books]);
 
-  const featured = authors.slice(0, 2);
+  // Featured Authors section: only authors explicitly marked in the
+  // Admin Dashboard ("Show as Featured Author"). Authors without the
+  // field (legacy docs) are treated as not featured.
+  const featured = useMemo(
+    () => authors.filter((a) => a.isFeatured === true),
+    [authors]
+  );
 
   // Portraits floating on the right side of the hero.
   // Managed from the Admin Panel → "Authors Hero Images".
@@ -333,6 +339,7 @@ export default function Authors() {
       </section>
 
       {/* ================= FEATURED AUTHORS ================= */}
+      {featured.length > 0 && (
       <section className="featured-section">
         <div className="container">
           <motion.div
@@ -402,6 +409,7 @@ export default function Authors() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ================= ALL AUTHORS ================= */}
       <section id="all-authors" className="all-authors-section">

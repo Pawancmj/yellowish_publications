@@ -2593,6 +2593,9 @@ const AuthorForm = ({
       books:
         author?.books || [],
 
+      isFeatured:
+        author?.isFeatured === true,
+
     });
 
   const [errors, setErrors] =
@@ -2870,6 +2873,34 @@ const AuthorForm = ({
               rows="4"
               placeholder="Enter the books separated by commas..."
             />
+
+          </div>
+
+          <div className="form-group">
+
+            <label className="trusted-active-checkbox">
+
+              <input
+                type="checkbox"
+                checked={formData.isFeatured}
+                onChange={(e) =>
+                  handleInputChange(
+                    "isFeatured",
+                    e.target.checked
+                  )
+                }
+              />
+
+              <span>
+                Show as Featured Author
+              </span>
+
+            </label>
+
+            <small className="testimonial-order-help">
+              Enable this to display the author in the Featured Authors
+              section on the public website.
+            </small>
 
           </div>
 
