@@ -3,9 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FaPen,
-  FaStar,
-  FaStarHalfAlt,
-  FaRegStar,
   FaSearch,
   FaBookOpen,
   FaArrowRight,
@@ -61,21 +58,6 @@ const staggerWrap = {
   visible: { transition: { staggerChildren: 0.09 } },
 };
 
-function Stars({ rating }) {
-  const full = Math.floor(rating);
-  const half = rating % 1 >= 0.5;
-  return (
-    <span className="stars" aria-label={`${rating} out of 5 stars`}>
-      {Array.from({ length: 5 }).map((_, i) => {
-        if (i < full) return <FaStar key={i} className="star filled" />;
-        if (i === full && half)
-          return <FaStarHalfAlt key={i} className="star filled" />;
-        return <FaRegStar key={i} className="star" />;
-      })}
-    </span>
-  );
-}
-
 function AuthorBio({ bio }) {
   const text = bio
     ? bio.split(".").slice(0, 2).join(".") + "."
@@ -83,10 +65,49 @@ function AuthorBio({ bio }) {
   return <>{text}</>;
 }
 
+// Normalize author names for matching book records to author cards
+// (trim, collapse spaces, drop common honorifics).
+function normalizeAuthorName(value) {
+  return String(value || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase()
+    .replace(/^(dr|mr|mrs|ms|miss|prof|rev|er|shri|smt|ca|adv|fr|sr)\.?\s+/i, "")
+    .replace(/[.,]+$/, "")
+    .trim();
+}
+
+// Published book count derived from actual book records, not the manual
+// `books` array stored on author docs. A book belongs to an author through
+// the stable `authorId` field when present; otherwise through the book's
+// `author` name field (supports co-authors separated by commas / "&" / "and").
+// Each book is counted at most once per author (deduped by book id/title).
+function publishedBookCount(author, books) {
+  if (!Array.isArray(books)) return 0;
+  const authorId = String(author.id ?? "");
+  const authorName = normalizeAuthorName(author.name);
+  const matched = new Set();
+  for (const book of books) {
+    const linked = book.authorId
+      ? String(book.authorId) === authorId
+      : authorName !== "" &&
+        String(book.author || "")
+          .split(/\s*(?:,|&|\band\b)\s*/i)
+          .map(normalizeAuthorName)
+          .includes(authorName);
+    if (linked) matched.add(String(book.id || book.title || ""));
+  }
+  return matched.size;
+}
+
+function booksPublishedLabel(count) {
+  return `${count} Book${count === 1 ? "" : "s"} Published`;
+}
+
 export default function Authors() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authors, loading, getAuthorPhoto, addLead, authorsHero } = useData();
+  const { authors, books, loading, getAuthorPhoto, addLead, authorsHero } = useData();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -201,6 +222,12 @@ export default function Authors() {
     }
     return list;
   }, [authors, query, genreFilter, sortBy]);
+
+  const authorCounts = useMemo(() => {
+    const counts = new Map();
+    authors.forEach((a) => counts.set(a.id, publishedBookCount(a, books)));
+    return counts;
+  }, [authors, books]);
 
   const featured = authors.slice(0, 2);
 
@@ -345,7 +372,7 @@ export default function Authors() {
                   </div>
                   <span className="books-label">
                     <FaBookOpen />{" "}
-                    {author.books ? author.books.length : 0} Books Published
+                    {booksPublishedLabel(authorCounts.get(author.id) ?? 0)}
                   </span>
                   <p className="f-bio">
                     <AuthorBio bio={author.bio} />
@@ -435,8 +462,6 @@ export default function Authors() {
           {filteredAuthors.length > 0 ? (
             <div className="authors-grid">
               {filteredAuthors.map((author, i) => {
-                const idx = authors.findIndex((x) => x.id === author.id);
-                const rating = RATINGS[idx] || 4.5;
                 return (
                   <motion.article
                     key={author.id}
@@ -463,14 +488,10 @@ export default function Authors() {
                       />
                     </a>
                     <div className="card-body">
-                      <div className="card-rating">
-                        <Stars rating={rating} />
-                        <span>{rating.toFixed(1)}</span>
-                      </div>
                       <h3>{author.name}</h3>
                       <span className="books-label">
                         <FaBookOpen />{" "}
-                        {author.books ? author.books.length : 0} Books Published
+                        {booksPublishedLabel(authorCounts.get(author.id) ?? 0)}
                       </span>
                       <p className="card-desc">
                         <AuthorBio bio={author.bio} />

@@ -719,6 +719,7 @@
 
 .article-body .article-figure img {
   width: 100%;
+  aspect-ratio: auto 3 / 2;
   border-radius: 22px;
   box-shadow: 0 26px 64px rgba(18, 58, 92, 0.16);
   display: block;
