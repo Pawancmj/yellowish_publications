@@ -9,11 +9,23 @@ export default function AuthorDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const { authors, getAuthorPhoto } = useData(); // Removed deleteAuthor
+  const { authors, authorsLoading, getAuthorPhoto } = useData(); // Removed deleteAuthor
   
   const author = authors.find((a) => String(a.id) === id);
   
   if (!author) {
+    if (authorsLoading) {
+      return (
+        <div className="author-details">
+          <div className="author-banner">
+            <div style={{ textAlign: 'center', padding: '40px' }}>
+              <h2>Loading author...</h2>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="author-details">
         <div className="author-banner">

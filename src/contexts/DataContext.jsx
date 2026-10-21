@@ -98,6 +98,8 @@ export function DataProvider({ children }) {
   const [authorsHeroLoading, setAuthorsHeroLoading] =
     useState(true);
   const [loading, setLoading] = useState(true);
+  const [authorsLoading, setAuthorsLoading] =
+    useState(true);
   const [blogsLoading, setBlogsLoading] = useState(true);
 
   // Auth
@@ -124,6 +126,38 @@ export function DataProvider({ children }) {
   const hasSeededRef = useRef(false);
   const hasSeededBlogsRef = useRef(false);
   const hasSeededTestimonialsRef = useRef(false);
+
+  // First-snapshot counts from the main public listeners.
+  // The seed checks reuse these instead of attaching duplicate
+  // listeners on the same collections.
+  const firstBooksCountRef = useRef(undefined);
+  const firstBlogsCountRef = useRef(undefined);
+  const firstTestimonialsCountRef = useRef(undefined);
+  const firstSnapshotWaitersRef = useRef({});
+
+  const notifyFirstSnapshot = (key, count) => {
+    const waiter = firstSnapshotWaitersRef.current[key];
+    if (waiter) {
+      delete firstSnapshotWaitersRef.current[key];
+      waiter(count);
+    }
+  };
+
+  const waitForFirstSnapshot = (key, getRef, timeoutMs = 10000) =>
+    new Promise((resolve) => {
+      if (getRef().current !== undefined) {
+        resolve(getRef().current);
+        return;
+      }
+      const timer = setTimeout(() => {
+        delete firstSnapshotWaitersRef.current[key];
+        resolve(undefined);
+      }, timeoutMs);
+      firstSnapshotWaitersRef.current[key] = (count) => {
+        clearTimeout(timer);
+        resolve(count);
+      };
+    });
 
   // ============================================================
   // 1. AUTH
@@ -183,6 +217,11 @@ export function DataProvider({ children }) {
 
         booksReceived = true;
 
+        if (firstBooksCountRef.current === undefined) {
+          firstBooksCountRef.current = booksData.length;
+          notifyFirstSnapshot("books", booksData.length);
+        }
+
         console.log(
           `📚 LIVE: ${booksData.length} books from Firestore`
         );
@@ -215,6 +254,11 @@ export function DataProvider({ children }) {
         setBooks(initialBooks);
 
         booksReceived = true;
+
+        if (firstBooksCountRef.current === undefined) {
+          firstBooksCountRef.current = -1;
+          notifyFirstSnapshot("books", -1);
+        }
 
         if (booksReceived && authorsReceived) {
           setLoading(false);
@@ -263,6 +307,7 @@ export function DataProvider({ children }) {
         }
 
         setAuthors(mergedAuthors);
+        setAuthorsLoading(false);
 
         if (booksReceived && authorsReceived) {
           setLoading(false);
@@ -275,6 +320,7 @@ export function DataProvider({ children }) {
         );
 
         setAuthors(initialAuthors);
+        setAuthorsLoading(false);
 
         authorsReceived = true;
 
@@ -395,6 +441,9 @@ export function DataProvider({ children }) {
         );
 
         setLoading(false);
+        // authorsLoading is intentionally NOT flipped here:
+        // author detail pages keep their truthful loading
+        // state until the authors listener answers or errors.
       }
     }, 5000);
 
@@ -436,6 +485,11 @@ export function DataProvider({ children }) {
         const blogData = snapshot.docs.map((d) =>
           normalizeBlog(d)
         );
+
+        if (firstBlogsCountRef.current === undefined) {
+          firstBlogsCountRef.current = snapshot.docs.length;
+          notifyFirstSnapshot("blogs", snapshot.docs.length);
+        }
 
         console.log(
           `📄 LIVE: ${blogData.length} blogs from Firestore`
@@ -624,6 +678,17 @@ export function DataProvider({ children }) {
       onSnapshot(
         testimonialsRef,
         (snapshot) => {
+          if (
+            firstTestimonialsCountRef.current === undefined
+          ) {
+            firstTestimonialsCountRef.current =
+              snapshot.docs.length;
+            notifyFirstSnapshot(
+              "testimonials",
+              snapshot.docs.length
+            );
+          }
+
           const items = snapshot.docs
             .map((d) => ({
               id: d.id,
@@ -698,111 +763,104 @@ export function DataProvider({ children }) {
     ) {
       const checkAndSeed = async () => {
         try {
-          const booksQuery = query(
-            collection(
-              db,
-              `users/${FIXED_USER_ID}/books`
-            )
+          const firstCount = await waitForFirstSnapshot(
+            "books",
+            () => firstBooksCountRef
           );
 
-          const unsubCheck =
-            onSnapshot(
-              booksQuery,
-              async (snapshot) => {
-                unsubCheck();
+          if (
+            firstCount === undefined ||
+            firstCount !== 0 ||
+            hasSeededRef.current
+          ) {
+            return;
+          }
 
-                if (
-                  snapshot.docs.length === 0 &&
-                  !hasSeededRef.current
-                ) {
-                  hasSeededRef.current = true;
+          hasSeededRef.current = true;
 
-                  console.log(
-                    "🌱 Seeding initial data to Firestore..."
-                  );
+          console.log(
+            "🌱 Seeding initial data to Firestore..."
+          );
 
-                  // ------------------------------------------------
-                  // Seed books
-                  // ------------------------------------------------
+          // ------------------------------------------------
+          // Seed books
+          // ------------------------------------------------
 
-                  for (
-                    const book of initialBooks
-                  ) {
-                    const bookData = {
-                      ...book,
-                    };
+          for (
+            const book of initialBooks
+          ) {
+            const bookData = {
+              ...book,
+            };
 
-                    if (
-                      typeof bookData.cover !==
-                        "string" ||
-                      !bookData.cover.startsWith(
-                        "http"
-                      )
-                    ) {
-                      delete bookData.cover;
-                    }
+            if (
+              typeof bookData.cover !==
+                "string" ||
+              !bookData.cover.startsWith(
+                "http"
+              )
+            ) {
+              delete bookData.cover;
+            }
 
-                    await setDoc(
-                      doc(
-                        db,
-                        `users/${FIXED_USER_ID}/books`,
-                        book.id
-                      ),
-                      {
-                        ...bookData,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                      },
-                      {
-                        merge: true,
-                      }
-                    );
-                  }
-
-                  // ------------------------------------------------
-                  // Seed authors
-                  // ------------------------------------------------
-
-                  for (
-                    const author of initialAuthors
-                  ) {
-                    const authorData = {
-                      ...author,
-                    };
-
-                    if (
-                      typeof authorData.photo !==
-                        "string" ||
-                      !authorData.photo.startsWith(
-                        "http"
-                      )
-                    ) {
-                      delete authorData.photo;
-                    }
-
-                    await setDoc(
-                      doc(
-                        db,
-                        `users/${FIXED_USER_ID}/authors`,
-                        author.id
-                      ),
-                      {
-                        ...authorData,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                      },
-                      {
-                        merge: true,
-                      }
-                    );
-                  }
-
-                  console.log(
-                    "✅ Initial data seeded to Firestore"
-                  );
-                }
+            await setDoc(
+              doc(
+                db,
+                `users/${FIXED_USER_ID}/books`,
+                book.id
+              ),
+              {
+                ...bookData,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              },
+              {
+                merge: true,
               }
             );
+          }
+
+          // ------------------------------------------------
+          // Seed authors
+          // ------------------------------------------------
+
+          for (
+            const author of initialAuthors
+          ) {
+            const authorData = {
+              ...author,
+            };
+
+            if (
+              typeof authorData.photo !==
+                "string" ||
+              !authorData.photo.startsWith(
+                "http"
+              )
+            ) {
+              delete authorData.photo;
+            }
+
+            await setDoc(
+              doc(
+                db,
+                `users/${FIXED_USER_ID}/authors`,
+                author.id
+              ),
+              {
+                ...authorData,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              },
+              {
+                merge: true,
+              }
+            );
+          }
+
+          console.log(
+            "✅ Initial data seeded to Firestore"
+          );
         } catch (error) {
           console.error(
             "❌ Seed error:",
@@ -826,55 +884,44 @@ export function DataProvider({ children }) {
     ) {
       const checkAndSeedBlogs = async () => {
         try {
-          const blogsQuery =
-            blogListQuery();
+          const firstCount = await waitForFirstSnapshot(
+            "blogs",
+            () => firstBlogsCountRef
+          );
 
-          const unsubCheck =
-            onSnapshot(
-              blogsQuery,
-              async (snapshot) => {
-                unsubCheck();
+          if (
+            firstCount === undefined ||
+            firstCount > 0 ||
+            hasSeededBlogsRef.current
+          ) {
+            return;
+          }
 
-                if (
-                  snapshot.docs.length > 0 ||
-                  hasSeededBlogsRef.current
-                ) {
-                  return;
-                }
+          hasSeededBlogsRef.current =
+            true;
 
-                hasSeededBlogsRef.current =
-                  true;
+          console.log(
+            "🌱 Seeding blogs to Firestore..."
+          );
 
-                console.log(
-                  "🌱 Seeding blogs to Firestore..."
-                );
+          const seeds =
+            buildSeedBlogs();
 
-                const seeds =
-                  buildSeedBlogs();
-
-                for (
-                  const seed of seeds
-                ) {
-                  await setDoc(
-                    blogDocRef(seed.id),
-                    seed,
-                    {
-                      merge: true,
-                    }
-                  );
-                }
-
-                console.log(
-                  `✅ ${seeds.length} blogs seeded to Firestore`
-                );
-              },
-              (error) => {
-                console.error(
-                  "❌ Blogs seed check error:",
-                  error
-                );
+          for (
+            const seed of seeds
+          ) {
+            await setDoc(
+              blogDocRef(seed.id),
+              seed,
+              {
+                merge: true,
               }
             );
+          }
+
+          console.log(
+            `✅ ${seeds.length} blogs seeded to Firestore`
+          );
         } catch (error) {
           console.error(
             "❌ Blogs seed error:",
@@ -918,66 +965,62 @@ export function DataProvider({ children }) {
               return;
             }
 
-            const unsubCheck = onSnapshot(
-              collection(
-                db,
-                `users/${FIXED_USER_ID}/testimonials`
-              ),
-              async (snapshot) => {
-                unsubCheck();
+            const firstCount =
+              await waitForFirstSnapshot(
+                "testimonials",
+                () => firstTestimonialsCountRef
+              );
 
-                if (snapshot.docs.length > 0) {
-                  // Collection already has content
-                  // (seeded earlier or created by
-                  // hand) — just mark it done.
-                  await setDoc(
-                    markerRef,
-                    { seeded: true },
-                    { merge: true }
-                  ).catch(() => {});
+            if (
+              firstCount === undefined
+            ) {
+              return;
+            }
 
-                  return;
-                }
+            if (firstCount > 0) {
+              // Collection already has content
+              // (seeded earlier or created by
+              // hand) — just mark it done.
+              await setDoc(
+                markerRef,
+                { seeded: true },
+                { merge: true }
+              ).catch(() => {});
 
-                console.log(
-                  "🌱 Seeding testimonials to Firestore..."
-                );
+              return;
+            }
 
-                for (const testimonial of seedTestimonials) {
-                  const { id, ...data } =
-                    testimonial;
+            console.log(
+              "🌱 Seeding testimonials to Firestore..."
+            );
 
-                  await setDoc(
-                    doc(
-                      db,
-                      `users/${FIXED_USER_ID}/testimonials`,
-                      id
-                    ),
-                    {
-                      ...data,
-                      createdAt: new Date(),
-                      updatedAt: new Date(),
-                    },
-                    { merge: true }
-                  );
-                }
+            for (const testimonial of seedTestimonials) {
+              const { id, ...data } =
+                testimonial;
 
-                await setDoc(
-                  markerRef,
-                  { seeded: true },
-                  { merge: true }
-                ).catch(() => {});
+              await setDoc(
+                doc(
+                  db,
+                  `users/${FIXED_USER_ID}/testimonials`,
+                  id
+                ),
+                {
+                  ...data,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                },
+                { merge: true }
+              );
+            }
 
-                console.log(
-                  `✅ ${seedTestimonials.length} testimonials seeded to Firestore`
-                );
-              },
-              (error) => {
-                console.error(
-                  "❌ Testimonials seed check error:",
-                  error
-                );
-              }
+            await setDoc(
+              markerRef,
+              { seeded: true },
+              { merge: true }
+            ).catch(() => {});
+
+            console.log(
+              `✅ ${seedTestimonials.length} testimonials seeded to Firestore`
             );
           } catch (error) {
             console.error(
@@ -2119,6 +2162,7 @@ export function DataProvider({ children }) {
     heroLoading,
     authorsHeroLoading,
     loading,
+    authorsLoading,
     blogsLoading,
 
     // ----------------------------------------------------------

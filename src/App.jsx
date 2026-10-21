@@ -1,4 +1,5 @@
 // src/App.js
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext"; // Add this
@@ -17,11 +18,14 @@ import Books from "./pages/Books/Books";
 import BookDetails from "./pages/BookDetails/BookDetails";
 import Blog from "./pages/Blog/Blog";
 import BlogDetail from "./pages/BlogDetail/BlogDetail";
-import Admin from "./pages/Admindashboard/Admin";
-import AdminForm from "./pages/Admindashboard/AdminForm";
-import AdminBlogs from "./pages/BlogAdmin/AdminBlogs";
-import BlogForm from "./pages/BlogAdmin/BlogForm";
 import { useAuth } from "./contexts/AuthContext";
+
+// Admin-only pages — loaded on demand so public pages
+// (authors, store, blog) don't download the admin bundle.
+const Admin = lazy(() => import("./pages/Admindashboard/Admin"));
+const AdminForm = lazy(() => import("./pages/Admindashboard/AdminForm"));
+const AdminBlogs = lazy(() => import("./pages/BlogAdmin/AdminBlogs"));
+const BlogForm = lazy(() => import("./pages/BlogAdmin/BlogForm"));
 
 // Route guard — admin-only pages.
 function RequireAdmin({ children }) {
@@ -40,6 +44,13 @@ function App() {
         <div className="app-container">
           <Navbar />
           <main style={{ flex: 1, width: "100%", overflowX: "hidden" }}>
+            <Suspense
+              fallback={
+                <div style={{ textAlign: "center", padding: "60px 20px" }}>
+                  Loading...
+                </div>
+              }
+            >
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
@@ -77,6 +88,7 @@ function App() {
                 }
               />
             </Routes>
+            </Suspense>
           </main>
           <Footer />
           <StickyActions />

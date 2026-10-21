@@ -257,17 +257,6 @@ export default function Authors() {
     }));
   }, [authorsHero]);
 
-  if (loading) {
-    return (
-      <div className="authors-wrapper">
-        <div className="authors-loader">
-          <FaPen className="loader-icon" />
-          <p>Loading authors...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="authors-page">
       {/* ================= HERO ================= */}
@@ -339,7 +328,7 @@ export default function Authors() {
       </section>
 
       {/* ================= FEATURED AUTHORS ================= */}
-      {featured.length > 0 && (
+      {!loading && featured.length > 0 && (
       <section className="featured-section">
         <div className="container">
           <motion.div
@@ -427,6 +416,13 @@ export default function Authors() {
           </motion.div>
 
           {/* Filter Bar */}
+          {loading ? (
+            <div className="authors-loader">
+              <FaPen className="loader-icon" />
+              <p>Loading authors...</p>
+            </div>
+          ) : (
+          <>
           <div className="filter-bar">
             <div className="filter-search">
               <FaSearch className="search-ico" />
@@ -523,6 +519,8 @@ export default function Authors() {
               <FaSearch className="no-results-ico" />
               <p>No authors found. Try a different search or genre.</p>
             </div>
+          )}
+          </>
           )}
         </div>
       </section>
