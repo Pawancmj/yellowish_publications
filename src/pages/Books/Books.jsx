@@ -368,7 +368,7 @@ export default function Books() {
             transition={{ duration: 0.6 }}
           >
             <span className="gold-label">FULL LIBRARY</span>
-            <h2>Browse Our Collection</h2>
+            <h2>Explore Our Books</h2>
             <p>Find your next favourite read.</p>
           </motion.div>
 
