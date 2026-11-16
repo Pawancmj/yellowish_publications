@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../contexts/DataContext";
 import "./Home.css";
@@ -29,6 +29,11 @@ import author5 from "../../assets/author5.webp";
 
 import Hero from "../../components/Hero/Hero";
 import { NO_COVER_PLACEHOLDER } from "../../utils/coverPlaceholder";
+import {
+  ALL_BOOKS_LABEL,
+  filterBooksByGenre,
+  genreKey,
+} from "../../utils/genres";
 
 // React Icons
 import {
@@ -141,8 +146,6 @@ const GOOGLE_REVIEWS = [
   },
 ];
 
-const GALLERY_CATEGORIES = ["All Books", "Fiction", "Poetry", "Academic", "Hindi"];
-
 function Stars({ rating }) {
   const full = Math.floor(rating);
   const half = rating % 1 >= 0.5;
@@ -190,11 +193,12 @@ export default function Home() {
     addLead,
     trustedAuthorPosts,
     testimonials,
+    activeGenres,
   } = useData();
 
   // baaki code...
 
-  const [activeCategory, setActiveCategory] = useState("All Books");
+  const [activeCategory, setActiveCategory] = useState(ALL_BOOKS_LABEL);
 
   //  Distribution carousel hooks — added here, inside the component
   const distTrackRef = useRef(null);
@@ -245,6 +249,28 @@ export default function Home() {
 
   const galleryBooks = books;
 
+  const galleryCategories = useMemo(
+    () => [
+      ALL_BOOKS_LABEL,
+      ...(activeGenres || []).map((genre) => genre.name),
+    ],
+    [activeGenres]
+  );
+
+  // If the selected genre was deactivated or deleted in the admin panel,
+  // fall back to All Books instead of showing a broken/empty filter.
+  useEffect(() => {
+    if (
+      activeCategory !== ALL_BOOKS_LABEL &&
+      !galleryCategories.some(
+        (category) =>
+          genreKey(category) === genreKey(activeCategory)
+      )
+    ) {
+      setActiveCategory(ALL_BOOKS_LABEL);
+    }
+  }, [activeCategory, galleryCategories]);
+
   const galleryRef = useRef(null);
 
   const scrollGallery = (direction) => {
@@ -291,26 +317,18 @@ export default function Home() {
       setTrustedIndex(0);
     }
   }, [trustedAuthorPosts.length, trustedIndex]);
+  const selectedGenre =
+    activeCategory === ALL_BOOKS_LABEL
+      ? null
+      : activeGenres?.find(
+          (genre) =>
+            genreKey(genre.name) === genreKey(activeCategory)
+        ) || null;
+
   const filteredGallery =
-    activeCategory === "All Books"
+    activeCategory === ALL_BOOKS_LABEL || !selectedGenre
       ? galleryBooks
-      : galleryBooks.filter((book) => {
-        const genre = (book.genre || "").toLowerCase();
-        const subtitle = (book.subtitle || "").toLowerCase();
-        if (activeCategory === "Fiction") {
-          return /fiction|fantasy/i.test(genre) || /tale|story|novel/i.test(subtitle);
-        }
-        if (activeCategory === "Poetry") {
-          return /poetry|poem/i.test(genre) || /poetry|poem|verse/i.test(subtitle);
-        }
-        if (activeCategory === "Academic") {
-          return /academic|management|mathematics|maths|law|psychology|science|astronomy|business|nature|research/i.test(genre);
-        }
-        if (activeCategory === "Hindi") {
-          return /hindi/i.test(genre + " " + subtitle);
-        }
-        return true;
-      });
+      : filterBooksByGenre(galleryBooks, selectedGenre);
 
   const validatePhone = (phone) => {
     const phoneRegex = /^[0-9]{10}$/;
@@ -469,7 +487,7 @@ export default function Home() {
             <h2>BOOKS PUBLISHED</h2>
           </div>
           <div className="filter-tabs">
-            {GALLERY_CATEGORIES.map((cat) => (
+            {galleryCategories.map((cat) => (
               <button
                 key={cat}
                 className={`tab ${activeCategory === cat ? "active" : ""}`}

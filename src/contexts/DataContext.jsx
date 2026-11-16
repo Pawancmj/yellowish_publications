@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useRef,
   useCallback,
+  useMemo,
 } from "react";
 
 import { db, auth } from "../firebase";
@@ -58,6 +59,21 @@ import {
   updateAuthorsHero as updateAuthorsHeroDoc,
 } from "../services/authorsHeroModel";
 
+import {
+  homepageSettingsDocRef,
+  normalizeHomepageSettings,
+  resolveFeaturedBooks,
+  updateHomepageSettings as updateHomepageSettingsDoc,
+} from "../services/homepageSettingsModel";
+
+import {
+  deriveGenresFromBooks,
+  genresDocRef,
+  getActiveGenres,
+  normalizeGenresSnapshot,
+  saveGenresConfig,
+} from "../services/genreModel";
+
 import { buildSeedBlogs } from "../data/seedBlogs";
 
 const FIXED_USER_ID = "shared-app-user";
@@ -83,6 +99,16 @@ export function DataProvider({ children }) {
   const [blogs, setBlogs] = useState([]);
   const [hero, setHero] = useState(null);
   const [authorsHero, setAuthorsHero] = useState(null);
+  const [homepageSettings, setHomepageSettings] =
+    useState(null);
+
+  // Genre configuration. Until the `genres` document exists, the list is
+  // derived from the genre values already present on books.
+  const [genreConfig, setGenreConfig] = useState([]);
+  const [genresDocExists, setGenresDocExists] =
+    useState(false);
+  const [genresLoading, setGenresLoading] = useState(true);
+  const [genresError, setGenresError] = useState(null);
 
   // Trusted Authors
   const [trustedAuthorPosts, setTrustedAuthorPosts] =
@@ -97,6 +123,10 @@ export function DataProvider({ children }) {
   const [heroLoading, setHeroLoading] = useState(true);
   const [authorsHeroLoading, setAuthorsHeroLoading] =
     useState(true);
+  const [homepageSettingsLoading, setHomepageSettingsLoading] =
+    useState(true);
+  const [homepageSettingsError, setHomepageSettingsError] =
+    useState(null);
   const [loading, setLoading] = useState(true);
   const [authorsLoading, setAuthorsLoading] =
     useState(true);
@@ -116,6 +146,8 @@ export function DataProvider({ children }) {
   const blogsUnsubscribeRef = useRef(null);
   const heroUnsubscribeRef = useRef(null);
   const authorsHeroUnsubscribeRef = useRef(null);
+  const homepageSettingsUnsubscribeRef = useRef(null);
+  const genresUnsubscribeRef = useRef(null);
   const trustedAuthorsUnsubscribeRef = useRef(null);
   const testimonialsUnsubscribeRef = useRef(null);
 
@@ -583,6 +615,110 @@ export function DataProvider({ children }) {
       }
     };
   }, []);
+
+  // ============================================================
+  // 4C. HOMEPAGE FEATURED BOOKS
+  // ============================================================
+
+  useEffect(() => {
+    homepageSettingsUnsubscribeRef.current =
+      onSnapshot(
+        homepageSettingsDocRef(),
+        (snapshot) => {
+          setHomepageSettings(
+            snapshot.exists()
+              ? normalizeHomepageSettings(snapshot)
+              : null
+          );
+
+          setHomepageSettingsError(null);
+          setHomepageSettingsLoading(false);
+        },
+        (error) => {
+          console.error(
+            "❌ Homepage settings listener error:",
+            error
+          );
+
+          setHomepageSettings(null);
+          setHomepageSettingsError(error);
+          setHomepageSettingsLoading(false);
+        }
+      );
+
+    return () => {
+      if (homepageSettingsUnsubscribeRef.current) {
+        homepageSettingsUnsubscribeRef.current();
+      }
+    };
+  }, []);
+
+  // ============================================================
+  // 4D. GENRE CONFIGURATION
+  // ============================================================
+
+  useEffect(() => {
+    genresUnsubscribeRef.current = onSnapshot(
+      genresDocRef(),
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setGenreConfig(
+            normalizeGenresSnapshot(snapshot)
+          );
+          setGenresDocExists(true);
+        } else {
+          setGenreConfig([]);
+          setGenresDocExists(false);
+        }
+
+        setGenresError(null);
+        setGenresLoading(false);
+      },
+      (error) => {
+        console.error(
+          "❌ Genres listener error:",
+          error
+        );
+
+        // Fall back to genres derived from the loaded books. Reads and
+        // writes should both be available for admins, but this keeps the
+        // homepage usable if the config cannot be reached.
+        setGenreConfig([]);
+        setGenresDocExists(false);
+        setGenresError(error);
+        setGenresLoading(false);
+      }
+    );
+
+    return () => {
+      if (genresUnsubscribeRef.current) {
+        genresUnsubscribeRef.current();
+      }
+    };
+  }, []);
+
+  const genres = useMemo(() => {
+    if (genresDocExists) return genreConfig;
+
+    return deriveGenresFromBooks(books);
+  }, [genresDocExists, genreConfig, books]);
+
+  const activeGenres = useMemo(
+    () => getActiveGenres(genres),
+    [genres]
+  );
+
+  // Configured IDs resolved against the already-loaded books, in the
+  // admin-defined order. No extra Firestore reads and no "show all books"
+  // fallback: an empty selection is an empty list.
+  const featuredHeroBooks = useMemo(
+    () =>
+      resolveFeaturedBooks(
+        books,
+        homepageSettings?.featuredBookIds
+      ),
+    [books, homepageSettings]
+  );
 
   // ============================================================
   // 5. PUBLIC TRUSTED AUTHORS
@@ -1480,6 +1616,61 @@ export function DataProvider({ children }) {
   );
 
   // ============================================================
+  // 12C. HOMEPAGE FEATURED BOOKS
+  // ============================================================
+
+  const updateHomepageSettings = useCallback(
+    async (data) => {
+      try {
+        await updateHomepageSettingsDoc(data);
+
+        console.log(
+          "✅ Homepage featured books updated"
+        );
+
+        return {
+          error: null,
+        };
+      } catch (error) {
+        console.error(
+          "❌ Update homepage featured books failed (admin only):",
+          error.message
+        );
+
+        return {
+          error,
+        };
+      }
+    },
+    []
+  );
+
+  // ============================================================
+  // 12D. GENRES
+  // ============================================================
+
+  const updateGenres = useCallback(async (items) => {
+    try {
+      await saveGenresConfig(items);
+
+      console.log("✅ Genres updated");
+
+      return {
+        error: null,
+      };
+    } catch (error) {
+      console.error(
+        "❌ Update genres failed (admin only):",
+        error.message
+      );
+
+      return {
+        error,
+      };
+    }
+  }, []);
+
+  // ============================================================
   // 13. TRUSTED AUTHORS CRUD
   // FIRESTORE ONLY
   // PUBLIC IMAGE URL APPROACH
@@ -2149,6 +2340,14 @@ export function DataProvider({ children }) {
     hero,
     authorsHero,
 
+    // Homepage featured books (resolved, ordered)
+    featuredHeroBooks,
+    homepageSettings,
+
+    // Genre filters (admin managed)
+    genres,
+    activeGenres,
+
     // Trusted Authors
     trustedAuthorPosts,
 
@@ -2161,6 +2360,10 @@ export function DataProvider({ children }) {
 
     heroLoading,
     authorsHeroLoading,
+    homepageSettingsLoading,
+    homepageSettingsError,
+    genresLoading,
+    genresError,
     loading,
     authorsLoading,
     blogsLoading,
@@ -2213,6 +2416,18 @@ export function DataProvider({ children }) {
     // ----------------------------------------------------------
 
     updateAuthorsHero,
+
+    // ----------------------------------------------------------
+    // Homepage Featured Books
+    // ----------------------------------------------------------
+
+    updateHomepageSettings,
+
+    // ----------------------------------------------------------
+    // Genre Filters
+    // ----------------------------------------------------------
+
+    updateGenres,
 
     // ----------------------------------------------------------
     // Trusted Authors

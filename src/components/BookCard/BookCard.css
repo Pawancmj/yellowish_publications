@@ -1,10 +1,9 @@
 ﻿/* ============================================================
-   Compact Premium Book Card â€” shared by the Store page
+   Compact Premium Book Card - shared by the Store page
    (Featured Books and Browse Our Collection).
    Default = cover + genre badge + title + author + price.
-   Hover  = image zooms, a dark gradient overlay fades in and
-            reveals rating / description / actions INSIDE the
-            cover image. Card height never changes, no overlap.
+   There is no hover overlay or hover action buttons: the cover
+   and title link to the book details page.
    ============================================================ */
 .book-card {
   position: relative;
@@ -15,17 +14,9 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 28px rgba(18, 58, 92, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.book-card:hover {
-  transform: translateY(-6px);
-  border-color: #d9a441;
-  box-shadow: 0 24px 52px rgba(18, 58, 92, 0.18);
-  z-index: 2;
-}
-
-/* Cover â€” ~75â€“80% of the visible card, rounded top corners only */
+/* Cover - ~75-80% of the visible card, rounded top corners only */
 .book-cover-wrap {
   position: relative;
   aspect-ratio: var(--book-cover-ratio);
@@ -44,11 +35,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.3s ease;
-}
-
-.book-card:hover .book-cover {
-  transform: scale(1.04);
 }
 
 .card-badge-stack {
@@ -76,152 +62,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* Hover overlay â€” sits INSIDE the cover image, never grows the card */
-.card-overlay {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 1rem 0.95rem 0.9rem;
-  background: linear-gradient(
-    180deg,
-    rgba(18, 58, 92, 0.15) 0%,
-    rgba(18, 58, 92, 0.55) 45%,
-    rgba(18, 58, 92, 0.94) 100%
-  );
-  opacity: 0;
-  transform: translateY(16px);
-  pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.card-overlay-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-
-.card-overlay-inner > * {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.card-overlay-inner > *:nth-child(2) {
-  transition-delay: 0.06s;
-}
-
-.card-overlay-inner > *:nth-child(3) {
-  transition-delay: 0.12s;
-}
-
-.book-card:hover .card-overlay {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.book-card:hover .card-overlay-inner > * {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.card-overlay .card-desc {
-  color: #fff;
-  font-size: 0.78rem;
-  line-height: 1.45;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.overlay-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.15rem;
-}
-
-.card-share {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1.5px solid #d9a441;
-  background: rgba(255, 255, 255, 0.14);
-  color: #d9a441;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  cursor: pointer;
-  flex-shrink: 0;
-  backdrop-filter: blur(4px);
-  transition: all 0.3s ease;
-}
-
-.card-share:hover {
-  background: #d9a441;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(217, 164, 65, 0.45);
-}
-
-.hover-buttons {
-  display: flex;
-  gap: 0.55rem;
-  flex: 1;
-}
-
-.details-btn,
-.whatsapp-btn {
-  display: inline-flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
-  padding: 0.5rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.details-btn {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid #d9a441;
-  color: #fff;
-  text-decoration: none;
-}
-
-.details-btn:hover {
-  background: #d9a441;
-  color: #fff;
-  box-shadow: 0 8px 18px rgba(217, 164, 65, 0.45);
-}
-
-.whatsapp-btn {
-  background: #25d366;
-  border: 1.5px solid #25d366;
-  color: #fff;
-  text-decoration: none;
-  box-shadow: 0 8px 18px rgba(37, 211, 102, 0.35);
-}
-
-.whatsapp-btn:hover {
-  background: #1ebe5d;
-  border-color: #1ebe5d;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(37, 211, 102, 0.5);
 }
 
 /* Default compact info */
@@ -285,25 +125,10 @@
   color: #123a5c;
 }
 
-/* Touch devices â€” hover unavailable, keep the overlay content visible */
-@media (hover: none) {
-  .card-overlay {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .card-overlay-inner > * {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* ============================================================
-   Mobile (<=767): one card per row (~290-440px wide), so the
-   compact always-visible overlay keeps comfortable proportions.
-   The cover keeps a book-like 3:4 frame and the overlay only
-   sits inside it. Action row: [Share] [View Details] / [WhatsApp].
+   Mobile (<=767): one card per row (~290-440px wide).
+   The cover keeps a book-like 3:4 frame and the info block sits
+   below it.
    ============================================================ */
 @media (max-width: 767px) {
   .book-card {
@@ -326,75 +151,7 @@
     font-size: 0.64rem;
   }
 
-  /* Overlay — always visible, subtle bottom gradient, stays fully
-     inside the image boundaries. */
-  .card-overlay {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    padding: 0.6rem 0.6rem 0.55rem;
-    background: linear-gradient(
-      180deg,
-      rgba(18, 58, 92, 0) 0%,
-      rgba(18, 58, 92, 0.3) 26%,
-      rgba(18, 58, 92, 0.9) 100%
-    );
-  }
-
-  .card-overlay-inner {
-    gap: 0.28rem;
-  }
-
-  .card-overlay-inner > * {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* The long description is reserved for the card info /
-     detail view so the compact overlay never buries the cover art. */
-  .card-overlay .card-desc {
-    display: none;
-  }
-
-  /* Action controls — comfortable tap targets in a row */
-  .overlay-actions {
-    display: flex;
-    align-items: stretch;
-    gap: 0.4rem;
-    margin-top: 0.1rem;
-  }
-
-  .card-share {
-    flex: 0 0 30px;
-    width: 30px;
-    height: 30px;
-    border-radius: 999px;
-    font-size: 0.68rem;
-  }
-
-  .hover-buttons {
-    flex: 1;
-    flex-direction: row;
-    gap: 0.4rem;
-    min-width: 0;
-  }
-
-  .details-btn,
-  .whatsapp-btn {
-    flex: 1;
-    min-height: 32px;
-    padding: 0.3rem 0.5rem;
-    border-radius: 999px;
-    font-size: 0.72rem;
-    gap: 0.3rem;
-    white-space: nowrap;
-  }
-
-  .whatsapp-btn svg {
-    font-size: 0.78rem;
-  }
-
-  /* Info below the image — auto height, always inside the card */
+  /* Info below the image - auto height, always inside the card */
   .card-info {
     height: auto;
     padding: 0.6rem 0.75rem 0.75rem;
@@ -424,13 +181,8 @@
   }
 }
 
-/* Tablet (768-1023): 3-column cards get more breathing room; the
-   overlay is a touch larger than mobile but stays compact. */
+/* Tablet (768-1023): 3-column cards get more breathing room. */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .card-overlay {
-    padding: 0.7rem 0.65rem 0.65rem;
-  }
-
   .card-info {
     height: auto;
     padding: 0.6rem 0.7rem 0.7rem;

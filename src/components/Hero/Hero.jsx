@@ -1,167 +1,284 @@
 import { motion as Motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import "./Hero.css";
 import { useData } from "../../contexts/DataContext";
+import { NO_COVER_PLACEHOLDER } from "../../utils/coverPlaceholder";
 
-import book5 from "../../assets/book5.webp";
-import book16 from "../../assets/book16.webp";
-import book13 from "../../assets/book13.webp";
-import book9 from "../../assets/book9.webp";
-
-
-const FALLBACK_POOL = [
-  { id: "fallback-1", src: book13, title: "Published Book 1" },
-  { id: "fallback-2", src: book5, title: "Published Book 2" },
-  { id: "fallback-3", src: book9, title: "Published Book 3" },
-  { id: "fallback-4", src: book16, title: "Published Book 4" },
-];
-
+// Desktop shows up to six covers at once; mobile CSS shows two.
 const VISIBLE_BOOKS = 6;
+const MOBILE_VISIBLE_BOOKS = 2;
+const MOBILE_MEDIA_QUERY = "(max-width: 768px)";
+
+function readIsMobileViewport() {
+  if (
+    typeof window === "undefined" ||
+    typeof window.matchMedia !== "function"
+  ) {
+    return false;
+  }
+
+  return window.matchMedia(MOBILE_MEDIA_QUERY).matches;
+}
+
+// Mirrors the CSS mobile breakpoint so arrows/rotation only appear when the
+// selection does not fit in the visible showcase slots.
+function useVisibleBookCount() {
+  const [isMobile, setIsMobile] = useState(
+    readIsMobileViewport
+  );
+
+  useEffect(() => {
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia(
+      MOBILE_MEDIA_QUERY
+    );
+
+    const handleChange = (event) =>
+      setIsMobile(event.matches);
+
+    setIsMobile(mediaQuery.matches);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener(
+        "change",
+        handleChange
+      );
+
+      return () =>
+        mediaQuery.removeEventListener(
+          "change",
+          handleChange
+        );
+    }
+
+    // Safari < 14 fallback.
+    mediaQuery.addListener(handleChange);
+
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  return isMobile
+    ? MOBILE_VISIBLE_BOOKS
+    : VISIBLE_BOOKS;
+}
+
+// Swap a broken cover for the shared placeholder exactly once.
+function handleCoverError(event) {
+  const image = event.currentTarget;
+
+  if (
+    !image ||
+    image.dataset.coverFallback === "true"
+  ) {
+    return;
+  }
+
+  image.dataset.coverFallback = "true";
+  image.src = NO_COVER_PLACEHOLDER;
+}
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
-  const { books, getBookCover } = useData();
+  const {
+    featuredHeroBooks,
+    homepageSettingsLoading,
+    homepageSettingsError,
+    getBookCover,
+  } = useData();
+
+  // Keep the latest cover helper without re-creating the slide list on every
+  // context render (DataContext re-renders regularly).
+  const getBookCoverRef = useRef(getBookCover);
+  getBookCoverRef.current = getBookCover;
+
   const [currentIndex, setCurrentIndex] = useState(0);
+  const visibleCount = useVisibleBookCount();
 
   /* =========================================
-      FETCH & PREVENT ADJACENT + GLOBAL DUPLICATES
+      FEATURED BOOKS ONLY (ADMIN ORDER)
   ========================================= */
+
   const sliderBooks = useMemo(() => {
-    let baseList = [];
-    const seenSrcs = new Set();
+    const source = Array.isArray(featuredHeroBooks)
+      ? featuredHeroBooks
+      : [];
 
-    if (Array.isArray(books) && books.length > 0) {
-      books.forEach((book) => {
-        const src = getBookCover ? getBookCover(book) : book.src;
-        if (!src) return;
-        if (seenSrcs.has(src)) return; // skip duplicate covers from data itself
-        seenSrcs.add(src);
-        baseList.push({
-          id: book.id || `book-${Math.random()}`,
-          title: book.title || "Published Book",
-          src,
-          customBadge: book.customBadge,
-        });
-      });
-    }
+    const resolveCover = getBookCoverRef.current;
+    const seenIds = new Set();
+    const result = [];
 
-    if (baseList.length === 0) {
-      baseList = [...FALLBACK_POOL];
-      baseList.forEach((b) => seenSrcs.add(b.src));
-    }
-
-    // Fill slots with fallback images if count < 6, checked against the WHOLE list
-    let filledList = [...baseList];
-    let fallbackIndex = 0;
-    let attempts = 0;
-    const maxAttempts = FALLBACK_POOL.length * 4; // safety guard against infinite loop
-
-    while (filledList.length < VISIBLE_BOOKS && attempts < maxAttempts) {
-      const fallbackItem = FALLBACK_POOL[fallbackIndex % FALLBACK_POOL.length];
-      fallbackIndex++;
-      attempts++;
-
-      // Check against the ENTIRE list, not just the last item
-      const alreadyPresent = filledList.some(
-        (b) => b.src === fallbackItem.src
-      );
-
-      if (!alreadyPresent) {
-        filledList.push({
-          ...fallbackItem,
-          id: `fallback-fill-${filledList.length}`,
-        });
-      }
-    }
-
-    // If still short (e.g. fallback pool exhausted), allow repeats but never adjacent
-    while (filledList.length < VISIBLE_BOOKS) {
-      const fallbackItem = FALLBACK_POOL[fallbackIndex % FALLBACK_POOL.length];
-      fallbackIndex++;
-      if (filledList[filledList.length - 1]?.src !== fallbackItem.src) {
-        filledList.push({
-          ...fallbackItem,
-          id: `fallback-fill-${filledList.length}`,
-        });
-      }
-    }
-
-    // Expand pool for infinite slider loop — guard the seam between copies
-    let expanded = [...filledList];
-    while (expanded.length < VISIBLE_BOOKS * 3) {
-      const nextCopy = [...filledList];
-      // avoid identical src at the seam (last of expanded vs first of nextCopy)
+    source.forEach((book) => {
       if (
-        expanded[expanded.length - 1]?.src === nextCopy[0]?.src &&
-        nextCopy.length > 1
+        !book ||
+        book.id === undefined ||
+        book.id === null
       ) {
-        // rotate the copy by one so the seam doesn't repeat
-        nextCopy.push(nextCopy.shift());
+        return;
       }
-      expanded = expanded.concat(nextCopy);
-    }
 
-    return expanded;
-  }, [books, getBookCover]);
+      const id = String(book.id);
 
-  /* Prefetch the next slide window so covers are warm before they rotate in */
+      // Guard against duplicate IDs in a malformed document.
+      if (seenIds.has(id)) return;
+
+      const cover = resolveCover
+        ? resolveCover(book)
+        : book.cover;
+
+      seenIds.add(id);
+
+      result.push({
+        id,
+        title: book.title || "Published Book",
+        src:
+          typeof cover === "string" && cover
+            ? cover
+            : NO_COVER_PLACEHOLDER,
+        customBadge: book.customBadge,
+      });
+    });
+
+    return result;
+  }, [featuredHeroBooks]);
+
+  /* =========================================
+      KEEP THE WINDOW IN RANGE
+  ========================================= */
+
   useEffect(() => {
-    if (!sliderBooks.length) return;
-    const prefetch = () => {
-      for (let i = 0; i < VISIBLE_BOOKS; i++) {
-        const targetIndex = (currentIndex + VISIBLE_BOOKS + i) % sliderBooks.length;
-        const src = sliderBooks[targetIndex]?.src;
-        if (src) {
-          const img = new Image();
-          img.decoding = "async";
-          img.src = src;
-        }
+    setCurrentIndex((previous) => {
+      if (sliderBooks.length === 0) return 0;
+
+      // When everything fits, always start at the admin's first book so the
+      // configured order is shown exactly as saved.
+      if (sliderBooks.length <= visibleCount) {
+        return 0;
       }
-    };
-    const raf = requestAnimationFrame(prefetch);
-    return () => cancelAnimationFrame(raf);
-  }, [currentIndex, sliderBooks]);
+
+      return previous % sliderBooks.length;
+    });
+  }, [sliderBooks.length, visibleCount]);
+
+  const sliderEnabled =
+    sliderBooks.length > visibleCount;
 
   /* =========================================
       NAVIGATION
   ========================================= */
+
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % sliderBooks.length);
+    if (!sliderEnabled) return;
+
+    setCurrentIndex(
+      (previous) =>
+        (previous + 1) % sliderBooks.length
+    );
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + sliderBooks.length) % sliderBooks.length);
+    if (!sliderEnabled) return;
+
+    setCurrentIndex(
+      (previous) =>
+        (previous - 1 + sliderBooks.length) %
+        sliderBooks.length
+    );
   };
 
   /* =========================================
-      AUTO SLIDE
+      AUTO SLIDE (ONLY WHEN NEEDED)
   ========================================= */
+
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (
+      prefersReducedMotion ||
+      !sliderEnabled
+    ) {
+      return undefined;
+    }
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % sliderBooks.length);
+      setCurrentIndex(
+        (previous) =>
+          (previous + 1) % sliderBooks.length
+      );
     }, 3500);
 
     return () => clearInterval(interval);
-  }, [prefersReducedMotion, sliderBooks.length]);
+  }, [
+    prefersReducedMotion,
+    sliderEnabled,
+    sliderBooks.length,
+  ]);
 
   /* =========================================
       VISIBLE SLOTS
   ========================================= */
+
   const visibleBooks = useMemo(() => {
+    if (sliderBooks.length === 0) return [];
+
+    const count = Math.min(
+      visibleCount,
+      sliderBooks.length
+    );
+
     const result = [];
-    for (let i = 0; i < VISIBLE_BOOKS; i++) {
-      const targetIndex = (currentIndex + i) % sliderBooks.length;
-      result.push({
-        ...sliderBooks[targetIndex],
-        slotIndex: i,
-      });
+
+    for (let i = 0; i < count; i++) {
+      result.push(
+        sliderBooks[
+          (currentIndex + i) % sliderBooks.length
+        ]
+      );
     }
+
     return result;
-  }, [sliderBooks, currentIndex]);
+  }, [sliderBooks, currentIndex, visibleCount]);
+
+  /* Prefetch the next slide window so covers are warm before they rotate in */
+  useEffect(() => {
+    if (!sliderEnabled) return undefined;
+
+    const prefetch = () => {
+      for (let i = 0; i < visibleCount; i++) {
+        const targetIndex =
+          (currentIndex +
+            visibleCount +
+            i) %
+          sliderBooks.length;
+
+        const src = sliderBooks[targetIndex]?.src;
+
+        if (src) {
+          const image = new Image();
+          image.decoding = "async";
+          image.src = src;
+        }
+      }
+    };
+
+    const raf = requestAnimationFrame(prefetch);
+
+    return () => cancelAnimationFrame(raf);
+  }, [
+    currentIndex,
+    sliderBooks,
+    sliderEnabled,
+    visibleCount,
+  ]);
+
+  const showLoadingState =
+    homepageSettingsLoading &&
+    sliderBooks.length === 0;
 
   return (
     <section className="hero" aria-label="Yellowish Publication Hero">
@@ -195,77 +312,93 @@ export default function Hero() {
       </div>
 
       <div className="book-showcase">
-        <button
-          type="button"
-          className="book-arrow book-arrow-left"
-          onClick={prevSlide}
-          aria-label="Previous books"
-        >
-          ‹
-        </button>
+        {showLoadingState ? (
+          <div
+            className="hero-books-empty"
+            role="status"
+            aria-live="polite"
+          >
+            <strong>Loading featured books…</strong>
+          </div>
+        ) : sliderBooks.length === 0 ? (
+          <div
+            className="hero-books-empty"
+            role="status"
+            aria-live="polite"
+          >
+            <strong>Featured books coming soon</strong>
+            <span>
+              {homepageSettingsError
+                ? "We couldn't load the featured selection right now. Please try again shortly."
+                : "Our next featured selection is being prepared."}
+            </span>
+          </div>
+        ) : (
+          <>
+            {sliderEnabled && (
+              <button
+                type="button"
+                className="book-arrow book-arrow-left"
+                onClick={prevSlide}
+                aria-label="Previous books"
+              >
+                ‹
+              </button>
+            )}
 
-        <div className="hero-books">
-          {visibleBooks.map((book) => {
-            const isFallback = String(book.id).includes("fallback");
-            const customBadge =
-              typeof book.customBadge === "string"
-                ? book.customBadge.trim()
-                : "";
+            <div className="hero-books">
+              {visibleBooks.map((book) => {
+                const customBadge =
+                  typeof book.customBadge ===
+                  "string"
+                    ? book.customBadge.trim()
+                    : "";
 
-            return (
-              <div key={`slot-${book.slotIndex}`} className="hero-book-wrapper">
-                {isFallback ? (
-                  <div className="hero-book-link">
-                    <div className="hero-book">
-                      <img
-                        src={book.src}
-                        alt={book.title}
-                        width={470}
-                        height={705}
-                        loading="eager"
-                        fetchPriority="high"
-                        decoding="async"
-                      />
-                      {customBadge ? (
-                        <span className="hero-book-badge">{customBadge}</span>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : (
-                  <Link
-                    to={`/book/${book.id}`}
-                    className="hero-book-link"
-                    aria-label={`View ${book.title}`}
+                return (
+                  <div
+                    key={book.id}
+                    className="hero-book-wrapper"
                   >
-                    <div className="hero-book">
-                      <img
-                        src={book.src}
-                        alt={book.title}
-                        width={470}
-                        height={705}
-                        loading="eager"
-                        fetchPriority="high"
-                        decoding="async"
-                      />
-                      {customBadge ? (
-                        <span className="hero-book-badge">{customBadge}</span>
-                      ) : null}
-                    </div>
-                  </Link>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                    <Link
+                      to={`/book/${book.id}`}
+                      className="hero-book-link"
+                      aria-label={`View ${book.title}`}
+                    >
+                      <div className="hero-book">
+                        <img
+                          src={book.src}
+                          alt={book.title}
+                          width={470}
+                          height={705}
+                          loading="eager"
+                          fetchPriority="high"
+                          decoding="async"
+                          onError={handleCoverError}
+                        />
+                        {customBadge ? (
+                          <span className="hero-book-badge">
+                            {customBadge}
+                          </span>
+                        ) : null}
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
 
-        <button
-          type="button"
-          className="book-arrow book-arrow-right"
-          onClick={nextSlide}
-          aria-label="Next books"
-        >
-          ›
-        </button>
+            {sliderEnabled && (
+              <button
+                type="button"
+                className="book-arrow book-arrow-right"
+                onClick={nextSlide}
+                aria-label="Next books"
+              >
+                ›
+              </button>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

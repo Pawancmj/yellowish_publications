@@ -132,9 +132,9 @@
   z-index: 5;
   width: min(1600px, 94%);
   height: 355px;
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  align-items: end;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   gap: 22px;
 }
 
@@ -145,10 +145,49 @@
 
 .hero-book-wrapper {
   min-width: 0;
-  width: 100%;
+  flex: 0 1 235px;
+  width: 235px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
+}
+
+
+/* ============================================================
+   EMPTY / LOADING SHOWCASE STATE
+============================================================ */
+
+.hero-books-empty {
+  position: relative;
+  z-index: 5;
+  align-self: center;
+  width: min(460px, 84%);
+  margin: 0 auto;
+  padding: 22px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(255, 253, 250, 0.94);
+  border-radius: 12px;
+  color: #17243a;
+  text-align: center;
+  font-family:
+    "DM Sans",
+    "Inter",
+    system-ui,
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.hero-books-empty strong {
+  font-size: 16px;
+  color: #17243a;
+}
+
+.hero-books-empty span {
+  color: #555;
 }
 
 
@@ -378,6 +417,11 @@
     gap: 20px;
   }
 
+  .hero-book-wrapper {
+    flex-basis: 205px;
+    width: 205px;
+  }
+
   .hero-book {
     max-width: 205px;
   }
@@ -421,6 +465,11 @@
     width: 96%;
     height: 315px;
     gap: 12px;
+  }
+
+  .hero-book-wrapper {
+    flex-basis: 175px;
+    width: 175px;
   }
 
   .hero-book {
@@ -497,14 +546,18 @@
   .hero-books {
     width: 100%;
     height: 275px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-content: start;
     gap: 12px;
   }
 
-  /* MOBILE: show exactly 2 books — hide the rest (slider still cycles them) */
+  /* MOBILE: only two slots are rendered; hide any extra slot defensively. */
   .hero-book-wrapper:nth-child(n + 3) {
     display: none;
+  }
+
+  .hero-book-wrapper {
+    flex-basis: 150px;
+    width: 150px;
   }
 
   .hero-book {
@@ -585,7 +638,6 @@
 
   .hero-books {
     height: 255px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
 

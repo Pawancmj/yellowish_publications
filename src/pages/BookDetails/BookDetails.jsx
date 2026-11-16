@@ -11,13 +11,13 @@ const WHATSAPP_NUMBER = "919871569192";
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   // ✅ USE LIVE FIRESTORE DATA (read-only for public)
-  const { books, getBookCover } = useData(); 
-  
+  const { books, getBookCover } = useData();
+
   // ✅ FIND BOOK FROM LIVE DATA
   const book = books.find((b) => b.id === id);
-  
+
   // Loading state while data loads
   if (!book) {
     return (
@@ -25,12 +25,12 @@ export default function BookDetails() {
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <h2>Book not found or loading...</h2>
           <p>Total books loaded: {books.length}</p>
-          <button 
+          <button
             onClick={() => navigate("/store")}
-            style={{ 
-              background: '#007bff', 
-              color: 'white', 
-              border: 'none', 
+            style={{
+              background: '#007bff',
+              color: 'white',
+              border: 'none',
               padding: '10px 20px',
               borderRadius: '5px',
               cursor: 'pointer',
@@ -75,8 +75,8 @@ export default function BookDetails() {
   return (
     <div className="book-details">
       <div className="book-details-cover-wrap">
-        <img 
-          src={getBookCover ? getBookCover(book) : (book.cover || book.image || NO_COVER_PLACEHOLDER)} 
+        <img
+          src={getBookCover ? getBookCover(book) : (book.cover || book.image || NO_COVER_PLACEHOLDER)}
           width={600}
           height={900}
           loading="eager"
@@ -87,14 +87,14 @@ export default function BookDetails() {
             e.currentTarget.dataset.fallback = "1";
             e.currentTarget.src = NO_COVER_PLACEHOLDER;
           }}
-          alt={book.title} 
-          className="book-details-cover" 
+          alt={book.title}
+          className="book-details-cover"
         />
         {customBadge ? (
           <span className="book-details-badge">{customBadge}</span>
         ) : null}
       </div>
-      
+
       <div className="book-details-info">
         <h1>{book.title}</h1>
         {book.subtitle && <h3 className="subtitle">{book.subtitle}</h3>}
@@ -104,11 +104,11 @@ export default function BookDetails() {
         {book.updatedAt && (
           <p className="updated">Last Updated: {new Date(book.updatedAt.seconds * 1000).toLocaleDateString()}</p>
         )}
-        
+
         <div className="description">
           {book.description || "No description available."}
         </div>
-        
+
         <p className="price">₹{book.price || 0}</p>
 
         {/* ✅ ONLY PUBLIC BUTTONS - No Delete */}
@@ -120,7 +120,7 @@ export default function BookDetails() {
             className="book-action-btn whatsapp-buy-btn"
             title="Buy on WhatsApp"
           >
-            <FaWhatsapp /> Buy on WhatsApp
+            Buy Now
           </a>
           <button onClick={handleBack} className="book-action-btn back-btn">
             ← Back to Store

@@ -1,6 +1,11 @@
 // src/pages/Admindashboard/Admin.jsx
 
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
@@ -24,9 +29,14 @@ import {
   FaInstagram,
   FaImages,
   FaQuoteLeft,
+  FaStar,
+  FaTags,
 } from "react-icons/fa";
 
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
+import { NO_COVER_PLACEHOLDER } from "../../utils/coverPlaceholder";
+import { normalizeFeaturedBookIds } from "../../utils/featuredBooks";
+import GenresManager from "./GenresManager";
 
 import "./Admin.css";
 
@@ -60,6 +70,18 @@ const Admin = () => {
     authorsHero,
     authorsHeroLoading,
     updateAuthorsHero,
+
+    // Homepage featured books
+    homepageSettings,
+    homepageSettingsLoading,
+    homepageSettingsError,
+    updateHomepageSettings,
+
+    // Homepage genre filters
+    genres,
+    genresLoading,
+    genresError,
+    updateGenres,
 
     // Trusted Authors
     trustedAuthorPosts,
@@ -391,6 +413,32 @@ const Admin = () => {
             onClick={() => setActiveTab("hero")}
           >
             <FaHome /> Manage Hero
+          </button>
+
+          <button
+            className={
+              activeTab === "featuredBooks"
+                ? "tab-active"
+                : "tab"
+            }
+            onClick={() =>
+              setActiveTab("featuredBooks")
+            }
+          >
+            <FaStar /> Featured Books
+          </button>
+
+          <button
+            className={
+              activeTab === "genres"
+                ? "tab-active"
+                : "tab"
+            }
+            onClick={() =>
+              setActiveTab("genres")
+            }
+          >
+            <FaTags /> Manage Genres
           </button>
 
           <button
@@ -1108,6 +1156,87 @@ const Admin = () => {
         )}
 
         {/* =========================================================
+            HOMEPAGE FEATURED BOOKS
+        ========================================================= */}
+
+        {activeTab === "featuredBooks" && (
+          <div className="featured-books-management">
+
+            <div className="section-header">
+
+              <div>
+
+                <h2>
+                  Featured Books / Homepage Hero Books
+                </h2>
+
+                <p>
+                  Choose which books appear in the
+                  homepage hero showcase and in what
+                  order. Only selected books are shown;
+                  removing one here never deletes it
+                  from the Books collection.
+                </p>
+
+              </div>
+
+            </div>
+
+            <FeaturedBooksManager
+              books={books}
+              savedBookIds={
+                homepageSettings?.featuredBookIds || []
+              }
+              settingsLoading={
+                homepageSettingsLoading
+              }
+              settingsError={homepageSettingsError}
+              getBookCover={getBookCover}
+              onSave={updateHomepageSettings}
+            />
+
+          </div>
+        )}
+
+        {/* =========================================================
+            HOMEPAGE GENRES
+        ========================================================= */}
+
+        {activeTab === "genres" && (
+          <div className="genres-management">
+
+            <div className="section-header">
+
+              <div>
+
+                <h2>Manage Genres</h2>
+
+                <p>
+                  Genres power the filters in the
+                  homepage “Books Published” section.
+                  Only active genres appear on the
+                  homepage; deleting a genre never deletes
+                  its books or removes them from All Books.
+                  Renaming a genre keeps its existing books
+                  linked automatically.
+                </p>
+
+              </div>
+
+            </div>
+
+            <GenresManager
+              genres={genres}
+              genresLoading={genresLoading}
+              genresError={genresError}
+              books={books}
+              onSave={updateGenres}
+            />
+
+          </div>
+        )}
+
+        {/* =========================================================
             AUTHORS HERO IMAGES
         ========================================================= */}
 
@@ -1299,6 +1428,7 @@ const Admin = () => {
       {showBookForm && (
         <BookForm
           book={editingBook}
+          genres={genres}
 
           onSave={(bookData) => {
 
@@ -1939,36 +2069,53 @@ const TrustedAuthorForm = ({
 
 const CUSTOM_GENRE_VALUE = "__custom__";
 
-const PREDEFINED_GENRES = [
-  "Fiction",
-  "Poetry",
-  "History",
-  "Self-Help",
-  "Academic",
-  "Psychology",
-  "Science",
-  "Management",
-  "Dharma",
-  "Nature",
-  "Business",
-  "Astronomy",
-  "Mathematics",
-  "Law",
-  "Spiritual Growth",
-  "Epic Fantasy",
-];
-
 const BookForm = ({
   book,
+  genres = [],
   onSave,
   onCancel,
 }) => {
 
+  const genreOptions = useMemo(() => {
+    const options = [];
+    const seen = new Set();
+
+    (Array.isArray(genres) ? genres : []).forEach(
+      (genre) => {
+        const name =
+          typeof genre?.name === "string"
+            ? genre.name.trim()
+            : "";
+        const key = name.toLowerCase();
+
+        if (!name || seen.has(key)) return;
+
+        seen.add(key);
+        options.push(name);
+      }
+    );
+
+    // Keep the book's current genre selectable even if the genre was
+    // deactivated or deleted after the book was created.
+    const currentGenre =
+      typeof book?.genre === "string"
+        ? book.genre.trim()
+        : "";
+    const currentKey = currentGenre.toLowerCase();
+
+    if (currentGenre && !seen.has(currentKey)) {
+      options.push(currentGenre);
+    }
+
+    return options;
+  }, [genres, book?.genre]);
+
   const initialGenre =
-    book?.genre || "Fiction";
+    book?.genre || genreOptions[0] || "";
 
   const initialGenreIsPredefined =
-    PREDEFINED_GENRES.includes(initialGenre);
+    Boolean(initialGenre) &&
+    genreOptions.includes(initialGenre);
 
   // Custom genre text kept separately; formData.genre holds the
   // sentinel while the admin is in "Add Custom Genre" mode.
@@ -2290,69 +2437,14 @@ const BookForm = ({
                 required
               >
 
-                <option value="Fiction">
-                  Fiction
-                </option>
-
-                <option value="Poetry">
-                  Poetry
-                </option>
-
-                <option value="History">
-                  History
-                </option>
-
-                <option value="Self-Help">
-                  Self-Help
-                </option>
-
-                <option value="Academic">
-                  Academic
-                </option>
-
-                <option value="Psychology">
-                  Psychology
-                </option>
-
-                <option value="Science">
-                  Science
-                </option>
-
-                <option value="Management">
-                  Management
-                </option>
-
-                <option value="Dharma">
-                  Dharma
-                </option>
-
-                <option value="Nature">
-                  Nature
-                </option>
-
-                <option value="Business">
-                  Business
-                </option>
-
-                <option value="Astronomy">
-                  Astronomy
-                </option>
-
-                <option value="Mathematics">
-                  Mathematics
-                </option>
-
-                <option value="Law">
-                  Law
-                </option>
-
-                <option value="Spiritual Growth">
-                  Spiritual Growth
-                </option>
-
-                <option value="Epic Fantasy">
-                  Epic Fantasy
-                </option>
+                {genreOptions.map((genreName) => (
+                  <option
+                    key={genreName}
+                    value={genreName}
+                  >
+                    {genreName}
+                  </option>
+                ))}
 
                 <option value={CUSTOM_GENRE_VALUE}>
                   Add Custom Genre
@@ -2937,6 +3029,697 @@ const AuthorForm = ({
 /* ================================================================
    HERO MANAGER
 ================================================================ */
+
+const handleAdminCoverError = (event) => {
+  const image = event.currentTarget;
+
+  if (
+    !image ||
+    image.dataset.coverFallback === "true"
+  ) {
+    return;
+  }
+
+  image.dataset.coverFallback = "true";
+  image.src = NO_COVER_PLACEHOLDER;
+};
+
+/* ================================================================
+   FEATURED BOOKS / HOMEPAGE HERO BOOKS MANAGER
+=============================================================== */
+
+const FeaturedBooksManager = ({
+  books = [],
+  savedBookIds = [],
+  settingsLoading = false,
+  settingsError = null,
+  getBookCover,
+  onSave,
+}) => {
+  const savedSignature = JSON.stringify(
+    normalizeFeaturedBookIds(savedBookIds)
+  );
+
+  const [selectedIds, setSelectedIds] = useState(
+    () => normalizeFeaturedBookIds(savedBookIds)
+  );
+  const [search, setSearch] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState({
+    type: "",
+    text: "",
+  });
+  const [dragIndex, setDragIndex] = useState(null);
+  const initializedRef = useRef(false);
+
+  // Initialize from the persisted selection once settings finish loading.
+  // Deliberately NOT re-syncing on every settings snapshot: Firestore emits a
+  // local optimistic snapshot while a write is in flight and reverts it when
+  // the server rejects the write, which would wipe the admin's unsaved edits.
+  useEffect(() => {
+    if (settingsLoading || initializedRef.current) {
+      return;
+    }
+
+    initializedRef.current = true;
+
+    setSelectedIds(
+      normalizeFeaturedBookIds(savedBookIds)
+    );
+  }, [
+    settingsLoading,
+    savedBookIds,
+    savedSignature,
+  ]);
+
+  const booksById = useMemo(() => {
+    const map = new Map();
+
+    (Array.isArray(books) ? books : []).forEach(
+      (book) => {
+        if (
+          !book ||
+          book.id === undefined ||
+          book.id === null
+        ) {
+          return;
+        }
+
+        map.set(String(book.id), book);
+      }
+    );
+
+    return map;
+  }, [books]);
+
+  const validSelectedIds = useMemo(
+    () =>
+      selectedIds.filter((id) =>
+        booksById.has(id)
+      ),
+    [selectedIds, booksById]
+  );
+
+  const validSelectedBooks = useMemo(
+    () =>
+      validSelectedIds
+        .map((id) => booksById.get(id))
+        .filter(Boolean),
+    [validSelectedIds, booksById]
+  );
+
+  const missingIds = useMemo(
+    () =>
+      selectedIds.filter(
+        (id) => !booksById.has(id)
+      ),
+    [selectedIds, booksById]
+  );
+
+  const orderById = new Map(
+    validSelectedIds.map((id, index) => [
+      id,
+      index + 1,
+    ])
+  );
+
+  const filteredBooks = useMemo(() => {
+    const term = search.trim().toLowerCase();
+
+    const list = (
+      Array.isArray(books) ? books : []
+    ).filter(Boolean);
+
+    const matched = term
+      ? list.filter((book) =>
+          [
+            book.title,
+            book.author,
+            book.genre,
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase()
+            .includes(term)
+        )
+      : list;
+
+    return [...matched].sort((a, b) =>
+      String(a.title || "").localeCompare(
+        String(b.title || "")
+      )
+    );
+  }, [books, search]);
+
+  const dirty =
+    JSON.stringify(selectedIds) !== savedSignature;
+
+  const notify = (type, text) =>
+    setMessage({ type, text });
+
+  const toggleBook = (bookId) => {
+    notify("", "");
+
+    setSelectedIds((previous) =>
+      previous.includes(bookId)
+        ? previous.filter((id) => id !== bookId)
+        : [...previous, bookId]
+    );
+  };
+
+  const reorderSelected = (
+    sourceId,
+    targetId,
+    placeAfter = false
+  ) => {
+    setSelectedIds((previous) => {
+      const from = previous.indexOf(sourceId);
+      const targetIndex = previous.indexOf(targetId);
+
+      if (
+        from === -1 ||
+        targetIndex === -1 ||
+        from === targetIndex
+      ) {
+        return previous;
+      }
+
+      const next = [...previous];
+      const [moved] = next.splice(from, 1);
+      const insertAt = next.indexOf(targetId);
+
+      next.splice(
+        placeAfter ? insertAt + 1 : insertAt,
+        0,
+        moved
+      );
+
+      return next;
+    });
+  };
+
+  const moveSelected = (bookId, offset) => {
+    const index = validSelectedIds.indexOf(bookId);
+    const targetId =
+      validSelectedIds[index + offset];
+
+    if (!targetId) return;
+
+    reorderSelected(
+      bookId,
+      targetId,
+      offset > 0
+    );
+  };
+
+  const removeMissing = (bookId) => {
+    notify("", "");
+
+    setSelectedIds((previous) =>
+      previous.filter((id) => id !== bookId)
+    );
+  };
+
+  const handleDiscard = () => {
+    setSelectedIds(
+      normalizeFeaturedBookIds(savedBookIds)
+    );
+
+    notify(
+      "success",
+      "Unsaved changes discarded."
+    );
+  };
+
+  const handleSave = async () => {
+    if (saving) return;
+
+    setSaving(true);
+    notify("", "");
+
+    try {
+      // Deleted books cannot be featured; drop stale IDs on save.
+      const idsToSave = selectedIds.filter((id) =>
+        booksById.has(id)
+      );
+
+      const result = await onSave({
+        featuredBookIds: idsToSave,
+      });
+
+      if (result?.error) {
+        notify(
+          "error",
+          result.error.message ||
+            "Failed to save featured books."
+        );
+      } else {
+        setSelectedIds(idsToSave);
+
+        notify(
+          "success",
+          idsToSave.length === 0
+            ? "Saved. The homepage hero will show its empty state until books are selected."
+            : `Saved. ${idsToSave.length} book${
+                idsToSave.length === 1 ? "" : "s"
+              } will appear in the homepage hero.`
+        );
+      }
+    } catch (error) {
+      notify(
+        "error",
+        error?.message ||
+          "Failed to save featured books."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (settingsLoading) {
+    return (
+      <div className="hero-manager-loading">
+        <FaSpinner className="hero-manager-spin" />
+        Loading featured book settings…
+      </div>
+    );
+  }
+
+  return (
+    <div className="hero-manager-card featured-books-card">
+
+      <p className="hero-manager-hint">
+        Tick a book to feature it, then arrange the
+        order on the right. Drag selected books or use
+        the arrow buttons to reorder. Unselected and
+        newly added books never appear automatically.
+      </p>
+
+      {settingsError && (
+        <div className="fb-warning">
+          <FaExclamationCircle />
+          <span>
+            The saved featured selection could not be
+            loaded. Saving now will replace it.
+          </span>
+        </div>
+      )}
+
+      {missingIds.length > 0 &&
+        books.length > 0 && (
+          <div className="fb-warning">
+            <FaExclamationCircle />
+            <span>
+              {missingIds.length} featured book
+              {missingIds.length === 1 ? "" : "s"}{" "}
+              no longer exist and will not appear on
+              the homepage.
+            </span>
+
+            <span className="fb-missing-list">
+              {missingIds.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  className="fb-missing-remove"
+                  onClick={() =>
+                    removeMissing(id)
+                  }
+                  title="Remove this deleted book from the selection"
+                >
+                  {id} ×
+                </button>
+              ))}
+            </span>
+          </div>
+        )}
+
+      <div className="fb-toolbar">
+        <input
+          type="search"
+          className="fb-search"
+          value={search}
+          onChange={(event) =>
+            setSearch(event.target.value)
+          }
+          placeholder="Search books by title, author or genre…"
+          aria-label="Search books"
+        />
+
+        <span className="fb-count">
+          <FaStar /> {validSelectedIds.length} selected
+          {missingIds.length > 0
+            ? ` (+${missingIds.length} missing)`
+            : ""}
+        </span>
+      </div>
+
+      <div className="fb-layout">
+
+        {/* ================= ALL BOOKS ================= */}
+
+        <div className="fb-column">
+          <h3 className="fb-column-title">
+            All Books
+            <span>{filteredBooks.length}</span>
+          </h3>
+
+          {filteredBooks.length === 0 ? (
+            <p className="fb-empty">
+              No books match “{search}”.
+            </p>
+          ) : (
+            <ul className="fb-book-list">
+              {filteredBooks.map((book) => {
+                const bookId = String(book.id);
+                const order = orderById.get(bookId);
+                const isSelected = Boolean(order);
+                const cover = getBookCover
+                  ? getBookCover(book)
+                  : book.cover ||
+                    NO_COVER_PLACEHOLDER;
+
+                return (
+                  <li
+                    key={bookId}
+                    className={
+                      isSelected
+                        ? "fb-book-row is-selected"
+                        : "fb-book-row"
+                    }
+                  >
+                    <img
+                      className="fb-book-cover"
+                      src={
+                        cover || NO_COVER_PLACEHOLDER
+                      }
+                      alt=""
+                      width={48}
+                      height={72}
+                      loading="lazy"
+                      decoding="async"
+                      onError={handleAdminCoverError}
+                    />
+
+                    <div className="fb-book-info">
+                      <strong>
+                        {book.title ||
+                          book.id}
+                      </strong>
+                      <span>
+                        {book.author ||
+                          "Unknown author"}
+                      </span>
+                    </div>
+
+                    <span
+                      className={
+                        isSelected
+                          ? "fb-status is-featured"
+                          : "fb-status"
+                      }
+                    >
+                      {isSelected
+                        ? `Featured · #${order}`
+                        : "Not featured"}
+                    </span>
+
+                    <button
+                      type="button"
+                      className={
+                        isSelected
+                          ? "fb-toggle fb-toggle-remove"
+                          : "fb-toggle"
+                      }
+                      onClick={() =>
+                        toggleBook(bookId)
+                      }
+                      aria-pressed={isSelected}
+                    >
+                      {isSelected ? "Remove" : "Add"}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
+        {/* ================= HOMEPAGE ORDER ================= */}
+
+        <div className="fb-column">
+          <h3 className="fb-column-title">
+            Homepage Order
+            <span>{validSelectedBooks.length}</span>
+          </h3>
+
+          {validSelectedBooks.length === 0 ? (
+            <p className="fb-empty">
+              No books selected. The homepage hero
+              will show a clean “coming soon” state.
+            </p>
+          ) : (
+            <ol className="fb-order-list">
+              {validSelectedBooks.map(
+                (book, index) => {
+                  const bookId = String(book.id);
+                  const cover = getBookCover
+                    ? getBookCover(book)
+                    : book.cover ||
+                      NO_COVER_PLACEHOLDER;
+
+                  return (
+                    <li
+                      key={bookId}
+                      className={
+                        dragIndex === index
+                          ? "fb-order-row is-dragging"
+                          : "fb-order-row"
+                      }
+                      draggable
+                      onDragStart={() =>
+                        setDragIndex(index)
+                      }
+                      onDragOver={(event) =>
+                        event.preventDefault()
+                      }
+                      onDrop={(event) => {
+                        event.preventDefault();
+
+                        if (
+                          dragIndex !== null &&
+                          dragIndex !== index
+                        ) {
+                          const sourceId =
+                            validSelectedIds[
+                              dragIndex
+                            ];
+                          const targetId =
+                            validSelectedIds[
+                              index
+                            ];
+
+                          if (
+                            sourceId &&
+                            targetId
+                          ) {
+                            reorderSelected(
+                              sourceId,
+                              targetId,
+                              dragIndex < index
+                            );
+                          }
+                        }
+
+                        setDragIndex(null);
+                      }}
+                      onDragEnd={() =>
+                        setDragIndex(null)
+                      }
+                    >
+                      <span className="fb-order-num">
+                        {index + 1}
+                      </span>
+
+                      <img
+                        className="fb-order-cover"
+                        src={
+                          cover ||
+                          NO_COVER_PLACEHOLDER
+                        }
+                        alt=""
+                        width={36}
+                        height={54}
+                        loading="lazy"
+                        decoding="async"
+                        onError={
+                          handleAdminCoverError
+                        }
+                      />
+
+                      <div className="fb-order-info">
+                        <strong>
+                          {book.title ||
+                            book.id}
+                        </strong>
+                        <span>
+                          {book.author ||
+                            "Unknown author"}
+                        </span>
+                      </div>
+
+                      <div className="fb-order-actions">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            moveSelected(
+                              bookId,
+                              -1
+                            )
+                          }
+                          disabled={index === 0}
+                          aria-label={`Move ${book.title} up`}
+                          title="Move up"
+                        >
+                          ↑
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            moveSelected(
+                              bookId,
+                              1
+                            )
+                          }
+                          disabled={
+                            index ===
+                            validSelectedBooks.length -
+                              1
+                          }
+                          aria-label={`Move ${book.title} down`}
+                          title="Move down"
+                        >
+                          ↓
+                        </button>
+
+                        <button
+                          type="button"
+                          className="fb-order-remove"
+                          onClick={() =>
+                            toggleBook(bookId)
+                          }
+                          aria-label={`Remove ${book.title} from featured books`}
+                          title="Remove from featured"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </li>
+                  );
+                }
+              )}
+            </ol>
+          )}
+
+          <div className="fb-preview">
+            <h4>Homepage Hero Preview</h4>
+
+            {validSelectedBooks.length === 0 ? (
+              <p className="fb-empty fb-preview-empty">
+                Featured books coming soon
+              </p>
+            ) : (
+              <div className="fb-preview-row">
+                {validSelectedBooks.map((book) => {
+                  const cover = getBookCover
+                    ? getBookCover(book)
+                    : book.cover ||
+                      NO_COVER_PLACEHOLDER;
+
+                  return (
+                    <img
+                      key={String(book.id)}
+                      src={
+                        cover ||
+                        NO_COVER_PLACEHOLDER
+                      }
+                      alt={book.title || ""}
+                      width={54}
+                      height={81}
+                      loading="lazy"
+                      decoding="async"
+                      onError={handleAdminCoverError}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+      </div>
+
+      {message.text && (
+        <p
+          className={
+            message.type === "error"
+              ? "hero-manager-msg error"
+              : "hero-manager-msg success"
+          }
+          role="status"
+        >
+          {message.type === "error" ? (
+            <FaExclamationCircle />
+          ) : (
+            <FaCheckCircle />
+          )}
+          {message.text}
+        </p>
+      )}
+
+      <div className="fb-actions">
+        <span
+          className={
+            dirty
+              ? "fb-dirty"
+              : "fb-dirty is-saved"
+          }
+        >
+          {dirty
+            ? "Unsaved changes"
+            : "All changes saved"}
+        </span>
+
+        <button
+          type="button"
+          className="cancel-btn"
+          onClick={handleDiscard}
+          disabled={!dirty || saving}
+        >
+          Discard
+        </button>
+
+        <button
+          type="button"
+          className="save-btn"
+          onClick={handleSave}
+          disabled={!dirty || saving}
+        >
+          {saving ? (
+            <>
+              <FaSpinner className="hero-manager-spin" />{" "}
+              Saving…
+            </>
+          ) : (
+            "Save Changes"
+          )}
+        </button>
+      </div>
+
+    </div>
+  );
+};
 
 const HERO_SLOTS = [
 

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useData } from "../../contexts/DataContext";
@@ -91,18 +91,11 @@ export default function Books() {
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState("");
   const [sortBy, setSortBy] = useState("");
-  const [toast, setToast] = useState("");
 
   const { books, getBookCover } = useData();
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    if (!toast) return;
-    const t = setTimeout(() => setToast(""), 2500);
-    return () => clearTimeout(t);
-  }, [toast]);
 
   // Unique genres derived from live data (keeps filter logic exact-match)
   const categories = useMemo(() => {
@@ -171,31 +164,6 @@ export default function Books() {
     window.scrollTo({ top, behavior: "smooth" });
   };
 
-  const shareBook = async (e, book) => {
-    e.preventDefault();
-    const url = `${window.location.origin}/book/${book.id}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: book.title || "Book",
-          text: `${book.title || "This book"} by ${
-            book.author || book.authorsName || "Unknown"
-          }`,
-          url,
-        });
-      } catch (err) {
-        // User dismissed the share sheet
-      }
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      setToast("Book link copied.");
-    } catch (err) {
-      // Clipboard unavailable
-    }
-  };
-
   const renderCard = (book, i, baseIndex) => {
     const badge = getBookBadge(book);
     const coverUrl = getBookCover(book);
@@ -208,7 +176,6 @@ export default function Books() {
         badge={badge}
         cover={coverUrl}
         handleNavClick={handleNavClick}
-        shareBook={shareBook}
       />
     );
   };
@@ -349,7 +316,6 @@ export default function Books() {
                   badge={badge}
                   cover={getBookCover(book)}
                   handleNavClick={handleNavClick}
-                  shareBook={shareBook}
                 />
               );
             })}

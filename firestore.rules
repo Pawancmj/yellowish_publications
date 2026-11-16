@@ -15,6 +15,11 @@ service cloud.firestore {
     // Same authorization pattern as blogs/books/authors/leads: the existing
     // Admin Dashboard authenticates with Firebase Email/Password, so writes
     // require request.auth != null. The public Home Page only reads.
+    //
+    // This collection is also used for small homepage configuration documents
+    // (hero/homepageSettings and hero/genres), so the public homepage can read
+    // the admin-managed featured-book and genre configuration without exposing
+    // any write access. Book documents are never modified by these settings.
     match /users/{userId}/hero/{heroId} {
       allow read: if true;
       allow create: if request.auth != null;
