@@ -28,7 +28,6 @@ import {
   FaReply,
   FaHeart,
   FaRegHeart,
-  FaBookOpen,
   FaSearch,
 } from "react-icons/fa";
 
@@ -653,9 +652,6 @@ export default function BlogDetail() {
               <h3>{post.author}</h3>
               <p className="ag-bio">{post.authorBio}</p>
               <div className="ag-stats">
-                <span>
-                  <FaBookOpen /> {post.authorBooks}
-                </span>
                 <span>
                   <FaPen /> {post.authorRole}
                 </span>

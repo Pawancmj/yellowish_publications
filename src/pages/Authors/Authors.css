@@ -1531,6 +1531,9 @@
   border-radius:
     50%;
 
+  background:
+    #fff1cc;
+
   object-fit:
     cover;
 
@@ -1657,29 +1660,6 @@
 
   font-size:
     0.78rem;
-
-  font-weight:
-    600;
-}
-
-.books-label {
-  display:
-    inline-flex;
-
-  align-items:
-    center;
-
-  gap:
-    0.4rem;
-
-  margin-top:
-    0.75rem;
-
-  color:
-    #d9a441;
-
-  font-size:
-    0.85rem;
 
   font-weight:
     600;
@@ -2245,17 +2225,6 @@
 .genre-multi {
   display:
     inline-block;
-}
-
-.card-body .books-label {
-  display:
-    flex;
-
-  justify-content:
-    center;
-
-  margin-top:
-    0.65rem;
 }
 
 .card-desc {

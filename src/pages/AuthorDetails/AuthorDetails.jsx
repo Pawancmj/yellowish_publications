@@ -98,7 +98,7 @@ export default function AuthorDetails() {
       {/* Books */}
       <div className="author-books">
         <h2>
-          <FaBookOpen /> Books by {author.name} ({authorBooks.length})
+          <FaBookOpen /> Books by {author.name}
         </h2>
         {authorBooks.length > 0 ? (
           <ul>

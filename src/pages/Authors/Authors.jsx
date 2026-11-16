@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import {
   FaPen,
   FaSearch,
-  FaBookOpen,
   FaArrowRight,
   FaQuoteLeft,
   FaFacebookF,
@@ -19,6 +18,11 @@ import author2 from "../../assets/author2.webp";
 import author3 from "../../assets/author3.webp";
 import author4 from "../../assets/author4.webp";
 import author5 from "../../assets/author5.webp";
+import author1Small from "../../assets/author1-320.webp";
+import author2Small from "../../assets/author2-320.webp";
+import author3Small from "../../assets/author3-320.webp";
+import author4Small from "../../assets/author4-320.webp";
+import author5Small from "../../assets/author5-320.webp";
 
 import "./Authors.css";
 
@@ -65,49 +69,55 @@ function AuthorBio({ bio }) {
   return <>{text}</>;
 }
 
-// Normalize author names for matching book records to author cards
-// (trim, collapse spaces, drop common honorifics).
-function normalizeAuthorName(value) {
-  return String(value || "")
-    .trim()
-    .replace(/\s+/g, " ")
-    .toLowerCase()
-    .replace(/^(dr|mr|mrs|ms|miss|prof|rev|er|shri|smt|ca|adv|fr|sr)\.?\s+/i, "")
-    .replace(/[.,]+$/, "")
-    .trim();
-}
+// Number of Featured Authors portraits that sit in the first row of the
+// two-column grid and can appear in the initial viewport. They are loaded
+// eagerly with a high fetch priority; every lower image stays lazy.
+const EAGER_FEATURED_IMAGES = 2;
 
-// Published book count derived from actual book records, not the manual
-// `books` array stored on author docs. A book belongs to an author through
-// the stable `authorId` field when present; otherwise through the book's
-// `author` name field (supports co-authors separated by commas / "&" / "and").
-// Each book is counted at most once per author (deduped by book id/title).
-function publishedBookCount(author, books) {
-  if (!Array.isArray(books)) return 0;
-  const authorId = String(author.id ?? "");
-  const authorName = normalizeAuthorName(author.name);
-  const matched = new Set();
-  for (const book of books) {
-    const linked = book.authorId
-      ? String(book.authorId) === authorId
-      : authorName !== "" &&
-        String(book.author || "")
-          .split(/\s*(?:,|&|\band\b)\s*/i)
-          .map(normalizeAuthorName)
-          .includes(authorName);
-    if (linked) matched.add(String(book.id || book.title || ""));
-  }
-  return matched.size;
-}
+// The bundled photos are authored at 640px. Serving the 320px variant to
+// 1x/2x screens nearly halves the download while keeping the 640px file as
+// the high-density fallback. Only bundled assets have variants; uploaded
+// data URLs / remote URLs keep their original single source.
+const AUTHOR_IMAGE_SRCSETS = new Map([
+  [author1, `${author1Small} 320w, ${author1} 640w`],
+  [author2, `${author2Small} 320w, ${author2} 640w`],
+  [author3, `${author3Small} 320w, ${author3} 640w`],
+  [author4, `${author4Small} 320w, ${author4} 640w`],
+  [author5, `${author5Small} 320w, ${author5} 640w`],
+]);
 
-function booksPublishedLabel(count) {
-  return `${count} Book${count === 1 ? "" : "s"} Published`;
+function AuthorImage({ src, alt, width, height, sizes, priority = false }) {
+  const srcSet = AUTHOR_IMAGE_SRCSETS.get(src);
+
+  return (
+    <img
+      src={src}
+      srcSet={srcSet}
+      sizes={srcSet ? sizes : undefined}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : "auto"}
+      decoding="async"
+      onError={(e) => {
+        // Only fall back once so a broken image cannot trigger an
+        // endless chain of duplicate requests.
+        const img = e.currentTarget;
+        if (img.dataset.fallbackApplied === "true") return;
+        img.dataset.fallbackApplied = "true";
+        img.removeAttribute("srcset");
+        img.removeAttribute("sizes");
+        img.src = author5;
+      }}
+    />
+  );
 }
 
 export default function Authors() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authors, books, loading, getAuthorPhoto, addLead, authorsHero } = useData();
+  const { authors, loading, getAuthorPhoto, addLead, authorsHero } = useData();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -222,12 +232,6 @@ export default function Authors() {
     }
     return list;
   }, [authors, query, genreFilter, sortBy]);
-
-  const authorCounts = useMemo(() => {
-    const counts = new Map();
-    authors.forEach((a) => counts.set(a.id, publishedBookCount(a, books)));
-    return counts;
-  }, [authors, books]);
 
   // Featured Authors section: only authors explicitly marked in the
   // Admin Dashboard ("Show as Featured Author"). Authors without the
@@ -353,23 +357,19 @@ export default function Authors() {
                 transition={{ duration: 0.6, delay: i * 0.1 }}
               >
                 <div className="f-portrait">
-                  <img
+                  <AuthorImage
                     src={getAuthorPhoto(author)}
                     alt={author.name}
-                    loading="lazy"
-                    onError={(e) => {
-                      e.target.src = author5;
-                    }}
+                    width={148}
+                    height={148}
+                    sizes="(max-width: 767px) 84px, 148px"
+                    priority={i < EAGER_FEATURED_IMAGES}
                   />
                 </div>
                 <div className="f-body">
                   <div className="f-topline">
                     <h3>{author.name}</h3>
                   </div>
-                  <span className="books-label">
-                    <FaBookOpen />{" "}
-                    {booksPublishedLabel(authorCounts.get(author.id) ?? 0)}
-                  </span>
                   <p className="f-bio">
                     <AuthorBio bio={author.bio} />
                   </p>
@@ -482,21 +482,16 @@ export default function Authors() {
                         handleNavClick(e, `/author/${author.id}`)
                       }
                     >
-                      <img
+                      <AuthorImage
                         src={getAuthorPhoto(author)}
                         alt={author.name}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.src = author5;
-                        }}
+                        width={400}
+                        height={400}
+                        sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1024px) 30vw, 368px"
                       />
                     </a>
                     <div className="card-body">
                       <h3>{author.name}</h3>
-                      <span className="books-label">
-                        <FaBookOpen />{" "}
-                        {booksPublishedLabel(authorCounts.get(author.id) ?? 0)}
-                      </span>
                       <p className="card-desc">
                         <AuthorBio bio={author.bio} />
                       </p>
