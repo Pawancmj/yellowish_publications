@@ -525,8 +525,8 @@ export default function Home() {
                       <img
                         src={getBookCover(book)}
                         alt={book.title}
-                        width={400}
-                        height={600}
+                        width={576}
+                        height={864}
                         loading="lazy"
                         decoding="async"
                         onError={(e) => {

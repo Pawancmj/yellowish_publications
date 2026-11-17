@@ -368,8 +368,8 @@ export default function Hero() {
                         <img
                           src={book.src}
                           alt={book.title}
-                          width={470}
-                          height={705}
+                          width={576}
+                          height={864}
                           loading="eager"
                           fetchPriority="high"
                           decoding="async"
