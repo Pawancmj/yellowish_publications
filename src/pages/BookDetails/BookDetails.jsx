@@ -101,9 +101,6 @@ export default function BookDetails() {
         <p className="author">By {book.author || book.authorsName || "Unknown"}</p>
         <p className="genre">Genre: {book.genre || "Uncategorized"}</p>
         {book.year && <p className="year">Published: {book.year}</p>}
-        {book.updatedAt && (
-          <p className="updated">Last Updated: {new Date(book.updatedAt.seconds * 1000).toLocaleDateString()}</p>
-        )}
 
         <div className="description">
           {book.description || "No description available."}

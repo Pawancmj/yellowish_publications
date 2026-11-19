@@ -76,7 +76,7 @@
   margin: 0.2rem 0;
 }
 
-.book-details-info .genre, .book-details-info .year, .book-details-info .updated {
+.book-details-info .genre, .book-details-info .year {
   font-size: 1rem;
   color: #666;
   margin: 0.2rem 0;
