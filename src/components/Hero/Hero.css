@@ -124,13 +124,14 @@
 
 
 /* ============================================================
-   BOOK ROW / INFINITE TRACK
+   BOOK ROW / INFINITE MARQUEE
 ============================================================ */
 
 .hero-books {
   --hero-slide-width: 210px;
   --hero-gap: 18px;
-  --hero-visible-count: 5;
+  --hero-half-gap: 9px;
+  --hero-marquee-duration: 28s;
 
   position: relative;
   z-index: 5;
@@ -142,19 +143,52 @@
   gap: var(--hero-gap);
 }
 
-/* The carousel viewport is exactly the responsive slot count so the orange
-   background is the only thing visible around the covers. */
-.hero-books--carousel {
-  width: calc(
-    var(--hero-slide-width) *
-      var(--hero-visible-count) +
-      var(--hero-gap) *
-      (var(--hero-visible-count) - 1)
-  );
+/* Static fallback: used only for a single selected book. */
+.hero-books--static {
+  width: min(1600px, 94%);
+}
+
+/* Mirrors .dist-marquee: a full-width clipping container so the max-content
+   track starts at the left edge and the -50% reset stays seamless. */
+.hero-marquee {
+  width: 100%;
   max-width: 100%;
+  flex: 0 0 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+/* Keep the single-book/static fallback in the original centered flow. */
+.hero-books-static-wrap {
+  display: contents;
+}
+
+/* Mirrors .dist-track in the Distribution Channels section. */
+.hero-books--marquee {
+  width: max-content;
+  max-width: none;
   flex: 0 0 auto;
   justify-content: flex-start;
+  animation: heroBookMarquee var(--hero-marquee-duration) linear infinite;
   will-change: transform;
+}
+
+/* Same hover behaviour as .dist-marquee:hover .dist-track. */
+.book-showcase:hover .hero-books--marquee {
+  animation-play-state: paused;
+}
+
+@keyframes heroBookMarquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - var(--hero-half-gap)));
+  }
 }
 
 
@@ -173,7 +207,7 @@
   transition: transform 0.4s ease;
 }
 
-.hero-books--carousel .hero-book-wrapper {
+.hero-books--marquee .hero-book-wrapper {
   flex: 0 0 var(--hero-slide-width);
 }
 
@@ -301,48 +335,6 @@
 
 
 /* ============================================================
-   ARROWS
-============================================================ */
-
-.book-arrow {
-  position: absolute;
-  z-index: 10;
-  top: 58%;
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 50%;
-  background: #fffdfa;
-  color: #17243a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: Arial, sans-serif;
-  font-size: 31px;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.16);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-
-.book-arrow:hover {
-  transform: translateY(-50%) scale(1.08);
-  background: #ffffff;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
-}
-
-.book-arrow-left {
-  left: 24px;
-  transform: translateY(-50%);
-}
-
-.book-arrow-right {
-  right: 24px;
-  transform: translateY(-50%);
-}
-
-
-/* ============================================================
    FEATURE STRIP
 ============================================================ */
 
@@ -450,13 +442,8 @@
   .hero-books {
     --hero-slide-width: 205px;
     --hero-gap: 20px;
+    --hero-half-gap: 10px;
     height: 370px;
-  }
-
-  .book-arrow {
-    width: 46px;
-    height: 46px;
-    font-size: 34px;
   }
 }
 
@@ -491,26 +478,12 @@
   .hero-books {
     --hero-slide-width: 175px;
     --hero-gap: 12px;
-    --hero-visible-count: 4;
+    --hero-half-gap: 6px;
     height: 315px;
   }
 
   .hero-books--static .hero-book-wrapper:nth-child(n + 5) {
     display: none;
-  }
-
-  .book-arrow {
-    width: 40px;
-    height: 40px;
-    font-size: 29px;
-  }
-
-  .book-arrow-left {
-    left: 15px;
-  }
-
-  .book-arrow-right {
-    right: 15px;
   }
 
   .hero-info-item {
@@ -569,27 +542,14 @@
   .hero-books {
     --hero-slide-width: 150px;
     --hero-gap: 12px;
-    --hero-visible-count: 2;
+    --hero-half-gap: 6px;
+    --hero-marquee-duration: 24s;
     height: 275px;
     align-content: start;
   }
 
   .hero-books--static .hero-book-wrapper:nth-child(n + 3) {
     display: none;
-  }
-
-  .book-arrow {
-    width: 35px;
-    height: 35px;
-    font-size: 26px;
-  }
-
-  .book-arrow-left {
-    left: 8px;
-  }
-
-  .book-arrow-right {
-    right: 8px;
   }
 
   .hero-info {
@@ -653,21 +613,9 @@
   .hero-books {
     --hero-slide-width: 140px;
     --hero-gap: 10px;
+    --hero-half-gap: 5px;
+    --hero-marquee-duration: 20s;
     height: 255px;
-  }
-
-  .book-arrow {
-    width: 33px;
-    height: 33px;
-    font-size: 24px;
-  }
-
-  .book-arrow-left {
-    left: 6px;
-  }
-
-  .book-arrow-right {
-    right: 6px;
   }
 
   .hero-info {
@@ -708,6 +656,7 @@
   .hero-books {
     --hero-slide-width: 115px;
     --hero-gap: 7px;
+    --hero-half-gap: 3.5px;
     height: 240px;
   }
 }
@@ -718,11 +667,13 @@
 ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-books--marquee {
+    animation: none;
+  }
+
   .hero-book img,
   .hero-book,
-  .hero-book-wrapper,
-  .hero-books--carousel,
-  .book-arrow {
+  .hero-book-wrapper {
     transition: none;
   }
 }
