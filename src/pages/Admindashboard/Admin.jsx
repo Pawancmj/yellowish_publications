@@ -22,20 +22,17 @@ import {
   FaUser,
   FaEnvelope,
   FaPen,
-  FaHome,
   FaSpinner,
   FaCheckCircle,
   FaExclamationCircle,
   FaInstagram,
   FaImages,
   FaQuoteLeft,
-  FaStar,
   FaTags,
 } from "react-icons/fa";
 
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
-import { NO_COVER_PLACEHOLDER } from "../../utils/coverPlaceholder";
-import { normalizeFeaturedBookIds } from "../../utils/featuredBooks";
+import { normalizeHeroDisplayOrder } from "../../utils/featuredBooks";
 import GenresManager from "./GenresManager";
 
 import "./Admin.css";
@@ -62,20 +59,14 @@ const Admin = () => {
     leads,
     deleteLead,
     blogs,
-    hero,
-    heroLoading,
-    updateHero,
+
+    // Homepage hero books (selected on the book documents)
+    featuredHeroBooks,
 
     // Authors page hero images
     authorsHero,
     authorsHeroLoading,
     updateAuthorsHero,
-
-    // Homepage featured books
-    homepageSettings,
-    homepageSettingsLoading,
-    homepageSettingsError,
-    updateHomepageSettings,
 
     // Homepage genre filters
     genres,
@@ -402,30 +393,6 @@ const Admin = () => {
             }
           >
             <FaInstagram /> Trusted Authors
-          </button>
-
-          <button
-            className={
-              activeTab === "hero"
-                ? "tab-active"
-                : "tab"
-            }
-            onClick={() => setActiveTab("hero")}
-          >
-            <FaHome /> Manage Hero
-          </button>
-
-          <button
-            className={
-              activeTab === "featuredBooks"
-                ? "tab-active"
-                : "tab"
-            }
-            onClick={() =>
-              setActiveTab("featuredBooks")
-            }
-          >
-            <FaStar /> Featured Books
           </button>
 
           <button
@@ -1113,92 +1080,6 @@ const Admin = () => {
         )}
 
         {/* =========================================================
-            HERO
-        ========================================================= */}
-
-        {activeTab === "hero" && (
-          <div className="hero-management">
-
-            <div className="section-header">
-
-              <h2>Hero Section Management</h2>
-
-            </div>
-
-            <div className="hero-manager-card">
-
-              <p className="hero-manager-hint">
-                Choose a book for each of the four
-                floating positions on the right side of
-                the Home page hero. The selected book's
-                cover and its detail-page link are used
-                automatically — no uploads or IDs
-                required. Save to publish.
-              </p>
-
-              <HeroManager
-                hero={hero}
-                heroLoading={heroLoading}
-                books={books}
-                getBookCover={getBookCover}
-                onSave={async (images) => {
-                  const result = await updateHero({
-                    images,
-                  });
-
-                  return result;
-                }}
-              />
-
-            </div>
-
-          </div>
-        )}
-
-        {/* =========================================================
-            HOMEPAGE FEATURED BOOKS
-        ========================================================= */}
-
-        {activeTab === "featuredBooks" && (
-          <div className="featured-books-management">
-
-            <div className="section-header">
-
-              <div>
-
-                <h2>
-                  Featured Books / Homepage Hero Books
-                </h2>
-
-                <p>
-                  Choose which books appear in the
-                  homepage hero showcase and in what
-                  order. Only selected books are shown;
-                  removing one here never deletes it
-                  from the Books collection.
-                </p>
-
-              </div>
-
-            </div>
-
-            <FeaturedBooksManager
-              books={books}
-              savedBookIds={
-                homepageSettings?.featuredBookIds || []
-              }
-              settingsLoading={
-                homepageSettingsLoading
-              }
-              settingsError={homepageSettingsError}
-              getBookCover={getBookCover}
-              onSave={updateHomepageSettings}
-            />
-
-          </div>
-        )}
-
-        {/* =========================================================
             HOMEPAGE GENRES
         ========================================================= */}
 
@@ -1429,6 +1310,7 @@ const Admin = () => {
         <BookForm
           book={editingBook}
           genres={genres}
+          featuredHeroBooks={featuredHeroBooks}
 
           onSave={(bookData) => {
 
@@ -2072,6 +1954,7 @@ const CUSTOM_GENRE_VALUE = "__custom__";
 const BookForm = ({
   book,
   genres = [],
+  featuredHeroBooks = [],
   onSave,
   onCancel,
 }) => {
@@ -2117,6 +2000,35 @@ const BookForm = ({
     Boolean(initialGenre) &&
     genreOptions.includes(initialGenre);
 
+  const heroIndex = Array.isArray(featuredHeroBooks)
+    ? featuredHeroBooks.findIndex(
+        (heroBook) =>
+          String(heroBook?.id) === String(book?.id)
+      )
+    : -1;
+
+  const hasExplicitHeroField =
+    Boolean(book) &&
+    Object.prototype.hasOwnProperty.call(
+      book,
+      "showInHomepageHero"
+    );
+
+  const initialHeroSelected = hasExplicitHeroField
+    ? book.showInHomepageHero === true
+    : heroIndex >= 0;
+
+  const initialHeroOrder =
+    hasExplicitHeroField &&
+    book.showInHomepageHero === true
+      ? normalizeHeroDisplayOrder(
+          book.heroDisplayOrder,
+          1
+        )
+      : heroIndex >= 0
+        ? heroIndex + 1
+        : 1;
+
   // Custom genre text kept separately; formData.genre holds the
   // sentinel while the admin is in "Add Custom Genre" mode.
   const [customGenre, setCustomGenre] =
@@ -2156,6 +2068,12 @@ const BookForm = ({
 
     description:
       book?.description || "",
+
+    showInHomepageHero:
+      initialHeroSelected,
+
+    heroDisplayOrder:
+      initialHeroOrder,
 
   });
 
@@ -2257,6 +2175,24 @@ const BookForm = ({
 
     }
 
+    if (formData.showInHomepageHero) {
+
+      const heroOrder = Number(
+        formData.heroDisplayOrder
+      );
+
+      if (
+        !Number.isInteger(heroOrder) ||
+        heroOrder < 1
+      ) {
+
+        newErrors.heroDisplayOrder =
+          "Display order must be a positive whole number.";
+
+      }
+
+    }
+
     setErrors(newErrors);
 
     return (
@@ -2294,6 +2230,17 @@ const BookForm = ({
             formData.customBadge ||
             ""
           ).trim(),
+
+        showInHomepageHero:
+          Boolean(formData.showInHomepageHero),
+
+        heroDisplayOrder:
+          formData.showInHomepageHero
+            ? normalizeHeroDisplayOrder(
+                formData.heroDisplayOrder,
+                1
+              )
+            : null,
 
       });
 
@@ -2624,6 +2571,75 @@ const BookForm = ({
               rows="4"
               placeholder="Enter book description..."
             />
+
+          </div>
+
+          <div className="homepage-display-section">
+
+            <h3>Homepage Display</h3>
+
+            <label className="homepage-hero-checkbox">
+
+              <input
+                type="checkbox"
+                checked={
+                  formData.showInHomepageHero
+                }
+                onChange={(e) =>
+                  handleInputChange(
+                    "showInHomepageHero",
+                    e.target.checked
+                  )
+                }
+              />
+
+              <span>
+                Show this book in Homepage Hero Section
+              </span>
+
+            </label>
+
+            {formData.showInHomepageHero && (
+
+              <div className="form-group homepage-hero-order">
+
+                <label>
+                  Hero Display Order
+                </label>
+
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={
+                    formData.heroDisplayOrder
+                  }
+                  onChange={(e) =>
+                    handleInputChange(
+                      "heroDisplayOrder",
+                      e.target.value
+                    )
+                  }
+                  className={
+                    errors.heroDisplayOrder
+                      ? "input-error"
+                      : ""
+                  }
+                />
+
+                <small>
+                  Lower numbers appear first in the homepage hero.
+                </small>
+
+                {errors.heroDisplayOrder && (
+                  <span className="error-text">
+                    {errors.heroDisplayOrder}
+                  </span>
+                )}
+
+              </div>
+
+            )}
 
           </div>
 
@@ -3023,1166 +3039,6 @@ const AuthorForm = ({
       </div>
 
     </div>
-  );
-};
-
-/* ================================================================
-   HERO MANAGER
-================================================================ */
-
-const handleAdminCoverError = (event) => {
-  const image = event.currentTarget;
-
-  if (
-    !image ||
-    image.dataset.coverFallback === "true"
-  ) {
-    return;
-  }
-
-  image.dataset.coverFallback = "true";
-  image.src = NO_COVER_PLACEHOLDER;
-};
-
-/* ================================================================
-   FEATURED BOOKS / HOMEPAGE HERO BOOKS MANAGER
-=============================================================== */
-
-const FeaturedBooksManager = ({
-  books = [],
-  savedBookIds = [],
-  settingsLoading = false,
-  settingsError = null,
-  getBookCover,
-  onSave,
-}) => {
-  const savedSignature = JSON.stringify(
-    normalizeFeaturedBookIds(savedBookIds)
-  );
-
-  const [selectedIds, setSelectedIds] = useState(
-    () => normalizeFeaturedBookIds(savedBookIds)
-  );
-  const [search, setSearch] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState({
-    type: "",
-    text: "",
-  });
-  const [dragIndex, setDragIndex] = useState(null);
-  const initializedRef = useRef(false);
-
-  // Initialize from the persisted selection once settings finish loading.
-  // Deliberately NOT re-syncing on every settings snapshot: Firestore emits a
-  // local optimistic snapshot while a write is in flight and reverts it when
-  // the server rejects the write, which would wipe the admin's unsaved edits.
-  useEffect(() => {
-    if (settingsLoading || initializedRef.current) {
-      return;
-    }
-
-    initializedRef.current = true;
-
-    setSelectedIds(
-      normalizeFeaturedBookIds(savedBookIds)
-    );
-  }, [
-    settingsLoading,
-    savedBookIds,
-    savedSignature,
-  ]);
-
-  const booksById = useMemo(() => {
-    const map = new Map();
-
-    (Array.isArray(books) ? books : []).forEach(
-      (book) => {
-        if (
-          !book ||
-          book.id === undefined ||
-          book.id === null
-        ) {
-          return;
-        }
-
-        map.set(String(book.id), book);
-      }
-    );
-
-    return map;
-  }, [books]);
-
-  const validSelectedIds = useMemo(
-    () =>
-      selectedIds.filter((id) =>
-        booksById.has(id)
-      ),
-    [selectedIds, booksById]
-  );
-
-  const validSelectedBooks = useMemo(
-    () =>
-      validSelectedIds
-        .map((id) => booksById.get(id))
-        .filter(Boolean),
-    [validSelectedIds, booksById]
-  );
-
-  const missingIds = useMemo(
-    () =>
-      selectedIds.filter(
-        (id) => !booksById.has(id)
-      ),
-    [selectedIds, booksById]
-  );
-
-  const orderById = new Map(
-    validSelectedIds.map((id, index) => [
-      id,
-      index + 1,
-    ])
-  );
-
-  const filteredBooks = useMemo(() => {
-    const term = search.trim().toLowerCase();
-
-    const list = (
-      Array.isArray(books) ? books : []
-    ).filter(Boolean);
-
-    const matched = term
-      ? list.filter((book) =>
-          [
-            book.title,
-            book.author,
-            book.genre,
-          ]
-            .filter(Boolean)
-            .join(" ")
-            .toLowerCase()
-            .includes(term)
-        )
-      : list;
-
-    return [...matched].sort((a, b) =>
-      String(a.title || "").localeCompare(
-        String(b.title || "")
-      )
-    );
-  }, [books, search]);
-
-  const dirty =
-    JSON.stringify(selectedIds) !== savedSignature;
-
-  const notify = (type, text) =>
-    setMessage({ type, text });
-
-  const toggleBook = (bookId) => {
-    notify("", "");
-
-    setSelectedIds((previous) =>
-      previous.includes(bookId)
-        ? previous.filter((id) => id !== bookId)
-        : [...previous, bookId]
-    );
-  };
-
-  const reorderSelected = (
-    sourceId,
-    targetId,
-    placeAfter = false
-  ) => {
-    setSelectedIds((previous) => {
-      const from = previous.indexOf(sourceId);
-      const targetIndex = previous.indexOf(targetId);
-
-      if (
-        from === -1 ||
-        targetIndex === -1 ||
-        from === targetIndex
-      ) {
-        return previous;
-      }
-
-      const next = [...previous];
-      const [moved] = next.splice(from, 1);
-      const insertAt = next.indexOf(targetId);
-
-      next.splice(
-        placeAfter ? insertAt + 1 : insertAt,
-        0,
-        moved
-      );
-
-      return next;
-    });
-  };
-
-  const moveSelected = (bookId, offset) => {
-    const index = validSelectedIds.indexOf(bookId);
-    const targetId =
-      validSelectedIds[index + offset];
-
-    if (!targetId) return;
-
-    reorderSelected(
-      bookId,
-      targetId,
-      offset > 0
-    );
-  };
-
-  const removeMissing = (bookId) => {
-    notify("", "");
-
-    setSelectedIds((previous) =>
-      previous.filter((id) => id !== bookId)
-    );
-  };
-
-  const handleDiscard = () => {
-    setSelectedIds(
-      normalizeFeaturedBookIds(savedBookIds)
-    );
-
-    notify(
-      "success",
-      "Unsaved changes discarded."
-    );
-  };
-
-  const handleSave = async () => {
-    if (saving) return;
-
-    setSaving(true);
-    notify("", "");
-
-    try {
-      // Deleted books cannot be featured; drop stale IDs on save.
-      const idsToSave = selectedIds.filter((id) =>
-        booksById.has(id)
-      );
-
-      const result = await onSave({
-        featuredBookIds: idsToSave,
-      });
-
-      if (result?.error) {
-        notify(
-          "error",
-          result.error.message ||
-            "Failed to save featured books."
-        );
-      } else {
-        setSelectedIds(idsToSave);
-
-        notify(
-          "success",
-          idsToSave.length === 0
-            ? "Saved. The homepage hero will show its empty state until books are selected."
-            : `Saved. ${idsToSave.length} book${
-                idsToSave.length === 1 ? "" : "s"
-              } will appear in the homepage hero.`
-        );
-      }
-    } catch (error) {
-      notify(
-        "error",
-        error?.message ||
-          "Failed to save featured books."
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  if (settingsLoading) {
-    return (
-      <div className="hero-manager-loading">
-        <FaSpinner className="hero-manager-spin" />
-        Loading featured book settings…
-      </div>
-    );
-  }
-
-  return (
-    <div className="hero-manager-card featured-books-card">
-
-      <p className="hero-manager-hint">
-        Tick a book to feature it, then arrange the
-        order on the right. Drag selected books or use
-        the arrow buttons to reorder. Unselected and
-        newly added books never appear automatically.
-      </p>
-
-      {settingsError && (
-        <div className="fb-warning">
-          <FaExclamationCircle />
-          <span>
-            The saved featured selection could not be
-            loaded. Saving now will replace it.
-          </span>
-        </div>
-      )}
-
-      {missingIds.length > 0 &&
-        books.length > 0 && (
-          <div className="fb-warning">
-            <FaExclamationCircle />
-            <span>
-              {missingIds.length} featured book
-              {missingIds.length === 1 ? "" : "s"}{" "}
-              no longer exist and will not appear on
-              the homepage.
-            </span>
-
-            <span className="fb-missing-list">
-              {missingIds.map((id) => (
-                <button
-                  key={id}
-                  type="button"
-                  className="fb-missing-remove"
-                  onClick={() =>
-                    removeMissing(id)
-                  }
-                  title="Remove this deleted book from the selection"
-                >
-                  {id} ×
-                </button>
-              ))}
-            </span>
-          </div>
-        )}
-
-      <div className="fb-toolbar">
-        <input
-          type="search"
-          className="fb-search"
-          value={search}
-          onChange={(event) =>
-            setSearch(event.target.value)
-          }
-          placeholder="Search books by title, author or genre…"
-          aria-label="Search books"
-        />
-
-        <span className="fb-count">
-          <FaStar /> {validSelectedIds.length} selected
-          {missingIds.length > 0
-            ? ` (+${missingIds.length} missing)`
-            : ""}
-        </span>
-      </div>
-
-      <div className="fb-layout">
-
-        {/* ================= ALL BOOKS ================= */}
-
-        <div className="fb-column">
-          <h3 className="fb-column-title">
-            All Books
-            <span>{filteredBooks.length}</span>
-          </h3>
-
-          {filteredBooks.length === 0 ? (
-            <p className="fb-empty">
-              No books match “{search}”.
-            </p>
-          ) : (
-            <ul className="fb-book-list">
-              {filteredBooks.map((book) => {
-                const bookId = String(book.id);
-                const order = orderById.get(bookId);
-                const isSelected = Boolean(order);
-                const cover = getBookCover
-                  ? getBookCover(book)
-                  : book.cover ||
-                    NO_COVER_PLACEHOLDER;
-
-                return (
-                  <li
-                    key={bookId}
-                    className={
-                      isSelected
-                        ? "fb-book-row is-selected"
-                        : "fb-book-row"
-                    }
-                  >
-                    <img
-                      className="fb-book-cover"
-                      src={
-                        cover || NO_COVER_PLACEHOLDER
-                      }
-                      alt=""
-                      width={48}
-                      height={72}
-                      loading="lazy"
-                      decoding="async"
-                      onError={handleAdminCoverError}
-                    />
-
-                    <div className="fb-book-info">
-                      <strong>
-                        {book.title ||
-                          book.id}
-                      </strong>
-                      <span>
-                        {book.author ||
-                          "Unknown author"}
-                      </span>
-                    </div>
-
-                    <span
-                      className={
-                        isSelected
-                          ? "fb-status is-featured"
-                          : "fb-status"
-                      }
-                    >
-                      {isSelected
-                        ? `Featured · #${order}`
-                        : "Not featured"}
-                    </span>
-
-                    <button
-                      type="button"
-                      className={
-                        isSelected
-                          ? "fb-toggle fb-toggle-remove"
-                          : "fb-toggle"
-                      }
-                      onClick={() =>
-                        toggleBook(bookId)
-                      }
-                      aria-pressed={isSelected}
-                    >
-                      {isSelected ? "Remove" : "Add"}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
-
-        {/* ================= HOMEPAGE ORDER ================= */}
-
-        <div className="fb-column">
-          <h3 className="fb-column-title">
-            Homepage Order
-            <span>{validSelectedBooks.length}</span>
-          </h3>
-
-          {validSelectedBooks.length === 0 ? (
-            <p className="fb-empty">
-              No books selected. The homepage hero
-              will show a clean “coming soon” state.
-            </p>
-          ) : (
-            <ol className="fb-order-list">
-              {validSelectedBooks.map(
-                (book, index) => {
-                  const bookId = String(book.id);
-                  const cover = getBookCover
-                    ? getBookCover(book)
-                    : book.cover ||
-                      NO_COVER_PLACEHOLDER;
-
-                  return (
-                    <li
-                      key={bookId}
-                      className={
-                        dragIndex === index
-                          ? "fb-order-row is-dragging"
-                          : "fb-order-row"
-                      }
-                      draggable
-                      onDragStart={() =>
-                        setDragIndex(index)
-                      }
-                      onDragOver={(event) =>
-                        event.preventDefault()
-                      }
-                      onDrop={(event) => {
-                        event.preventDefault();
-
-                        if (
-                          dragIndex !== null &&
-                          dragIndex !== index
-                        ) {
-                          const sourceId =
-                            validSelectedIds[
-                              dragIndex
-                            ];
-                          const targetId =
-                            validSelectedIds[
-                              index
-                            ];
-
-                          if (
-                            sourceId &&
-                            targetId
-                          ) {
-                            reorderSelected(
-                              sourceId,
-                              targetId,
-                              dragIndex < index
-                            );
-                          }
-                        }
-
-                        setDragIndex(null);
-                      }}
-                      onDragEnd={() =>
-                        setDragIndex(null)
-                      }
-                    >
-                      <span className="fb-order-num">
-                        {index + 1}
-                      </span>
-
-                      <img
-                        className="fb-order-cover"
-                        src={
-                          cover ||
-                          NO_COVER_PLACEHOLDER
-                        }
-                        alt=""
-                        width={36}
-                        height={54}
-                        loading="lazy"
-                        decoding="async"
-                        onError={
-                          handleAdminCoverError
-                        }
-                      />
-
-                      <div className="fb-order-info">
-                        <strong>
-                          {book.title ||
-                            book.id}
-                        </strong>
-                        <span>
-                          {book.author ||
-                            "Unknown author"}
-                        </span>
-                      </div>
-
-                      <div className="fb-order-actions">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            moveSelected(
-                              bookId,
-                              -1
-                            )
-                          }
-                          disabled={index === 0}
-                          aria-label={`Move ${book.title} up`}
-                          title="Move up"
-                        >
-                          ↑
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            moveSelected(
-                              bookId,
-                              1
-                            )
-                          }
-                          disabled={
-                            index ===
-                            validSelectedBooks.length -
-                              1
-                          }
-                          aria-label={`Move ${book.title} down`}
-                          title="Move down"
-                        >
-                          ↓
-                        </button>
-
-                        <button
-                          type="button"
-                          className="fb-order-remove"
-                          onClick={() =>
-                            toggleBook(bookId)
-                          }
-                          aria-label={`Remove ${book.title} from featured books`}
-                          title="Remove from featured"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    </li>
-                  );
-                }
-              )}
-            </ol>
-          )}
-
-          <div className="fb-preview">
-            <h4>Homepage Hero Preview</h4>
-
-            {validSelectedBooks.length === 0 ? (
-              <p className="fb-empty fb-preview-empty">
-                Featured books coming soon
-              </p>
-            ) : (
-              <div className="fb-preview-row">
-                {validSelectedBooks.map((book) => {
-                  const cover = getBookCover
-                    ? getBookCover(book)
-                    : book.cover ||
-                      NO_COVER_PLACEHOLDER;
-
-                  return (
-                    <img
-                      key={String(book.id)}
-                      src={
-                        cover ||
-                        NO_COVER_PLACEHOLDER
-                      }
-                      alt={book.title || ""}
-                      width={54}
-                      height={81}
-                      loading="lazy"
-                      decoding="async"
-                      onError={handleAdminCoverError}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-
-      </div>
-
-      {message.text && (
-        <p
-          className={
-            message.type === "error"
-              ? "hero-manager-msg error"
-              : "hero-manager-msg success"
-          }
-          role="status"
-        >
-          {message.type === "error" ? (
-            <FaExclamationCircle />
-          ) : (
-            <FaCheckCircle />
-          )}
-          {message.text}
-        </p>
-      )}
-
-      <div className="fb-actions">
-        <span
-          className={
-            dirty
-              ? "fb-dirty"
-              : "fb-dirty is-saved"
-          }
-        >
-          {dirty
-            ? "Unsaved changes"
-            : "All changes saved"}
-        </span>
-
-        <button
-          type="button"
-          className="cancel-btn"
-          onClick={handleDiscard}
-          disabled={!dirty || saving}
-        >
-          Discard
-        </button>
-
-        <button
-          type="button"
-          className="save-btn"
-          onClick={handleSave}
-          disabled={!dirty || saving}
-        >
-          {saving ? (
-            <>
-              <FaSpinner className="hero-manager-spin" />{" "}
-              Saving…
-            </>
-          ) : (
-            "Save Changes"
-          )}
-        </button>
-      </div>
-
-    </div>
-  );
-};
-
-const HERO_SLOTS = [
-
-  {
-    id: "hero-1",
-    label: "Hero Book 1",
-    position: "Left / upper area",
-  },
-
-  {
-    id: "hero-2",
-    label: "Hero Book 2",
-    position: "Upper / right area",
-  },
-
-  {
-    id: "hero-3",
-    label: "Hero Book 3",
-    position: "Lower / center area",
-  },
-
-  {
-    id: "hero-4",
-    label: "Hero Book 4",
-    position: "Right / lower area",
-  },
-
-];
-
-const HeroManager = ({
-  hero,
-  heroLoading,
-  books = [],
-  getBookCover,
-  onSave,
-}) => {
-
-  const [slots, setSlots] =
-    useState([]);
-
-  const [saving, setSaving] =
-    useState(false);
-
-  const [savedMsg, setSavedMsg] =
-    useState("");
-
-  const [error, setError] =
-    useState("");
-
-  useEffect(() => {
-
-    if (!heroLoading) {
-
-      const heroImages =
-        Array.isArray(hero?.images)
-          ? hero.images
-          : [];
-
-      setSlots(
-
-        HERO_SLOTS.map((slot) => {
-
-          const existing =
-            heroImages.find(
-              (img) =>
-                img.id === slot.id
-            );
-
-          return {
-
-            id: slot.id,
-
-            bookId:
-              existing?.bookId || "",
-
-          };
-
-        })
-
-      );
-
-    }
-
-  }, [hero, heroLoading]);
-
-  const updateSlotBook = (
-    id,
-    bookId
-  ) => {
-
-    setSlots((prev) =>
-      prev.map((s) =>
-        s.id === id
-          ? {
-              ...s,
-              bookId,
-            }
-          : s
-      )
-    );
-
-  };
-
-  const clearSlot = (id) => {
-
-    updateSlotBook(
-      id,
-      ""
-    );
-
-  };
-
-  const handleSave = async (e) => {
-
-    e.preventDefault();
-
-    if (saving) return;
-
-    setSaving(true);
-    setSavedMsg("");
-    setError("");
-
-    try {
-
-      const result =
-        await onSave(slots);
-
-      if (result?.error) {
-
-        setError(
-          result.error.message ||
-            "Failed to save the hero books."
-        );
-
-      } else {
-
-        setSavedMsg(
-          "Hero books saved successfully."
-        );
-
-      }
-
-    } catch (err) {
-
-      setError(
-        err?.message ||
-          "Failed to save the hero books."
-      );
-
-    } finally {
-
-      setSaving(false);
-
-    }
-
-  };
-
-  const handleDelete = async () => {
-
-    if (
-      !window.confirm(
-        "Clear all four hero book selections and restore the default covers?"
-      )
-    ) {
-      return;
-    }
-
-    if (saving) return;
-
-    setSaving(true);
-    setSavedMsg("");
-    setError("");
-
-    try {
-
-      const result =
-        await onSave(
-
-          HERO_SLOTS.map((slot) => ({
-
-            id: slot.id,
-            bookId: "",
-
-          }))
-
-        );
-
-      if (result?.error) {
-
-        setError(
-          result.error.message ||
-            "Failed to clear the hero books."
-        );
-
-      } else {
-
-        setSavedMsg(
-          "Hero books cleared. Default covers restored."
-        );
-
-      }
-
-    } catch (err) {
-
-      setError(
-        err?.message ||
-          "Failed to clear the hero books."
-      );
-
-    } finally {
-
-      setSaving(false);
-
-    }
-
-  };
-
-  if (heroLoading) {
-
-    return (
-
-      <div className="hero-manager-loading">
-
-        <FaSpinner className="hero-manager-spin" />
-
-        Loading hero settings…
-
-      </div>
-
-    );
-
-  }
-
-  return (
-
-    <form
-      onSubmit={handleSave}
-      className="hero-manager-form"
-    >
-
-      <div className="hero-slots">
-
-        {HERO_SLOTS.map((slot) => {
-
-          const current =
-            slots.find(
-              (s) =>
-                s.id === slot.id
-            );
-
-          const bookId =
-            current?.bookId || "";
-
-          const selectedBook =
-            books.find(
-              (b) =>
-                String(b.id) ===
-                String(bookId)
-            ) || null;
-
-          const heroSlot =
-            (hero?.images || []).find(
-              (img) =>
-                img.id === slot.id
-            );
-
-          const legacyImage =
-            !bookId &&
-            heroSlot?.imageUrl
-              ? heroSlot.imageUrl
-              : "";
-
-          return (
-
-            <div
-              className="hero-slot"
-              key={slot.id}
-            >
-
-              <div className="hero-slot-header">
-
-                <h3>
-                  {slot.label}
-                </h3>
-
-                <span>
-                  {slot.position}
-                </span>
-
-              </div>
-
-              <label className="hero-slot-book">
-
-                <span>
-                  Select Book
-                </span>
-
-                <select
-                  value={bookId}
-                  onChange={(e) =>
-                    updateSlotBook(
-                      slot.id,
-                      e.target.value
-                    )
-                  }
-                >
-
-                  <option value="">
-                    Select a book…
-                  </option>
-
-                  {books.map((b) => (
-
-                    <option
-                      key={b.id}
-                      value={b.id}
-                    >
-                      {b.title || b.id}
-                    </option>
-
-                  ))}
-
-                </select>
-
-              </label>
-
-              {legacyImage && (
-
-                <p className="hero-slot-legacy">
-
-                  Legacy image present —
-                  select a book to make
-                  this slot clickable.
-
-                </p>
-
-              )}
-
-              {selectedBook ? (
-
-                <div className="hero-slot-preview">
-
-                  <img
-                    src={getBookCover(
-                      selectedBook
-                    )}
-                    alt={
-                      selectedBook.title
-                    }
-                    loading="lazy"
-                  />
-
-                  <div className="hero-slot-preview-meta">
-
-                    <strong>
-                      {selectedBook.title}
-                    </strong>
-
-                    <span>
-                      By{" "}
-                      {selectedBook.author ||
-                        selectedBook.authorsName ||
-                        "Unknown"}
-                    </span>
-
-                  </div>
-
-                  <button
-                    type="button"
-                    className="hero-slot-clear"
-                    onClick={() =>
-                      clearSlot(
-                        slot.id
-                      )
-                    }
-                  >
-                    Clear
-                  </button>
-
-                </div>
-
-              ) : (
-
-                <p className="hero-slot-empty">
-                  No book selected
-                </p>
-
-              )}
-
-            </div>
-
-          );
-
-        })}
-
-      </div>
-
-      {error && (
-
-        <div className="hero-manager-msg error">
-
-          <FaExclamationCircle />
-
-          {" "}
-
-          {error}
-
-        </div>
-
-      )}
-
-      {savedMsg && (
-
-        <div className="hero-manager-msg success">
-
-          <FaCheckCircle />
-
-          {" "}
-
-          {savedMsg}
-
-        </div>
-
-      )}
-
-      <div className="hero-manager-actions">
-
-        <button
-          type="submit"
-          className="save-btn"
-          disabled={saving}
-        >
-
-          {saving ? (
-
-            <>
-              <FaSpinner className="hero-manager-spin" />
-              Saving…
-            </>
-
-          ) : (
-
-            "Save Changes"
-
-          )}
-
-        </button>
-
-        <button
-          type="button"
-          className="cancel-btn"
-          onClick={handleDelete}
-          disabled={saving}
-        >
-
-          <FaTrash /> Clear All
-
-        </button>
-
-      </div>
-
-    </form>
-
   );
 };
 

@@ -89,8 +89,8 @@ export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
   const {
     featuredHeroBooks,
-    homepageSettingsLoading,
-    homepageSettingsError,
+    featuredHeroBooksLoading,
+    featuredHeroBooksError,
     getBookCover,
   } = useData();
 
@@ -277,7 +277,7 @@ export default function Hero() {
   ]);
 
   const showLoadingState =
-    homepageSettingsLoading &&
+    featuredHeroBooksLoading &&
     sliderBooks.length === 0;
 
   return (
@@ -328,7 +328,7 @@ export default function Hero() {
           >
             <strong>Featured books coming soon</strong>
             <span>
-              {homepageSettingsError
+              {featuredHeroBooksError
                 ? "We couldn't load the featured selection right now. Please try again shortly."
                 : "Our next featured selection is being prepared."}
             </span>

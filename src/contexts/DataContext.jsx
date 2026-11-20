@@ -48,9 +48,8 @@ import {
 } from "../services/blogModel";
 
 import {
-  heroDocRef,
-  normalizeHero,
-  updateHero as updateHeroDoc,
+  getLegacyHeroBookIds,
+  legacyHeroDocRef,
 } from "../services/heroModel";
 
 import {
@@ -60,11 +59,9 @@ import {
 } from "../services/authorsHeroModel";
 
 import {
-  homepageSettingsDocRef,
-  normalizeHomepageSettings,
-  resolveFeaturedBooks,
-  updateHomepageSettings as updateHomepageSettingsDoc,
-} from "../services/homepageSettingsModel";
+  hasHeroSelectionFields,
+  resolveHomepageHeroBooks,
+} from "../utils/featuredBooks";
 
 import {
   deriveGenresFromBooks,
@@ -97,10 +94,9 @@ export function DataProvider({ children }) {
   // Firestore data
   const [leads, setLeads] = useState([]);
   const [blogs, setBlogs] = useState([]);
-  const [hero, setHero] = useState(null);
+  const [legacyHeroBookIds, setLegacyHeroBookIds] =
+    useState([]);
   const [authorsHero, setAuthorsHero] = useState(null);
-  const [homepageSettings, setHomepageSettings] =
-    useState(null);
 
   // Genre configuration. Until the `genres` document exists, the list is
   // derived from the genre values already present on books.
@@ -120,13 +116,14 @@ export function DataProvider({ children }) {
     useState(seedTestimonials);
 
   // Loading states
-  const [heroLoading, setHeroLoading] = useState(true);
+  const [legacyHeroLoading, setLegacyHeroLoading] =
+    useState(true);
+  const [legacyHeroError, setLegacyHeroError] =
+    useState(null);
+  const [booksListenerError, setBooksListenerError] =
+    useState(null);
   const [authorsHeroLoading, setAuthorsHeroLoading] =
     useState(true);
-  const [homepageSettingsLoading, setHomepageSettingsLoading] =
-    useState(true);
-  const [homepageSettingsError, setHomepageSettingsError] =
-    useState(null);
   const [loading, setLoading] = useState(true);
   const [authorsLoading, setAuthorsLoading] =
     useState(true);
@@ -144,9 +141,9 @@ export function DataProvider({ children }) {
   const leadsUnsubscribeRef = useRef(null);
   const publicLeadsUnsubscribeRef = useRef(null);
   const blogsUnsubscribeRef = useRef(null);
-  const heroUnsubscribeRef = useRef(null);
+  const legacyHeroUnsubscribeRef = useRef(null);
   const authorsHeroUnsubscribeRef = useRef(null);
-  const homepageSettingsUnsubscribeRef = useRef(null);
+  const heroMigrationStartedRef = useRef(false);
   const genresUnsubscribeRef = useRef(null);
   const trustedAuthorsUnsubscribeRef = useRef(null);
   const testimonialsUnsubscribeRef = useRef(null);
@@ -258,6 +255,8 @@ export function DataProvider({ children }) {
           `📚 LIVE: ${booksData.length} books from Firestore`
         );
 
+        setBooksListenerError(null);
+
         // Merge Firestore data with static data
         const mergedBooks = [...booksData];
 
@@ -284,6 +283,7 @@ export function DataProvider({ children }) {
         );
 
         setBooks(initialBooks);
+        setBooksListenerError(error);
 
         booksReceived = true;
 
@@ -549,35 +549,41 @@ export function DataProvider({ children }) {
   }, []);
 
   // ============================================================
-  // 4. PUBLIC HERO
+  // 4. LEGACY HERO SELECTION (MIGRATION SOURCE ONLY)
   // ============================================================
 
+  // The old Manage Hero document is still read publicly so existing
+  // selections can be shown until an admin migration writes them onto the
+  // book documents. This is not a second selection system: once any book has
+  // showInHomepageHero, the resolver ignores these IDs entirely.
   useEffect(() => {
-    heroUnsubscribeRef.current = onSnapshot(
-      heroDocRef(),
+    legacyHeroUnsubscribeRef.current = onSnapshot(
+      legacyHeroDocRef(),
       (snapshot) => {
-        setHero(
+        setLegacyHeroBookIds(
           snapshot.exists()
-            ? normalizeHero(snapshot)
-            : null
+            ? getLegacyHeroBookIds(snapshot)
+            : []
         );
 
-        setHeroLoading(false);
+        setLegacyHeroError(null);
+        setLegacyHeroLoading(false);
       },
       (error) => {
         console.error(
-          "❌ Hero listener error:",
+          "❌ Legacy hero listener error:",
           error
         );
 
-        setHero(null);
-        setHeroLoading(false);
+        setLegacyHeroBookIds([]);
+        setLegacyHeroError(error);
+        setLegacyHeroLoading(false);
       }
     );
 
     return () => {
-      if (heroUnsubscribeRef.current) {
-        heroUnsubscribeRef.current();
+      if (legacyHeroUnsubscribeRef.current) {
+        legacyHeroUnsubscribeRef.current();
       }
     };
   }, []);
@@ -612,43 +618,6 @@ export function DataProvider({ children }) {
     return () => {
       if (authorsHeroUnsubscribeRef.current) {
         authorsHeroUnsubscribeRef.current();
-      }
-    };
-  }, []);
-
-  // ============================================================
-  // 4C. HOMEPAGE FEATURED BOOKS
-  // ============================================================
-
-  useEffect(() => {
-    homepageSettingsUnsubscribeRef.current =
-      onSnapshot(
-        homepageSettingsDocRef(),
-        (snapshot) => {
-          setHomepageSettings(
-            snapshot.exists()
-              ? normalizeHomepageSettings(snapshot)
-              : null
-          );
-
-          setHomepageSettingsError(null);
-          setHomepageSettingsLoading(false);
-        },
-        (error) => {
-          console.error(
-            "❌ Homepage settings listener error:",
-            error
-          );
-
-          setHomepageSettings(null);
-          setHomepageSettingsError(error);
-          setHomepageSettingsLoading(false);
-        }
-      );
-
-    return () => {
-      if (homepageSettingsUnsubscribeRef.current) {
-        homepageSettingsUnsubscribeRef.current();
       }
     };
   }, []);
@@ -708,17 +677,23 @@ export function DataProvider({ children }) {
     [genres]
   );
 
-  // Configured IDs resolved against the already-loaded books, in the
-  // admin-defined order. No extra Firestore reads and no "show all books"
-  // fallback: an empty selection is an empty list.
+  // The homepage hero reads the same live books array the Admin forms write.
+  // Explicit showInHomepageHero fields win; legacy IDs are used only until
+  // those fields have been migrated. An empty selection stays empty.
   const featuredHeroBooks = useMemo(
     () =>
-      resolveFeaturedBooks(
+      resolveHomepageHeroBooks(
         books,
-        homepageSettings?.featuredBookIds
+        legacyHeroBookIds
       ),
-    [books, homepageSettings]
+    [books, legacyHeroBookIds]
   );
+
+  const featuredHeroBooksLoading =
+    loading || legacyHeroLoading;
+
+  const featuredHeroBooksError =
+    booksListenerError || legacyHeroError;
 
   // ============================================================
   // 5. PUBLIC TRUSTED AUTHORS
@@ -1235,6 +1210,72 @@ export function DataProvider({ children }) {
     []
   );
 
+  // Migrate the old four-slot hero selection onto the selected book
+  // documents the first time an authenticated admin opens the app. The legacy
+  // document is left intact; these are field additions only, never new book
+  // records. Public visitors keep seeing the legacy selection via the fallback
+  // until this write succeeds.
+  useEffect(() => {
+    if (heroMigrationStartedRef.current) return;
+    if (!currentUser) return;
+    if (loading || legacyHeroLoading) return;
+    if (!Array.isArray(legacyHeroBookIds) || legacyHeroBookIds.length === 0) return;
+    if (!Array.isArray(books) || books.length === 0) return;
+    if (hasHeroSelectionFields(books)) return;
+
+    heroMigrationStartedRef.current = true;
+
+    const booksById = new Map(
+      books
+        .filter((book) => book && book.id !== undefined && book.id !== null)
+        .map((book) => [String(book.id), book])
+    );
+
+    const writes = legacyHeroBookIds
+      .map((legacyId, index) => {
+        const book = booksById.get(String(legacyId));
+
+        if (!book) return null;
+
+        return updateBook(book.id, {
+          showInHomepageHero: true,
+          heroDisplayOrder: index + 1,
+        });
+      })
+      .filter(Boolean);
+
+    if (writes.length === 0) {
+      console.warn(
+        "⚠️ Legacy hero selection had no matching book documents; nothing migrated."
+      );
+      return;
+    }
+
+    Promise.allSettled(writes).then((results) => {
+      const failures = results.filter(
+        (result) => result.status === "rejected"
+      );
+
+      if (failures.length > 0) {
+        console.error(
+          `❌ Hero migration failed for ${failures.length} of ${writes.length} books.`,
+          failures.map((failure) => failure.reason)
+        );
+      } else {
+        console.log(
+          `✅ Migrated ${writes.length} legacy hero selection(s) onto book documents.`
+        );
+      }
+    });
+  }, [
+    currentUser,
+    loading,
+    legacyHeroLoading,
+    legacyHeroBookIds,
+    books,
+    updateBook,
+  ]);
+
   const deleteBook = useCallback(
     async (id) => {
       try {
@@ -1556,37 +1597,7 @@ export function DataProvider({ children }) {
   );
 
   // ============================================================
-  // 12. HERO
-  // ============================================================
-
-  const updateHero = useCallback(
-    async (data) => {
-      try {
-        await updateHeroDoc(data);
-
-        console.log(
-          "✅ Hero updated"
-        );
-
-        return {
-          error: null,
-        };
-      } catch (error) {
-        console.error(
-          "❌ Update hero failed (admin only):",
-          error.message
-        );
-
-        return {
-          error,
-        };
-      }
-    },
-    []
-  );
-
-  // ============================================================
-  // 12B. AUTHORS PAGE HERO
+  // 12. AUTHORS PAGE HERO
   // ============================================================
 
   const updateAuthorsHero = useCallback(
@@ -1616,37 +1627,7 @@ export function DataProvider({ children }) {
   );
 
   // ============================================================
-  // 12C. HOMEPAGE FEATURED BOOKS
-  // ============================================================
-
-  const updateHomepageSettings = useCallback(
-    async (data) => {
-      try {
-        await updateHomepageSettingsDoc(data);
-
-        console.log(
-          "✅ Homepage featured books updated"
-        );
-
-        return {
-          error: null,
-        };
-      } catch (error) {
-        console.error(
-          "❌ Update homepage featured books failed (admin only):",
-          error.message
-        );
-
-        return {
-          error,
-        };
-      }
-    },
-    []
-  );
-
-  // ============================================================
-  // 12D. GENRES
+  // 12B. GENRES
   // ============================================================
 
   const updateGenres = useCallback(async (items) => {
@@ -2337,12 +2318,10 @@ export function DataProvider({ children }) {
     authors,
     leads,
     blogs,
-    hero,
     authorsHero,
 
-    // Homepage featured books (resolved, ordered)
+    // Homepage hero books (selected on the book documents, in order)
     featuredHeroBooks,
-    homepageSettings,
 
     // Genre filters (admin managed)
     genres,
@@ -2358,10 +2337,9 @@ export function DataProvider({ children }) {
     // Loading
     // ----------------------------------------------------------
 
-    heroLoading,
+    featuredHeroBooksLoading,
+    featuredHeroBooksError,
     authorsHeroLoading,
-    homepageSettingsLoading,
-    homepageSettingsError,
     genresLoading,
     genresError,
     loading,
@@ -2406,22 +2384,10 @@ export function DataProvider({ children }) {
     deleteBlogDoc,
 
     // ----------------------------------------------------------
-    // Hero
-    // ----------------------------------------------------------
-
-    updateHero,
-
-    // ----------------------------------------------------------
     // Authors Page Hero
     // ----------------------------------------------------------
 
     updateAuthorsHero,
-
-    // ----------------------------------------------------------
-    // Homepage Featured Books
-    // ----------------------------------------------------------
-
-    updateHomepageSettings,
 
     // ----------------------------------------------------------
     // Genre Filters

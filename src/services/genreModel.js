@@ -18,7 +18,7 @@
 //
 // The document lives in the existing `hero` collection instead of a new
 // top-level collection: the deployed rules already allow public reads and
-// authenticated admin writes there (they also store homepageSettings). This
+// authenticated admin writes there (they also store the legacy hero config). This
 // keeps the homepage filters publicly readable without exposing genre writes.
 // It does not change the hero document itself.
 //
