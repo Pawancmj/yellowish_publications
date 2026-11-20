@@ -1,32 +1,57 @@
 import { motion as Motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import "./Hero.css";
 import { useData } from "../../contexts/DataContext";
 import { NO_COVER_PLACEHOLDER } from "../../utils/coverPlaceholder";
 
-// Desktop shows up to six covers at once; mobile CSS shows two.
-const VISIBLE_BOOKS = 6;
-const MOBILE_VISIBLE_BOOKS = 2;
-const MOBILE_MEDIA_QUERY = "(max-width: 768px)";
+// Five or fewer selected books keep the original static showcase.
+const STATIC_BOOK_LIMIT = 5;
 
-function readIsMobileViewport() {
+// Responsive slot counts. These mirror the CSS custom properties in Hero.css.
+const DESKTOP_VISIBLE_BOOKS = 5;
+const TABLET_VISIBLE_BOOKS = 4;
+const MOBILE_VISIBLE_BOOKS = 2;
+
+const VISIBLE_COUNT_MEDIA_QUERIES = [
+  {
+    query: "(max-width: 768px)",
+    count: MOBILE_VISIBLE_BOOKS,
+  },
+  {
+    query: "(max-width: 1100px)",
+    count: TABLET_VISIBLE_BOOKS,
+  },
+];
+
+const AUTO_SLIDE_DELAY = 3200;
+const SLIDE_DURATION = 900;
+
+// Symmetric, restrained stagger: baseline / higher / lower / higher / baseline.
+const STAGGER_OFFSETS = [0, -18, 10, -18, 0];
+
+function readVisibleBookCount() {
   if (
     typeof window === "undefined" ||
     typeof window.matchMedia !== "function"
   ) {
-    return false;
+    return DESKTOP_VISIBLE_BOOKS;
   }
 
-  return window.matchMedia(MOBILE_MEDIA_QUERY).matches;
+  // Smallest breakpoint first so the most specific match wins.
+  for (const { query, count } of VISIBLE_COUNT_MEDIA_QUERIES) {
+    if (window.matchMedia(query).matches) {
+      return count;
+    }
+  }
+
+  return DESKTOP_VISIBLE_BOOKS;
 }
 
-// Mirrors the CSS mobile breakpoint so arrows/rotation only appear when the
-// selection does not fit in the visible showcase slots.
 function useVisibleBookCount() {
-  const [isMobile, setIsMobile] = useState(
-    readIsMobileViewport
+  const [visibleCount, setVisibleCount] = useState(
+    readVisibleBookCount
   );
 
   useEffect(() => {
@@ -37,37 +62,47 @@ function useVisibleBookCount() {
       return undefined;
     }
 
-    const mediaQuery = window.matchMedia(
-      MOBILE_MEDIA_QUERY
+    const mediaQueries = VISIBLE_COUNT_MEDIA_QUERIES.map(
+      ({ query }) => window.matchMedia(query)
     );
 
-    const handleChange = (event) =>
-      setIsMobile(event.matches);
+    const handleChange = () =>
+      setVisibleCount(readVisibleBookCount());
 
-    setIsMobile(mediaQuery.matches);
+    setVisibleCount(readVisibleBookCount());
 
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener(
-        "change",
-        handleChange
-      );
-
-      return () =>
-        mediaQuery.removeEventListener(
+    mediaQueries.forEach((mediaQuery) => {
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener(
           "change",
           handleChange
         );
-    }
+      } else {
+        // Safari < 14 fallback.
+        mediaQuery.addListener(handleChange);
+      }
+    });
 
-    // Safari < 14 fallback.
-    mediaQuery.addListener(handleChange);
-
-    return () => mediaQuery.removeListener(handleChange);
+    return () => {
+      mediaQueries.forEach((mediaQuery) => {
+        if (mediaQuery.removeEventListener) {
+          mediaQuery.removeEventListener(
+            "change",
+            handleChange
+          );
+        } else {
+          mediaQuery.removeListener(handleChange);
+        }
+      });
+    };
   }, []);
 
-  return isMobile
-    ? MOBILE_VISIBLE_BOOKS
-    : VISIBLE_BOOKS;
+  return visibleCount;
+}
+
+function positiveModulo(value, divisor) {
+  if (!divisor || !Number.isFinite(divisor)) return 0;
+  return ((value % divisor) + divisor) % divisor;
 }
 
 // Swap a broken cover for the shared placeholder exactly once.
@@ -99,8 +134,13 @@ export default function Hero() {
   const getBookCoverRef = useRef(getBookCover);
   getBookCoverRef.current = getBookCover;
 
-  const [currentIndex, setCurrentIndex] = useState(0);
   const visibleCount = useVisibleBookCount();
+  const trackRef = useRef(null);
+
+  const [isPaused, setIsPaused] = useState(false);
+  const [slideStep, setSlideStep] = useState(0);
+  const [animateTrack, setAnimateTrack] = useState(false);
+  const [position, setPosition] = useState(0);
 
   /* =========================================
       FEATURED BOOKS ONLY (ADMIN ORDER)
@@ -149,139 +189,175 @@ export default function Hero() {
     return result;
   }, [featuredHeroBooks]);
 
+  const bookCount = sliderBooks.length;
+  const carouselEnabled = bookCount > STATIC_BOOK_LIMIT;
+
+  // Three copies let the track wrap without ever showing an empty slot or a
+  // missing book. The middle copy starts in view; the outer copies make both
+  // navigation directions seamless.
+  const trackBooks = useMemo(() => {
+    if (!carouselEnabled) return sliderBooks;
+    return [
+      ...sliderBooks,
+      ...sliderBooks,
+      ...sliderBooks,
+    ];
+  }, [carouselEnabled, sliderBooks]);
+
   /* =========================================
-      KEEP THE WINDOW IN RANGE
+      RESET / MEASUREMENT
   ========================================= */
 
   useEffect(() => {
-    setCurrentIndex((previous) => {
-      if (sliderBooks.length === 0) return 0;
+    setPosition(carouselEnabled ? bookCount : 0);
+    setAnimateTrack(false);
+  }, [carouselEnabled, bookCount]);
 
-      // When everything fits, always start at the admin's first book so the
-      // configured order is shown exactly as saved.
-      if (sliderBooks.length <= visibleCount) {
-        return 0;
-      }
+  useLayoutEffect(() => {
+    if (!trackRef.current || bookCount === 0) {
+      return undefined;
+    }
 
-      return previous % sliderBooks.length;
-    });
-  }, [sliderBooks.length, visibleCount]);
+    const measure = () => {
+      const track = trackRef.current;
+      const firstItem = track?.querySelector(
+        ".hero-book-wrapper"
+      );
 
-  const sliderEnabled =
-    sliderBooks.length > visibleCount;
+      if (!track || !firstItem) return;
+
+      const styles = window.getComputedStyle(track);
+      const gap =
+        Number.parseFloat(
+          styles.columnGap || styles.gap || "0"
+        ) || 0;
+      const nextStep =
+        firstItem.getBoundingClientRect().width + gap;
+
+      setSlideStep((previous) =>
+        Math.abs(previous - nextStep) < 0.5
+          ? previous
+          : nextStep
+      );
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+
+    return () =>
+      window.removeEventListener("resize", measure);
+  }, [bookCount, carouselEnabled, visibleCount]);
+
+  // Re-enable the transition one frame after a hidden wrap reset.
+  useLayoutEffect(() => {
+    if (animateTrack || typeof window === "undefined") {
+      return undefined;
+    }
+
+    const frame = window.requestAnimationFrame(() =>
+      setAnimateTrack(true)
+    );
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [animateTrack]);
 
   /* =========================================
       NAVIGATION
   ========================================= */
 
   const nextSlide = () => {
-    if (!sliderEnabled) return;
-
-    setCurrentIndex(
-      (previous) =>
-        (previous + 1) % sliderBooks.length
-    );
+    if (!carouselEnabled) return;
+    setPosition((previous) => previous + 1);
   };
 
   const prevSlide = () => {
-    if (!sliderEnabled) return;
-
-    setCurrentIndex(
-      (previous) =>
-        (previous - 1 + sliderBooks.length) %
-        sliderBooks.length
-    );
+    if (!carouselEnabled || position <= 0) return;
+    setPosition((previous) => previous - 1);
   };
-
-  /* =========================================
-      AUTO SLIDE (ONLY WHEN NEEDED)
-  ========================================= */
 
   useEffect(() => {
     if (
       prefersReducedMotion ||
-      !sliderEnabled
+      !carouselEnabled ||
+      isPaused ||
+      bookCount === 0 ||
+      slideStep <= 0
     ) {
       return undefined;
     }
 
-    const interval = setInterval(() => {
-      setCurrentIndex(
-        (previous) =>
-          (previous + 1) % sliderBooks.length
-      );
-    }, 3500);
+    const interval = window.setInterval(() => {
+      setPosition((previous) => previous + 1);
+    }, AUTO_SLIDE_DELAY);
 
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, [
     prefersReducedMotion,
-    sliderEnabled,
-    sliderBooks.length,
+    carouselEnabled,
+    isPaused,
+    bookCount,
+    slideStep,
   ]);
 
-  /* =========================================
-      VISIBLE SLOTS
-  ========================================= */
-
-  const visibleBooks = useMemo(() => {
-    if (sliderBooks.length === 0) return [];
-
-    const count = Math.min(
-      visibleCount,
-      sliderBooks.length
-    );
-
-    const result = [];
-
-    for (let i = 0; i < count; i++) {
-      result.push(
-        sliderBooks[
-          (currentIndex + i) % sliderBooks.length
-        ]
-      );
+  // Once the wrap animation finishes, jump by one whole cycle with the
+  // transition disabled. The duplicate copy looks identical, so no motion jump
+  // is visible and every book keeps its place in the rotation.
+  useEffect(() => {
+    if (!carouselEnabled || bookCount === 0) {
+      return undefined;
     }
 
-    return result;
-  }, [sliderBooks, currentIndex, visibleCount]);
+    const lowerBound = 0;
+    const upperBound = bookCount * 2;
 
-  /* Prefetch the next slide window so covers are warm before they rotate in */
-  useEffect(() => {
-    if (!sliderEnabled) return undefined;
+    if (
+      position > lowerBound &&
+      position < upperBound
+    ) {
+      return undefined;
+    }
 
-    const prefetch = () => {
-      for (let i = 0; i < visibleCount; i++) {
-        const targetIndex =
-          (currentIndex +
-            visibleCount +
-            i) %
-          sliderBooks.length;
-
-        const src = sliderBooks[targetIndex]?.src;
-
-        if (src) {
-          const image = new Image();
-          image.decoding = "async";
-          image.src = src;
+    const timeout = window.setTimeout(() => {
+      setAnimateTrack(false);
+      setPosition((previous) => {
+        if (previous >= upperBound) {
+          return previous - bookCount;
         }
-      }
-    };
+        if (previous <= lowerBound) {
+          return previous + bookCount;
+        }
+        return previous;
+      });
+    }, prefersReducedMotion ? 0 : SLIDE_DURATION + 60);
 
-    const raf = requestAnimationFrame(prefetch);
-
-    return () => cancelAnimationFrame(raf);
+    return () => window.clearTimeout(timeout);
   }, [
-    currentIndex,
-    sliderBooks,
-    sliderEnabled,
-    visibleCount,
+    bookCount,
+    carouselEnabled,
+    position,
+    prefersReducedMotion,
   ]);
 
+  const trackStyle = carouselEnabled
+    ? {
+        transform: `translate3d(${-position * slideStep}px, 0, 0)`,
+        transition:
+          animateTrack &&
+          !prefersReducedMotion &&
+          slideStep > 0
+            ? `transform ${SLIDE_DURATION}ms cubic-bezier(0.22, 1, 0.36, 1)`
+            : "none",
+      }
+    : undefined;
+
   const showLoadingState =
-    featuredHeroBooksLoading &&
-    sliderBooks.length === 0;
+    featuredHeroBooksLoading && bookCount === 0;
 
   return (
-    <section className="hero" aria-label="Yellowish Publication Hero">
+    <section
+      className="hero"
+      aria-label="Yellowish Publication Hero"
+    >
       <div className="hero-heading">
         <Motion.p
           className="hero-eyebrow"
@@ -311,7 +387,11 @@ export default function Hero() {
         </Motion.p>
       </div>
 
-      <div className="book-showcase">
+      <div
+        className="book-showcase"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         {showLoadingState ? (
           <div
             className="hero-books-empty"
@@ -320,7 +400,7 @@ export default function Hero() {
           >
             <strong>Loading featured books…</strong>
           </div>
-        ) : sliderBooks.length === 0 ? (
+        ) : bookCount === 0 ? (
           <div
             className="hero-books-empty"
             role="status"
@@ -335,7 +415,7 @@ export default function Hero() {
           </div>
         ) : (
           <>
-            {sliderEnabled && (
+            {carouselEnabled && (
               <button
                 type="button"
                 className="book-arrow book-arrow-left"
@@ -346,23 +426,63 @@ export default function Hero() {
               </button>
             )}
 
-            <div className="hero-books">
-              {visibleBooks.map((book) => {
+            <div
+              ref={trackRef}
+              className={`hero-books ${
+                carouselEnabled
+                  ? "hero-books--carousel"
+                  : "hero-books--static"
+              }`}
+              style={trackStyle}
+            >
+              {trackBooks.map((book, index) => {
                 const customBadge =
                   typeof book.customBadge ===
                   "string"
                     ? book.customBadge.trim()
                     : "";
 
+                const visualSlot = carouselEnabled
+                  ? positiveModulo(
+                      index - position,
+                      visibleCount
+                    )
+                  : positiveModulo(index, visibleCount);
+
+                const stagger =
+                  STAGGER_OFFSETS[
+                    visualSlot % STAGGER_OFFSETS.length
+                  ];
+
+                const duplicateCopy = carouselEnabled
+                  ? index < bookCount ||
+                    index >= bookCount * 2
+                  : false;
+
+                const highPriority = carouselEnabled
+                  ? index >= bookCount &&
+                    index < bookCount * 2 &&
+                    index - bookCount < visibleCount
+                  : index < visibleCount;
+
                 return (
                   <div
-                    key={book.id}
+                    key={`${book.id}-${index}`}
                     className="hero-book-wrapper"
+                    style={{
+                      "--hero-stagger": `${stagger}px`,
+                    }}
+                    aria-hidden={
+                      duplicateCopy ? "true" : undefined
+                    }
                   >
                     <Link
                       to={`/book/${book.id}`}
                       className="hero-book-link"
                       aria-label={`View ${book.title}`}
+                      tabIndex={
+                        duplicateCopy ? -1 : undefined
+                      }
                     >
                       <div className="hero-book">
                         <img
@@ -370,8 +490,16 @@ export default function Hero() {
                           alt={book.title}
                           width={576}
                           height={864}
-                          loading="eager"
-                          fetchPriority="high"
+                          loading={
+                            highPriority
+                              ? "eager"
+                              : "lazy"
+                          }
+                          fetchPriority={
+                            highPriority
+                              ? "high"
+                              : "auto"
+                          }
                           decoding="async"
                           onError={handleCoverError}
                         />
@@ -387,7 +515,7 @@ export default function Hero() {
               })}
             </div>
 
-            {sliderEnabled && (
+            {carouselEnabled && (
               <button
                 type="button"
                 className="book-arrow book-arrow-right"
